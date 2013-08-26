@@ -22,17 +22,40 @@ module Vagrant
         Plugin to build and manage OpenShift Origin environments
       }
 
-      command "reposync" do
-        require_relative "commands/repo_sync"
+      command "sync" do
+        require_relative "command/repo_sync"
         Commands::RepoSync
       end
 
-      command "build-origin-base" do
-        require_relative "commands/build_origin_base"
+      command "origin-build-base" do
+        require_relative "command/build_origin_base"
         Commands::BuildOriginBase
       end
 
+      command "origin-init" do
+        require_relative "command/openshift_init"
+        Commands::OpenshiftInit
+      end
 
+      command "origin-local-checkout" do
+        require_relative "command/local_repo_setup"
+        Commands::LocalRepoSetup
+      end
+
+      command "test" do
+        require_relative "command/test"
+        Commands::Test
+      end
+
+      config "openshift" do
+        require_relative "config"
+        Config
+      end
+
+      provisioner "openshift" do
+        require_relative "provisioner"
+        Provisioner
+      end
     end
   end
 end

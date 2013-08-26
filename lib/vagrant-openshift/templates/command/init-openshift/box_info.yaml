@@ -1,0 +1,58 @@
+---
+:fedora:
+  :os:
+    :virtualbox:
+      :box_name: f19
+      :box_url: http://www.krishnaraman.net/downloads/f19.box
+    :aws:
+      :ami: ami-b22e5cdb
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: oso-vagrant-dev
+  :base:
+    :virtualbox:
+      :box_name: f19-base
+      :box_url: http://www.krishnaraman.net/downloads/f19-base.box
+    :aws:
+      :ami: ami-45632e2c
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: oso-vagrant-dev
+:rhel:
+  :os:
+    :virtualbox:
+      :box_name: rhel_64
+      :box_url: ''
+    :aws:
+      :ami: ami-a25415cb
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-vagrant-rhel-dev
+  :base:
+    :virtualbox:
+      :box_name: rhel_64
+      :box_url: ''
+    :aws:
+      :ami: ami-654a030c
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-vagrant-rhel-dev
+:centos:
+  :os:
+    :virtualbox:
+      :box_name: centos_64
+      :box_url: http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-x86_64-v20130309.box
+    :aws:
+      :ami: ''
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-vagrant-centos-dev
+  :base:
+    :virtualbox:
+      :box_name: centos_64
+      :box_url: http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-x86_64-v20130309.box
+    :aws:
+      :ami: ''
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-vagrant-centos-dev

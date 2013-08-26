@@ -13,22 +13,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require "vagrant-openshift/version"
-require "pathname"
-
-begin
-  require "vagrant"
-rescue LoadError
-  raise "Not running in vagrant environment"
-end
 
 module Vagrant
   module Openshift
-    plugin_path = Pathname.new(File.expand_path("#{__FILE__}/../vagrant-openshift/"))
+    module Action
+      class RunTests
+        include CommandHelper
 
-    autoload :CommandHelper, plugin_path + "helper/command_helper"
-    autoload :Constants, plugin_path + "constants"
+        @@SSH_TIMEOUT = 4800
+
+        def initialize(app, env, options)
+          @app = app
+          @env = env
+          @options = options
+        end
+
+        def call(env)
+          cmd = "cd #{Constants.build_dir + 'builder'}; rake run_tests "
+
+          @options.delete :help
+          @options.each do |k,v|
+            cmd += "#{k}=#{v} "
+          end
+
+          sudo env[:machine], cmd, {timeout: 0}
+
+          @app.call(env)
+        end
+      end
+    end
   end
 end
-
-require "vagrant-openshift/plugin"

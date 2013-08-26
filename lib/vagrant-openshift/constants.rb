@@ -22,7 +22,6 @@ module Vagrant
         {
           'origin-server' => 'https://github.com/openshift/origin-server.git',
           'rhc' => 'https://github.com/openshift/rhc.git',
-          #'origin-dev-tools' => 'https://github.com/openshift/origin-dev-tools.git',
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git'
         }
       end
@@ -31,8 +30,29 @@ module Vagrant
         Pathname.new "/data"
       end
 
-      def git_ssh
+      def self.git_ssh
         ""
+      end
+
+      def self.restart_services_cmd
+        services = [ 'mongod', 'mcollective', 'activemq', 'cgconfig', 'cgred', 'named',
+                     'openshift-broker', 'openshift-console', 'openshift-node-web-proxy',
+                     'sshd', 'httpd' ]
+        cmd = []
+        cmd += services.map do |service|
+          "/sbin/service #{service} stop;"
+        end
+        cmd += services.map do |service|
+          "/sbin/service #{service} start;"
+        end
+        cmd << "rm -rf /var/www/openshift/broker/tmp/cache/*;"
+        cmd << "/etc/cron.minutely/openshift-facts;"
+        cmd << "/sbin/service openshift-tc reload;"
+        cmd << "/sbin/service network restart;"
+        cmd << "/sbin/service messagebus restart;"
+        cmd << "/sbin/service oddjobd restart;"
+
+        cmd
       end
     end
   end

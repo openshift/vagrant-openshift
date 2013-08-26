@@ -13,22 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require "vagrant-openshift/version"
-require "pathname"
-
-begin
-  require "vagrant"
-rescue LoadError
-  raise "Not running in vagrant environment"
-end
 
 module Vagrant
   module Openshift
-    plugin_path = Pathname.new(File.expand_path("#{__FILE__}/../vagrant-openshift/"))
+    module Action
+      class SetHostName
+        include CommandHelper
 
-    autoload :CommandHelper, plugin_path + "helper/command_helper"
-    autoload :Constants, plugin_path + "constants"
+        def initialize(app, env)
+          @app = app
+          @env = env
+        end
+
+        def call(env)
+          hostname = env[:machine].config.vm.hostname
+          remote_write(env[:machine], "/etc/sysconfig/network") {
+            "NETWORKING=yes\nNETWORKING_IPV6=no\nHOSTNAME=#{hostname}\n"
+          }
+          remote_write(env[:machine], "/etc/hostname") {
+            hostname
+          }
+          sudo(env[:machine],"restorecon -v /etc/sysconfig/network /etc/hostname")
+
+          @app.call(env)
+        end
+      end
+    end
   end
 end
-
-require "vagrant-openshift/plugin"

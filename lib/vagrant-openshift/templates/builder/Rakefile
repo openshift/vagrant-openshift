@@ -1,0 +1,189 @@
+#--
+# Copyright 2013 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#++
+
+require 'rubygems'
+require 'pathname'
+require 'yaml'
+require 'tsort'
+require_relative 'lib/constants'
+require_relative 'lib/options'
+require_relative 'lib/rpm'
+require_relative 'lib/test'
+$stdout.sync = true
+$stderr.sync = true
+
+task :install_deps do
+  spec_files = RPM::get_packages(ignore_packages: OPTIONS[:ignore_packages], ignore_cache: true)
+
+  all_build_dependencies = []
+  all_inst_dependencies  = []
+  spec_files.each do |spec|
+    all_build_dependencies += spec[:build_deps]
+    all_inst_dependencies  += spec[:deps]
+  end
+
+  all_packages = all_build_dependencies + all_inst_dependencies
+
+  all_packages.map! do |name|
+    m = name.match(/(ruby193-)?rubygem[(]([a-z\-_]*)[)]/)
+    if m.nil?
+      name.strip
+    else
+      scl_prefix = m[1].nil? ? "" : m[1]
+      "#{scl_prefix}rubygem-#{m[2]}".strip
+    end
+  end
+
+  all_packages.delete_if { |name| name.match(/openshift/)}
+
+  RPM::install_rpms(all_packages)
+end
+
+task :build_all do
+  FileUtils.rm_rf("/tmp/tito/*")
+  spec_files = RPM::get_packages(remove_os_build_deps: true, ignore_packages: OPTIONS[:ignore_packages], ignore_cache: true)
+  RPM::build_packages(spec_files)
+end
+
+task :clean_rpms do
+  FileUtils.rm_rf("/tmp/tito/*")
+  RPM::uninstall_openshift
+end
+
+task :install_puppet do
+  Dir.chdir((Vagrant::Openshift::Constants.build_dir + "puppet-openshift_origin").to_s) do
+    FileUtils.rm_rf "pkg"
+    system("puppet module build")
+    pkg = Dir.glob((Vagrant::Openshift::Constants.build_dir + "puppet-openshift_origin/pkg/openshift-openshift_origin*.tar.gz").to_s).first
+    system("puppet module uninstall openshift-openshift_origin")
+    system("puppet module install #{pkg}")
+    system("rm -rf #{Vagrant::Openshift::Constants.build_dir + "puppet-openshift_origin/pkg"}")
+  end
+end
+
+task :update_packages do
+  if  (Vagrant::Openshift::Constants.build_dir + ".built_packages").exist?
+    print "Updating packages\n"
+    RPM::updated_packages
+  else
+    print "Building all packages\n"
+    Rake::Task['build_all'].invoke
+    print "Installing openshift puppet module\n"
+    Rake::Task['install_puppet'].invoke
+    print "Applying openshift puppet recipe\n"
+    system("puppet apply --verbose #{Vagrant::Openshift::Constants.build_dir + 'configure_origin.pp'}")
+  end
+  Rake::Task['restart_services'].invoke
+end
+
+task :restart_services do
+  system(Vagrant::Openshift::Constants.restart_services_cmd.join("\n"))
+  cmd = ""
+  OPTIONS[:additional_services].each do |service|
+    cmd += "service #{service} restart;"
+  end
+  system(cmd)
+
+  unless system("service openshift-tc status 2>/dev/null 1>/dev/null")
+    system("service openshift-tc start")
+  end
+end
+
+task :checkout_tests do
+  print "Updating remote tests..."
+  system "rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test"
+  git_archive_commands = ''
+  Vagrant::Openshift::Constants.repos.each do |repo_name, url|
+    repo_dir = "#{Vagrant::Openshift::Constants.build_dir}/#{repo_name}-bare"
+    git_archive_commands += "pushd #{repo_dir} > /dev/null; git archive --prefix openshift-test/ --format=tar 'HEAD' | (cd #{Vagrant::Openshift::Constants.build_dir} && tar --warning=no-timestamp -xf -); popd > /dev/null; "
+  end
+  git_archive_commands += "pushd #{Vagrant::Openshift::Constants.build_dir}/rhc-bare > /dev/null; git archive --prefix openshift-test/rhc/ --format=tar 'HEAD' | (cd #{Vagrant::Openshift::Constants.build_dir} && tar --warning=no-timestamp -xf -); popd > /dev/null; "
+
+  system %{
+set -e;
+sudo bash -c \"rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test\"
+#{git_archive_commands}
+sudo bash -c \"mkdir -p /tmp/rhc/junit\"
+          }
+
+  system(%{
+rm -f #{Vagrant::Openshift::Constants.build_dir}/openshift-test/tests;
+ln -s #{Vagrant::Openshift::Constants.build_dir}/openshift-test/controller/test/cucumber #{Vagrant::Openshift::Constants.build_dir}/openshift-test/tests
+})
+  print "done\n"
+end
+
+task :create_test_users do
+  ['test_user@test.com', 'user_with_multiple_gear_sizes@test.com', 'user_with_extra_storage@test.com', 'user_with_certificate_capabilities@test.com']. each do |user|
+    unless system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
+      print "Creating test user:  #{user}\n"
+      exitcode = system("/usr/bin/oo-register-user -l admin -p admin --username #{user} --userpass test")
+      if (!exitcode) || (! system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null"))
+        print "Unable to create #{user}\n"
+        exit 1
+      end
+    else
+      print "#{user} already exists\n"
+    end
+  end
+
+  # Create a known test user with medium-sized gears
+  # This must be done before the deployment of application templates!
+  exitcode = system("/usr/sbin/oo-admin-ctl-user -l user_with_multiple_gear_sizes@test.com --addgearsize medium")
+  if(!exitcode)
+    print "Unable to assign medium gear capability to user_with_multiple_gear_sizes@test.com"
+    exit 1
+  end
+
+  # Create a test user with additional storage capabilities
+  exitcode = system("/usr/sbin/oo-admin-ctl-user -l user_with_extra_storage@test.com --setmaxuntrackedstorage 5 --setmaxgears 10")
+  if(!exitcode)
+    print "Unable to assign additional storage to user_with_extra_storage@test.com"
+    exit 1
+  end
+
+  # Create a test user with ssl certificates capabilities
+  exitcode = system("/usr/sbin/oo-admin-ctl-user -l user_with_certificate_capabilities@test.com --allowprivatesslcertificates true")
+  if(!exitcode)
+    print "Unable to assign ssl certificates capabilities to user_with_certificate_capabilities@test.com"
+    exit 1
+  end
+
+  unless system("test -e  /root/.ssh/id_rsa")
+    system("ssh-keygen -q -f /root/.ssh/id_rsa -P \"\" </dev/null")
+  end
+end
+
+task :idle_all_gears do
+  Test.new.idle_all_gears
+end
+
+task :run_tests do
+  options = {}
+  if ENV["extended"] == "true"
+    options[:node_extended]   = ENV["node"] == "true"
+    options[:broker_extended] = ENV["broker"] == "true"
+    options[:rhc_extended]    = ENV["rhc"] == "true"
+    options[:console_extended] = ENV["console"] == "true"
+  else
+    options[:exclude_node]    = ENV["node"] != "true"
+    options[:exclude_broker]  = ENV["broker"] != "true"
+    options[:exclude_rhc]     = ENV["rhc"] != "true"
+    options[:exclude_console] = ENV["console"] != "true"
+  end
+
+  Test.new.test(options)
+end

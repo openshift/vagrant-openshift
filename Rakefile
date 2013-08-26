@@ -27,7 +27,9 @@ namespace :vagrant do
     Rake::Task['build'].invoke
     name = Bundler::GemHelper.instance.send(:name)
     version = Bundler::GemHelper.instance.send(:version).to_s
-    system("vagrant plugin install pkg/#{name}-#{version}.gem")
+    Bundler.with_clean_env do
+      system("vagrant plugin install pkg/#{name}-#{version}.gem")
+    end
   end
 end
 

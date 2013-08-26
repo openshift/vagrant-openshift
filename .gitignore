@@ -14,4 +14,9 @@ rdoc
 spec/reports
 test/tmp
 test/version_tmp
+test/Vagrantfile
+test/Vagrantfile
+test/origin-server
+test/puppet-openshift_origin
+test/rhc
 tmp

@@ -1,0 +1,124 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network :private_network, ip: "192.168.33.10"
+
+  # If true, then any SSH connections made will enable agent forwarding.
+  # Default value: false
+  # config.ssh.forward_agent = true
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Box to load when booting the vagrant VM. This section applicable only to VirtualBox.
+  # Other providers may override this value
+  config.vm.box     = "<%= box_info[:virtualbox][:box_name] %>"
+  config.vm.box_url = "<%= box_info[:virtualbox][:box_url] %>"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  config.vm.provider :virtualbox do |vb|
+     # Don't boot with headless mode
+     vb.gui = true
+
+     # Use VBoxManage to customize the VM. For example to change memory:
+     vb.customize ["modifyvm", :id, "--memory", "2048"]
+     #vb.customize ["modifyvm", :id, "--cpus", "2"]
+  end
+
+  config.vm.provider :aws do |aws, override|
+    # You will need the latest AWS plugin for vagrant
+    # https://github.com/mitchellh/vagrant-aws
+
+    override.vm.box = "dummy"
+    override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    aws.access_key_id = "<%= box_info[:aws][:aws_access_key_id] %>"
+    aws.secret_access_key = "<%= box_info[:aws][:aws_secret_access_key] %>"
+    aws.keypair_name = "<%= box_info[:aws][:aws_keypair_name] %>"
+    override.ssh.private_key_path = "<%= box_info[:aws][:aws_private_key_path] %>"
+
+    aws.ami = "<%= box_info[:aws][:ami] %>"
+    aws.region = "<%= box_info[:aws][:ami_region] %>"
+    override.ssh.username = "<%= box_info[:aws][:ami_ssh_user] %>"
+    aws.instance_type = "m1.large"
+    aws.tags = { "Name" => "<%= box_info[:aws][:machine_name] %>" }
+    aws.user_data = %{
+#cloud-config
+
+growpart:
+  mode: auto
+  devices: ['/']
+runcmd:
+- [ sh, -xc, "echo 'Defaults:<%= box_info[:aws][:ami_ssh_user] %> \!requiretty' >> /etc/sudoers"]
+    }
+    aws.block_device_mapping = [
+      {
+         "DeviceName" => "/dev/sda1",
+         "Ebs.VolumeSize" => 10
+      }
+    ]
+  end
+
+  config.vm.provider :managed do |managed, override|
+    # You will need the latest managed-servers plugin for vagrant
+    # https://github.com/tknerr/vagrant-managed-servers
+
+    override.vm.box = "dummy"
+    override.vm.box_url = "https://github.com/tknerr/vagrant-managed-servers/raw/master/dummy.box"
+    managed.server = "ip-or-hostname"
+    override.ssh.username = "root"
+    override.ssh.private_key_path = "~/.ssh/id_rsa"
+  end
+
+  config.vm.hostname  = 'broker.example.com'
+  config.vm.provision   :openshift
+  config.vm.guest     = :fedora
+
+  # Domain zone under which application will be created. Eg: appname.namespace.example.com
+  config.openshift.cloud_domain = "example.com"
+
+  # Pakages that are part of OpenShift Origin code but should not be compiled or installed
+<% if box_info[:os] == :fedora %>
+  config.openshift.ignore_packages = [
+    'openshift-origin-util-scl',
+    'rubygem-openshift-origin-container-libvirt',
+    'openshift-origin-cartridge-jbosseap',
+    'openshift-origin-cartridge-jbossews',
+  ]
+<% else %>
+  config.openshift.ignore_packages = [
+    'openshift-origin-util',
+    'rubygem-openshift-origin-container-libvirt',
+    'openshift-origin-cartridge-jbosseap',
+    'openshift-origin-cartridge-jbossews',
+
+    'avahi-cname-manager',
+    'rubygem-openshift-origin-dns-avahi',
+  ]
+<% end %>
+
+# Any additional services on the machine which should be restarted after installing OpenShift packages
+# config.openshift.additional_services = [
+#   'libvirtd',
+# ]
+
+# The container type to configure the machine with. Options: selinux (default), or libvirt
+# config.openshift.container = 'libvirt'
+
+# Advanced settings to be copied into puppet manifest
+# config.openshift.advanced_puppet_values = {
+# }
+end

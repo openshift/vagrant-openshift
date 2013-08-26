@@ -13,22 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require "vagrant-openshift/version"
-require "pathname"
-
-begin
-  require "vagrant"
-rescue LoadError
-  raise "Not running in vagrant environment"
-end
 
 module Vagrant
   module Openshift
-    plugin_path = Pathname.new(File.expand_path("#{__FILE__}/../vagrant-openshift/"))
+    module Action
+      class PreserveMcollectiveLogs
+        include CommandHelper
 
-    autoload :CommandHelper, plugin_path + "helper/command_helper"
-    autoload :Constants, plugin_path + "constants"
+        def initialize(app, env)
+          @app = app
+          @env = env
+        end
+
+        def call(env)
+          unless env[:machine].communicate.test("grep 'keeplogs=9999' /etc/mcollective/server.cfg")
+            env[:machine].ui.info "Keep all mcollective logs on remote instance"
+            sudo(env[:machine], "echo keeplogs=9999 >> /etc/mcollective/server.cfg")
+            sudo(env[:machine], "/sbin/service mcollective restart")
+          end
+
+          @app.call(env)
+        end
+      end
+    end
   end
 end
-
-require "vagrant-openshift/plugin"

@@ -13,22 +13,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require "vagrant-openshift/version"
-require "pathname"
-
-begin
-  require "vagrant"
-rescue LoadError
-  raise "Not running in vagrant environment"
-end
 
 module Vagrant
   module Openshift
-    plugin_path = Pathname.new(File.expand_path("#{__FILE__}/../vagrant-openshift/"))
+    module Action
+      class BuildSources
+        include CommandHelper
 
-    autoload :CommandHelper, plugin_path + "helper/command_helper"
-    autoload :Constants, plugin_path + "constants"
+        def initialize(app, env)
+          @app = app
+          @env = env
+        end
+
+        def call(env)
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          sudo(env[:machine], "cd #{Constants.build_dir + "builder"}; #{scl_wrapper(is_fedora,'rake update_packages')}", {timeout: 60*30})
+
+          @app.call(env)
+        end
+      end
+    end
   end
 end
-
-require "vagrant-openshift/plugin"
