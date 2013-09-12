@@ -98,7 +98,7 @@ task :restart_services do
   system(cmd)
 
   unless system("service openshift-tc status 2>/dev/null 1>/dev/null")
-    system("service openshift-tc start")
+    system("service openshift-tc reload")
   end
 end
 

@@ -53,9 +53,12 @@ module Vagrant
             sudo(machine,cmd)
           end
         else
-          @machine.ui.info("Preparing base environment")
-          require_relative "command/build_origin_base"
-          Vagrant::Openshift::Commands::BuildOriginBase.new([], @machine.env).execute
+          if not @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
+            @machine.ui.info("Preparing base environment")
+            require_relative "command/build_origin_base"
+            Vagrant::Openshift::Commands::BuildOriginBase.new([], @machine.env).execute
+            @machine.communicate.sudo("touch #{Vagrant::Openshift::Constants.deps_marker}")
+          end
         end
       end
     end

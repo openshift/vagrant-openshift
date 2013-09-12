@@ -71,6 +71,10 @@ module Vagrant
             exit
           end
 
+          if !(options[:broker] || options[:node] || options[:rhc] || options[:console])
+            options[:node] = options[:broker] = options[:console] = options[:rhc] = true
+          end
+
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.run_tests(options)
             @env.action_runner.run actions, {:machine => machine}

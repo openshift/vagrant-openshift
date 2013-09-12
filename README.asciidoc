@@ -65,7 +65,7 @@ $ vagrant origin-init
 
 ==== Start the machine
 
-.VirtualBox
+===== VirtualBox
 
 Running with the default VirtualBox provider
 
@@ -74,7 +74,9 @@ Running with the default VirtualBox provider
 vagrant up
 ----
 
-.AWS/EC2
+===== AWS/EC2
+
+* Install the latest vagrant-aws plugin. Follow the link:https://github.com/mitchellh/vagrant-aws/blob/master/README.md#development[build steps].
 
 * Edit the Vagrantfile and update your EC2 credentials.
 
@@ -96,9 +98,110 @@ NOTE: Requires latest link:https://github.com/mitchellh/vagrant-aws[AWS] provide
 
 NOTE: You can use the link:https://github.com/mikery/vagrant-ami[Vagrant-AMI] plugin to create an AMI from a running AWS machine.
 
-.Managed
+
+===== LibVirt
+
+* Install the vagrant-libvirt plugin dependencies
+
+[source, sh]
+----
+yum install libxslt-devel libxml2-devel libvirt-devel
+----
+
+* Install the vagrant-libvirt plugin
+
+[source, sh]
+----
+vagrant plugin install vagrant-libvirt
+----
+
+* Configure LibVirt to allow remote TLS connections
+** Create TLS certificates and key pairs. Follow the guide at http://libvirt.org/remote.html#Remote_certificates
+Example commands for creating a self signed certificate are provided below.
+
+.Example self-signed certificates
+[source, sh]
+----
+mkdir -p /etc/pki/libvirt/private
+
+#CA Cert
+certtool --generate-privkey > cakey.pem
+
+cat <<EOF> ca.info
+cn = MyOrg
+ca
+cert_signing_key
+EOF
+
+certtool --generate-self-signed --load-privkey cakey.pem --template ca.info --outfile cacert.pem
+/bin/cp -f cacert.pem /etc/pki/CA/cacert.pem
+
+#Server cert
+certtool --generate-privkey > serverkey.pem
+
+cat <<EOF> server.info
+organization = MyOrg
+cn = oirase
+tls_www_server
+encryption_key
+signing_key
+EOF
+
+certtool --generate-certificate --load-privkey serverkey.pem \
+  --load-ca-certificate cacert.pem --load-ca-privkey cakey.pem \
+  --template server.info --outfile servercert.pem
+/bin/cp -f serverkey.pem /etc/pki/libvirt/private/serverkey.pem
+/bin/cp -f servercert.pem /etc/pki/libvirt/servercert.pem
+
+#Client cert
+certtool --generate-privkey > clientkey.pem
+
+cat <<EOF> client.info
+country = US
+state = California
+locality = Mountain View
+organization = MyOrg
+cn = client1
+tls_www_client
+encryption_key
+signing_key
+EOF
+
+certtool --generate-certificate --load-privkey clientkey.pem \
+  --load-ca-certificate cacert.pem --load-ca-privkey cakey.pem \
+  --template client.info --outfile clientcert.pem
+
+/bin/cp -f clientkey.pem /etc/pki/libvirt/private/clientkey.pem
+/bin/cp -f clientcert.pem /etc/pki/libvirt/clientcert.pem
+----
+
+** Modify /etc/sysconfig/libvirtd and enable listening to connections
+
+----
+LIBVIRTD_ARGS="--listen"
+---- 
+
+** Restart libvirtd
+
+* Start the LibVirt machine
+
+[source, sh] 
+----
+vagrant up --provider=libvirt
+----
+
+NOTE: Requires latest link:https://github.com/pradels/vagrant-libvirt[LibVirt] provider
+
+===== Managed
 
 Running on other environments which are not managed by Vagrant directly.
+
+* Install the vagrant-managed-servers plugin
+
+[source, sh]
+----
+vagrant plugin install vagrant-managed-servers
+----
 
 * Edit the Vagrantfile and update the managed section to update the IP address, User name and SSH key.
 
@@ -108,7 +211,7 @@ override.ssh.username = "root"
 override.ssh.private_key_path = "~/.ssh/id_rsa"
 ----
 
-* Start the AWS machine
+* Connect to the manually managed machine
 
 [source, sh] 
 ----
@@ -116,6 +219,7 @@ vagrant up --provider=managed
 ----
 
 NOTE: Requires latest link:https://github.com/tknerr/vagrant-managed-servers[Managed] provider
+
 
 ==== Install build dependencies
 

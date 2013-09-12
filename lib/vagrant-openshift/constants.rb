@@ -30,6 +30,10 @@ module Vagrant
         Pathname.new "/data"
       end
 
+      def self.deps_marker
+        Pathname.new "/.origin_deps_installed"
+      end
+
       def self.git_ssh
         ""
       end
@@ -48,7 +52,7 @@ module Vagrant
         cmd << "rm -rf /var/www/openshift/broker/tmp/cache/*;"
         cmd << "/etc/cron.minutely/openshift-facts;"
         cmd << "/sbin/service openshift-tc reload;"
-        cmd << "/sbin/service network restart;"
+        cmd << "/sbin/service network restart || /sbin/service network reload;"
         cmd << "/sbin/service messagebus restart;"
         cmd << "/sbin/service oddjobd restart;"
 
