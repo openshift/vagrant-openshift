@@ -45,6 +45,8 @@ This will clone 3 repositores from your link:http://www.github.com[GitHub] accou
 * link:http://github.com/openshift/origin-server[OpenShift Origin console, broker and node]
 * link:http://github.com/openshift/puppet-openshift_origin[Puppet module for OpenShift Origin]
 
+NOTE: Skip this step if building upstream code
+
 ==== Initialize the Vagrantfile
 
 Create a Vagrantfile and customize it to match your requirements:
@@ -234,9 +236,18 @@ NOTE: Its is a good idea to snapshot the VM after this step so that you don't ha
 
 ==== Sync and Build OpenShift packages
 
+* Syncing and building code from local repository clones
+
 [source, sh]
 ----
-$ vagrant sync -l
+$ vagrant sync
+----
+
+* Syncing and building code from upstream repositories
+
+[source, sh]
+----
+$ vagrant sync --upstream
 ----
 
 ==== Running OpenShift Origin Tests
@@ -251,6 +262,30 @@ $ vagrant test --all
 ----
 $ vagrant origin-test --extended --all
 ----
+
+== Other Notes
+
+=== Developer environment
+
+To enable easy customization of the build environment, any files placed under '\~/.openshiftdev/home.d' will be copied to
+the vagrant user home directory. For example: '~/.openshiftdev/home.d/.bash_profile' will be copied to '.bash_profile'
+on the vagrant VM.
+
+=== AWS Credentials
+
+Rather than have to add AWS credentials every time the Vagrantfile is created using origin-init command, you can
+specify your credentials in the '~/.awscreds' file and it will be automatically added to the Vagrantfile.
+
+Example:
+
+.'~/.awscreds'
+----
+AWSAccessKeyId=<AWS API Key>
+AWSSecretKey=<AWS API Secret>
+AWSKeyPair=<Keypair name>
+AWSPrivateKeyPath=<SSH Private key>
+----
+
 
 == Notice of Export Control Law
 
