@@ -90,7 +90,8 @@ task :update_packages do
 end
 
 task :restart_services do
-  system(Vagrant::Openshift::Constants.restart_services_cmd.join("\n"))
+  is_fedora=File.exists?("/etc/fedora-release")
+  system(Vagrant::Openshift::Constants.restart_services_cmd(is_fedora).join("\n"))
   cmd = ""
   OPTIONS[:additional_services].each do |service|
     cmd += "service #{service} restart;"

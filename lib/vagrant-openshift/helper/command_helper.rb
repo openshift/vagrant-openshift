@@ -63,6 +63,7 @@ module Vagrant
         stderr = []
         rc = -1
 
+        machine.env.ui.info "Running command '#{command}'"
         rc = machine.communicate.execute(command) do |type, data|
           if [:stderr, :stdout].include?(type)
             if type == :stdout

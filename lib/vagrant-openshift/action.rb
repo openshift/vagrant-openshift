@@ -51,9 +51,14 @@ module Vagrant
             end
           end
 
-          b.use SyncLocalRepository if options[:local_source]
+          if options[:local_source]
+            b.use SyncLocalRepository
+          else
+            b.use SyncUpstreamRepository
+          end
           b.use CheckoutRepositories
           b.use InstallOpenShiftDependencies if options[:deps]
+          b.use UninstallOpenShiftRpms if options[:clean]
           b.use BuildSources unless options[:no_build]
         end
       end
@@ -76,6 +81,7 @@ module Vagrant
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :Clean, action_root.join("clean")
+      autoload :UninstallOpenShiftRpms, action_root.join("uninstall_openshift_rpms")
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
       autoload :CreateYumRepositories, action_root.join("create_yum_repositories")
       autoload :CreatePuppetFile, action_root.join("create_puppet_file")
@@ -88,6 +94,7 @@ module Vagrant
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
+      autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
       autoload :BuildSources, action_root.join("build_sources")
       autoload :LocalRepoCheckout, action_root.join("local_repo_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")

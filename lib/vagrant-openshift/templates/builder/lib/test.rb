@@ -352,12 +352,19 @@ mkdir -p /tmp/rhc/junit
     is_fedora = system("test -e /etc/fedora-release")
 
     print "Idling all gears on remote instance\n"
-    system('/sbin/service mcollective stop; /sbin/service mcollective start; /sbin/service openshift-port-proxy restart;')
+
+    if is_fedora
+      system('/sbin/service mcollective stop; /sbin/service mcollective start; /sbin/service openshift-port-proxy restart;')
+    else
+      system('/sbin/service ruby193-mcollective stop; /sbin/service ruby193-mcollective start; /sbin/service openshift-port-proxy restart;')
+    end
+
     system(%{
             for gear in `oo-admin-ctl-gears list`; do
               oo-admin-ctl-gears idlegear $gear;
             done;
           })
+
     if is_fedora
       system('/sbin/service httpd reload')
     else

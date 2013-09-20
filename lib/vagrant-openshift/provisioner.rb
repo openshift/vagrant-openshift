@@ -43,8 +43,12 @@ module Vagrant
         #reapply puppet configuration so that IPs and ifcfg-* file is correct
         if @machine.communicate.test("test -d /etc/openshift")
           @machine.ui.info("Reapplying puppet script to update changed IP values")
+          hostname = @machine.config.vm.hostname
+          sudo(machine,"echo #{hostname} > /proc/sys/kernel/hostname")
           sudo(machine,"puppet apply --verbose #{Vagrant::Openshift::Constants.build_dir + 'configure_origin.pp'}")
-          sudo(machine,Constants.restart_services_cmd.join("\n"))
+          is_fedora = @machine.communicate.test("test -e /etc/fedora-release")
+
+          sudo(machine,Constants.restart_services_cmd(is_fedora).join("\n"))
           if @machine.config.openshift.additional_services.size > 0
             cmd = ""
             @machine.config.openshift.additional_services.each do |service|

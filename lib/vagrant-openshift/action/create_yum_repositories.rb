@@ -29,13 +29,14 @@ module Vagrant
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
 
           unless is_fedora
-            sudo env[:machine], "yum install -y http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm"
-            remote_write(env[:machine], "/etc/yum.repos.d/epel.repo") {
-              %{
+            unless env[:machine].communicate.test("rpm -q epel-release")
+              sudo env[:machine], "yum install -y http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm"
+              remote_write(env[:machine], "/etc/yum.repos.d/epel.repo") {
+                %{
 [epel]
 name=Extra Packages for Enterprise Linux 6 - $basearch
 #baseurl=http://download.fedoraproject.org/pub/epel/6/$basearch
-mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch
+mirrorlist=http://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch
 exclude=*passenger* nodejs*
 failovermethod=priority
 enabled=1
@@ -61,8 +62,9 @@ failovermethod=priority
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
 gpgcheck=1
-                }
-            }
+                  }
+              }
+            end
 
             remote_write(env[:machine], "/etc/yum.repos.d/puppet.repo") {
               %{[puppet]
