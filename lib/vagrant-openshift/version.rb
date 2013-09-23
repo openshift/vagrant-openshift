@@ -15,7 +15,7 @@
 #++
 
 module Vagrant
-  module Openshift
-    VERSION = "0.0.3"
+   Openshift
+    VERSION = "0.0.4-dev"
   end
 end
