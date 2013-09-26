@@ -44,18 +44,22 @@ module Vagrant
           remote_write(env[:machine], "#{Constants.build_dir}/configure_origin.pp") {
             config = "
 class { 'openshift_origin' :
-  node_fqdn           => '#{hostname}',
-  mq_fqdn             => '#{hostname}',
-  broker_fqdn         => '#{hostname}',
-  cloud_domain        => '#{domain}',
-  named_tsig_priv_key => '#{key}',
-  dns_servers         => ['8.8.8.8'],
-  os_unmanaged_users  => ['#{env[:machine].ssh_info[:username]}'],
-  install_repo        => 'file://#{Constants.build_dir}/origin-rpms',
-  development_mode    => true,
-  configure_cgroups   => true,
-  eth_device          => '#{links.first}',
-  node_container      => '#{env[:machine].config.openshift.container}'\n"
+  domain                     => '#{domain}',
+  broker_hostname            => '#{hostname}',
+  node_hostname              => '#{hostname}',
+  named_hostname             => '#{hostname}',
+  datastore_hostname         => '#{hostname}',
+  activemq_hostname          => '#{hostname}',
+  openshift_user1            => 'admin',
+  openshift_password1        => 'admin',
+  bind_key                   => '#{key}',
+  override_install_repo      => 'file://#{Constants.build_dir}/origin-rpms',
+  development_mode           => true,
+  conf_node_external_eth_dev => '#{links.first}',
+  register_host_with_named   => true,
+  broker_auth_plugin         => 'mongo',
+  node_unmanaged_users       => ['#{env[:machine].ssh_info[:username]}'],
+  node_container_plugin      => '#{env[:machine].config.openshift.container}'"
             env[:machine].config.openshift.advanced_puppet_values.each do |k,v|
               config += %{  #{k} => #{v}\n}
             end
