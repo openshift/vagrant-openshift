@@ -58,6 +58,7 @@ class { 'openshift_origin' :
   conf_node_external_eth_dev => '#{links.first}',
   register_host_with_named   => true,
   broker_auth_plugin         => 'mongo',
+  conf_broker_auth_salt      => 'salt salt salt',
   node_unmanaged_users       => ['#{env[:machine].ssh_info[:username]}'],
   node_container_plugin      => '#{env[:machine].config.openshift.container}'"
             env[:machine].config.openshift.advanced_puppet_values.each do |k,v|

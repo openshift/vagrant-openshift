@@ -26,7 +26,8 @@ module Vagrant
         end
 
         def call(env)
-          sudo env[:machine], "cd #{Constants.build_dir}/builder; rake checkout_tests"
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          sudo env[:machine], "cd #{Constants.build_dir}/builder; #{scl_wrapper(is_fedora,'rake checkout_tests')}"
           @app.call(env)
         end
       end

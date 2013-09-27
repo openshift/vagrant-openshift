@@ -29,12 +29,13 @@ module Vagrant
         end
 
         def call(env)
-          cmd = "cd #{Constants.build_dir + 'builder'}; rake run_tests "
-
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")          
           @options.delete :help
+          cmd_opts = ''
           @options.each do |k,v|
-            cmd += "#{k}=#{v} "
+            cmd_opts += "#{k}=#{v} "
           end
+          cmd = "cd #{Constants.build_dir + 'builder'}; #{scl_wrapper(is_fedora,'rake run_tests ' + cmd_opts)} "
 
           sudo env[:machine], cmd, {timeout: 0}
 

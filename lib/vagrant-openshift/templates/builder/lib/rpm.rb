@@ -107,6 +107,7 @@ set /files/etc/pam.d/sshd/02/argument[2] env_params
 rm /files/etc/pam.d/sshd/*[module='pam_openshift.so']
 rm /files/etc/pam.d/sshd/*[module='pam_namespace.so']
 rm /files/etc/pam.d/sshd/*[module='pam_cgroup.so']
+rm /files/etc/pam.d/sshd/*[module='pam_succeed_if.so']
 save
       })
         file.close

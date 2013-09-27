@@ -298,7 +298,7 @@ Test: #{test[:title]}
       if test_env["SKIP_RUNCON"]
         "export REGISTER_USER=1 ; #{env_str} #{command}"
       else
-        %{runcon -t openshift_initrc_t bash -c \"export REGISTER_USER=1 ; #{env_str} #{command}"}
+        %{runcon system_u:system_r:openshift_initrc_t:s0-s0:c0.c1023 bash -c \"export REGISTER_USER=1 ; #{env_str} #{command}"}
       end
     else
       %{/usr/bin/scl enable ruby193 "export LANG=en_US.UTF-8 ; export REGISTER_USER=1; #{env_str} #{command}"}

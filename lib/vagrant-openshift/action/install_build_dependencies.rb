@@ -30,7 +30,7 @@ module Vagrant
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
 
           if is_fedora
-            sudo(env[:machine], "yum install -y rubygem-rake")
+            sudo(env[:machine], "yum install -y rubygem-rake rubygem-fakefs")
           else
             sudo(env[:machine], "yum install -y ruby193-rubygem-rake ruby193-build scl-utils-build")
             #test dependencies
