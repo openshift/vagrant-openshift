@@ -60,6 +60,9 @@ module Vagrant
           b.use InstallOpenShiftDependencies if options[:deps]
           b.use UninstallOpenShiftRpms if options[:clean]
           b.use BuildSources unless options[:no_build]
+          if options[:download]
+            b.use DownloadArtifacts
+          end
         end
       end
 
@@ -76,6 +79,32 @@ module Vagrant
           b.use IdleAllGears
           b.use CheckoutTests
           b.use RunTests, options
+          if options[:download]
+            b.use DownloadArtifacts
+          end
+          b.use TestExitCode
+        end
+      end
+
+      def self.gen_vagrant_file(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use GenerateTemplate, options
+        end
+      end
+
+      def self.create_ami(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use VagrantPlugins::AWS::Action::ConnectAWS
+          b.use CreateAMI, options
+        end
+      end
+
+      def self.modify_instance(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use VagrantPlugins::AWS::Action::ConnectAWS
+          b.use ModifyInstance, options
         end
       end
 
@@ -103,6 +132,11 @@ module Vagrant
       autoload :PreserveMcollectiveLogs, action_root.join("preserve_mcollective_logs")
       autoload :RunTests, action_root.join("run_tests")
       autoload :CheckoutTests, action_root.join("checkout_tests")
+      autoload :GenerateTemplate, action_root.join("generate_template")
+      autoload :CreateAMI, action_root.join("create_ami")
+      autoload :ModifyInstance, action_root.join("modify_instance")
+      autoload :DownloadArtifacts, action_root.join("download_artifacts")
+      autoload :TestExitCode, action_root.join("test_exit_code")
     end
   end
 end

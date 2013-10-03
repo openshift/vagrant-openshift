@@ -44,8 +44,12 @@ module Vagrant
               options[:deps] = f
             end
 
-            o.on("-d", "--dont-install", "Dont build and install RPMs") do |f|
+            o.on("--dont-install", "Dont build and install RPMs") do |f|
               options[:no_build] = f
+            end
+
+            o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
+              options[:download] = true
             end
 
             o.on("-h", "--help", "Show this message") do |f|

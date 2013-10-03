@@ -354,9 +354,9 @@ mkdir -p /tmp/rhc/junit
     print "Idling all gears on remote instance\n"
 
     if is_fedora
-      system('/sbin/service mcollective stop; /sbin/service mcollective start; /sbin/service openshift-port-proxy restart;')
+      system('/sbin/service mcollective stop; /sbin/service mcollective start')
     else
-      system('/sbin/service ruby193-mcollective stop; /sbin/service ruby193-mcollective start; /sbin/service openshift-port-proxy restart;')
+      system('/sbin/service ruby193-mcollective stop; /sbin/service ruby193-mcollective start')
     end
 
     system(%{

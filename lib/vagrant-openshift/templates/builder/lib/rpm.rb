@@ -129,6 +129,7 @@ save
 
     FileUtils.mkdir_p "/tmp/tito/noarch/"
     FileUtils.mkdir_p (Vagrant::Openshift::Constants.build_dir + "origin-rpms").to_s
+    FileUtils.mkdir_p (Vagrant::Openshift::Constants.build_dir + "origin-srpms").to_s
     (1..3).each do |phase|
       print "Build phase #{phase}\n"
       buildable = []
@@ -152,14 +153,21 @@ save
         Dir.chdir(spec[:dir]) do
           puts "\n#{'-'*60}"
           system "rm -f /tmp/tito/noarch/#{spec[:name]}*.rpm"
+          system "rm -f /tmp/tito/#{spec[:name]}*.src.rpm"
+
           raise "Unable to build #{spec[:name]}" unless system("tito build --rpm --test")
 
           Dir.glob('/tmp/tito/x86_64/*.rpm').each {|file|
             FileUtils.mv file, "/tmp/tito/noarch/"
           }
           Dir.glob("/tmp/tito/noarch/#{spec[:name]}*.rpm").each do |file|
+            FileUtils.rm_f (Vagrant::Openshift::Constants.build_dir + "origin-rpms/" + "#{spec[:name]}*.rpm").to_s
             FileUtils.cp file, (Vagrant::Openshift::Constants.build_dir + "origin-rpms/").to_s
           end
+          Dir.glob('/tmp/tito/*.src.rpm').each {|file|
+            FileUtils.rm_f (Vagrant::Openshift::Constants.build_dir + "origin-srpms/" + "#{spec[:name]}*.src.rpm").to_s
+            FileUtils.mv file, (Vagrant::Openshift::Constants.build_dir + "origin-srpms/").to_s
+          }
 
           built_specs << spec
           spec_files.delete(spec)

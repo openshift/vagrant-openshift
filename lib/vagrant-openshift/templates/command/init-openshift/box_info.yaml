@@ -12,18 +12,32 @@
     :libvirt:
       :libvirt_box_name: f19
       :libvirt_box_url:  http://www.krishnaraman.net/downloads/f19-libvirt.box
-  :base:
+  :deps:
     :virtualbox:
       :box_name: f19-base
       :box_url: http://www.krishnaraman.net/downloads/f19-base.box
     :aws:
       :ami: n/a
+      :ami_tag_prefix: oso-fedora-base_
       :ami_region: us-east-1
       :ami_ssh_user: fedora
-      :machine_name: oso-vagrant-dev
+      :machine_name: oso-fedora-dev
     :libvirt:
       :libvirt_box_name: f19-base
       :libvirt_box_url:  http://www.krishnaraman.net/downloads/f19-base-libvirt.box
+  :inst:
+    :virtualbox:
+      :box_name: f19
+      :box_url: n/a
+    :aws:
+      :ami: n/a
+      :ami_tag_prefix: oso-fedora_
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: oso-fedora-dev
+    :libvirt:
+      :libvirt_box_name: f19
+      :libvirt_box_url:  n/a
 :rhel:
   :os:
     :virtualbox:
@@ -37,15 +51,29 @@
     :libvirt:
       :libvirt_box_name: n/a
       :libvirt_box_url:  n/a
-  :base:
+  :deps:
     :virtualbox:
       :box_name: rhel_64
       :box_url: n/a
     :aws:
       :ami: n/a
+      :ami_tag_prefix: oso-rhel-base_
       :ami_region: us-east-1
       :ami_ssh_user: ec2-user
-      :machine_name: oso-vagrant-rhel-dev
+      :machine_name: oso-rhel-dev
+    :libvirt:
+      :libvirt_box_name: n/a
+      :libvirt_box_url:  n/a
+  :inst:
+    :virtualbox:
+      :box_name: rhel_64
+      :box_url: n/a
+    :aws:
+      :ami: n/a
+      :ami_tag_prefix: oso-rhel_
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-rhel-dev
     :libvirt:
       :libvirt_box_name: n/a
       :libvirt_box_url:  n/a
@@ -62,7 +90,7 @@
     :libvirt:
       :libvirt_box_name: n/a
       :libvirt_box_url:  n/a
-  :base:
+  :deps:
     :virtualbox:
       :box_name: centos_64-openshift-base
       :box_url: n/a
@@ -71,6 +99,18 @@
       :ami_region: us-east-1
       :ami_ssh_user: ec2-user
       :machine_name: oso-vagrant-centos-dev
+    :libvirt:
+      :libvirt_box_name: n/a
+      :libvirt_box_url:  n/a
+  :inst:
+    :virtualbox:
+      :box_name: centos_64
+      :box_url: n/a
+    :aws:
+      :ami: n/a
+      :ami_region: us-east-1
+      :ami_ssh_user: ec2-user
+      :machine_name: oso-centos-dev
     :libvirt:
       :libvirt_box_name: n/a
       :libvirt_box_url:  n/a

@@ -18,31 +18,29 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class OpenshiftInit < Vagrant.plugin(2, :command)
+      class ModifyInstance < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def execute
           options = {}
-          options[:no_base] = false
           options[:help] = false
-          options[:provider] = "virtualbox"
-          options[:os] = "fedora"
-          options[:stage] = "inst"
+          options[:rename] = nil
+          options[:stop] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant origin-init [machine-name]"
+            o.banner = "Usage: vagrant modify-instance [machine-name]"
             o.separator ""
 
-            o.on("-s [stage]", "--stage [stage]", "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]") do |f|
-              options[:stage] = f
+            o.on("-r", "--rename [name]", String, "Rename the AMI") do |f|
+              options[:rename] = f
             end
 
-            o.on("-o [name]", "--os [name]", String, "Operating system: fedora (default)") do |f|
-              options[:os] = f
+            o.on("-s", "--stop", String, "Stop the AMI") do |f|
+              options[:stop] = true
             end
 
             o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
+              options[:help] = true
             end
           end
 
@@ -54,21 +52,12 @@ module Vagrant
             exit
           end
 
-          unless ["os", "deps", "inst"].include? options[:stage]
-            @env.ui.warn "Unknown stage #{options[:stage]}. Please choose from os, deps, inst"
-            exit
+          with_target_vms(argv, :reverse => true) do |machine|
+            actions = Vagrant::Openshift::Action.modify_instance(options)
+            @env.action_runner.run actions, {:machine => machine}
+            0
           end
-
-          options[:name] = argv[0] if argv[0]
-
-          actions = Vagrant::Openshift::Action.gen_vagrant_file(options)
-          @env.action_runner.run actions
-          0
         end
-
-        private
-
-
       end
     end
   end

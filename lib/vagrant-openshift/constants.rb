@@ -53,6 +53,8 @@ module Vagrant
         cmd += services.map do |service|
           "/sbin/service #{service} stop;"
         end
+        cmd << "rm -f /var/www/openshift/broker/httpd/run/httpd.pid;"
+        cmd << "rm -f /var/www/openshift/console/httpd/run/httpd.pid;"
         cmd += services.map do |service|
           "/sbin/service #{service} start;"
         end

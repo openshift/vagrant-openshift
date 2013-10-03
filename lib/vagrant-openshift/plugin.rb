@@ -47,6 +47,16 @@ module Vagrant
         Commands::Test
       end
 
+      command "create-ami" do
+        require_relative "command/create_ami"
+        Commands::CreateAMI
+      end
+
+      command "modify-instance" do
+        require_relative "command/modify_instance"
+        Commands::ModifyInstance
+      end
+
       config "openshift" do
         require_relative "config"
         Config

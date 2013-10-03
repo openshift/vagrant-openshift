@@ -29,6 +29,7 @@ module Vagrant
           options[:rhc] = false
           options[:console] = false
           options[:extended] = false
+          options[:download] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test [machine-name]"
@@ -56,6 +57,10 @@ module Vagrant
 
             o.on("-a", "--all", String, "Run all tests") do |f|
               options[:node] = options[:broker] = options[:console] = options[:rhc] = true
+            end
+
+            o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
+              options[:download] = true
             end
 
             o.on("-h", "--help", "Show this message") do |f|

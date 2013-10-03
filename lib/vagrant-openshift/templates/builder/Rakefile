@@ -115,9 +115,9 @@ task :checkout_tests do
 
   system %{
 set -e;
-sudo bash -c \"rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test\"
+rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test
 #{git_archive_commands}
-sudo bash -c \"mkdir -p /tmp/rhc/junit\"
+mkdir -p /tmp/rhc/junit
           }
 
   system(%{

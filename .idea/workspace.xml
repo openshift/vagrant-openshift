@@ -2,21 +2,41 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/command/test.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/command/test.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/action/test_exit_code.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/action.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/action.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/constants.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/constants.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/action/download_artifacts.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/action/download_artifacts.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/action/run_tests.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/action/run_tests.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/test.rb" afterPath="$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/test.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="vagrant-openshift.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378882680785" ignored="false" />
-    <file path="/plugin.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378877830056" ignored="false" />
+    <file path="/Dummy.txt" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380834520059" ignored="false" />
+    <file path="/plugin.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380865944803" ignored="false" />
     <file path="/repo_sync.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378877876880" ignored="false" />
-    <file path="/test.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378908615566" ignored="false" />
-    <file path="/a.dummy" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378882991546" ignored="false" />
+    <file path="/test.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380815447348" ignored="false" />
+    <file path="/a.dummy" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380898826624" ignored="false" />
     <file path="/Rakefile" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378878300194" ignored="false" />
     <file path="/create_yum_repositories.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378878407163" ignored="false" />
     <file path="/install_build_dependencies.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378879386554" ignored="false" />
     <file path="/README.asciidoc" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378881172301" ignored="false" />
     <file path="$PROJECT_DIR$/../origin-server/msg-common/openshift-origin-msg-common.spec" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378882922153" ignored="false" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1378908620638" ignored="false" />
+    <file path="/openshift_init.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380777928003" ignored="false" />
+    <file path="/Vagrantfile.erb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380844976433" ignored="false" />
+    <file path="/dummy.xml" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380758509612" ignored="false" />
+    <file path="/box_info.yaml" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380778191281" ignored="false" />
+    <file path="/generate_template.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380846370239" ignored="false" />
+    <file path="/action.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380914143791" ignored="false" />
+    <file path="/vagrant-openshift.gemspec" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380820330246" ignored="false" />
+    <file path="/create_ami.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380836456186" ignored="false" />
+    <file path="/run_tests.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380914161680" ignored="false" />
+    <file path="/download_artifacts.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380904538018" ignored="false" />
+    <file path="/rpm.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380823699937" ignored="false" />
+    <file path="/uninstall_openshift_rpms.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380823758008" ignored="false" />
+    <file path="/modify_instance.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380867021810" ignored="false" />
+    <file path="/constants.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380905564823" ignored="false" />
+    <file path="/test_exit_code.rb" changelist="abf29ab7-77f4-4bf8-b7e0-045ddb74bdbf" time="1380913447001" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,17 +55,7 @@
     <favorites_list name="vagrant-openshift" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="test.rb" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/command/test.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="31" selection-start="1843" selection-end="1843" vertical-scroll-proportion="0.5952381">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -63,22 +73,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/rpm.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/uninstall_openshift_rpms.rb" />
         <option value="$PROJECT_DIR$/lib/vagrant-openshift/command/repo_sync.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/checkout_tests.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/create_test_users.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/idle_all_gears.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/install_open_shift_dependencies.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/run_tests.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/create_yum_repositories.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/command/openshift_init.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/install_build_dependencies.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/templates/command/init-openshift/box_info.yaml" />
-        <option value="$PROJECT_DIR$/README.asciidoc" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/Rakefile" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/build_sources.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/clean.rb" />
+        <option value="$PROJECT_DIR$/vagrant-openshift.gemspec" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/create_ami.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/templates/command/init-openshift/Vagrantfile.erb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/plugin.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/modify_instance.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/command/modify_instance.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/generate_template.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/download_artifacts.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/test.rb" />
         <option value="$PROJECT_DIR$/lib/vagrant-openshift/constants.rb" />
-        <option value="$PROJECT_DIR$/lib/vagrant-openshift/command/test.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/test_exit_code.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action/run_tests.rb" />
+        <option value="$PROJECT_DIR$/lib/vagrant-openshift/action.rb" />
       </list>
     </option>
   </component>
@@ -113,7 +123,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -185,70 +194,6 @@
               <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="command" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="init-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="builder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vagrant-openshift" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="builder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -318,13 +263,96 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../origin-server" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/vagrant-openshift/action" />
+      <recent name="$PROJECT_DIR$/lib/vagrant-openshift/command" />
+    </key>
+  </component>
   <component name="RunManager">
+    <configuration default="true" type="RSpecRunConfigurationType" factoryName="RSpec">
+      <predefined_log_file id="RUBY_RSPEC" enabled="true" />
+      <module name="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="RubyRunConfigurationType" factoryName="Ruby">
+      <module name="" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
+      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
+      <module name="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
+      <method />
+    </configuration>
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -337,26 +365,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1920" height="1103" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="22" width="1920" height="1103" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33062056" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32994923" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6693795" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25506938" sideWeight="0.67005074" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960325" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -420,114 +448,114 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/create_test_users.rb">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/create_ami.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="71" selection-start="877" selection-end="877" vertical-scroll-proportion="0.664557">
+        <state line="48" column="38" selection-start="1937" selection-end="1937" vertical-scroll-proportion="0.7523511">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/idle_all_gears.rb">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/command/init-openshift/Vagrantfile.erb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="71" selection-start="874" selection-end="874" vertical-scroll-proportion="0.664557">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/install_open_shift_dependencies.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="101" selection-start="1615" selection-end="1615" vertical-scroll-proportion="0.7151899">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/test.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="24" selection-start="821" selection-end="821" vertical-scroll-proportion="0.2136076">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/create_yum_repositories.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="27" selection-start="2069" selection-end="2069" vertical-scroll-proportion="-0.094936706">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/clone_upstream_repositories.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.42405063">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/command/openshift_init.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="1253" selection-end="1253" vertical-scroll-proportion="0.5933544">
+        <state line="45" column="80" selection-start="1889" selection-end="1889" vertical-scroll-proportion="0.54662377">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/plugin.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="22" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.6914557">
+        <state line="56" column="32" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.76489025">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/install_build_dependencies.rb">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/command/modify_instance.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="30" selection-start="1244" selection-end="1244" vertical-scroll-proportion="0.6914557">
+        <state line="34" column="34" selection-start="1148" selection-end="1148" vertical-scroll-proportion="0.4357367">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/command/init-openshift/box_info.yaml">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/modify_instance.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="17" selection-start="776" selection-end="776" vertical-scroll-proportion="0.71202534">
+        <state line="36" column="87" selection-start="1234" selection-end="1234" vertical-scroll-proportion="0.5611285">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.asciidoc">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/generate_template.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="39" selection-start="3396" selection-end="3396" vertical-scroll-proportion="0.71202534">
+        <state line="63" column="43" selection-start="2568" selection-end="2568" vertical-scroll-proportion="0.6865204">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/build_sources.rb">
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/prepare_ssh_config.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="135" selection-start="1022" selection-end="1022" vertical-scroll-proportion="0.6904762">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/Rakefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="14" selection-start="2837" selection-end="2837" vertical-scroll-proportion="0.50729334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/constants.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="0" selection-start="1011" selection-end="1011" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/clean.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="880" selection-end="880" vertical-scroll-proportion="0.42857143">
+        <state line="74" column="22" selection-start="2545" selection-end="2545" vertical-scroll-proportion="1.1582278">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/command/test.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="31" selection-start="1843" selection-end="1843" vertical-scroll-proportion="0.5952381">
+        <state line="68" column="47" selection-start="2218" selection-end="2218" vertical-scroll-proportion="0.8022152">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/download_artifacts.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="39" selection-start="2695" selection-end="2695" vertical-scroll-proportion="0.75474685">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/lib/test.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="366" column="92" selection-start="13752" selection-end="13752" vertical-scroll-proportion="0.64398736">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/templates/builder/Rakefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="49" selection-start="2712" selection-end="2712" vertical-scroll-proportion="-1.6235864">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/helper/command_helper.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="61" selection-start="935" selection-end="935" vertical-scroll-proportion="0.094936706">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/constants.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="24" selection-start="2275" selection-end="2275" vertical-scroll-proportion="1.4746835">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="29" selection-start="2517" selection-end="2517" vertical-scroll-proportion="0.403481">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/test_exit_code.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="25" selection-start="718" selection-end="718" vertical-scroll-proportion="0.5221519">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/vagrant-openshift/action/run_tests.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="10" selection-start="1253" selection-end="1253" vertical-scroll-proportion="0.6914557">
           <folding />
         </state>
       </provider>

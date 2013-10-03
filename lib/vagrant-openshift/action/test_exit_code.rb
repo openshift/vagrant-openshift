@@ -17,28 +17,16 @@
 module Vagrant
   module Openshift
     module Action
-      class RunTests
+      class TestExitCode
         include CommandHelper
 
-        @@SSH_TIMEOUT = 4800
-
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options.clone
         end
 
         def call(env)
-          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-          @options.delete :help
-          @options.delete :logs
-
-          cmd_opts = ''
-          @options.each do |k,v|
-            cmd_opts += "#{k}=#{v} "
-          end
-          cmd = "cd #{Constants.build_dir + 'builder'}; #{scl_wrapper(is_fedora,'rake run_tests ' + cmd_opts)} "
-          _,_,rc = sudo(env[:machine], cmd, {timeout: 0})
+          exit(env[:test_exit_code]) if env.has_key? :test_exit_code
 
           @app.call(env)
         end

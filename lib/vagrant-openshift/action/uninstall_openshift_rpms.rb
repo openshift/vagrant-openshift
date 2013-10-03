@@ -28,7 +28,7 @@ module Vagrant
         def call(env)
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
           sudo env[:machine], "cd #{Constants.build_dir + "builder; #{scl_wrapper(is_fedora,'rake clean_rpms')}"}"
-          sudo env[:machine], "rm -rf #{Constants.build_dir + "origin-rpms"} #{Constants.build_dir + ".built_packages"} #{Constants.build_dir + ".spec_cache"}"
+          sudo env[:machine], "rm -rf #{Constants.build_dir + "origin-rpms"} #{Constants.build_dir + "origin-srpms"} #{Constants.build_dir + ".built_packages"} #{Constants.build_dir + ".spec_cache"}"
           @app.call(env)
         end
       end
