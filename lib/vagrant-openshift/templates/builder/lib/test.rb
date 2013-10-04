@@ -29,37 +29,43 @@ class Test
       (1..4).each do |i|
         test_queues[i-1] << build_cucumber_command("REST API Group #{i}", ["@broker_api#{i}"])
       end
+      test_queues[0] << build_rake_command("OpenShift Broker Domain System", "cd /data/openshift-test/broker; rake test:domain_system_test")
       test_queues[2] << build_rake_command("OpenShift Broker Functionals Ext", "cd /data/openshift-test/broker; rake test:functionals_ext")
+      test_queues[2] << build_rake_command("OpenShift Broker Integration Ext", "cd /data/openshift-test/broker; rake test:integration_ext")
+      test_queues[0] << build_rake_command("OpenShift Broker Application System", "cd /data/openshift-test/broker; rake test:application_system_test")
+      test_queues[2] << build_rake_command("OpenShift Broker Cartridge System", "cd /data/openshift-test/broker; rake test:cartridge_system_test")
     end
 
     if options[:node_extended]
       (1..3).each do |i|
         test_queues[i-1] << build_cucumber_command("Extended Runtime Group #{i}", ["@runtime_extended#{i}"])
       end
+      test_queues[3] << build_rake_command("OpenShift Runtime Functionals Ext", "cd /data/openshift-test/node; rake ext_func_test")
     end
 
     if options[:rhc_extended]
-      test_queues[0] << build_cucumber_command("RHC Extended", ["@rhc_extended"])
-      test_queues[1] << build_cucumber_command("RHC Integration",[],
+      test_queues[0] << build_cucumber_command("RHC Integration",[],
                                                {"RHC_SERVER" => "broker.example.com", "RHC_DOMAIN" => "example.com"},
-                                               nil,"/data/openshift-test/rhc/features")
+                                               nil,"/data/openshift-test/rhc/cucumber")
     end
 
-    #timeout = @@SSH_TIMEOUT
-    #timeout = @@SSH_TIMEOUT_OVERRIDES[options.include_cucumber] if not @@SSH_TIMEOUT_OVERRIDES[options.include_cucumber].nil?
-    #test_queues[0] << build_cucumber_command(options.include_cucumber, [], {}, nil, nil, options.include_cucumber)
-
     unless options[:exclude_broker]
+      test_queues[0] << build_rake_command("OpenShift Broker Sanity", "cd /data/openshift-test/broker; rake test:sanity", {}, false) if options[:fixme]
       test_queues[3] << build_rake_command("OpenShift Broker Units", "cd /data/openshift-test/broker; rake test:units", {}, false)
       test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/openshift-test/broker; rake test:integration", {}, false)
       test_queues[2] << build_rake_command("OpenShift Broker Functional", "cd /data/openshift-test/broker; rake test:functionals", {}, false)
-      #test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/openshift-test/broker; rake test:admin_console_functionals", {}, false)
+      test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/openshift-test/broker; rake test:admin_console_functionals", {}, false) if options[:fixme]
       test_queues[3] << build_cucumber_command("Broker cucumber", ["@broker"])
     end
 
     unless options[:exclude_node]
-      test_queues[0] << build_rake_command("Runtime Functional", "cd /data/openshift-test/node; rake func_test", {}, false)
-      test_queues[0] << build_rake_command("Runtime Unit", "cd /data/openshift-test/node; rake unit_test", {}, false)
+      test_queues[0] << build_rake_command("Runtime Functional", "cd /data/openshift-test/node; rake essentials_test", {}, false)
+      test_queues[1] << build_rake_command("Runtime Frontend Plugin ApacheDB", "cd /data/openshift-test/plugins/frontend/apachedb; rake test", {}, false)
+      test_queues[2] << build_rake_command("Runtime Frontend Plugin Apache Mod Rewrite", "cd /data/openshift-test/plugins/frontend/apache-mod-rewrite; rake test", {}, false)
+      test_queues[3] << build_rake_command("Runtime Frontend Plugin Apache Vhost", "cd /data/openshift-test/plugins/frontend/apache-vhost; rake test", {}, false)
+      test_queues[0] << build_rake_command("Runtime Frontend Plugin NodeJS Websocket", "cd /data/openshift-test/plugins/frontend/nodejs-websocket; rake test", {}, false)
+      test_queues[1] << build_rake_command("Runtime Frontend Plugin Haproxy SNI Proxy", "cd /data/openshift-test/plugins/frontend/haproxy-sni-proxy; rake test", {}, false)
+      test_queues[2] << build_rake_command("Runtime Unit", "cd /data/openshift-test/node; rake unit_test", {}, false)
       (1..4).each do |i|
         test_queues[i-1] << build_cucumber_command("Runtime Group #{i.to_s}", ["@runtime#{i.to_s}"])
       end
@@ -68,8 +74,24 @@ class Test
     unless options[:exclude_rhc]
       if @is_fedora
         test_queues[0] << build_rake_command("RHC Spec", 'cd /data/openshift-test/rhc; bundle install --local && bundle exec rake spec', {"SKIP_RUNCON" => 1}, false)
+        test_queues[0] << build_rake_command("RHC Features", %{
+cd /data/openshift-test/rhc;
+export TEST_INSECURE=1;
+export TEST_RANDOM_USER=1;
+export RHC_SERVER=broker.example.com;
+export RHC_DOMAIN=example.com;
+bundle install --local && bundle exec rspec features/*_feature.rb
+        }, {}, false)
       else
         test_queues[0] << build_rake_command("RHC Spec", 'cd /data/openshift-test/rhc; bundle install --path=/tmp/rhc_bundle && bundle exec rake spec', {}, false)
+        test_queues[0] << build_rake_command("RHC Features", %{
+cd /data/openshift-test/rhc;
+export TEST_INSECURE=1;
+export TEST_RANDOM_USER=1;
+export RHC_SERVER=broker.example.com;
+export RHC_DOMAIN=example.com;
+bundle install --path=/tmp/rhc_bundle && bundle exec rspec features/*_feature.rb
+        }, {}, false)
       end
     end
 

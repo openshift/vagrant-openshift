@@ -38,7 +38,7 @@ module Vagrant
             cmd_opts += "#{k}=#{v} "
           end
           cmd = "cd #{Constants.build_dir + 'builder'}; #{scl_wrapper(is_fedora,'rake run_tests ' + cmd_opts)} "
-          _,_,rc = sudo(env[:machine], cmd, {timeout: 0})
+          _,_,env[:test_exit_code] = sudo(env[:machine], cmd, {timeout: 0, fail_on_error: false})
 
           @app.call(env)
         end

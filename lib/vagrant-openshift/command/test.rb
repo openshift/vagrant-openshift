@@ -63,6 +63,10 @@ module Vagrant
               options[:download] = true
             end
 
+            o.on("--fixme", "Run known broken tests to verify test fixes") do |f|
+              options[:fixme] = true
+            end
+
             o.on("-h", "--help", "Show this message") do |f|
               options[:help] = true
             end
