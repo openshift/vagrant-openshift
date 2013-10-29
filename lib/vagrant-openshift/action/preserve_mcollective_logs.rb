@@ -26,10 +26,13 @@ module Vagrant
         end
 
         def call(env)
-          unless env[:machine].communicate.test("grep 'keeplogs=9999' /etc/mcollective/server.cfg")
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          server_cfg_path = is_fedora ? '/etc/mcollective/server.cfg' : '/opt/rh/ruby193/root/etc/mcollective/server.cfg'
+
+          unless env[:machine].communicate.test("grep 'keeplogs=9999' #{server_cfg_path}")
             env[:machine].ui.info "Keep all mcollective logs on remote instance"
-            sudo(env[:machine], "echo keeplogs=9999 >> /etc/mcollective/server.cfg")
-            is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+            sudo(env[:machine], "echo keeplogs=9999 >> #{server_cfg_path}")
+
             if is_fedora
               sudo(env[:machine], "/sbin/service mcollective restart")
             else

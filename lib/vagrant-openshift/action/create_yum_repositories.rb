@@ -72,13 +72,15 @@ name=Puppet
 baseurl=http://yum.puppetlabs.com/el/6/products/x86_64/
 enabled=1
 gpgcheck=0
-exclude=mcollective*
+exclude=mcollective* activemq*
 
 [puppet-deps]
 name=Puppet-Deps
 baseurl=http://yum.puppetlabs.com/el/6/dependencies/x86_64/
 enabled=1
-gpgcheck=0}}
+gpgcheck=0
+exclude=mcollective* activemq*
+}}
           end
 
           if is_fedora
