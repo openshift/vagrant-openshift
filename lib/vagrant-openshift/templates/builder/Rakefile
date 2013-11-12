@@ -177,18 +177,21 @@ task :run_tests do
   options[:fixme] = ENV["fixme"] == "true"
   if ENV["extended"] == "true"
     options[:node_extended]   = ENV["node"] == "true"
+    options[:cart_extended]   = ENV["cart"] == "true"
     options[:broker_extended] = ENV["broker"] == "true"
     options[:rhc_extended]    = ENV["rhc"] == "true"
     options[:console_extended] = ENV["console"] == "true"
-    options[:exclude_node]    = true
-    options[:exclude_broker]  = true
-    options[:exclude_rhc]     = true
-    options[:exclude_console] = true
+    options[:node]    = false
+    options[:cart]    = false
+    options[:broker]  = false
+    options[:rhc]     = false
+    options[:console] = false
   else
-    options[:exclude_node]    = ENV["node"] != "true"
-    options[:exclude_broker]  = ENV["broker"] != "true"
-    options[:exclude_rhc]     = ENV["rhc"] != "true"
-    options[:exclude_console] = ENV["console"] != "true"
+    options[:node]    = ENV["node"] == "true"
+    options[:cart]    = ENV["cart"] == "true"
+    options[:broker]  = ENV["broker"] == "true"
+    options[:rhc]     = ENV["rhc"] == "true"
+    options[:console] = ENV["console"] == "true"
   end
 
   Test.new.test(options)

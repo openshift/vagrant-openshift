@@ -45,7 +45,7 @@ module Vagrant
           @machine.ui.info("Reapplying puppet script to update changed IP values")
           hostname = @machine.config.vm.hostname
           sudo(machine,"echo #{hostname} > /proc/sys/kernel/hostname")
-          sudo(machine,"puppet apply --verbose #{Vagrant::Openshift::Constants.build_dir + 'configure_origin.pp'}")
+          sudo(machine,"puppet apply --verbose #{Vagrant::Openshift::Constants.build_dir + 'configure_origin.pp'}", {timeout: 60*20})
           is_fedora = @machine.communicate.test("test -e /etc/fedora-release")
 
           sudo(machine,Constants.restart_services_cmd(is_fedora).join("\n"))

@@ -10,7 +10,9 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/work" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.2, ruby-1.9.3-p385) [gem]" level="application" />
@@ -36,7 +38,7 @@
     <orderEntry type="library" scope="PROVIDED" name="ruby-hmac (v0.4.0, ruby-1.9.3-p385) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="slop (v3.4.6, ruby-1.9.3-p385) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.18.1, ruby-1.9.3-p385) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="vagrant (v1.3.4.dev@590566, ruby-1.9.3-p385) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="vagrant (v1.2.8.dev@2b3951, ruby-1.9.3-p385) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="vagrant-aws (v0.3.0, ruby-1.9.3-p385) [gem]" level="application" />
   </component>
 </module>

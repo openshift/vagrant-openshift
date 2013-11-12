@@ -25,6 +25,7 @@ module Vagrant
           options = {}
           options[:help] = false
           options[:node] = false
+          options[:cart] = false
           options[:broker] = false
           options[:rhc] = false
           options[:console] = false
@@ -37,6 +38,10 @@ module Vagrant
 
             o.on("-n", "--node", String, "Run node tests") do |f|
               options[:node] = true
+            end
+
+            o.on("-c", "--cart", String, "Run cartridge tests") do |f|
+              options[:cart] = true
             end
 
             o.on("-b", "--broker", String, "Run broker tests") do |f|
@@ -80,8 +85,8 @@ module Vagrant
             exit
           end
 
-          if !(options[:broker] || options[:node] || options[:rhc] || options[:console])
-            options[:node] = options[:broker] = options[:console] = options[:rhc] = true
+          if !(options[:broker] || options[:node] || options[:cart] || options[:rhc] || options[:console])
+            options[:node] = options[:cart] = options[:broker] = options[:console] = options[:rhc] = true
           end
 
           with_target_vms(argv, :reverse => true) do |machine|

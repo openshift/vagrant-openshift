@@ -38,9 +38,16 @@ class Test
 
     if options[:node_extended]
       (1..3).each do |i|
-        test_queues[i-1] << build_cucumber_command("Extended Runtime Group #{i}", ["@runtime_extended#{i}"])
+        test_queues[i-1] << build_cucumber_command("Extended Node Group #{i}", ["@node_extended#{i}"])
       end
-      test_queues[3] << build_rake_command("OpenShift Runtime Functionals Ext", "cd /data/openshift-test/node; rake ext_func_test")
+      test_queues[3] << build_rake_command("OpenShift Runtime Node Functionals Ext", "cd /data/openshift-test/node; rake ext_node_func_test")
+    end
+
+    if options[:cart_extended]
+      (1..3).each do |i|
+        test_queues[i-1] << build_cucumber_command("Extended Cart Group #{i}", ["@cart_extended#{i}"])
+      end
+      test_queues[2] << build_rake_command("OpenShift Runtime Cartridge Functionals Ext", "cd /data/openshift-test/node; rake ext_cart_func_test")
     end
 
     if options[:rhc_extended]
@@ -49,16 +56,16 @@ class Test
                                                nil,"/data/openshift-test/rhc/cucumber")
     end
 
-    unless options[:exclude_broker]
+    if options[:broker]
       test_queues[0] << build_rake_command("OpenShift Broker Sanity", "cd /data/openshift-test/broker; rake test:sanity", {}, false) if options[:fixme]
       test_queues[3] << build_rake_command("OpenShift Broker Units", "cd /data/openshift-test/broker; rake test:units", {}, false)
-      test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/openshift-test/broker; rake test:integration", {}, false)
       test_queues[2] << build_rake_command("OpenShift Broker Functional", "cd /data/openshift-test/broker; rake test:functionals", {}, false)
-      test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/openshift-test/broker; rake test:admin_console_functionals", {}, false) if options[:fixme]
+      test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/openshift-test/broker; rake test:integration", {}, false)
+      test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/openshift-test/broker; rake test:admin_console_functionals", {}, false)
       test_queues[3] << build_cucumber_command("Broker cucumber", ["@broker"])
     end
 
-    unless options[:exclude_node]
+    if options[:node]
       test_queues[0] << build_rake_command("Runtime Functional", "cd /data/openshift-test/node; rake essentials_test", {}, false)
       test_queues[1] << build_rake_command("Runtime Frontend Plugin ApacheDB", "cd /data/openshift-test/plugins/frontend/apachedb; rake test", {}, false)
       test_queues[2] << build_rake_command("Runtime Frontend Plugin Apache Mod Rewrite", "cd /data/openshift-test/plugins/frontend/apache-mod-rewrite; rake test", {}, false)
@@ -66,12 +73,18 @@ class Test
       test_queues[0] << build_rake_command("Runtime Frontend Plugin NodeJS Websocket", "cd /data/openshift-test/plugins/frontend/nodejs-websocket; rake test", {}, false)
       test_queues[1] << build_rake_command("Runtime Frontend Plugin Haproxy SNI Proxy", "cd /data/openshift-test/plugins/frontend/haproxy-sni-proxy; rake test", {}, false)
       test_queues[2] << build_rake_command("Runtime Unit", "cd /data/openshift-test/node; rake unit_test", {}, false)
-      (1..4).each do |i|
-        test_queues[i-1] << build_cucumber_command("Runtime Group #{i.to_s}", ["@runtime#{i.to_s}"])
+      (1..3).each do |i|
+        test_queues[i] << build_cucumber_command("Node Group #{i.to_s}", ["@node#{i.to_s}"])
       end
     end
 
-    unless options[:exclude_rhc]
+    if options[:cart]
+      (1..3).each do |i|
+        test_queues[i] << build_cucumber_command("Cartridge Group #{i.to_s}", ["@cartridge#{i.to_s}"])
+      end
+    end
+
+    if options[:rhc]
       if @is_fedora
         test_queues[0] << build_rake_command("RHC Spec", 'cd /data/openshift-test/rhc; bundle install --local && bundle exec rake spec', {"SKIP_RUNCON" => 1}, false)
         test_queues[0] << build_rake_command("RHC Features", %{
@@ -99,10 +112,14 @@ bundle install --path=/tmp/rhc_bundle && bundle exec rspec features/*_feature.rb
 
     #These are special tests that cannot be written to work concurrently
     singleton_queue = []
+    idle_all_gears
 
-    unless options[:exclude_node]
-      idle_all_gears
-      singleton_queue << build_cucumber_command("Runtime singletons", ["@singleton"])
+    if options[:node]
+      singleton_queue << build_cucumber_command("Runtime singletons", ["@node_singleton"])
+    end
+
+    if options[:cart]
+      singleton_queue << build_cucumber_command("Runtime singletons", ["@cart_singleton"])
     end
 
     run_tests_with_retry([singleton_queue])
