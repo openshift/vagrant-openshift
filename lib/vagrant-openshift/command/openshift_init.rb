@@ -25,7 +25,6 @@ module Vagrant
           options = {}
           options[:no_base] = false
           options[:help] = false
-          options[:provider] = "virtualbox"
           options[:os] = "fedora"
           options[:stage] = "inst"
 
