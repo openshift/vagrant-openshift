@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # https://github.com/mitchellh/vagrant-aws
 
     aws_creds_file = Pathname.new(File.expand_path("<%= box_info[:aws_creds_file]%>"))
-    aws_creds = aws_creds_file.exist? ? Hash[*(File.open(aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
+    aws_creds = aws_creds_file.exist? ? Hash[*(File.open('.awscred_complete').readlines.map {|l| l.strip }.select {|l| not '' == l and not l.start_with? '#' and not l.start_with? '['}.map {|l| l.split '=' })] : {}
 
     aws.access_key_id    = aws_creds["AWSAccessKeyId"] || "AWS ACCESS KEY"
     aws.secret_access_key = aws_creds["AWSSecretKey"] || "AWS SECRET KEY"
