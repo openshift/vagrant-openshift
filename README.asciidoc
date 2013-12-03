@@ -37,7 +37,7 @@ $ rake install
 $ vagrant origin-local-checkout <github username>
 ----
 
-This will clone 3 repositores from your link:http://www.github.com[GitHub] account and links it against the upstream repositories.
+This will clone 3 repositores from your link:http://www.github.com[GitHub] account and link them against the upstream repositories.
 
 .GitHub repositories
 
@@ -232,9 +232,20 @@ If starting from a bare OS image, install the build and package dependencies.
 $ vagrant origin-build-base
 ----
 
-NOTE: Its is a good idea to snapshot the VM after this step so that you don't have to  redo this step every time.
+NOTE: It is a good idea to snapshot the VM after this step so that you don't have to redo this step every time.
 
 ==== Sync and Build OpenShift packages
+
+* Perform initial sync from local repository clones and build packages
+
+[source, sh]
+----
+$ vagrant sync --clean
+----
+
+NOTE: This will `rsync` every git repo in your working directory to your origin machine.  If you have multiple unrelated 
+projects in the same directory, you can create a special working directory to run `sync` and populate it with symbolic links
+to your local clones.
 
 * Syncing and building code from local repository clones
 
