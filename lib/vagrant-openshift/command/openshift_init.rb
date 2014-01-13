@@ -25,7 +25,7 @@ module Vagrant
           options = {}
           options[:no_base] = false
           options[:help] = false
-          options[:os] = "fedora"
+          options[:os] = "centos"
           options[:stage] = "inst"
 
           opts = OptionParser.new do |o|

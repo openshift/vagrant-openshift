@@ -61,7 +61,11 @@ module Vagrant
         cmd << "rm -rf /var/www/openshift/broker/tmp/cache/*;"
         cmd << "/etc/cron.minutely/openshift-facts;"
         cmd << "/sbin/service openshift-tc start || /sbin/service openshift-tc reload;"
-        cmd << "/sbin/service network restart || /sbin/service network reload;"
+        if(is_fedora)
+          cmd << "/sbin/service network reload;"
+        else
+          cmd << "/sbin/service network restart;"
+        end
         cmd << "/sbin/service messagebus restart;"
         cmd << "/sbin/service oddjobd restart;"
 

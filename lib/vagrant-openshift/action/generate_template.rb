@@ -39,6 +39,13 @@ module Vagrant
           @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
           @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
           box_info[:aws_creds_file] = @aws_creds_file
+          case @options[:os].to_sym
+            when :centos
+              box_info[:vagrant_guest] = :redhat
+            else
+              box_info[:vagrant_guest] = @options[:os].to_sym
+          end
+
 
           find_ami_from_tag(box_info)
           contents = Vagrant::Util::TemplateRenderer.render(template_path.to_s[0..-5], box_info: box_info)

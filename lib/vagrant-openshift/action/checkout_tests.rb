@@ -47,7 +47,7 @@ Listen 81
   ServerAdmin root@localhost
   DocumentRoot /var/www/html/binaryartifacts
 </VirtualHost>}}
-
+          sudo env[:machine], "restorecon -v /etc/httpd/conf.d/binaryartifacts.conf"
           sudo env[:machine], "service httpd restart"
           @app.call(env)
         end

@@ -66,7 +66,7 @@ end
 task :install_puppet do
   Dir.chdir((Vagrant::Openshift::Constants.build_dir + "puppet-openshift_origin").to_s) do
     FileUtils.rm_rf "pkg"
-    system("puppet module build")
+    system("puppet module build .")
     pkg = Dir.glob((Vagrant::Openshift::Constants.build_dir + "puppet-openshift_origin/pkg/openshift-openshift_origin*.tar.gz").to_s).first
     system("puppet module uninstall openshift-openshift_origin")
     system("puppet module install #{pkg}")

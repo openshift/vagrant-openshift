@@ -34,9 +34,11 @@ module Vagrant
               sudo(env[:machine], "yum install -y https://mirror.openshift.com/pub/origin-server/nightly/fedora-19/dependencies/x86_64/activemq-5.6.0-6.fc19.x86_64.rpm")
             end
             sudo(env[:machine], "yum install -y rubygem-rake")
+            sudo(env[:machine], "yum install -y rubygem-net-ssh-multi rubygem-net-ssh-gateway")
           else
             sudo(env[:machine], "yum install -y activemq")
             sudo(env[:machine], "yum install -y ruby193-rubygem-rake ruby193-build scl-utils-build")
+            sudo(env[:machine], "yum install -y ruby193-rubygem-net-ssh-multi ruby193-rubygem-net-ssh-gateway")
           end
 
           sudo(env[:machine], "cd #{Constants.build_dir + "builder"}; #{scl_wrapper(is_fedora, 'rake install_deps')}", {timeout: 0})

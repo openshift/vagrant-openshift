@@ -25,8 +25,56 @@ module Vagrant
           @env = env
         end
 
+        def set_yum_repo(env, file, repo_name, baseurl)
+          unless baseurl.nil?
+            sudo(env[:machine], %{
+(
+  echo "set /files#{file}/#{repo_name}/baseurl #{baseurl}"
+  echo "set /files#{file}/#{repo_name}/gpgcheck 0"
+  echo "rm  /files#{file}/#{repo_name}/mirrorlist"
+  echo save
+) | augtool
+              })
+          end
+        end
+
         def call(env)
+          options = env[:global_config].openshift
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          is_centos = env[:machine].communicate.test("test -e /etc/centos-release")
+          is_rhel   = env[:machine].communicate.test("test -e /etc/redhat-release") && !is_centos && !is_fedora
+
+          sudo(env[:machine], "yum install -y augeas")
+          if is_centos
+            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "base", options.os_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "updates", options.os_updates_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "extras", options.os_extras_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/CentOS-SCL.repo", "scl", options.os_scl_repo)
+          end
+
+          if is_rhel
+            set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "base", options.os_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "updates", options.os_updates_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/RHEL-SCL.repo", "scl", options.os_scl_repo)
+
+          end
+
+          if is_fedora
+            set_yum_repo(env, "/etc/yum.repos.d/fedora.repo", "fedora", options.os_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/fedora.repo", "updates", options.os_updates_repo)
+          end
+
+          if options.repos_base == "nightlies"
+            packages = "#{options.repos_base}/packages/latest/x86_64"
+            dependencies = "#{options.repos_base}/dependencies/x86_64"
+          else
+            packages = "#{options.repos_base}/packages/x86_64"
+            dependencies = "#{options.repos_base}/dependencies/x86_64"
+          end
+
+          set_yum_repo(env, "/etc/yum.repos.d/openshift.repo", "origin-deps", dependencies)
 
           unless is_fedora
             unless env[:machine].communicate.test("rpm -q epel-release")
@@ -53,81 +101,7 @@ fi
 }}
                 sudo env[:machine], "chmod og+x /etc/rc.local"
               end
-
-              sudo env[:machine], "yum install -y http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm"
-              remote_write(env[:machine], "/etc/yum.repos.d/epel.repo") {
-                %{
-[epel]
-name=Extra Packages for Enterprise Linux 6 - $basearch
-#baseurl=http://download.fedoraproject.org/pub/epel/6/$basearch
-mirrorlist=http://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch
-exclude=*passenger* nodejs*
-failovermethod=priority
-enabled=1
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-
-[epel-debuginfo]
-name=Extra Packages for Enterprise Linux 6 - $basearch - Debug
-#baseurl=http://download.fedoraproject.org/pub/epel/6/$basearch/debug
-mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-6&arch=$basearch
-exclude=*passenger* nodejs*
-failovermethod=priority
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-gpgcheck=1
-
-[epel-source]
-name=Extra Packages for Enterprise Linux 6 - $basearch - Source
-#baseurl=http://download.fedoraproject.org/pub/epel/6/SRPMS
-mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-6&arch=$basearch
-exclude=*passenger* nodejs*
-failovermethod=priority
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-gpgcheck=1
-                  }
-              }
             end
-
-            remote_write(env[:machine], "/etc/yum.repos.d/puppet.repo") {
-              %{[puppet]
-name=Puppet
-baseurl=http://yum.puppetlabs.com/el/6/products/x86_64/
-enabled=1
-gpgcheck=0
-exclude=mcollective* activemq*
-
-[puppet-deps]
-name=Puppet-Deps
-baseurl=http://yum.puppetlabs.com/el/6/dependencies/x86_64/
-enabled=1
-gpgcheck=0
-exclude=mcollective* activemq*
-}}
-
-            #additonal SCL repos
-            sudo env[:machine], "curl http://people.redhat.com/bkabrda/scl_python27.repo -o /etc/yum.repos.d/scl_python27.repo"
-            sudo env[:machine], "curl http://sochotni.fedorapeople.org/nodejs010-RHSCL-1-RHEL-6/nodejs010.repo -o /etc/yum.repos.d/nodejs010.repo"
-          end
-
-          if is_fedora
-            deps_mirror_url = "https://mirror.openshift.com/pub/origin-server/nightly/fedora-19/dependencies/x86_64/"
-          else
-            deps_mirror_url = "https://mirror.openshift.com/pub/origin-server/nightly/rhel-6/dependencies/x86_64/"
-          end
-
-          remote_write(env[:machine], "/etc/yum.repos.d/openshift-origin-deps.repo") {
-            %{[openshift-origin-deps]
-name=openshift-origin-deps
-baseurl=#{deps_mirror_url}
-gpgcheck=0
-enabled=1}}
-
-          unless env[:machine].communicate.test("test -f /etc/yum.repos.d/jenkins.repo")
-            sudo(env[:machine], "yum install -y wget")
-            sudo(env[:machine], "wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo")
-            sudo(env[:machine], "rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key")
           end
 
           @app.call(env)

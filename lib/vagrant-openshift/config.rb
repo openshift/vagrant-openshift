@@ -18,13 +18,22 @@ module Vagrant
   module Openshift
     class Config < Vagrant.plugin(2, :config)
       attr_accessor :cloud_domain, :ignore_packages, :additional_services, :container,
-                    :advanced_puppet_values
+                    :advanced_puppet_values, :repos_base, :os_repo, :os_updates_repo,
+                    :jenkins_repo_base, :optional_repo, :os_extras_repo, :os_scl_repo
 
       def initialize
         @ignore_packages      = UNSET_VALUE
         @cloud_domain         = UNSET_VALUE
         @additional_services  = UNSET_VALUE
         @container            = UNSET_VALUE
+        @repos_base           = nil
+        @os_repo              = nil
+        @os_updates_repo      = nil
+        @os_extras_repo       = nil
+        @jenkins_repo_base    = nil
+        @optional_repo        = nil
+        @os_scl_repo          = nil
+
         @advanced_puppet_values = UNSET_VALUE
       end
 

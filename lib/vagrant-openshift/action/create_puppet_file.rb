@@ -59,12 +59,18 @@ class { 'openshift_origin' :
   register_host_with_named   => true,
   broker_auth_plugin         => 'mongo',
   conf_broker_auth_salt      => 'salt salt salt',
+  conf_valid_gear_sizes      => ['small','medium'],
   node_unmanaged_users       => ['#{env[:machine].ssh_info[:username]}'],
-  node_container_plugin      => '#{env[:machine].config.openshift.container}'"
+  node_container_plugin      => '#{env[:machine].config.openshift.container}',"
             env[:machine].config.openshift.advanced_puppet_values.each do |k,v|
-              config += %{  #{k} => #{v}\n}
+              config += %{  #{k} => '#{v}',\n}
             end
-            config += "}"
+            config += "\n  repos_base => '#{env[:machine].config.openshift.repos_base}'," unless env[:machine].config.openshift.repos_base.nil?
+            config += "\n  os_repo => '#{env[:machine].config.openshift.os_repo}'," unless env[:machine].config.openshift.os_repo.nil?
+            config += "\n  os_updates_repo => '#{env[:machine].config.openshift.os_updates_repo}'," unless env[:machine].config.openshift.os_updates_repo.nil?
+            config += "\n  jenkins_repo_base => '#{env[:machine].config.openshift.jenkins_repo_base }'," unless env[:machine].config.openshift.jenkins_repo_base.nil?
+            config += "\n  optional_repo => '#{env[:machine].config.openshift.optional_repo}'," unless env[:machine].config.openshift.optional_repo.nil?
+            config += "\n}\n"
             config
           }
 

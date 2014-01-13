@@ -100,7 +100,7 @@ runcmd:
 
   config.vm.hostname  = 'broker.example.com'
   config.vm.provision   :openshift
-  config.vm.guest     = :fedora
+  config.vm.guest     = :<%= box_info[:vagrant_guest]%>
 
   # Domain zone under which application will be created. Eg: appname.namespace.example.com
   config.openshift.cloud_domain = "example.com"
@@ -128,11 +128,7 @@ runcmd:
 
 # Any additional services on the machine which should be restarted after installing OpenShift packages
 # config.openshift.additional_services = [
-#   'libvirtd',
 # ]
-
-# The container type to configure the machine with. Options: selinux (default), or libvirt
-# config.openshift.container = 'libvirt'
 
 # Advanced settings to be copied into puppet manifest
 # config.openshift.advanced_puppet_values = {
