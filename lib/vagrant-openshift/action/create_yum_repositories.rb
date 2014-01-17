@@ -76,6 +76,8 @@ module Vagrant
 
           set_yum_repo(env, "/etc/yum.repos.d/openshift.repo", "origin-deps", dependencies)
 
+          sudo(env[:machine], "yum clean all")
+
           unless is_fedora
             unless env[:machine].communicate.test("rpm -q epel-release")
               #Workaround broken RHEL image which does not recover after restart.

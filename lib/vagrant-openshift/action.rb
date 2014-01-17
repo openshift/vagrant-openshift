@@ -94,6 +94,7 @@ module Vagrant
 
       def self.create_ami(options)
         Vagrant::Action::Builder.new.tap do |b|
+          b.use CleanNetworkSetup
           b.use ConfigValidate
           b.use VagrantPlugins::AWS::Action::ConnectAWS
           b.use CreateAMI, options
@@ -137,6 +138,7 @@ module Vagrant
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :DownloadArtifacts, action_root.join("download_artifacts")
       autoload :TestExitCode, action_root.join("test_exit_code")
+      autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
     end
   end
 end
