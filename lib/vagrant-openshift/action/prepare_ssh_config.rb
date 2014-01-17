@@ -30,6 +30,9 @@ module Vagrant
           ssh_host = env[:machine].ssh_info[:host]
           ssh_port = env[:machine].ssh_info[:port]
           ssh_id_file = env[:machine].ssh_info[:private_key_path]
+          if ssh_id_file.kind_of?(Array)
+            ssh_id_file = ssh_id_file.first
+          end
           ssh_id   = env[:machine].id.gsub("-","")
 
           ssh_config_path = Pathname.new(File.expand_path("~/.ssh/config"))
