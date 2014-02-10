@@ -46,6 +46,7 @@ module Vagrant
 
           sudo(env[:machine], "yum install -y augeas")
           if is_centos
+            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64 http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm")
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "base", options.os_repo)
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "updates", options.os_updates_repo)
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "extras", options.os_extras_repo)
@@ -66,7 +67,13 @@ module Vagrant
             set_yum_repo(env, "/etc/yum.repos.d/fedora.repo", "updates", options.os_updates_repo)
           end
 
-          if options.repos_base == "nightlies"
+          if options.repos_base == nil
+            if is_fedora
+                options.repos_base = "http://mirror.openshift.com/pub/openshift-origin/nightly/fedora-19/"
+            elsif is_centos or is_rhel
+                options.repos_base = "http://mirror.openshift.com/pub/openshift-origin/nightly/rhel-6/"
+            end
+
             packages = "#{options.repos_base}/packages/latest/x86_64"
             dependencies = "#{options.repos_base}/dependencies/x86_64"
           else

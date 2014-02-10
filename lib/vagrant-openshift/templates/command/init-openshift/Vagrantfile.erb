@@ -70,7 +70,7 @@ runcmd:
     }
     aws.block_device_mapping = [
       {
-         "DeviceName" => "/dev/sda1",
+         "DeviceName" => "/dev/sda",
          "Ebs.VolumeSize" => 10
       }
     ]
@@ -123,6 +123,7 @@ runcmd:
 
     'avahi-cname-manager',
     'rubygem-openshift-origin-dns-avahi',
+    'openshift-origin-cartridge-mariadb',
   ]
 <% end %>
 

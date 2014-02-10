@@ -235,7 +235,7 @@ save
 
         tito_report.each do |package_report|
           package_report = package_report.split("\n")
-          m = package_report.shift.match(/([a-z\-]+)-([\d\.\-]+)..HEAD/)
+          m = package_report.shift.match(/([a-z0-9\-]+)-([\d\.\-]+)..HEAD/)
           packages[m[1]] = {
               version: m[2],
               untagged_revisions: package_report.map{ |line| line.split(" ")[0] }

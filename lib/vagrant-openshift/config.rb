@@ -26,11 +26,11 @@ module Vagrant
         @cloud_domain         = UNSET_VALUE
         @additional_services  = UNSET_VALUE
         @container            = UNSET_VALUE
-        @repos_base           = nil
+        @repos_base           = UNSET_VALUE
         @os_repo              = nil
         @os_updates_repo      = nil
         @os_extras_repo       = nil
-        @jenkins_repo_base    = nil
+        @jenkins_repo_base    = UNSET_VALUE
         @optional_repo        = nil
         @os_scl_repo          = nil
 
@@ -43,6 +43,8 @@ module Vagrant
         @additional_services = []         if @additional_services == UNSET_VALUE
         @container           = "selinux"  if @container == UNSET_VALUE
         @advanced_puppet_values = {}      if @advanced_puppet_values == UNSET_VALUE
+        @repos_base = nil         if @repos_base == UNSET_VALUE
+        @jenkins_repo_base = "http://pkg.jenkins-ci.org/redhat/"           if @jenkins_repo_base == UNSET_VALUE
       end
     end
   end

@@ -5,9 +5,9 @@
       :box_name: centos_65
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65.box
     :aws:
-      :ami: n/a
+      :ami: ami-6be4dc02
       :ami_region: us-east-1
-      :ami_ssh_user: ec2-user
+      :ami_ssh_user: root
       :machine_name: oso-vagrant-centos-dev
     :libvirt:
       :libvirt_box_name: n/a
@@ -19,7 +19,7 @@
     :aws:
       :ami: n/a
       :ami_region: us-east-1
-      :ami_ssh_user: ec2-user
+      :ami_ssh_user: root
       :machine_name: oso-vagrant-centos-dev
     :libvirt:
       :libvirt_box_name: n/a
@@ -31,7 +31,7 @@
     :aws:
       :ami: n/a
       :ami_region: us-east-1
-      :ami_ssh_user: ec2-user
+      :ami_ssh_user: root
       :machine_name: oso-centos-dev
     :libvirt:
       :libvirt_box_name: n/a
