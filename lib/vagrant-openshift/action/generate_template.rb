@@ -34,7 +34,10 @@ module Vagrant
 
           box_info_data = YAML.load(File.new(box_info_path))
           box_info = box_info_data[@options[:os].to_sym][@options[:stage].to_sym]
-          box_info[:aws][:machine_name] = @options[:name] unless @options[:name].nil?
+          if not @options[:name].nil?
+            box_info[:virtualbox][:box_name] = @options[:name]
+            box_info[:aws][:machine_name] = @options[:name]
+          end
           box_info[:os] = @options[:os].to_sym
           @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
           @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
