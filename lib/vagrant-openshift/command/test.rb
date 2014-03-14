@@ -21,16 +21,16 @@ module Vagrant
       class Test < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def component_list
+          [:node,:cart,:gear,:broker,:console,:rhc]
+        end
+
         def execute
           options = {}
           options[:help] = false
-          options[:node] = false
-          options[:cart] = false
-          options[:broker] = false
-          options[:rhc] = false
-          options[:console] = false
           options[:extended] = false
           options[:download] = false
+          component_list.each { |component| options[component] = false }
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test [machine-name]"
@@ -43,6 +43,10 @@ module Vagrant
             o.on("-t", "--cart", String, "Run cartridge tests") do |f|
               options[:cart] = true
             end
+
+           o.on("-g", "--gear", String, "Run gear tests") do |f|
+             options[:gear] = true
+           end
 
             o.on("-b", "--broker", String, "Run broker tests") do |f|
               options[:broker] = true
@@ -61,7 +65,7 @@ module Vagrant
             end
 
             o.on("-a", "--all", String, "Run all tests") do |f|
-              options[:node] = options[:broker] = options[:console] = options[:rhc] = true
+              component_list.each { |component| options[component] = true }
             end
 
             o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
@@ -85,8 +89,16 @@ module Vagrant
             exit
           end
 
-          if !(options[:broker] || options[:node] || options[:cart] || options[:rhc] || options[:console])
-            options[:node] = options[:cart] = options[:broker] = options[:console] = options[:rhc] = true
+          # Figure out if we are implicitly running all tests
+          do_all = true
+          component_list.each do |component|
+            if options[component]
+              do_all = false
+              break
+            end
+          end
+          if do_all
+            component_list.each { |component| options[component] = true }
           end
 
           with_target_vms(argv, :reverse => true) do |machine|
