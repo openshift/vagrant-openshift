@@ -131,7 +131,7 @@ task :create_test_users do
   ['test_user@test.com', 'user_with_multiple_gear_sizes@test.com', 'user_with_extra_storage@test.com', 'user_with_certificate_capabilities@test.com']. each do |user|
     unless system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
       print "Creating test user:  #{user}\n"
-      exitcode = system("/usr/bin/oo-register-user -l admin -p admin --username #{user} --userpass test")
+      exitcode = system("/usr/bin/htpasswd -b /etc/openshift/htpasswd #{user} test")
       if (!exitcode) || (! system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null"))
         print "Unable to create #{user}\n"
         exit 1
