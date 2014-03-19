@@ -22,21 +22,25 @@ module Vagrant
         include CommandHelper
 
         def execute
-          options = {}
-          options[:no_base] = false
-          options[:help] = false
-          options[:os] = "centos"
-          options[:stage] = "inst"
+          options = {
+            :no_base  => false,
+            :help     => false,
+            :os       => 'centos',
+            :stage    => 'inst',
+          }
+
+          valid_stage = ['os','deps','inst']
+          valid_os = ['centos','fedora','rhel']
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant origin-init [machine-name]"
+            o.banner = "Usage: vagrant origin-init [vm or instance name]"
             o.separator ""
 
-            o.on("-s [stage]", "--stage [stage]", "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]") do |f|
+            o.on("-s [stage]", "--stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]") do |f|
               options[:stage] = f
             end
 
-            o.on("-o [name]", "--os [name]", String, "Operating system: fedora (default)") do |f|
+            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos [default]\n\tfedora\n\trhel") do |f|
               options[:os] = f
             end
 
@@ -53,8 +57,13 @@ module Vagrant
             exit
           end
 
-          unless ["os", "deps", "inst"].include? options[:stage]
-            @env.ui.warn "Unknown stage #{options[:stage]}. Please choose from os, deps, inst"
+          unless valid_stage.include? options[:stage]
+            @env.ui.warn "Unknown stage '#{options[:stage]}'. Please choose from #{valid_stage.join(', ')}"
+            exit
+          end
+
+          unless valid_os.include? options[:os]
+            @env.ui.warn "Unknown OS '#{options[:os]}'. Please choose from #{valid_os.join(', ')}"
             exit
           end
 

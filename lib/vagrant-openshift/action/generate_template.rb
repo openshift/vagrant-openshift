@@ -29,28 +29,27 @@ module Vagrant
         end
 
         def call(env)
+          os = @options[:os].to_sym
+          stage = @options[:stage].to_sym
+
           template_path = Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/Vagrantfile.erb"))
           box_info_path = Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/box_info.yaml"))
 
           box_info_data = YAML.load(File.new(box_info_path))
-          box_info = box_info_data[@options[:os].to_sym][@options[:stage].to_sym]
+          box_info = box_info_data[os][stage]
+
           if not @options[:name].nil?
             box_info[:virtualbox][:box_name] = @options[:name]
             box_info[:aws][:machine_name] = @options[:name]
           end
-          box_info[:os] = @options[:os].to_sym
+          box_info[:os] = os
+          box_info[:vagrant_guest] = (os == :centos) ? :redhat : os
+
           @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
           @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
           box_info[:aws_creds_file] = @aws_creds_file
-          case @options[:os].to_sym
-            when :centos
-              box_info[:vagrant_guest] = :redhat
-            else
-              box_info[:vagrant_guest] = @options[:os].to_sym
-          end
-
-
           find_ami_from_tag(box_info)
+
           contents = Vagrant::Util::TemplateRenderer.render(template_path.to_s[0..-5], box_info: box_info)
           File.open("Vagrantfile", "w+") do |f|
             f.write(contents)
@@ -63,7 +62,7 @@ module Vagrant
 
         def find_ami_from_tag(box_info)
           return if box_info[:aws][:ami_tag_prefix].nil?
-          @env[:ui].info("Reading AWS credentials form #{@aws_creds_file.to_s}")
+          @env[:ui].info("Reading AWS credentials from #{@aws_creds_file.to_s}")
           if @aws_creds_file.exist?
             aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
 
