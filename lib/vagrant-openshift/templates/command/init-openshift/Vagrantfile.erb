@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.ami = "<%= box_info[:aws][:ami] %>"
     aws.region = "<%= box_info[:aws][:ami_region] %>"
     override.ssh.username = "<%= box_info[:aws][:ami_ssh_user] %>"
-    aws.instance_type = "m1.large"
+    aws.instance_type = "m3.large"
     aws.tags = { "Name" => "<%= box_info[:aws][:machine_name] %>" }
     aws.user_data = %{
 #cloud-config
@@ -71,31 +71,9 @@ runcmd:
     aws.block_device_mapping = [
       {
          "DeviceName" => "/dev/sda",
-         "Ebs.VolumeSize" => 10
+         "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>
       }
     ]
-  end
-
-  config.vm.provider :managed do |managed, override|
-    # You will need the latest managed-servers plugin for vagrant
-    # https://github.com/tknerr/vagrant-managed-servers
-
-    override.vm.box = "dummy"
-    override.vm.box_url = "https://github.com/tknerr/vagrant-managed-servers/raw/master/dummy.box"
-    managed.server = "ip-or-hostname"
-    override.ssh.username = "root"
-    override.ssh.private_key_path = "~/.ssh/id_rsa"
-  end
-
-  config.vm.provider :libvirt do |libvirt,override|
-    libvirt.driver 		= "qemu"
-    libvirt.host   		= "localhost"
-    libvirt.connect_via_ssh 	= false
-    libvirt.username 		= "root"
-    libvirt.storage_pool_name 	= "default"
-    libvirt.memory 		= 2048
-    override.vm.box             = "<%= box_info[:libvirt][:libvirt_box_name] %>"
-    override.vm.box_url         = "<%= box_info[:libvirt][:libvirt_box_url] %>"
   end
 
   config.vm.hostname  = 'broker.example.com'

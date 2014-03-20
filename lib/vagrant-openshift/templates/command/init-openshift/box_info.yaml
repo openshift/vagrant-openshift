@@ -2,37 +2,31 @@
 :centos:
   :os:
     :virtualbox:
-      :box_name: centos_65
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65.box
+      :box_name: centos_65_virtualbox_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_base.box
     :aws:
-      :ami: ami-6be4dc02
+      :ami: ami-11818b78
       :ami_region: us-east-1
       :ami_ssh_user: root
-      :machine_name: oso-vagrant-centos-dev
-    :libvirt:
-      :libvirt_box_name: n/a
-      :libvirt_box_url:  n/a
+      :machine_name: vagrant-centos-65
+      :ebs_volume_size: 40
   :deps:
     :virtualbox:
-      :box_name: centos_65-openshift-base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65-openshift-base.box
+      :box_name: centos_65_virtualbox_deps
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_deps.box
     :aws:
-      :ami: n/a
+      :ami: ami-179e947e
       :ami_region: us-east-1
       :ami_ssh_user: root
-      :machine_name: oso-vagrant-centos-dev
-    :libvirt:
-      :libvirt_box_name: n/a
-      :libvirt_box_url:  n/a
+      :machine_name: vagrant-centos-65
+      :ebs_volume_size: 10
   :inst:
     :virtualbox:
-      :box_name: centos_65-openshift-inst
+      :box_name: n/a
       :box_url: n/a
     :aws:
-      :ami: n/a
+      :ami: ami-49919b20
       :ami_region: us-east-1
       :ami_ssh_user: root
-      :machine_name: oso-centos-dev
-    :libvirt:
-      :libvirt_box_name: n/a
-      :libvirt_box_url:  n/a
+      :machine_name: vagrant-centos-65
+      :ebs_volume_size: 10
