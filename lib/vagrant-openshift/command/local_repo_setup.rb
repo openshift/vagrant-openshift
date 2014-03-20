@@ -22,10 +22,26 @@ module Vagrant
         include CommandHelper
 
         def execute
-          options = {}
+          options = {
+            :branch => 'master',
+            :replace => false,
+          }
+
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant origin-local-checkout [github username]"
+            o.banner = "Usage: vagrant origin-local-checkout [options]"
             o.separator ""
+
+            o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
+              options[:branch] = f
+            end
+
+            o.on("-u [username]", "--user [username]", String, "Your GitHub username. If provided, Vagrant will attempt to clone your forks of the Origin repos. If not provided, or if the forks cannot be found, Vagrant will clone read-only copies of the OpenShift repos.") do |f|
+              options[:user] = f
+            end
+
+            o.on("-r", "--replace", "Delete existing cloned dirs first. Default is to skip repos that are already cloned.") do |f|
+              options[:replace] = f
+            end
 
             o.on("-h", "--help", "Show this message") do |f|
               options[:help] = f
@@ -34,13 +50,13 @@ module Vagrant
 
           # Parse the options
           argv = parse_options(opts)
-          if options[:help] || argv.size == 0
+          if options[:help]
             @env.ui.info opts
             exit
           end
 
           actions = Vagrant::Openshift::Action.local_repo_checkout(options)
-          @env.action_runner.run actions, {:username => argv[0]}
+          @env.action_runner.run actions
           0
         end
       end

@@ -20,22 +20,40 @@ module Vagrant
       class LocalRepoCheckout
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
           Constants.repos.each do |repo, url|
-            unless Pathname.new(File.expand_path(repo)).exist?
-              if system("git clone git@github.com:#{env[:username]}/#{repo}")
+            repo_path = File.expand_path(repo)
+            if Pathname.new(repo_path).exist?
+              if @options[:replace]
+                puts "Replacing: #{repo_path}"
+                system("rm -rf #{repo_path}")
+              else
+                puts "Already cloned: #{repo}"
+                next
+              end
+            end
+            cloned = false
+            if @options[:user]
+              if system("git clone git@github.com:#{@options[:user]}/#{repo}")
+                cloned = true
                 Dir.chdir(repo) do
-                  system("git remote add upstream #{url}; git fetch upstream")
+                  system("git remote add upstream #{url} && git fetch upstream")
                 end
               else
                 @env.ui.warn "Fork of repo #{repo} not found. Cloning read-only copy from upstream"
-                system("git clone #{url}")
               end
+            end
+            if not cloned
+              system("git clone #{url}")
+            end
+            Dir.chdir(repo) do
+              system("git checkout #{@options[:branch]}")
             end
           end
 

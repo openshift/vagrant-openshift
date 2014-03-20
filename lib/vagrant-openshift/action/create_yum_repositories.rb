@@ -22,7 +22,6 @@ module Vagrant
 
         def initialize(app, env)
           @app = app
-          @env = env
         end
 
         def set_yum_repo(env, file, repo_name, baseurl)
@@ -39,7 +38,7 @@ module Vagrant
         end
 
         def call(env)
-          options = env[:global_config].openshift
+          options = env[:machine].config.openshift
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
           is_centos = env[:machine].communicate.test("test -e /etc/centos-release")
           is_rhel   = env[:machine].communicate.test("test -e /etc/redhat-release") && !is_centos && !is_fedora

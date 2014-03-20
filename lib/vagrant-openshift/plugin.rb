@@ -22,6 +22,16 @@ module Vagrant
         Plugin to build and manage OpenShift Origin environments
       }
 
+      config "openshift" do
+        require_relative "config"
+        Config
+      end
+
+      config(:openshift, :provisioner) do
+        require_relative "config"
+        Config
+      end
+
       command "sync" do
         require_relative "command/repo_sync"
         Commands::RepoSync
@@ -57,12 +67,7 @@ module Vagrant
         Commands::ModifyInstance
       end
 
-      config "openshift" do
-        require_relative "config"
-        Config
-      end
-
-      provisioner "openshift" do
+      provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner
       end
