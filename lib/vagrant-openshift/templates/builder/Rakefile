@@ -101,6 +101,9 @@ task :restart_services do
   unless system("service openshift-tc status 2>/dev/null 1>/dev/null")
     system("service openshift-tc reload")
   end
+
+  # TODO: Replace this temporary fix with a complete post-install routine
+  `oo-admin-ctl-cartridge -c import-node --activate --obsolete && RAILS_ENV=test oo-admin-ctl-cartridge -c import-node --activate --obsolete`
 end
 
 task :checkout_tests do

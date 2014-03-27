@@ -56,6 +56,9 @@ module Vagrant
             end
             sudo(machine,cmd)
           end
+
+          # TODO: Replace this temporary fix with a complete post-install routine
+          sudo(machine,"oo-admin-ctl-cartridge -c import-node --activate --obsolete && RAILS_ENV=test oo-admin-ctl-cartridge -c import-node --activate --obsolete")
         else
           if not @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
             @machine.ui.info("Preparing base environment")
