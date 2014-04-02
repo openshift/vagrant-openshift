@@ -24,12 +24,28 @@ namespace :vagrant do
 
   desc "Install plugin into Vagrant"
   task :install do
+    # We want to install our plugin on the system vagrant. Pull gem paths out of
+    # $PATH so that we get the correct vagrant binary.
+    dirty_path = `echo $PATH`
+    clean_path = dirty_path.split(':').select{ |p| not p.include?('gem') }.join(':')
+    sys_cmd = `PATH=#{clean_path} which vagrant`.chomp
+    if not $?.exitstatus == 0
+      sys_cmd = `which vagrant`.chomp
+      if not $?.exitstatus == 0
+        puts "ERROR: Could not find a Vagrant binary in your PATH.\nEnsure that Vagrant has been installed on this system."
+        exit
+      else
+        puts "WARNING: Could not find a Vagrant binary outside of your gem environments.\nEnsure that the Vagrant package has been installed from the official Vagrant packages and not a gem."
+      end
+    end
+
+    system("rm -rf pkg")
+
     Rake::Task['build'].invoke
     name = Bundler::GemHelper.instance.send(:name)
     version = Bundler::GemHelper.instance.send(:version).to_s
-    Bundler.with_clean_env do
-      system("vagrant plugin install pkg/#{name}-#{version}.gem")
-    end
+
+    system "#{sys_cmd} plugin uninstall vagrant-openshift && #{sys_cmd} plugin install pkg/#{name}-#{version}.gem"
   end
 end
 

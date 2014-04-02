@@ -22,6 +22,8 @@ module Vagrant
                     :jenkins_repo_base, :optional_repo, :os_extras_repo, :os_scl_repo
 
       def initialize
+        super
+
         @ignore_packages      = UNSET_VALUE
         @cloud_domain         = UNSET_VALUE
         @additional_services  = UNSET_VALUE
@@ -38,6 +40,8 @@ module Vagrant
       end
 
       def finalize!
+        super
+
         @ignore_packages = []             if @ignore_packages == UNSET_VALUE
         @cloud_domain    = "example.com"  if @cloud_domain    == UNSET_VALUE
         @additional_services = []         if @additional_services == UNSET_VALUE

@@ -68,7 +68,9 @@ module Vagrant
 
       def self.local_repo_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use LocalRepoCheckout unless options[:no_build]
+          if not options[:no_build]
+            b.use LocalRepoCheckout, options
+          end
         end
       end
 
