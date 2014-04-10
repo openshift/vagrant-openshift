@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require 'xml'
+require 'xmlsimple'
 require 'pry'
 
 module Vagrant
@@ -46,9 +46,9 @@ module Vagrant
               env[:machine].ui.info("Stopped!")
             end
           rescue Excon::Errors::BadRequest => e
-            doc = XML::Parser.string(e.response.body).parse
-            code = doc.find("//Response/Errors/Error/Code").first.content
-            message = doc.find("//Response/Errors/Error/Message").first.content
+            doc = XMLSimple.xml_in(e.response.body)
+            code = doc['Response']['Errors']['Error']['Code'][0]
+            message = doc['Response']['Errors']['Error']['Message'][0]
             raise VagrantPlugins::AWS::Errors::FogError, :message => "#{message}. Code: #{code}"
           end
           @app.call(env)
