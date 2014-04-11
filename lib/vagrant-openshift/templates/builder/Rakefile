@@ -131,6 +131,7 @@ ln -s #{Vagrant::Openshift::Constants.build_dir}/openshift-test/controller/test/
 end
 
 task :create_test_users do
+  system("mkdir -p /etc/openshift && touch /etc/openshift/htpasswd")
   ['test_user@test.com', 'user_with_multiple_gear_sizes@test.com', 'user_with_extra_storage@test.com', 'user_with_certificate_capabilities@test.com']. each do |user|
     unless system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
       print "Creating test user:  #{user}\n"

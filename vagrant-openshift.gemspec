@@ -37,6 +37,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency("thor")
   gem.add_dependency("pry")
   gem.add_dependency("fog")
-  gem.add_dependency("libxml-ruby")
+  gem.add_dependency("xml-simple")
   gem.add_dependency("vagrant-aws")
 end

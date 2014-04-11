@@ -28,6 +28,7 @@ module Vagrant
 
         def call(env)
           ssh_user = env[:machine].ssh_info[:username]
+          sudo(env[:machine], "yum clean all")
           sudo(env[:machine], "rm -rf #{Constants.build_dir}")
           sudo(env[:machine], "mkdir #{Constants.build_dir}")
           sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"}; chown #{ssh_user}:#{ssh_user} #{Constants.build_dir + "builder"};")

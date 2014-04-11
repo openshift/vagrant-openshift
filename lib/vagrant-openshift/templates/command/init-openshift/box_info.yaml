@@ -5,7 +5,7 @@
       :box_name: centos_65_virtualbox_base
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_base.box
     :aws:
-      :ami: ami-3b051252
+      :ami: ami-8f9d81e6
       :ami_region: us-east-1
       :ami_ssh_user: root
       :machine_name: origin-centos-65-base
@@ -15,7 +15,7 @@
       :box_name: centos_65_virtualbox_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_deps.box
     :aws:
-      :ami: ami-070a1d6e
+      :ami: ami-9d9d81f4
       :ami_region: us-east-1
       :ami_ssh_user: root
       :machine_name: origin-centos-65-deps
@@ -25,8 +25,8 @@
       :box_name: n/a
       :box_url: n/a
     :aws:
-      :ami: ami-993324f0
+      :ami: <AMI_ID>
       :ami_region: us-east-1
       :ami_ssh_user: root
-      :machine_name: origin-centos-65-inst
+      :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
