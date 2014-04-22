@@ -20,13 +20,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'vagrant-openshift/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "vagrant-openshift"
+  gem.name          = %q{vagrant-openshift}
   gem.version       = Vagrant::Openshift::VERSION
-  gem.authors       = ["Krishna Raman"]
-  gem.email         = ["kraman@gmail.com"]
+  gem.authors       = %q{Red Hat}
+  gem.email         = %q{dev@lists.openshift.redhat.com}
   gem.description   = %q{Vagrant plugin to manage OpenShift Origin environments}
   gem.summary       = %q{Vagrant plugin to manage OpenShift Origin environments}
-  gem.homepage      = "http://openshift.github.io"
+  gem.homepage      = %q{https://github.com/openshift/vagrant-openshift}
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
