@@ -136,6 +136,10 @@ task :create_test_users do
     unless system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
       print "Creating test user:  #{user}\n"
       exitcode = system("/usr/bin/htpasswd -b /etc/openshift/htpasswd #{user} test")
+      # Rushing apache triggers false failures; give the system a moment.
+      if exitcode
+        sleep 5
+      end
       if (!exitcode) || (! system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null"))
         print "Unable to create #{user}\n"
         exit 1
