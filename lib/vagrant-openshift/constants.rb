@@ -22,7 +22,9 @@ module Vagrant
         {
           'origin-server' => 'https://github.com/openshift/origin-server.git',
           'rhc' => 'https://github.com/openshift/rhc.git',
-          'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git'
+          'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
+          'geard' => 'https://github.com/openshift/geard.git',
+          'go-sti' => 'https://github.com/openshift/go-sti.git'
         }
       end
 

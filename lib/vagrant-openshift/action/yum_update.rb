@@ -30,7 +30,7 @@ module Vagrant
           sudo env[:machine], "yum clean all;"
           sudo env[:machine], "yum -y update --exclude=kernel*", {retries: 3, fail_on_error: false}
 
-          env[:machine].ui.warn "Increasing YUM cache timeout to 9999999. You will need manually clear cache to get additonal updates."
+          env[:machine].ui.warn "Increasing YUM cache timeout to 9999999. You will need manually clear cache to get additional updates."
           remote_write(env[:machine], "/etc/yum.conf") {
             %{
 [main]

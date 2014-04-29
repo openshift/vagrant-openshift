@@ -32,6 +32,9 @@
       :ebs_volume_size: 25
 :fedora:
   :os:
+    :virtualbox:
+      :box_name: fedora_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_base.box
     :aws:
       :ami: ami-9c9376f4
       :ami_region: us-east-1
@@ -39,6 +42,9 @@
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
   :deps:
+    :virtualbox:
+      :box_name: fedora_deps
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_deps.box
     :aws:
       :ami: ami-58e00530
       :ami_region: us-east-1
@@ -46,6 +52,9 @@
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
   :inst:
+    :virtualbox:
+      :box_name: n/a
+      :box_url: n/a
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
