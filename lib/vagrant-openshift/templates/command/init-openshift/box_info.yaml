@@ -30,3 +30,25 @@
       :ami_ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
+:fedora:
+  :os:
+    :aws:
+      :ami: ami-9c9376f4
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: openshift-fedora
+      :ebs_volume_size: 25
+  :deps:
+    :aws:
+      :ami: ami-58e00530
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: devenv-fedora-base
+      :ebs_volume_size: 25
+  :inst:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ami_ssh_user: fedora
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
