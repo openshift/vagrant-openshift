@@ -68,12 +68,14 @@ growpart:
 runcmd:
 - [ sh, -xc, "echo 'Defaults:<%= box_info[:aws][:ami_ssh_user] %> \!requiretty' >> /etc/sudoers"]
     }
-    aws.block_device_mapping = [
-      {
-         "DeviceName" => "/dev/sda",
-         "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>
-      }
-    ]
+    <% if box_info[:os] == :centos %>
+      aws.block_device_mapping = [
+        {
+           "DeviceName" => "/dev/sda",
+           "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>
+        }
+      ]
+    <% end %>
   end
 
   config.vm.hostname  = 'broker.example.com'
@@ -83,7 +85,7 @@ runcmd:
   # Domain zone under which application will be created. Eg: appname.namespace.example.com
   config.openshift.cloud_domain = "example.com"
 
-  # Pakages that are part of OpenShift Origin code but should not be compiled or installed
+  # Packages that are part of OpenShift Origin code but should not be compiled or installed
 <% if box_info[:os] == :fedora %>
   config.openshift.ignore_packages = [
     'openshift-origin-util-scl',
