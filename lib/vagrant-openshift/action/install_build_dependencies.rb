@@ -36,7 +36,7 @@ module Vagrant
             #test dependencies
             sudo(env[:machine], "yum install -y ruby193-rubygem-net-ssh ruby193-rubygem-archive-tar-minitar ruby193-rubygem-fakefs ruby193-rubygem-httpclient ruby193-rubygem-test-unit")
             sudo(env[:machine], "yum install -y ruby193-rubygem-cucumber ruby193-rubygem-simplecov ruby193-rubygem-webmock ruby193-rubygem-poltergeist")
-            
+
             #rhc client dependencies for SCL Ruby 1.9.3 environment
             sudo(env[:machine], "yum install -y rubygem-parseconfig ruby193-rubygem-net-ssh-multi ruby193-rubygem-commander ruby193-rubygem-open4")
           end

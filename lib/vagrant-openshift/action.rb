@@ -37,6 +37,28 @@ module Vagrant
         end
       end
 
+      def self.build_geard_base(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use CreateYumRepositories
+          b.use YumUpdate
+          b.use InstallGeardBaseDependencies
+          #b.use SetupBuilderFiles
+          b.use Clean
+          b.use CloneUpstreamRepositories
+          b.use SetHostName
+          #b.use SetupBindDnsKey
+          b.use CheckoutRepositories
+          #b.use InstallOpenShiftDependencies
+          #b.use CreatePuppetFile
+        end
+      end
+
+      def self.build_geard(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use InstallGeard
+        end
+      end
+
       def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -124,6 +146,8 @@ module Vagrant
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
+      autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
+      autoload :InstallGeard, action_root.join("install_geard")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")

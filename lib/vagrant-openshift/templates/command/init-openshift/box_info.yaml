@@ -46,7 +46,7 @@
       :box_name: fedora_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_deps.box
     :aws:
-      :ami: ami-58e00530
+      :ami: ami-a8a94fc0
       :ami_region: us-east-1
       :ami_ssh_user: fedora
       :machine_name: devenv-fedora-base

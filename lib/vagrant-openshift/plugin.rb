@@ -42,6 +42,16 @@ module Vagrant
         Commands::BuildOriginBase
       end
 
+      command "build-geard-base" do
+        require_relative "command/build_geard_base"
+        Commands::BuildGeardBase
+      end
+
+      command "build-geard" do
+        require_relative "command/build_geard"
+        Commands::BuildGeard
+      end
+
       command "origin-init" do
         require_relative "command/openshift_init"
         Commands::OpenshiftInit
