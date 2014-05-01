@@ -64,8 +64,8 @@ module Vagrant
           return if box_info[:aws][:ami_tag_prefix].nil?
           @env[:ui].info("Reading AWS credentials from #{@aws_creds_file.to_s}")
           if @aws_creds_file.exist?
-            aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
-
+            aws_creds = Hash[File.open(@aws_creds_file).readlines.map {|l| l.strip }.select {|l| not '' == l and not l.start_with? '#' and not l.start_with? '['}.map {|l| l.split '=' }]
+            aws_creds = ParseConfig.new(@aws_creds_file)
             fog_config = {
                 :provider              => :aws,
                 :region                => box_info[:aws][:ami_region],
