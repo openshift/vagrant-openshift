@@ -17,29 +17,18 @@
 module Vagrant
   module Openshift
     module Action
-      class CheckoutRepositories
+      class InstallGeardBroker
         include CommandHelper
 
-        def initialize(app, env, options={})
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options
         end
 
         def call(env)
-          git_clone_commands = ""
-          Constants.repos.each do |repo_name, url|
-            bare_repo_name = repo_name + "-bare"
-            bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
-
-            git_clone_commands += "rm -rf #{repo_path}; git clone #{bare_repo_path} #{repo_path}; "
-            if @options[:branch] && @options[:branch][repo_name]
-              git_clone_commands += "cd #{repo_path}; git checkout #{@options[:branch][repo_name]}; cd #{Constants.build_dir}; "
-            end
-          end
-          do_execute env[:machine], git_clone_commands
-
+          # Currently just do a docker build, eventually this will instead do a gear build
+          # with the broker's builder as the base image
+          sudo(env[:machine], "cd #{Constants.build_dir}/origin-server; docker build --rm -t origin-broker .")
           @app.call(env)
         end
       end
