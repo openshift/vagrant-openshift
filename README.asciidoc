@@ -21,7 +21,7 @@ link:http://gembundler.com[Bundler] to get the dependencies:
 $ bundle
 ----
 
-Install preqeq plugins to Vagrant
+Install prereq plugins to Vagrant
 ----
 $ vagrant plugin install aws
 ----
