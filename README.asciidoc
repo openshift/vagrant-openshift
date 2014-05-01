@@ -23,14 +23,14 @@ $ bundle
 
 Install prereq plugins to Vagrant
 ----
-$ vagrant plugin install aws
+$ vagrant plugin install vagrant-aws
 ----
 
 Compile an install the plugin using Rake
 
 [source, sh]
 ----
-$ rake install
+$ rake vagrant:install
 ----
 
 === Getting started
