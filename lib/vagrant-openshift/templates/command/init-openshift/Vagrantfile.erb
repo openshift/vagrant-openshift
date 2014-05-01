@@ -27,39 +27,48 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "<%= box_info[:virtualbox][:box_url] %>"
 
   # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
+  # backing providers for Vagrant.
   config.vm.provider :virtualbox do |vb|
-     # Don't boot with headless mode
-     vb.gui = true
-
-     # Use VBoxManage to customize the VM. For example to change memory:
+     vb.gui  = false
+     vb.name = "<%= box_info[:instance_name] %>"
      vb.customize ["modifyvm", :id, "--memory", "2048"]
-     #vb.customize ["modifyvm", :id, "--cpus", "2"]
+  end
+
+  config.vm.provider "vmware_fusion" do |vmf, override|
+    vmf.gui             = false
+    vmf.name            = "<%= box_info[:instance_name] %>"
+    vmf.vmx["memsize"]  = "2048"
+    override.vm.box     = "<%= box_info[:vmware][:box_name] %>"
+    override.vm.box_url = "<%= box_info[:vmware][:box_url] %>"
+  end
+
+  config.vm.provider "vmware_workstation" do |vmw, override|
+    vmw.gui             = false
+    vmw.name            = "<%= box_info[:instance_name] %>"
+    vmw.vmx["memsize"]  = "2048"
+    override.vm.box     = "<%= box_info[:vmware][:box_name] %>"
+    override.vm.box_url = "<%= box_info[:vmware][:box_url] %>"
   end
 
   config.vm.provider :aws do |aws, override|
     # You will need the latest AWS plugin for vagrant
     # https://github.com/mitchellh/vagrant-aws
-
     aws_creds_file = Pathname.new(File.expand_path("<%= box_info[:aws_creds_file]%>"))
-    aws_creds = aws_creds_file.exist? ? Hash[*(File.open(aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
+    aws_creds      = aws_creds_file.exist? ? Hash[*(File.open(aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
 
-    aws.access_key_id    = aws_creds["AWSAccessKeyId"] || "AWS ACCESS KEY"
-    aws.secret_access_key = aws_creds["AWSSecretKey"] || "AWS SECRET KEY"
+    override.vm.box               = "dummy"
+    override.vm.box_url           = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    override.ssh.username         = "<%= box_info[:aws][:ami_ssh_user] %>"
+    override.ssh.private_key_path = aws_creds["AWSPrivateKeyPath"] || "PATH TO AWS KEYPAIR PRIVATE KEY"
+
+    aws.access_key_id     = aws_creds["AWSAccessKeyId"] || "AWS ACCESS KEY"
+    aws.secret_access_key = aws_creds["AWSSecretKey"]   || "AWS SECRET KEY"
     aws.keypair_name      = aws_creds["AWSKeyPairName"] || "AWS KEYPAIR NAME"
-    override.ssh.private_key_path  = aws_creds["AWSPrivateKeyPath"] || "PATH TO AWS KEYPAIR PRIVATE KEY"
-
-    override.vm.box = "dummy"
-    override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-
-    aws.ami = "<%= box_info[:aws][:ami] %>"
-    aws.region = "<%= box_info[:aws][:ami_region] %>"
-    override.ssh.username = "<%= box_info[:aws][:ami_ssh_user] %>"
-    aws.instance_type = "m3.large"
-    aws.tags = { "Name" => "<%= box_info[:aws][:machine_name] %>" }
-    aws.user_data = %{
+    aws.ami               = "<%= box_info[:aws][:ami] %>"
+    aws.region            = "<%= box_info[:aws][:ami_region] %>"
+    aws.instance_type     = "m3.large"
+    aws.tags              = { "Name" => "<%= box_info[:instance_name] %>" }
+    aws.user_data         = %{
 #cloud-config
 
 growpart:

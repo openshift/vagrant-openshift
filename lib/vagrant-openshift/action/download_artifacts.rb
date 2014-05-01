@@ -29,6 +29,8 @@ module Vagrant
         def call(env)
           machine = @env[:machine]
           machine.ui.info "Downloading logs and rpms"
+          ssh_info = machine.ssh_info
+          private_key_path = ssh_info[:private_key_path].kind_of?(Array) ? ssh_info[:private_key_path][0] : ssh_info[:private_key_path]
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
           download_map = {
@@ -45,24 +47,17 @@ module Vagrant
             "#{Constants.build_dir}/origin-srpms/" => artifacts_dir + "srpms/",
           }
 
-          download_map.each do |k,v|
-            machine.ui.info "Downloading artifacts from '#{k}' to '#{v}'"
-            if v.to_s.end_with? '/'
-              FileUtils.mkdir_p v.to_s
+          download_map.each do |source,target|
+            machine.ui.info "Downloading artifacts from '#{source}' to '#{target}'"
+            if target.to_s.end_with? '/'
+              FileUtils.mkdir_p target.to_s
             else
-              FileUtils.mkdir_p File.dirname(v.to_s)
+              FileUtils.mkdir_p File.dirname(target.to_s)
             end
 
-            ssh_info = env[:machine].ssh_info
-            command = [
-                "rsync", "--verbose", "--human-readable", "--compress", "--recursive", "--perms",
-                "--times", "--stats", "--delete", "--rsync-path", "sudo rsync",
-                "--rsh", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'",
-                "#{ssh_info[:username]}@#{ssh_info[:host]}:#{k}", "#{v}"
-            ]
+            command = "/usr/bin/scp -r -i '#{private_key_path}' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
-            r = Vagrant::Util::Subprocess.execute(*command)
-            if r.exit_code != 0
+            if not system(command)
               machine.ui.warn "Unable to download artifact"
               machine.ui.warn r.stderr
             end
