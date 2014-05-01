@@ -29,19 +29,16 @@ module Vagrant
         end
 
         def call(env)
-          os = @options[:os].to_sym
-          stage = @options[:stage].to_sym
+          os      = @options[:os].to_sym
+          stage   = @options[:stage].to_sym
+          inst_ts = Time.now.getutc.strftime('%Y%m%d_%H%M')
 
           template_path = Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/Vagrantfile.erb"))
           box_info_path = Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/box_info.yaml"))
 
           box_info_data = YAML.load(File.new(box_info_path))
           box_info = box_info_data[os][stage]
-
-          if not @options[:name].nil?
-            box_info[:virtualbox][:box_name] = @options[:name]
-            box_info[:aws][:machine_name] = @options[:name]
-          end
+          box_info[:instance_name] = @options[:name].nil? ? 'openshift_origin_' + inst_ts : @options[:name]
           box_info[:os] = os
           box_info[:vagrant_guest] = (os == :centos) ? :redhat : os
 

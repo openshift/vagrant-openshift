@@ -4,6 +4,9 @@
     :virtualbox:
       :box_name: centos_65_virtualbox_base
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_base.box
+    :vmware:
+      :box_name: centos_65_vmware_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_base.box
     :aws:
       :ami: ami-8f9d81e6
       :ami_region: us-east-1
@@ -14,6 +17,9 @@
     :virtualbox:
       :box_name: centos_65_virtualbox_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_deps.box
+    :vmware:
+      :box_name: centos_65_vmware_deps
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_deps.box
     :aws:
       :ami: ami-9d9d81f4
       :ami_region: us-east-1
@@ -22,6 +28,9 @@
       :ebs_volume_size: 25
   :inst:
     :virtualbox:
+      :box_name: n/a
+      :box_url: n/a
+    :vmware:
       :box_name: n/a
       :box_url: n/a
     :aws:

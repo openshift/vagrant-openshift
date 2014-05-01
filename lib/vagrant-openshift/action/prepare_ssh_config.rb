@@ -38,17 +38,19 @@ module Vagrant
           ssh_config_path = Pathname.new(File.expand_path("~/.ssh/config"))
           ssh_config_str = %{
 Host verifier
-  HostName #{ssh_host}
-  Port     #{ssh_port}
-  User     #{ssh_user}
+  HostName     #{ssh_host}
+  Port         #{ssh_port}
+  User         #{ssh_user}
   IdentityFile #{ssh_id_file}
+  StrictHostKeyChecking no
+
           }
 
           if ssh_config_path.exist?
             if system( "grep -n 'Host verifier' #{ssh_config_path}" )
               lines = File.new(ssh_config_path.to_s).readlines
-              idx = lines.index{ |l| l.match(/Host verifier/)}
               lines.map!{ |line| line.rstrip }
+              idx = lines.index{ |l| l.match(/Host verifier/)}
 
               lines.delete_at(idx)
               while(not (lines[idx].nil? or lines[idx].match(/Host /)))
