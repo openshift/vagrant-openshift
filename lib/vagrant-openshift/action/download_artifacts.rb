@@ -55,7 +55,7 @@ module Vagrant
               FileUtils.mkdir_p File.dirname(target.to_s)
             end
 
-            command = "/usr/bin/scp -r -i '#{private_key_path}' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
+            command = "/usr/bin/rsync -avz -e 'ssh -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
             if not system(command)
               machine.ui.warn "Unable to download artifact"
