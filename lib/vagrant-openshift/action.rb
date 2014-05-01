@@ -55,6 +55,12 @@ module Vagrant
 
       def self.build_geard(options)
         Vagrant::Action::Builder.new.tap do |b|
+          b.use CreateYumRepositories
+          b.use YumUpdate
+          b.use Clean
+          b.use CloneUpstreamRepositories
+          b.use SetHostName
+          b.use CheckoutRepositories
           b.use InstallGeard
         end
       end

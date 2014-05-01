@@ -42,7 +42,7 @@ module Vagrant
 
           sudo env[:machine], "rm -rf /etc/yum.repos.d/openshift-origin.repo"
           sudo env[:machine], "rm -rf /var/cache/yum/x86_64/19/openshift-origin" #clear openshift package cache
-          sudo env[:machine], "rm -f /etc/openshift/.mongo-setup-complete"          
+          sudo env[:machine], "rm -f /etc/openshift/.mongo-setup-complete"
           @app.call(env)
         end
       end

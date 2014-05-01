@@ -27,6 +27,7 @@ module Vagrant
 
         def call(env)
           sudo(env[:machine], %{
+set -x
 usermod -a -G docker fedora
 systemctl enable docker.service
 systemctl start docker
@@ -40,40 +41,43 @@ GEARD_PATH=/fedora/src/github.com/openshift/geard
 chown -R fedora:fedora /fedora
 
 # Modify SSHD config to use gear-auth-keys-command to support git clone from repo
-if [[ $(cat /etc/ssh/sshd_config | grep /gear-auth-keys-command) = "" ]]; then
-  echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
-  echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
-else
-  echo "AuthorizedKeysCommand already configured"
-fi
+echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
+echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 
 # SET fedora USER PATH VARIABLES: GOPATH, GEARD_PATH
-if [[ $(cat ~fedora/.bash_profile | grep GOPATH) = "" ]]; then
-  echo 'export GOPATH=/fedora' >> ~fedora/.bash_profile
-  echo 'export PATH=$GOPATH/bin:$PATH' >> ~fedora/.bash_profile
-  echo "cd $GEARD_PATH" >> ~fedora/.bashrc
-  echo "bind '\"\e[A\":history-search-backward'" >> ~fedora/.bashrc
-  echo "bind '\"\e[B\":history-search-forward'" >> ~fedora/.bashrc
-else
-  echo "fedora user path variables already configured"
-fi
+echo 'export GOPATH=/fedora' >> ~fedora/.bash_profile
+echo 'export PATH=$GOPATH/bin:$PATH' >> ~fedora/.bash_profile
 
 # SET ROOT USER PATH VARIABLES: GOPATH, GEARD_PATH
-if [[ $(cat /root/.bash_profile | grep GOPATH) = "" ]]; then
-  echo 'export GOPATH=/fedora' >> /root/.bash_profile
-  echo 'export PATH=$GOPATH/bin:$PATH' >> /root/.bash_profile
-  echo "cd $GEARD_PATH" >> /root/.bashrc
-  echo "bind '\"\e[A\":history-search-backward'" >> /root/.bashrc
-  echo "bind '\"\e[B\":history-search-forward'" >> /root/.bashrc
-else
-  echo "root user path variables already configured"
-fi
+echo 'export GOPATH=/fedora' >> /root/.bash_profile
+echo 'export PATH=$GOPATH/bin:$PATH' >> /root/.bash_profile
 
-echo "Performing initial geard build..."
-su --login --shell="/bin/bash" --session-command "cd $GEARD_PATH && contrib/build" fedora
+
+cat > /usr/lib/systemd/system/geard.service <<DELIM
+[Unit]
+Description=Gear Provisioning Daemon (geard)
+Documentation=https://github.com/openshift/geard
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/gear
+ExecStart=/fedora/bin/gear daemon $GEARD_OPTS
+
+[Install]
+WantedBy=multi-user.target
+DELIM
+
+systemctl restart sshd
+systemctl enable geard.service
 
           })
-          @app.call(env)
+
+          do_execute(env[:machine], %{
+echo "Performing initial geard build..."
+pushd /fedora/src/github.com/openshift/geard
+  contrib/build -s
+popd
+          })
         end
       end
     end
