@@ -21,17 +21,16 @@ link:http://gembundler.com[Bundler] to get the dependencies:
 $ bundle
 ----
 
+Install preqeq plugins to Vagrant
+----
+$ vagrant plugin install aws
+----
+
 Compile an install the plugin using Rake
 
 [source, sh]
 ----
 $ rake install
-----
-
-Install plugin to Vagrant
-----
-$ vagrant plugin install aws
-$ vagrant plugin install pkg/vagrant-openshift-1.0.1.gem
 ----
 
 === Getting started
