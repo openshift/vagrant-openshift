@@ -41,6 +41,7 @@
       :ami_ssh_user: fedora
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
+      :ami_tag_prefix: openshift-fedora_
   :deps:
     :virtualbox:
       :box_name: fedora_deps
@@ -51,6 +52,7 @@
       :ami_ssh_user: fedora
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-fedora-base_
   :inst:
     :virtualbox:
       :box_name: n/a
@@ -61,3 +63,4 @@
       :ami_ssh_user: fedora
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-fedora_

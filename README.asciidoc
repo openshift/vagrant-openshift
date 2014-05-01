@@ -28,6 +28,12 @@ Compile an install the plugin using Rake
 $ rake install
 ----
 
+Install plugin to Vagrant
+----
+$ vagrant plugin install aws
+$ vagrant plugin install pkg/vagrant-openshift-1.0.1.gem
+----
+
 === Getting started
 
 ==== Clone the OpenShift Origin repositories
