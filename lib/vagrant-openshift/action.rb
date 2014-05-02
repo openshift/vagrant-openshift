@@ -65,6 +65,15 @@ module Vagrant
         end
       end
 
+      def self.build_geard_broker(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use Clean
+          b.use CloneUpstreamRepositories          
+          b.use CheckoutRepositories, options
+          b.use InstallGeardBroker
+        end
+      end      
+
       def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -152,6 +161,7 @@ module Vagrant
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
+      autoload :InstallGeardBroker, action_root.join("install_geard_broker")
       autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
       autoload :InstallGeard, action_root.join("install_geard")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")

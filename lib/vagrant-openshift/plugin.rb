@@ -52,6 +52,11 @@ module Vagrant
         Commands::BuildGeard
       end
 
+      command "build-geard-broker" do
+        require_relative "command/build_geard_broker"
+        Commands::BuildGeardBroker
+      end      
+
       command "origin-init" do
         require_relative "command/openshift_init"
         Commands::OpenshiftInit
