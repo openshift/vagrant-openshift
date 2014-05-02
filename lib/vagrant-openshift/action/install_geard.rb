@@ -44,14 +44,10 @@ chown -R fedora:fedora /fedora
 echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
 echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 
-# SET fedora USER PATH VARIABLES: GOPATH, GEARD_PATH
-echo 'export GOPATH=/fedora' >> ~fedora/.bash_profile
-echo 'export PATH=$GOPATH/bin:$PATH' >> ~fedora/.bash_profile
-
-# SET ROOT USER PATH VARIABLES: GOPATH, GEARD_PATH
-echo 'export GOPATH=/fedora' >> /root/.bash_profile
-echo 'export PATH=$GOPATH/bin:$PATH' >> /root/.bash_profile
-
+cat > /etc/profile.d/geard.sh <<DELIM
+export GOPATH=/fedora
+export PATH=$GOPATH/bin:$PATH
+DELIM
 
 cat > /usr/lib/systemd/system/geard.service <<DELIM
 [Unit]
