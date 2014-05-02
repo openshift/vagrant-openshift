@@ -26,9 +26,10 @@ module Vagrant
         end
 
         def call(env)
-          # Currently just do a docker build, eventually this will instead do a gear build
-          # with the broker's builder as the base image
-          sudo(env[:machine], "cd #{Constants.build_dir}/origin-server; docker build --rm -t origin-broker .")
+          #TODO gear build does not support a local directory as a git clone source yet, so use the github URL for now
+          #TODO branch should be configurable
+          sudo(env[:machine], "cd #{Constants.build_dir}/origin-server/broker/docker/origin-broker-builder; docker build --rm -t origin-broker-builder .")
+          sudo(env[:machine], "gear build https://github.com/openshift/origin-server.git origin-broker-builder origin-broker --ref='next_gen_node'")
           @app.call(env)
         end
       end
