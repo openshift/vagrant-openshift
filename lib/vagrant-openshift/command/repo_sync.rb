@@ -44,7 +44,7 @@ module Vagrant
               options[:deps] = f
             end
 
-            o.on("--dont-install", "Dont build and install RPMs") do |f|
+            o.on("--dont-install", "Don't build and install RPMs") do |f|
               options[:no_build] = f
             end
 

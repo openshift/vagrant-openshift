@@ -44,7 +44,7 @@ module Vagrant
             #"/tmp/rhc/*_coverage"                  => artifacts_dir + "coverage/",
             "/var/log/mcollective.*"               => artifacts_dir + "mcollective/",
             "#{Constants.build_dir}/origin-rpms/"  => artifacts_dir + "rpms/",
-            "#{Constants.build_dir}/origin-srpms/" => artifacts_dir + "srpms/",
+            "#{Constants.build_dir}/origin-srpms/" => artifacts_dir + "srpms/"
           }
 
           download_map.each do |source,target|

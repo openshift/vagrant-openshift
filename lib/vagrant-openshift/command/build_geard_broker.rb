@@ -27,7 +27,7 @@ module Vagrant
           options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-broker [vm-name]"
+            o.banner = "Usage: vagrant build-geard-broker [vm-name]"
             o.separator ""
 
             o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|

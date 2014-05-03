@@ -50,7 +50,7 @@ installonly_limit=3
 # information.
 #  It is esp. important, to have correct metadata, for distributions like
 # Fedora which don't keep old packages around. If you don't like this checking
-# interupting your command line usage, it's much better to have something
+# interrupting your command line usage, it's much better to have something
 # manually check the metadata once an hour (yum-updatesd will do this).
 metadata_expire=9999999
 

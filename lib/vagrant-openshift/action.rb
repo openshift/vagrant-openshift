@@ -68,11 +68,11 @@ module Vagrant
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use Clean
-          b.use CloneUpstreamRepositories          
+          b.use CloneUpstreamRepositories
           b.use CheckoutRepositories, options
           b.use InstallGeardBroker
         end
-      end      
+      end
 
       def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
