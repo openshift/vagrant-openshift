@@ -134,7 +134,7 @@ save
       print "Build phase #{phase}\n"
       buildable = []
 
-      #install pre reqs if thet have already been built
+      #install pre reqs if they have already been built
       spec_files.each do |spec|
         spec[:build_deps].delete_if do |dep|
           if opts[:assume_deps_built] || built_specs.map{ |s| s[:name] }.include?(dep)

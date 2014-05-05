@@ -30,9 +30,9 @@ class Test
         test_queues[i-1] << build_cucumber_command("REST API Group #{i}", ["@broker_api#{i}"])
       end
       (1..4).each do |i|
-        test_queues[i-1] << build_rake_command("OpenShift Broker Functionals Ext #{i}", "cd /data/openshift-test/broker; rake test:functionals_ext#{i}")
+        test_queues[i-1] << build_rake_command("OpenShift Broker Functionals Ext #{i}", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:functionals_ext#{i}")
       end
-      test_queues[0] << build_rake_command("OpenShift Broker OO Admin Scripts", "cd /data/openshift-test/broker; rake test:oo_admin_scripts")
+      test_queues[0] << build_rake_command("OpenShift Broker OO Admin Scripts", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:oo_admin_scripts")
     end
 
     if options[:node_extended]
@@ -52,7 +52,7 @@ class Test
         test_queues[i-1] << build_cucumber_command("Extended Gear Group #{i}", ["@gear_extended#{i}"])
       end
       (1..3).each do |i|
-        test_queues[i-1] << build_rake_command("OpenShift Gear Functionals Ext #{i}", "cd /data/openshift-test/node; rake ext_gear_func_test#{i}")
+        test_queues[i-1] << build_rake_command("OpenShift Gear Functionals Ext #{i}", "cd /data/src/github.com/openshift/openshift-test/node; rake ext_gear_func_test#{i}")
       end
     end
 
@@ -60,21 +60,21 @@ class Test
       test_queues[0] << build_cucumber_command("RHC Extended", ["@rhc_extended"])
       test_queues[1] << build_cucumber_command("RHC Integration",[],
                                                {"RHC_SERVER" => "broker.example.com", "RHC_DOMAIN" => "example.com"},
-                                               nil,"/data/openshift-test/rhc/cucumber")
+                                               nil,"/data/src/github.com/openshift/openshift-test/rhc/cucumber")
     end
 
     if options[:broker]
-      test_queues[3] << build_rake_command("OpenShift Broker Units", "cd /data/openshift-test/broker; rake test:units", {}, false)
-      test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/openshift-test/broker; rake test:integration", {}, false)
+      test_queues[3] << build_rake_command("OpenShift Broker Units", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:units", {}, false)
+      test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:integration", {}, false)
       (1..3).each do |i|
-        test_queues[i-1] << build_rake_command("OpenShift Broker Functional #{i}", "cd /data/openshift-test/broker; rake test:functionals#{i}", {}, false)
+        test_queues[i-1] << build_rake_command("OpenShift Broker Functional #{i}", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:functionals#{i}", {}, false)
       end
-      #test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/openshift-test/broker; rake test:admin_console_functionals", {}, false)
+      #test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:admin_console_functionals", {}, false)
       test_queues[3] << build_cucumber_command("Broker cucumber", ["@broker"])
     end
 
     if options[:node]
-      test_queues[0] << build_rake_command("Node Essentials", "cd /data/openshift-test/node; rake essentials_test | tail -100; exit ${PIPESTATUS[0]}", {}, false)
+      test_queues[0] << build_rake_command("Node Essentials", "cd /data/src/github.com/openshift/openshift-test/node; rake essentials_test | tail -100; exit ${PIPESTATUS[0]}", {}, false)
       (1..3).each do |i|
         test_queues[i] << build_cucumber_command("Node Group #{i.to_s}", ["@node#{i.to_s}"])
       end
@@ -88,9 +88,9 @@ class Test
 
     if options[:rhc]
       if @is_fedora
-        test_queues[0] << build_rake_command("RHC Spec", 'cd /data/openshift-test/rhc; bundle install --local && bundle exec rake spec', {"SKIP_RUNCON" => 1}, false)
+        test_queues[0] << build_rake_command("RHC Spec", 'cd /data/src/github.com/openshift/openshift-test/rhc; bundle install --local && bundle exec rake spec', {"SKIP_RUNCON" => 1}, false)
       else
-        test_queues[0] << build_rake_command("RHC Spec", 'cd /data/openshift-test/rhc; bundle install --path=/tmp/rhc_bundle && bundle exec rake spec', {}, false)
+        test_queues[0] << build_rake_command("RHC Spec", 'cd /data/src/github.com/openshift/openshift-test/rhc; bundle install --path=/tmp/rhc_bundle && bundle exec rake spec', {}, false)
       end
     end
 
