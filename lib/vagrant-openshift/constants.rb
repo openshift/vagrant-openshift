@@ -29,7 +29,7 @@ module Vagrant
       end
 
       def self.build_dir
-        Pathname.new "/data"
+        Pathname.new "/data/src/github.com/openshift/"
       end
 
       def self.deps_marker

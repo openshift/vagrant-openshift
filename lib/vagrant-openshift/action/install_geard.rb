@@ -33,19 +33,18 @@ systemctl enable docker.service
 systemctl start docker
 systemctl status docker
 
-mkdir -p /fedora/src/github.com/openshift/pkg
-mkdir -p /fedora/src/github.com/openshift/bin
-cp -r /data/geard /fedora/src/github.com/openshift/
+mkdir -p /data/src/github.com/openshift/pkg
+mkdir -p /data/src/github.com/openshift/bin
 
-GEARD_PATH=/fedora/src/github.com/openshift/geard
-chown -R fedora:fedora /fedora
+GEARD_PATH=/data/src/github.com/openshift/geard
+chown -R fedora:fedora /data
 
 # Modify SSHD config to use gear-auth-keys-command to support git clone from repo
 echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
 echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 
 cat > /etc/profile.d/geard.sh <<DELIM
-export GOPATH=/fedora
+export GOPATH=/data
 export PATH=$GOPATH/bin:$PATH
 DELIM
 
@@ -57,7 +56,7 @@ Documentation=https://github.com/openshift/geard
 [Service]
 Type=simple
 EnvironmentFile=-/etc/default/gear
-ExecStart=/fedora/bin/gear daemon $GEARD_OPTS
+ExecStart=/data/bin/gear daemon $GEARD_OPTS
 
 [Install]
 WantedBy=multi-user.target
@@ -70,7 +69,7 @@ systemctl enable geard.service
 
           do_execute(env[:machine], %{
 echo "Performing initial geard build..."
-pushd /fedora/src/github.com/openshift/geard
+pushd /data/src/github.com/openshift/geard
   contrib/build -s
 popd
           })
