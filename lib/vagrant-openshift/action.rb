@@ -103,6 +103,14 @@ module Vagrant
         end
       end
 
+      def self.repo_sync_geard(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PrepareSshConfig
+          b.use SyncLocalRepository
+          b.use CheckoutRepositories
+        end
+      end
+
       def self.local_repo_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]

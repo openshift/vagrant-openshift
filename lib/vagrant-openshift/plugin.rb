@@ -37,6 +37,11 @@ module Vagrant
         Commands::RepoSync
       end
 
+      command "sync-geard" do
+        require_relative "command/repo_sync_geard"
+        Commands::RepoSyncGeard
+      end      
+
       command "origin-build-base" do
         require_relative "command/build_origin_base"
         Commands::BuildOriginBase
