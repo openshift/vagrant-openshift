@@ -26,12 +26,11 @@ module Vagrant
         end
 
         def call(env)
-          do_execute(env[:machine], %{
-echo "Performing initial geard build..."
-pushd /data/src/github.com/openshift/geard
-  contrib/build -s
-popd
-          })
+          do_execute(env[:machine], sync_bash_command('geard', %{
+echo "Performing geard build..."
+set -e
+contrib/build -s
+          }))
         end
 
       end
