@@ -66,13 +66,6 @@ systemctl restart sshd
 systemctl enable geard.service
 
           })
-
-          do_execute(env[:machine], %{
-echo "Performing initial geard build..."
-pushd /data/src/github.com/openshift/geard
-  contrib/build -s
-popd
-          })
         end
       end
     end

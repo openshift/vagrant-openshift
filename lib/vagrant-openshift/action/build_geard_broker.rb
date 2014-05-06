@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallGeardBroker
+      class BuildGeardBroker
         include CommandHelper
 
         def initialize(app, env)
