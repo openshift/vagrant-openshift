@@ -30,9 +30,8 @@ module Vagrant
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum clean all")
           sudo(env[:machine], "rm -rf #{Constants.build_dir}")
-          sudo(env[:machine], "mkdir #{Constants.build_dir}")
-          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"}; chown #{ssh_user}:#{ssh_user} #{Constants.build_dir + "builder"};")
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
+          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"}; chown #{ssh_user}:#{ssh_user} #{Constants.build_dir + "builder"};")
           env[:machine].communicate.upload(File.expand_path("#{__FILE__}/../../templates/builder"), Constants.build_dir.to_s )
           env[:machine].communicate.upload(File.expand_path("#{__FILE__}/../../constants.rb"), (Constants.build_dir + "builder/lib/constants.rb").to_s )
           sudo(env[:machine], "chmod +x #{Constants.build_dir + "builder/yum-listbuilddep"}; chown #{ssh_user}:#{ssh_user} -R #{Constants.build_dir}")

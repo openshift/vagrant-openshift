@@ -40,7 +40,7 @@ module Vagrant
       command "sync-geard" do
         require_relative "command/repo_sync_geard"
         Commands::RepoSyncGeard
-      end      
+      end
 
       command "origin-build-base" do
         require_relative "command/build_origin_base"
@@ -57,10 +57,15 @@ module Vagrant
         Commands::BuildGeard
       end
 
+      command "install-geard" do
+        require_relative "command/install_geard"
+        Commands::InstallGeard
+      end
+
       command "build-geard-broker" do
         require_relative "command/build_geard_broker"
         Commands::BuildGeardBroker
-      end      
+      end
 
       command "origin-init" do
         require_relative "command/openshift_init"
