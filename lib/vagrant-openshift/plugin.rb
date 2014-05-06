@@ -92,6 +92,16 @@ module Vagrant
         Commands::ModifyInstance
       end
 
+      command "clone-upstream-repos" do
+        require_relative "command/clone_upstream_repositories"
+        Commands::CloneUpstreamRepositories
+      end
+
+      command "checkout-repos" do
+        require_relative "command/checkout_repositories"
+        Commands::CheckoutRepositories
+      end
+      
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner

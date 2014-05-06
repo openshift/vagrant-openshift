@@ -20,9 +20,10 @@ module Vagrant
       class CloneUpstreamRepositories
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
@@ -36,6 +37,10 @@ module Vagrant
           Constants.repos.each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name
+
+            if @options[:clean]
+              git_clone_commands += "rm -fr #{bare_repo_path};\n"
+            end
 
             git_clone_commands += "if [ ! -d #{bare_repo_path} ]; then\n"
             git_clone_commands += "git clone --bare #{url} #{bare_repo_path};\n"

@@ -58,9 +58,9 @@ module Vagrant
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use Clean
-          b.use CloneUpstreamRepositories
+          #b.use CloneUpstreamRepositories
           b.use SetHostName
-          b.use CheckoutRepositories
+          #b.use CheckoutRepositories
           b.use InstallGeard
           #b.use BuildGeard
         end
@@ -75,8 +75,8 @@ module Vagrant
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use Clean
-          b.use CloneUpstreamRepositories
-          b.use CheckoutRepositories, options
+          #b.use CloneUpstreamRepositories
+          #b.use CheckoutRepositories, options
           b.use BuildGeardBroker
         end
       end
@@ -160,6 +160,18 @@ module Vagrant
           b.use ConfigValidate
           b.use VagrantPlugins::AWS::Action::ConnectAWS
           b.use ModifyInstance, options
+        end
+      end
+
+      def self.clone_upstream_repositories(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use CloneUpstreamRepositories, options
+        end
+      end
+
+      def self.checkout_repositories(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use CheckoutRepositories, options
         end
       end
 
