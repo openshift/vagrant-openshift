@@ -102,6 +102,26 @@ chmod #{perms} #{dest}})
           file.unlink
         end
       end
+
+      def sync_bash_command(repo_name, build_cmd)
+        cmd = %{
+pushd /data/src/github.com/openshift/#{repo_name}
+  commit_id=`git rev-parse master`
+  mkdir -p /data/.sync/
+  if [ -f /data/.sync/#{repo_name} ]
+  then
+    previous_commit_id=$(cat /data/.sync/#{repo_name})
+  fi
+  if [ "$previous_commit_id" != "$commit_id" ]
+  then
+    #{build_cmd}
+  else
+    echo "No update for #{repo_name}"
+  fi
+  echo -n $commit_id > /data/.sync/#{repo_name}
+popd
+        }
+      end
     end
   end
 end
