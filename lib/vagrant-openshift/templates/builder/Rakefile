@@ -134,14 +134,35 @@ task :create_test_users do
   system("mkdir -p /etc/openshift && touch /etc/openshift/htpasswd")
   ['test_user@test.com', 'user_with_multiple_gear_sizes@test.com', 'user_with_extra_storage@test.com', 'user_with_certificate_capabilities@test.com']. each do |user|
     unless system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
+
+      # Try to create the user record
       print "Creating test user:  #{user}\n"
-      exitcode = system("/usr/bin/htpasswd -b /etc/openshift/htpasswd #{user} test")
-      # Rushing apache triggers false failures; give the system a moment.
-      if exitcode
+      user_created   = false
+      create_retries = 0
+      while create_retries < 3 do
+        user_created = system("/usr/bin/htpasswd -b /etc/openshift/htpasswd #{user} test")
+        break if user_created
+        create_retries = create_retries + 1
+        print "Could not add user #{user} to htpasswd file on attempt #{create_retries}\n"
+        sleep 2
+      end
+      if not user_created
+        print "Unable to add user '#{user}' to /etc/openshift/htpasswd\n"
+        exit 1
+      end
+
+      # Test the user record via the REST API
+      rest_connected = false
+      rest_retries   = 0
+      while rest_retries < 3 do
+        rest_connected = system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null")
+        break if rest_connected
+        rest_retries = rest_retries + 1
+        print "Could not verify user #{user} via the REST API on attempt #{rest_retries}\n"
         sleep 5
       end
-      if (!exitcode) || (! system("/usr/bin/curl -f -k https://broker.example.com/broker/rest/user -u #{user}:test 2>/dev/null 1>/dev/null"))
-        print "Unable to create #{user}\n"
+      if not rest_connected
+        print "Unable to verify user #{user} via the REST API\n"
         exit 1
       end
     else
