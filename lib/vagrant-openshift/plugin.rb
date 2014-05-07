@@ -87,6 +87,11 @@ module Vagrant
         Commands::Test
       end
 
+      command "test-geard" do
+        require_relative "command/test_geard"
+        Commands::TestGeard
+      end
+
       command "create-ami" do
         require_relative "command/create_ami"
         Commands::CreateAMI
