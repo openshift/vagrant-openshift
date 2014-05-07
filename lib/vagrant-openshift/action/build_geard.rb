@@ -31,6 +31,8 @@ echo "Performing geard build..."
 set -e
 contrib/build -s
           }))
+
+          @app.call(env)          
         end
 
       end

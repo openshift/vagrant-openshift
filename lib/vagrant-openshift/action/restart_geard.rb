@@ -29,6 +29,8 @@ module Vagrant
           sudo(env[:machine], %{
 systemctl restart geard
           })
+          
+          @app.call(env)          
         end
 
       end
