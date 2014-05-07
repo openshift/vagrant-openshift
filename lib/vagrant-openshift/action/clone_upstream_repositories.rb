@@ -43,9 +43,14 @@ module Vagrant
             end
 
             git_clone_commands += "if [ ! -d #{bare_repo_path} ]; then\n"
-            git_clone_commands += "git clone --bare #{url} #{bare_repo_path};\n"
+            git_clone_commands += "git clone --quiet --bare #{url} #{bare_repo_path} >/dev/null &\n"
+            git_clone_commands += "PIDS+=$!\" \";\n"
             git_clone_commands += "fi\n"
           end
+
+          git_clone_commands += "if [ -n \"$PIDS\" ]; then\n"
+          git_clone_commands += "wait $PIDS\n"
+          git_clone_commands += "fi\n"
 
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
