@@ -21,6 +21,10 @@ module Vagrant
       class RepoSync < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "syncs and installs(by default) your local repos to the current instance"
+        end
+
         def execute
           options = {}
           options[:clean] = false

@@ -21,6 +21,10 @@ module Vagrant
       class RestartGeard < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "restarts geard"
+        end
+
         def execute
           options = {}
           options[:clean] = false

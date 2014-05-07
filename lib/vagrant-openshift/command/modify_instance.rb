@@ -21,6 +21,10 @@ module Vagrant
       class ModifyInstance < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "modifies the current instance"
+        end
+
         def execute
           options = {}
           options[:help] = false

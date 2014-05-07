@@ -21,6 +21,10 @@ module Vagrant
       class CreateAMI < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "registers an ami of the current instance with the same name as the instance"
+        end
+
         def execute
           options = {}
           options[:help] = false

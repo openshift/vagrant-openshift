@@ -21,6 +21,10 @@ module Vagrant
       class OpenshiftInit < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "creates an OpenShift Vagrantfile based on the options supplied"
+        end
+
         def execute
           options = {
             :no_base  => false,
