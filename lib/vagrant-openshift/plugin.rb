@@ -107,6 +107,11 @@ module Vagrant
         Commands::CreateAMI
       end
 
+      command "modify-ami" do
+        require_relative "command/modify_ami"
+        Commands::ModifyAMI
+      end
+
       command "modify-instance" do
         require_relative "command/modify_instance"
         Commands::ModifyInstance
@@ -121,7 +126,7 @@ module Vagrant
         require_relative "command/checkout_repositories"
         Commands::CheckoutRepositories
       end
-      
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner

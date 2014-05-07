@@ -195,6 +195,14 @@ module Vagrant
         end
       end
 
+      def self.modify_ami(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use VagrantPlugins::AWS::Action::ConnectAWS
+          b.use ModifyAMI, options
+        end
+      end
+
       def self.clone_upstream_repositories(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CloneUpstreamRepositories, options
@@ -242,6 +250,7 @@ module Vagrant
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
+      autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifacts, action_root.join("download_artifacts")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
