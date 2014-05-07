@@ -18,29 +18,24 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class ModifyInstance < Vagrant.plugin(2, :command)
+      class ModifyAMI < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "modifies the current instance"
+          "modifies corresponding ami of the current instance"
         end
 
         def execute
           options = {}
           options[:help] = false
-          options[:rename] = nil
-          options[:stop] = false
+          options[:tag] = nil
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant modify-instance [machine-name]"
+            o.banner = "Usage: vagrant modify-ami [machine-name]"
             o.separator ""
 
-            o.on("-r", "--rename [name]", String, "Rename the instance") do |f|
-              options[:rename] = f
-            end
-
-            o.on("-s", "--stop", String, "Stop the instance") do |f|
-              options[:stop] = true
+            o.on("-t", "--tag [name]", String, "Tag the AMI") do |f|
+              options[:tag] = f
             end
 
             o.on("-h", "--help", "Show this message") do |f|
@@ -57,7 +52,7 @@ module Vagrant
           end
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.modify_instance(options)
+            actions = Vagrant::Openshift::Action.modify_ami(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
