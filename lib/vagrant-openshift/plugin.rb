@@ -62,6 +62,11 @@ module Vagrant
         Commands::InstallGeard
       end
 
+      command "restart-geard" do
+        require_relative "command/restart_geard"
+        Commands::RestartGeard
+      end
+
       command "build-geard-broker" do
         require_relative "command/build_geard_broker"
         Commands::BuildGeardBroker
