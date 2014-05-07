@@ -72,6 +72,12 @@ module Vagrant
         end
       end
 
+      def self.restart_geard(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RestartGeard
+        end
+      end
+
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use Clean
@@ -180,6 +186,7 @@ module Vagrant
       autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
       autoload :InstallGeard, action_root.join("install_geard")
       autoload :BuildGeard, action_root.join("build_geard")
+      autoload :RestartGeard, action_root.join("restart_geard")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
