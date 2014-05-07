@@ -27,6 +27,7 @@ module Vagrant
 
         def call(env)
           sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make mlocate bind augeas vim docker-io golang hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++")
+          sudo(env[:machine], "docker pull openshift/centos-mongodb")
           sudo(env[:machine], "touch #{Vagrant::Openshift::Constants.deps_marker}")
           #is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
           @app.call(env)
