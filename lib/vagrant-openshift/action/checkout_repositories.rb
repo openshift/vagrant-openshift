@@ -33,11 +33,21 @@ module Vagrant
             bare_repo_path = Constants.build_dir + bare_repo_name
             repo_path = Constants.build_dir + repo_name
 
-            git_clone_commands += "rm -rf #{repo_path}; git clone #{bare_repo_path} #{repo_path}; "
+            git_clone_commands += "if [ -d #{bare_repo_path} ]; then\n"
+            git_clone_commands += "rm -rf #{repo_path}; git clone #{bare_repo_path} #{repo_path};\n"
             if @options[:branch] && @options[:branch][repo_name]
-              git_clone_commands += "cd #{repo_path}; git checkout #{@options[:branch][repo_name]}; cd #{Constants.build_dir}; "
+              git_clone_commands += "cd #{repo_path}; git checkout #{@options[:branch][repo_name]}; cd #{Constants.build_dir};\n"
             end
+            git_clone_commands += "else\n"
+            git_clone_commands += "MISSING_REPO+='#{bare_repo_name} ';\n"
+            git_clone_commands += "fi\n"
           end
+          git_clone_commands += "if [ -n \"$MISSING_REPO\" ]; then\n"
+          git_clone_commands += "echo 'Missing required upstream repositories:';\n"
+          git_clone_commands += "echo $MISSING_REPO;\n"
+          git_clone_commands += "echo 'To fix, execute command: vagrant clone-upstream-repos';\n"
+          git_clone_commands += "fi\n"
+
           do_execute env[:machine], git_clone_commands
 
           @app.call(env)
