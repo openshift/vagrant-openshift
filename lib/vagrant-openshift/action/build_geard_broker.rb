@@ -35,7 +35,7 @@ set -e
 pushd broker/docker/origin-broker-builder
   docker build --rm -t origin-broker-builder .
 popd
-gear build https://github.com/openshift/origin-server.git origin-broker-builder origin-broker --ref='next_gen_node'
+gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker
           }))
           @app.call(env)
         end
