@@ -32,7 +32,7 @@ set -e
 contrib/build -s
           }))
 
-          @app.call(env)          
+          @app.call(env)
         end
 
       end
