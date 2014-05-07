@@ -66,6 +66,8 @@ systemctl restart sshd
 systemctl enable geard.service
 
           })
+
+          @app.call(env)
         end
       end
     end

@@ -62,7 +62,7 @@ module Vagrant
           b.use SetHostName
           #b.use CheckoutRepositories
           b.use InstallGeard
-          #b.use BuildGeard
+          b.use BuildGeard
         end
       end
 
