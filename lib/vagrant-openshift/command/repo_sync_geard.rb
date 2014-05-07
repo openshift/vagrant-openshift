@@ -27,10 +27,15 @@ module Vagrant
 
         def execute
           options = {}
+          options[:no_build] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-geard [vm-name]"
             o.separator ""
+
+            o.on("--dont-install", "Don't build and install updated source") do |f|
+              options[:no_build] = true
+            end
 
             o.on("-h", "--help", "Show this message") do |f|
               options[:help] = f

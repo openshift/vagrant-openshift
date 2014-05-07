@@ -121,6 +121,10 @@ module Vagrant
           b.use PrepareSshConfig
           b.use SyncLocalRepository
           b.use CheckoutRepositories
+          unless options[:no_build]
+            b.use BuildGeard
+            b.use RestartGeard
+          end
         end
       end
 
