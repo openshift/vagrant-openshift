@@ -20,7 +20,7 @@ module Vagrant
       class CloneUpstreamRepositories
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env, options={})
           @app = app
           @env = env
           @options = options
