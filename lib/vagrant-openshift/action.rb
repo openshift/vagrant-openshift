@@ -146,6 +146,16 @@ module Vagrant
         end
       end
 
+      def self.run_geard_tests(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunGeardTests, options
+          if options[:download]
+            b.use DownloadArtifacts
+          end
+          b.use TestExitCode
+        end
+      end
+
       def self.gen_vagrant_file(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use GenerateTemplate, options
@@ -209,6 +219,7 @@ module Vagrant
       autoload :IdleAllGears, action_root.join("idle_all_gears")
       autoload :PreserveMcollectiveLogs, action_root.join("preserve_mcollective_logs")
       autoload :RunTests, action_root.join("run_tests")
+      autoload :RunGeardTests, action_root.join("run_geard_tests")
       autoload :CheckoutTests, action_root.join("checkout_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
