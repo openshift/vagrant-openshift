@@ -21,6 +21,10 @@ module Vagrant
       class Test < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "run the OpenShift tests"
+        end
+
         def component_list
           [:node,:cart,:gear,:broker,:console,:rhc]
         end

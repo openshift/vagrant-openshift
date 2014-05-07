@@ -21,6 +21,10 @@ module Vagrant
       class LocalRepoSetup < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "clones the openshift repos into the current directory"
+        end
+
         def execute
           options = {
             :branch => 'master',

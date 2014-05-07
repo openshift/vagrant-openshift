@@ -21,6 +21,10 @@ module Vagrant
       class BuildOriginBase < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "installs the prereqs for origin"
+        end
+
         def execute
           options = {}
           options[:clean] = false

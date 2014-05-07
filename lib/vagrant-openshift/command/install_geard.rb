@@ -21,6 +21,10 @@ module Vagrant
       class InstallGeard < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "installs geard"
+        end
+
         def execute
           options = {}
           options[:clean] = false

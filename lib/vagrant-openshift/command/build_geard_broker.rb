@@ -21,6 +21,10 @@ module Vagrant
       class BuildGeardBroker < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "builds and installs the broker for geard"
+        end
+
         def execute
           options = {}
           options[:clean] = false

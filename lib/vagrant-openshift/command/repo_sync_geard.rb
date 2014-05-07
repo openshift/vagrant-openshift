@@ -21,6 +21,10 @@ module Vagrant
       class RepoSyncGeard < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "syncs your local repos to the current instance"
+        end
+
         def execute
           options = {}
 

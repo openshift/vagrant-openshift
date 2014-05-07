@@ -21,6 +21,10 @@ module Vagrant
       class BuildGeardBase < Vagrant.plugin(2, :command)
         include CommandHelper
 
+        def self.synopsis
+          "install the prereqs for geard"
+        end
+
         def execute
           options = {}
           options[:clean] = false
