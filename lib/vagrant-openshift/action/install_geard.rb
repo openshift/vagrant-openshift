@@ -26,15 +26,16 @@ module Vagrant
         end
 
         def call(env)
+          ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], %{
 set -x
-usermod -a -G docker fedora
+usermod -a -G docker #{ssh_user}
 
 mkdir -p /data/src/github.com/openshift/pkg
 mkdir -p /data/src/github.com/openshift/bin
 
 GEARD_PATH=/data/src/github.com/openshift/geard
-chown -R fedora:fedora /data
+chown -R #{ssh_user}:#{ssh_user} /data
 
 # Modify SSHD config to use gear-auth-keys-command to support git clone from repo
 echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
