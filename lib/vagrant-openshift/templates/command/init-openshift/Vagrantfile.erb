@@ -87,7 +87,10 @@ runcmd:
     <% end %>
   end
 
+<% unless box_info[:os] == :fedora %>
   config.vm.hostname  = 'broker.example.com'
+<% end %>
+
   config.vm.provision   :openshift
   config.vm.guest     = :<%= box_info[:vagrant_guest]%>
 
