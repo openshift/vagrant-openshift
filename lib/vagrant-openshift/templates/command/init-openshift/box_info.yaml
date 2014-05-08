@@ -43,10 +43,10 @@
   :os:
     :virtualbox:
       :box_name: fedora_base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_base.box
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_virtualbox.box
     :vmware:
       :box_name: fedora_base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_base.box
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_vmware.box
     :aws:
       :ami: ami-9c9376f4
       :ami_region: us-east-1
@@ -57,10 +57,10 @@
   :deps:
     :virtualbox:
       :box_name: fedora_deps
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_deps.box
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_virtualbox_base.box
     :vmware:
       :box_name: fedora_deps
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/fedora_deps.box
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_vmware_base.box
     :aws:
       :ami: ami-a8a94fc0
       :ami_region: us-east-1
