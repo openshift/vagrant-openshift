@@ -60,7 +60,9 @@ module Vagrant
           # TODO: Replace this temporary fix with a complete post-install routine
           sudo(machine,"oo-admin-ctl-cartridge -c import-node --activate --obsolete && RAILS_ENV=test oo-admin-ctl-cartridge -c import-node --activate --obsolete")
         else
-          if not @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
+          #TODO is_fedora is a temporary fix for the new environment
+          is_fedora = @machine.communicate.test("test -e /etc/fedora-release")
+          unless is_fedora || @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
             @machine.ui.info("Preparing base environment")
             require_relative "command/build_origin_base"
             Vagrant::Openshift::Commands::BuildOriginBase.new([], @machine.env).execute

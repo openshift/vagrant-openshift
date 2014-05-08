@@ -26,9 +26,6 @@ module Vagrant
         end
 
         def call(env)
-          #TODO gear build does not support a local directory as a git clone source yet, so use the github URL for now
-          #TODO branch should be configurable
-
           sudo(env[:machine], sync_bash_command('origin-server', %{
 echo "Performing broker build..."
 set -e
