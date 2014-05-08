@@ -29,9 +29,6 @@ module Vagrant
           sudo(env[:machine], %{
 set -x
 usermod -a -G docker fedora
-systemctl enable docker.service
-systemctl start docker
-systemctl status docker
 
 mkdir -p /data/src/github.com/openshift/pkg
 mkdir -p /data/src/github.com/openshift/bin
