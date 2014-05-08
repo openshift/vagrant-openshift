@@ -21,6 +21,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  gopath = nil
+  if ENV['GOPATH'] && !ENV['GOPATH'].empty?
+    gopath = File.expand_path(ENV['GOPATH'].split(/:/).last)
+    vagrantfile = File.expand_path(File.dirname(__FILE__))
+    if !vagrantfile.index(gopath)
+      puts "\nYou have GOPATH set to '#{gopath}', which should contain your OpenShift source repositories, but are running from '#{vagrantfile}' instead.\n\nSet GOPATH='' when running vagrant or move your openshift repos under '#{gopath}/src/github.com/openshift'."
+    else
+      config.vm.synced_folder gopath, "/data"
+    end
+  end
+
   # Box to load when booting the vagrant VM. This section applicable only to VirtualBox.
   # Other providers may override this value
   config.vm.box     = "<%= box_info[:virtualbox][:box_name] %>"
@@ -53,6 +64,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :aws do |aws, override|
     # You will need the latest AWS plugin for vagrant
     # https://github.com/mitchellh/vagrant-aws
+
+    if gopath
+      config.vm.synced_folder gopath, "/data", disabled: true
+    end
+
     aws_creds_file = Pathname.new(File.expand_path("<%= box_info[:aws_creds_file]%>"))
     aws_creds      = aws_creds_file.exist? ? Hash[*(File.open(aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
 
