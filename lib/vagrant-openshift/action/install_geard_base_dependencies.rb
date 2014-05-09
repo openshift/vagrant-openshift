@@ -31,7 +31,13 @@ module Vagrant
 systemctl enable docker
 systemctl start docker
 docker pull openshift/centos-mongodb
+if ! docker images | grep 'openshift/centos-mongodb' 2>&1 > /dev/null ; then
+  docker pull openshift/centos-mongodb
+fi
 docker pull openshift/centos-ruby
+if ! docker images | grep 'openshift/centos-ruby' 2>&1 > /dev/null ; then
+  docker pull openshift/centos-ruby
+fi
 touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
           #is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
