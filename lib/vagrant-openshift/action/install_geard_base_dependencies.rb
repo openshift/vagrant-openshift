@@ -30,12 +30,8 @@ module Vagrant
           sudo(env[:machine], %{
 systemctl enable docker
 systemctl start docker
-docker pull openshift/centos-mongodb >/dev/null &
-pid1=$!
-docker pull openshift/centos-ruby >/dev/null &
-pid2=$!
-wait $pid1
-wait $pid2
+docker pull openshift/centos-mongodb
+docker pull openshift/centos-ruby
 touch #{Vagrant::Openshift::Constants.deps_marker}
           })
           #is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
