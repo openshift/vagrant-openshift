@@ -33,7 +33,7 @@ systemctl start docker
 docker pull openshift/centos-mongodb
 docker pull openshift/centos-ruby
 touch #{Vagrant::Openshift::Constants.deps_marker}
-          })
+          }, {:timeout=>60*20})
           #is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
           @app.call(env)
         end

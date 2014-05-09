@@ -49,7 +49,7 @@ module Vagrant
               end
             end
           rescue Timeout::Error
-            machine.env.ui.warn "Timeout occured while running ssh/sudo command: #{command}"
+            machine.env.ui.warn "Timeout occurred while running ssh/sudo command: #{command}"
             rc = -1
           rescue Exception => e
             machine.env.ui.warn "Error while running ssh/sudo command: #{command}"
