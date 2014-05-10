@@ -31,7 +31,7 @@ module Vagrant
             %{Host github.com
    StrictHostKeyChecking no
    UserKnownHostsFile=/dev/null
-}}
+          }}
 
           git_clone_commands = ""
           Constants.repos.each do |repo_name, url|
