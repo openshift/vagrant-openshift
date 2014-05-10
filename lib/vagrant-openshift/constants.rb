@@ -23,7 +23,8 @@ module Vagrant
           'origin-server' => 'https://github.com/openshift/origin-server.git',
           'rhc' => 'https://github.com/openshift/rhc.git',
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
-          'geard' => 'https://github.com/openshift/geard.git'
+          'geard' => 'https://github.com/openshift/geard.git',
+          'docker-source-to-images' => 'https://github.com/openshift/docker-source-to-images.git'
         }
       end
 
