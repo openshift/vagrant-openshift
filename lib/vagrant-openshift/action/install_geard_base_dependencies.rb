@@ -34,6 +34,8 @@ docker pull openshift/centos-mongodb
 if ! docker images | grep 'openshift/centos-mongodb' 2>&1 > /dev/null ; then
   docker pull openshift/centos-mongodb
 fi
+          }, {:timeout=>6*20})
+          sudo(env[:machine], %{
 docker pull openshift/centos-ruby
 if ! docker images | grep 'openshift/centos-ruby' 2>&1 > /dev/null ; then
   docker pull openshift/centos-ruby
