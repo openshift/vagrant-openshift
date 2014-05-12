@@ -32,7 +32,7 @@ module Vagrant
 
           begin
             machine = env[:aws_compute].servers.get(env[:machine].id)
-            image_req = env[:aws_compute].create_image(machine.identity, machine.tags["Name"], machine.tags["Name"], true)
+            image_req = env[:aws_compute].create_image(machine.identity, machine.tags["Name"], machine.tags["Name"], false)
             image = env[:aws_compute].images.get(image_req.body["imageId"])
             env[:machine].ui.info "Creating AMI #{image.id}"
             while not image.ready?
