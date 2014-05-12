@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if !vagrantfile.index(gopath)
       puts "\nYou have GOPATH set to '#{gopath}', which should contain your OpenShift source repositories, but are running from '#{vagrantfile}' instead.\n\nSet GOPATH='' when running vagrant or move your openshift repos under '#{gopath}/src/github.com/openshift'."
     else
-      config.vm.synced_folder gopath, "/data"
+      config.vm.synced_folder gopath, "/data", create: true
     end
   end
 
