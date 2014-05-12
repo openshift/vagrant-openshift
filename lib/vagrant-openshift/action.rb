@@ -42,13 +42,9 @@ module Vagrant
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use InstallGeardBaseDependencies
-          #b.use SetupBuilderFiles
           b.use Clean
-          b.use CloneUpstreamRepositories
           b.use SetHostName
           #b.use SetupBindDnsKey
-          b.use CheckoutRepositories
-          #b.use InstallOpenShiftDependencies
           #b.use CreatePuppetFile
         end
       end
@@ -58,9 +54,7 @@ module Vagrant
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use Clean
-          #b.use CloneUpstreamRepositories
           b.use SetHostName
-          #b.use CheckoutRepositories
           b.use InstallGeard
           b.use BuildGeard
         end
@@ -70,7 +64,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use InstallGeardBroker
         end
-      end      
+      end
 
       def self.build_geard(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -88,7 +82,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use RestartGeardBroker
         end
-      end      
+      end
 
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
