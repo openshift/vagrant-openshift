@@ -66,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # https://github.com/mitchellh/vagrant-aws
 
     if gopath
-      config.vm.synced_folder gopath, "/data", disabled: true
+      override.vm.synced_folder gopath, "/data", disabled: true
     end
 
     aws_creds_file = Pathname.new(File.expand_path("<%= box_info[:aws_creds_file]%>"))
