@@ -26,12 +26,18 @@ module Vagrant
         end
 
         def call(env)
+          docker_file_path = "broker/docker/origin-broker-builder"
+          sudo(env[:machine], sync_bash_command_on_dockerfile('origin-server', docker_file_path, %{
+echo "Performing origin-broker-builder build..."
+set -e
+pushd #{docker_file_path}
+  docker build --rm -t origin-broker-builder .
+popd
+          }), {:timeout => 60*20})
+
           sudo(env[:machine], sync_bash_command('origin-server', %{
 echo "Performing broker build..."
 set -e
-pushd broker/docker/origin-broker-builder
-  docker build --rm -t origin-broker-builder .
-popd
 gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker
           }), {:timeout => 60*20})
           @app.call(env)

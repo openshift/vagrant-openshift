@@ -103,25 +103,34 @@ chmod #{perms} #{dest}})
         end
       end
 
-      def sync_bash_command(repo_name, build_cmd)
+      def sync_bash_command(repo_name, build_cmd, refname="master", sync_path="/data/.sync", commit_id_path="#{sync_path}/#{repo_name}")
         cmd = %{
 pushd /data/src/github.com/openshift/#{repo_name}
-  commit_id=`git rev-parse master`
-  mkdir -p /data/.sync/
-  if [ -f /data/.sync/#{repo_name} ]
+  commit_id=`git rev-parse #{refname}`
+  if [ -f #{commit_id_path} ]
   then
-    previous_commit_id=$(cat /data/.sync/#{repo_name})
+    previous_commit_id=$(cat #{commit_id_path})
   fi
   if [ "$previous_commit_id" != "$commit_id" ]
   then
     #{build_cmd}
   else
-    echo "No update for #{repo_name}"
+    echo "No update for #{repo_name}, #{refname}"
   fi
-  echo -n $commit_id > /data/.sync/#{repo_name}
-popd
+  mkdir -p #{sync_path}
+  echo -n $commit_id > #{commit_id_path}
+popd         
         }
+
       end
+
+      def sync_bash_command_on_dockerfile(repo_name, dockerfile_build_path, build_cmd)              
+        refname = "master:#{dockerfile_build_path}/Dockerfile"
+        sync_path = "/data/.sync/dockerfile/#{repo_name}/#{dockerfile_build_path}"
+        commit_id_path = "#{sync_path}/Dockerfile"
+        sync_bash_command(repo_name, build_cmd, refname, sync_path, commit_id_path)
+      end
+
     end
   end
 end
