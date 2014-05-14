@@ -32,7 +32,7 @@ set -e
 pushd broker/docker/origin-broker-builder
   docker build --rm -t origin-broker-builder .
 popd
-gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker
+gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker -a broker/.sti/scripts
           }), {:timeout => 60*20})
           @app.call(env)
         end
