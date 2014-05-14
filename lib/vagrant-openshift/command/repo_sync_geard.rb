@@ -29,6 +29,7 @@ module Vagrant
           options = {}
           options[:no_build] = false
           options[:clean] = false
+          options[:source] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-geard [vm-name]"
@@ -36,6 +37,10 @@ module Vagrant
 
             o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
               options[:clean] = f
+            end
+
+            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
+              options[:source] = f
             end
 
             o.on("--dont-install", "Don't build and install updated source") do |f|

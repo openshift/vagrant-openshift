@@ -24,7 +24,8 @@ module Vagrant
           'rhc' => 'https://github.com/openshift/rhc.git',
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
           'geard' => 'https://github.com/openshift/geard.git',
-          'docker-source-to-images' => 'https://github.com/openshift/docker-source-to-images.git'
+          'wildfly-8-centos.git' => 'https://github.com/openshift/wildfly-8-centos.git',
+          'ruby-19-centos.git' => 'https://github.com/openshift/ruby-19-centos.git'
         }
       end
 

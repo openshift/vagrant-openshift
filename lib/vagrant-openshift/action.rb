@@ -120,12 +120,14 @@ module Vagrant
       def self.repo_sync_geard(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
-          if options[:clean]
-            b.use Clean
-            b.use CloneUpstreamRepositories
+          if options[:source]
+            if options[:clean]
+              b.use Clean
+              b.use CloneUpstreamRepositories
+            end
+            b.use SyncLocalRepository
+            b.use CheckoutRepositories
           end
-          b.use SyncLocalRepository
-          b.use CheckoutRepositories
           unless options[:no_build]
             b.use BuildGeard
             b.use RestartGeard
