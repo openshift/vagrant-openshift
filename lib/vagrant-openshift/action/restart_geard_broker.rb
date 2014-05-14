@@ -27,9 +27,11 @@ module Vagrant
 
         def call(env)
           #TODO the second line is a temporary hack due to the selinux policies being outdated in the repo
+          #TODO post geard fixes, remove sleep 2, and gear init from sudo below
           sudo(env[:machine], %{
 set -e
 gear restart origin-broker-1
+sleep 2
 gear init --post "origin-broker-1" "origin-broker"
           })
         end

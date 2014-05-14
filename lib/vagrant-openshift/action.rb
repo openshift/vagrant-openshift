@@ -131,6 +131,8 @@ module Vagrant
           unless options[:no_build]
             b.use BuildGeard
             b.use RestartGeard
+            b.use BuildGeardBroker
+            b.use RestartGeardBroker
           end
         end
       end
