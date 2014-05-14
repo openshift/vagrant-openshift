@@ -26,12 +26,10 @@ module Vagrant
         end
 
         def call(env)
-          #TODO the second line is a temporary hack due to the selinux policies being outdated in the repo
           sudo(env[:machine], %{
 set -e
 pushd /data/src/github.com/openshift/origin-server/broker/docker
   gear deploy origin_deploy.json
-  gear init --post "origin-broker-1" "origin-broker"
 popd
           })
         end
