@@ -42,7 +42,6 @@ module Vagrant
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use InstallGeardBaseDependencies
-          b.use Clean
           b.use SetHostName
           #b.use SetupBindDnsKey
           #b.use CreatePuppetFile
@@ -53,7 +52,6 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
-          b.use Clean
           b.use SetHostName
           b.use InstallGeard
           b.use BuildGeard
@@ -86,9 +84,6 @@ module Vagrant
 
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use Clean
-          #b.use CloneUpstreamRepositories
-          #b.use CheckoutRepositories, options
           b.use BuildGeardBroker
         end
       end
@@ -125,6 +120,10 @@ module Vagrant
       def self.repo_sync_geard(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
+          if options[:clean]
+            b.use Clean
+            b.use CloneUpstreamRepositories
+          end
           b.use SyncLocalRepository
           b.use CheckoutRepositories
           unless options[:no_build]
