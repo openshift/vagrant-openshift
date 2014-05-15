@@ -29,6 +29,14 @@ module Vagrant
         }
       end
 
+      def self.git_branch_current
+        "$(git rev-parse --abbrev-ref HEAD)"
+      end
+
+      def self.sync_dir
+        Pathname.new "/vagrant-sync"
+      end
+
       def self.build_dir
         Pathname.new "/data/src/github.com/openshift/"
       end

@@ -103,15 +103,20 @@ chmod #{perms} #{dest}})
         end
       end
 
-      def sync_bash_command(repo_name, build_cmd, refname="master", sync_path="/data/.sync", commit_id_path="#{sync_path}/#{repo_name}")
+      def sync_bash_command(repo_name, build_cmd, file_path="", branch_name=Vagrant::Openshift::Constants.git_branch_current, sync_path=Vagrant::Openshift::Constants.sync_dir, commit_id_path="#{sync_path}/#{repo_name}")
+        refname = branch_name
+        refname = "#{refname}:#{file_path}" if !file_path.empty?
+        git_status_cmd = "git status --porcelain"
+        git_status_cmd = "#{git_status_cmd} | grep #{file_path}" if !file_path.empty?
         cmd = %{
 pushd /data/src/github.com/openshift/#{repo_name}
   commit_id=`git rev-parse #{refname}`
+  git_status=$(#{git_status_cmd})
   if [ -f #{commit_id_path} ]
   then
     previous_commit_id=$(cat #{commit_id_path})
   fi
-  if [ "$previous_commit_id" != "$commit_id" ]
+  if [ "$previous_commit_id" != "$commit_id" ] || [ -n "$git_status" ]
   then
     #{build_cmd}
   else
@@ -125,10 +130,11 @@ popd
       end
 
       def sync_bash_command_on_dockerfile(repo_name, dockerfile_build_path, build_cmd)              
-        refname = "master:#{dockerfile_build_path}/Dockerfile"
-        sync_path = "/data/.sync/dockerfile/#{repo_name}/#{dockerfile_build_path}"
+        file_path = "#{dockerfile_build_path}/Dockerfile"
+        branch_name=Vagrant::Openshift::Constants.git_branch_current
+        sync_path = "#{Vagrant::Openshift::Constants.sync_dir}/dockerfile/#{repo_name}/#{dockerfile_build_path}"
         commit_id_path = "#{sync_path}/Dockerfile"
-        sync_bash_command(repo_name, build_cmd, refname, sync_path, commit_id_path)
+        sync_bash_command(repo_name, build_cmd, file_path, branch_name, sync_path, commit_id_path)
       end
 
       def repo_checkout(repo, url)
@@ -139,7 +145,6 @@ popd
             system("rm -rf #{repo_path}")
           else
             puts "Already cloned: #{repo}"
-            next
           end
         end
         cloned = false
