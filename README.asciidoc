@@ -30,6 +30,7 @@ Compile an install the plugin using Rake
 
 [source, sh]
 ----
+$ vagrant plugin install vagrant-openshift
 $ rake vagrant:install
 ----
 
