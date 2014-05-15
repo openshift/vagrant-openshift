@@ -44,7 +44,7 @@ module Vagrant
 
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
-          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"}; chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir};")
+          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir}")
           do_execute env[:machine], git_clone_commands
 
           @app.call(env)
