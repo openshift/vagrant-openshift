@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class RestartGeardBroker
+      class InstallRhc
         include CommandHelper
 
         def initialize(app, env)
@@ -26,17 +26,15 @@ module Vagrant
         end
 
         def call(env)
-          #TODO the second line is a temporary hack due to the selinux policies being outdated in the repo
-          #TODO post geard fixes, remove sleep 2, and gear init from sudo below
-          sudo(env[:machine], %{
-set -e
-gear restart origin-broker-1
-sleep 2
-gear init --post "origin-broker-1" "origin-broker"
-          })
+          sudo(env[:machine], sync_bash_command('rhc', %{
+echo "Build and install rhc from local source"
+rm rhc-*.gem
+gem build rhc.gemspec
+gem uninstall rhc -x
+gem install $(find ./ -name 'rhc-*.gem')
+          }))
           @app.call(env)
         end
-
       end
     end
   end
