@@ -88,6 +88,12 @@ module Vagrant
         end
       end
 
+      def self.build_geard_images(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use BuildGeardImages
+        end
+      end
+
       def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -131,6 +137,7 @@ module Vagrant
           unless options[:no_build]
             b.use BuildGeard
             b.use RestartGeard
+            b.use BuildGeardImages
             b.use BuildGeardBroker
             b.use RestartGeardBroker
             b.use InstallRhc
@@ -241,6 +248,7 @@ module Vagrant
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
       autoload :BuildGeardBroker, action_root.join("build_geard_broker")
+      autoload :BuildGeardImages, action_root.join("build_geard_images")
       autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
       autoload :InstallGeard, action_root.join("install_geard")
       autoload :InstallGeardBroker, action_root.join("install_geard_broker")

@@ -82,6 +82,11 @@ module Vagrant
         Commands::BuildGeardBroker
       end
 
+      command "build-geard-images" do
+        require_relative "command/build_geard_images"
+        Commands::BuildGeardImages
+      end
+
       command "origin-init" do
         require_relative "command/openshift_init"
         Commands::OpenshiftInit
