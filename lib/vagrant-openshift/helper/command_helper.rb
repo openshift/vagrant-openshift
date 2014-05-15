@@ -131,6 +131,37 @@ popd
         sync_bash_command(repo_name, build_cmd, refname, sync_path, commit_id_path)
       end
 
+      def repo_checkout(repo, url)
+        repo_path = File.expand_path(repo)
+        if Pathname.new(repo_path).exist?
+          if @options[:replace]
+            puts "Replacing: #{repo_path}"
+            system("rm -rf #{repo_path}")
+          else
+            puts "Already cloned: #{repo}"
+            next
+          end
+        end
+        cloned = false
+        if @options[:user]
+          if system("git clone git@github.com:#{@options[:user]}/#{repo}")
+            cloned = true
+            Dir.chdir(repo) do
+              system("git remote add upstream #{url} && git fetch upstream")
+            end
+          else
+            @env.ui.warn "Fork of repo #{repo} not found. Cloning read-only copy from upstream"
+          end
+        end
+        if not cloned
+          system("git clone #{url}")
+        end
+        Dir.chdir(repo) do
+          system("git checkout #{@options[:branch]}")
+        end
+
+      end
+
     end
   end
 end
