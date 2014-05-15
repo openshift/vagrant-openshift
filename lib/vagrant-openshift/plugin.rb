@@ -92,6 +92,11 @@ module Vagrant
         Commands::LocalRepoSetup
       end
 
+      command "geard-local-checkout" do
+        require_relative "command/local_geard_setup"
+        Commands::LocalGeardSetup
+      end
+
       command "test" do
         require_relative "command/test"
         Commands::Test

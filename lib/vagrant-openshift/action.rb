@@ -146,6 +146,14 @@ module Vagrant
         end
       end
 
+      def self.local_geard_checkout(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          if not options[:no_build]
+            b.use LocalGeardCheckout, options
+          end
+        end
+      end
+
       def self.run_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateTestUsers
@@ -244,6 +252,7 @@ module Vagrant
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
       autoload :BuildSources, action_root.join("build_sources")
       autoload :LocalRepoCheckout, action_root.join("local_repo_checkout")
+      autoload :LocalGeardCheckout, action_root.join("local_geard_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
       autoload :CreateTestUsers, action_root.join("create_test_users")
       autoload :IdleAllGears, action_root.join("idle_all_gears")
