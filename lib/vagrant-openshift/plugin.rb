@@ -127,6 +127,11 @@ module Vagrant
         Commands::CheckoutRepositories
       end
 
+      command "install-rhc" do
+        require_relative "command/install_rhc"
+        Commands::InstallRhc
+      end
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner

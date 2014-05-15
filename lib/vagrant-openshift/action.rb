@@ -133,6 +133,7 @@ module Vagrant
             b.use RestartGeard
             b.use BuildGeardBroker
             b.use RestartGeardBroker
+            b.use InstallRhc
           end
         end
       end
@@ -212,6 +213,12 @@ module Vagrant
         end
       end
 
+      def self.install_rhc(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use InstallRhc
+        end        
+      end
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :Clean, action_root.join("clean")
       autoload :UninstallOpenShiftRpms, action_root.join("uninstall_openshift_rpms")
@@ -251,6 +258,7 @@ module Vagrant
       autoload :DownloadArtifacts, action_root.join("download_artifacts")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
+      autoload :InstallRhc, action_root.join("install_rhc")
     end
   end
 end
