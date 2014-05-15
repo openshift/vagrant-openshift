@@ -43,7 +43,8 @@ module Vagrant
 
       def self.restart_services_cmd(is_fedora)
         services = [ 'mongod', 'activemq', 'cgconfig', 'cgred', 'named',
-                     'openshift-broker', 'openshift-console', 'openshift-node-web-proxy',
+                     'openshift-broker', 'openshift-console',
+                     'openshift-node-web-proxy', 'openshift-watchman',
                      'sshd', 'httpd' ]
 
         if(is_fedora)
