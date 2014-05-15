@@ -24,6 +24,12 @@ module Vagrant
           'rhc' => 'https://github.com/openshift/rhc.git',
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
           'geard' => 'https://github.com/openshift/geard.git',
+
+        }.merge(cartridges)
+      end
+
+      def self.cartridges
+        {
           'wildfly-8-centos' => 'https://github.com/openshift/wildfly-8-centos.git',
           'ruby-19-centos' => 'https://github.com/openshift/ruby-19-centos.git'
         }
