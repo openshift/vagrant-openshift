@@ -38,18 +38,24 @@ $ rake vagrant:install
 
 ==== Clone the OpenShift Origin repositories
 
+===== OpenShift 3
+
+[source, sh]
+----
+$ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
+$ source ~/.bash_profile
+$ cd $GOPATH
+$ vagrant geard-local-checkout <github username>
+----
+
+===== OpenShift 2.x
+
 [source, sh]
 ----
 $ vagrant origin-local-checkout <github username>
 ----
 
-This will clone 3 repositores from your link:http://www.github.com[GitHub] account and link them against the upstream repositories.
-
-.GitHub repositories
-
-* link:http://github.com/openshift/rhc[Command line tools]
-* link:http://github.com/openshift/origin-server[OpenShift Origin console, broker and node]
-* link:http://github.com/openshift/puppet-openshift_origin[Puppet module for OpenShift Origin]
+This will clone several repositories from link:http://www.github.com[GitHub] and link them against the upstream repositories.
 
 NOTE: Skip this step if building upstream code
 
@@ -59,17 +65,27 @@ Create a Vagrantfile and customize it to match your requirements:
 
 [source, sh]
 ----
-$ vagrant origin-init 
+$ vagrant origin-init <instance name>
 ----
 
 .Command options:
 
 * Specify which OS to build with:
-** --os fedora		- Launch a Fedora 19 image
-** --os rhel		- Launch a RHEL image (where available)
+** --os fedora		- Launch a Fedora 20 image
+** --os rhel		  - Launch a RHEL image (where available)
 ** --os centos		- Launch a CentOS image (where available)
-* Build from bare installation of OS:
-** --no-base
+
+* Specify the stage of image to launch:
+** --stage os    - Launch the base operating system with no OpenShift dependencies
+** --stage deps  - Launch the image with OpenShift dependencies already installed
+** --stage inst  - Launch the image with OpenShift fully installed
+
+.So to launch the latest OpenShift instance:
+
+[source, sh]
+----
+$ vagrant origin-init --stage inst --os fedora <instance name>
+----
 
 ==== Start the machine
 
@@ -81,6 +97,72 @@ Running with the default VirtualBox provider
 ----
 vagrant up
 ----
+
+Note: See Other Environments below for launching against other options.
+
+
+==== Install OpenShift and its Dependencies
+
+If starting from --stage os, install the build and package dependencies.
+
+===== OpenShift 3
+
+[source, sh]
+----
+$ vagrant build-geard-base
+$ vagrant install-geard
+$ vagrant build-geard-broker
+$ vagrant install-geard-broker
+----
+
+===== OpenShift 2.x
+
+[source, sh]
+----
+$ vagrant origin-build-base
+$ vagrant sync --clean
+----
+
+==== Subsequent Sync and Build of OpenShift Packages
+
+* Syncing and building code from local repository clones
+
+===== OpenShift 3
+
+[source, sh]
+----
+$ vagrant sync-geard
+----
+
+
+===== OpenShift 2.x
+
+[source, sh]
+----
+$ vagrant sync
+----
+
+
+==== Running OpenShift Origin Tests
+
+===== OpenShift 3
+
+[source, sh]
+----
+$ vagrant test-geard --all
+----
+
+
+===== OpenShift 2.x
+
+[source, sh]
+----
+$ vagrant test --all
+----
+
+== Other Notes
+
+=== Other Environments
 
 ===== AWS/EC2
 
@@ -193,7 +275,7 @@ LIBVIRTD_ARGS="--listen"
 
 * Start the LibVirt machine
 
-[source, sh] 
+[source, sh]
 ----
 vagrant up --provider=libvirt
 ----
@@ -221,66 +303,12 @@ override.ssh.private_key_path = "~/.ssh/id_rsa"
 
 * Connect to the manually managed machine
 
-[source, sh] 
+[source, sh]
 ----
 vagrant up --provider=managed
 ----
 
 NOTE: Requires latest link:https://github.com/tknerr/vagrant-managed-servers[Managed] provider
-
-
-==== Install build dependencies
-
-If starting from a bare OS image, install the build and package dependencies.
-
-[source, sh]
-----
-$ vagrant origin-build-base
-----
-
-NOTE: It is a good idea to snapshot the VM after this step so that you don't have to redo this step every time.
-
-==== Sync and Build OpenShift packages
-
-* Perform initial sync from local repository clones and build packages
-
-[source, sh]
-----
-$ vagrant sync --clean
-----
-
-NOTE: This will `rsync` every git repo in your working directory to your origin machine.  If you have multiple unrelated 
-projects in the same directory, you can create a special working directory to run `sync` and populate it with symbolic links
-to your local clones.
-
-* Syncing and building code from local repository clones
-
-[source, sh]
-----
-$ vagrant sync
-----
-
-* Syncing and building code from upstream repositories
-
-[source, sh]
-----
-$ vagrant sync --upstream
-----
-
-==== Running OpenShift Origin Tests
-
-.Running basic tests
-[source, sh]
-----
-$ vagrant test --all
-----
-
-.Running extended tests
-----
-$ vagrant origin-test --extended --all
-----
-
-== Other Notes
 
 === Developer environment
 
