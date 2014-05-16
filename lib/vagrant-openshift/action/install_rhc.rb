@@ -28,10 +28,11 @@ module Vagrant
         def call(env)
           sudo(env[:machine], sync_bash_command('rhc', %{
 echo "Build and install rhc from local source"
-rm rhc-*.gem
+rm -f rhc-*.gem
 gem build rhc.gemspec
 gem uninstall rhc -x
 gem install $(find ./ -name 'rhc-*.gem')
+rm -f rhc-*.gem
           }))
           @app.call(env)
         end
