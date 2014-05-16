@@ -30,6 +30,7 @@ module Vagrant
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
+          options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_GEARD, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-geard [vm-name]"
@@ -50,6 +51,11 @@ module Vagrant
             o.on("-h", "--help", "Show this message") do |f|
               options[:help] = f
             end
+
+            o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
+              options[:include] = f.split " "
+            end
+
           end
 
           # Parse the options
