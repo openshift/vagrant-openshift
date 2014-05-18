@@ -101,29 +101,7 @@ vagrant up
 Note: See Other Environments below for launching against other options.
 
 
-==== Install OpenShift and its Dependencies
-
-If starting from --stage os, install the build and package dependencies.
-
-===== OpenShift 3
-
-[source, sh]
-----
-$ vagrant build-geard-base
-$ vagrant install-geard
-$ vagrant build-geard-broker
-$ vagrant install-geard-broker
-----
-
-===== OpenShift 2.x
-
-[source, sh]
-----
-$ vagrant origin-build-base
-$ vagrant sync --clean
-----
-
-==== Subsequent Sync and Build of OpenShift Packages
+==== Making Subsequent Changes
 
 * Syncing and building code from local repository clones
 
@@ -162,7 +140,29 @@ $ vagrant test --all
 
 == Other Notes
 
-=== Other Environments
+==== Install OpenShift and its Dependencies
+
+If starting from --stage os, install the build and package dependencies.
+
+===== OpenShift 3
+
+[source, sh]
+----
+$ vagrant build-geard-base
+$ vagrant install-geard
+$ vagrant build-geard-broker
+$ vagrant install-geard-broker
+----
+
+===== OpenShift 2.x
+
+[source, sh]
+----
+$ vagrant origin-build-base
+$ vagrant sync --clean
+----
+
+==== Other Environments
 
 ===== AWS/EC2
 
