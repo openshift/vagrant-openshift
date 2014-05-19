@@ -37,9 +37,16 @@ module Vagrant
             ).first
           end
           Dir.chdir(go_path) do
+            commands = "echo 'Waiting for the cloning process to finish'\n"
             Constants.repos.each do |repo, url|
-              repo_checkout(repo, url)
+              commands += %{
+( #{repo_checkout_bash_command(repo, url)} ) &
+PIDS+=$!\" \";
+}
             end
+
+            commands += "[ -n \"$PIDS\" ] && wait $PIDS\n"
+            system(commands)
             puts "OpenShift repositories cloned into #{Dir.pwd}"
           end
 
