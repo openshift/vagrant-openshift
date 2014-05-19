@@ -18,6 +18,12 @@ require 'pathname'
 module Vagrant
   module Openshift
     class Constants
+      
+      FILTER_BROKER="broker"
+      FILTER_IMAGES="images"
+      FILTER_RHC="rhc"
+      FILTER_GEARD="geard"
+
       def self.repos
         {
           'origin-server' => 'https://github.com/openshift/origin-server.git',

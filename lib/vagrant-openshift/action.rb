@@ -135,12 +135,12 @@ module Vagrant
             b.use CheckoutRepositories
           end
           unless options[:no_build]
-            b.use BuildGeard
-            b.use RestartGeard
-            b.use BuildGeardImages
-            b.use BuildGeardBroker
-            b.use RestartGeardBroker
-            b.use InstallRhc
+            b.use BuildGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
+            b.use RestartGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
+            b.use BuildGeardImages if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
+            b.use BuildGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
+            b.use RestartGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
+            b.use InstallRhc if options[:include].include? Vagrant::Openshift::Constants::FILTER_RHC
           end
         end
       end
