@@ -37,9 +37,7 @@ module Vagrant
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name
 
-            git_clone_commands += "if [ ! -d #{bare_repo_path} ]; then\n"
-            git_clone_commands += "git init --bare #{bare_repo_path};\n"
-            git_clone_commands += "fi\n"
+            git_clone_commands += "[ ! -d #{bare_repo_path} ] && git init --bare #{bare_repo_path};\n"
           end
 
           ssh_user = env[:machine].ssh_info[:username]
