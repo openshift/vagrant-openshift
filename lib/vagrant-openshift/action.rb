@@ -42,6 +42,7 @@ module Vagrant
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use InstallGeardBaseDependencies
+          b.use InstallGeardImages
           b.use SetHostName
           #b.use SetupBindDnsKey
           #b.use CreatePuppetFile
@@ -256,6 +257,7 @@ module Vagrant
       autoload :BuildGeardBroker, action_root.join("build_geard_broker")
       autoload :BuildGeardImages, action_root.join("build_geard_images")
       autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
+      autoload :InstallGeardImages, action_root.join("install_geard_images")
       autoload :InstallGeard, action_root.join("install_geard")
       autoload :InstallGeardBroker, action_root.join("install_geard_broker")
       autoload :BuildGeard, action_root.join("build_geard")

@@ -41,6 +41,12 @@ module Vagrant
         }
       end
 
+      def self.images
+        [
+          'centos'
+        ] + cartridges.map { |c, _| "openshift/#{c}" }
+      end
+
       def self.git_branch_current
         "$(git rev-parse --abbrev-ref HEAD)"
       end

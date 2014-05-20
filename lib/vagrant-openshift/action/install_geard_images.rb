@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallGeardBaseDependencies
+      class InstallGeardImages
         include CommandHelper
 
         def initialize(app, env)
@@ -26,21 +26,23 @@ module Vagrant
         end
 
         def call(env)
-          # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
-          #        add the image into 'repositories' constants
-          #
-          sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make mlocate bind augeas vim docker-io golang hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++")
-          sudo(env[:machine], %{
-systemctl enable docker
-systemctl start docker
-docker pull openshift/centos-mongodb
-if ! docker images | grep 'openshift/centos-mongodb' 2>&1 > /dev/null ; then
-  docker pull openshift/centos-mongodb
-fi
-touch #{Vagrant::Openshift::Constants.deps_marker}
-          }, {:timeout=>60*20})
+          Vagrant::Openshift::Constants.images.each do |image_name, _|
+            puts "Importing #{image_name} from Docker index"
+            sudo(env[:machine], pull_docker_image_cmd(image_name), {
+              :timeout=>60*20
+            })
+          end
           @app.call(env)
         end
+
+        def pull_docker_image_cmd(image_name)
+          %{
+docker pull '#{image_name}'
+[ ! docker inspect '#{image_name}' 2>&1 > /dev/null ] \
+  && docker pull '#{image_name}'
+          }
+        end
+
       end
     end
   end
