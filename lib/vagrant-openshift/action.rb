@@ -234,6 +234,12 @@ module Vagrant
         end        
       end
 
+      def self.setup_geard_broker(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use SetupGeardBroker
+        end
+      end
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :Clean, action_root.join("clean")
       autoload :UninstallOpenShiftRpms, action_root.join("uninstall_openshift_rpms")
@@ -276,6 +282,7 @@ module Vagrant
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :InstallRhc, action_root.join("install_rhc")
+      autoload :SetupGeardBroker, action_root.join("setup_geard_broker")
     end
   end
 end

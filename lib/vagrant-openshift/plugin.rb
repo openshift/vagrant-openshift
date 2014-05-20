@@ -142,6 +142,11 @@ module Vagrant
         Commands::InstallRhc
       end
 
+      command "setup-geard-broker" do
+        require_relative "command/setup_geard_broker"
+        Commands::SetupGeardBroker
+      end
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner
