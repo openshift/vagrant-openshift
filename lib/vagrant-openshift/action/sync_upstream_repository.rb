@@ -59,7 +59,7 @@ git checkout master;
 git reset --hard upstream/#{branch};
 git push origin master -f;
 }
-          do_execute(machine, command)
+          do_execute(env[:machine], command)
         end
       end
     end
