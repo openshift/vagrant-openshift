@@ -28,6 +28,7 @@ module Vagrant
         def call(env)
           env[:machine].env.ui.info("Sync'ing local sources")
 
+          pids = []
           Constants.repos.each do |repo_name, url|
             local_repo = Pathname.new(File.expand_path(env[:machine].env.root_path + repo_name))
             unless local_repo.exist?
@@ -35,10 +36,11 @@ module Vagrant
               next
             end
 
-            FileUtils.cd(local_repo) do
-              sync_repo(env[:machine], repo_name)
-            end
+            pids << fork {
+              Dir.chdir(local_repo) { sync_repo(env[:machine], repo_name) }
+            }
           end
+          Process.waitall
 
           @app.call(env)
         end
@@ -52,15 +54,17 @@ module Vagrant
             # Get the current branch
             branch = get_branch
 
-            puts "Synchronizing local changes from branch #{branch} for repo #{repo_name} from #{File.basename(FileUtils.pwd)}..."
+            puts "Synchronizing [#{repo_name}@#{branch}] from #{File.basename(FileUtils.pwd)}..."
 
             command = ""
-            command += "export GIT_SSH=#{Constants.git_ssh};\n" unless Constants.git_ssh.nil? or Constants.git_ssh.empty?
-            command += "git push -q verifier:#{Constants.build_dir + repo_name}-bare master:master --tags --force;\n" if branch == 'origin/master'
+            unless Constants.git_ssh.nil? or Constants.git_ssh.empty?
+              command += "export GIT_SSH=#{Constants.git_ssh};\n"
+            end
+            if branch == 'origin/master'
+              command += "git push -q verifier:#{Constants.build_dir + repo_name}-bare master:master --tags --force;\n"
+            end
             command += "git push -q verifier:#{Constants.build_dir + repo_name }-bare #{branch}:master --tags --force"
-            exitcode = system(command)
-
-            puts "Done"
+            system(command)
           ensure
             reset_temp_commit
           end
@@ -68,22 +72,22 @@ module Vagrant
 
         def temp_commit
           # Warn on uncommitted changes
-          `git diff-index --quiet HEAD`
+          %x[git diff-index --quiet HEAD]
 
-          if $? != 0
+          if $?.exitstatus != 0
             # Perform a temporary commit
             puts "Creating temporary commit to build"
 
             begin
-              `git commit -m "Temporary commit #1 - index changes"`
+              %x[git commit -m "Temporary commit #1 - index changes"]
             ensure
-              (@temp_commit ||= []).push("git reset --soft HEAD^") if $? == 0
+              (@temp_commit ||= []).push("git reset --soft HEAD^") if $?.exitstatus == 0
             end
 
             begin
               `git commit -a -m "Temporary commit #2 - non-index changes"`
             ensure
-              (@temp_commit ||= []).push("git reset --mixed HEAD^") if $? == 0
+              (@temp_commit ||= []).push("git reset --mixed HEAD^") if $?.exitstatus == 0
             end
 
             puts @temp_commit ? "No-op" : "Done"
@@ -94,7 +98,7 @@ module Vagrant
           if @temp_commit
             puts "Undoing temporary commit..."
             while undo = @temp_commit.pop
-              `#{undo}`
+              %x[#{undo}]
             end
             @temp_commit = nil
             puts "Done."
@@ -102,11 +106,9 @@ module Vagrant
         end
 
         def get_branch
-          branch_str = `git status | head -n1`.chomp
-          branch_str =~ /.*branch (.*)/
-          branch = $1 ? $1 : 'origin/master'
-          return branch
+          (%x[git status | head -n1].chomp =~ /.*branch (.*)/) ? $1 : 'origin/master'
         end
+
       end
     end
   end
