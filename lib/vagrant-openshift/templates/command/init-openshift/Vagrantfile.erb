@@ -72,6 +72,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws_creds_file = Pathname.new(File.expand_path("<%= box_info[:aws_creds_file]%>"))
     aws_creds      = aws_creds_file.exist? ? Hash[*(File.open(aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
 
+    unless aws_creds['AWSKeyPairName']
+      puts "[WARNING] You need to add 'AWSKeyPairName=libra' into ~/.awscred file."
+    end
+
+    unless aws_creds['AWSPrivateKeyPath']
+      puts "[WARNING] You need to add 'AWSPrivateKeyPath=~/.ssh/libra.pem' into ~/.awscred file."
+    end
+
+
     override.vm.box               = "dummy"
     override.vm.box_url           = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
     override.ssh.username         = "<%= box_info[:aws][:ami_ssh_user] %>"
