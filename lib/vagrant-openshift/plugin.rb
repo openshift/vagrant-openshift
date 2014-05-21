@@ -127,6 +127,11 @@ module Vagrant
         Commands::ModifyInstance
       end
 
+      command "destroy-instance" do
+        require_relative "command/destroy_instance"
+        Commands::DestroyInstance
+      end
+
       command "clone-upstream-repos" do
         require_relative "command/clone_upstream_repositories"
         Commands::CloneUpstreamRepositories
