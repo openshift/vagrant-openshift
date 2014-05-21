@@ -37,6 +37,14 @@ module Vagrant
             o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
               options[:branch] = {"origin-server" => f}
             end
+
+            o.on("--geard-images [ #{Vagrant::Openshift::Constants.geard_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
+              if f.split(" ").include?("all")
+                options[:geard_images] = Vagrant::Openshift::Constants.geard_images.keys
+              else
+                options[:geard_images] = f.split(" ")
+              end
+            end
           end
 
           # Parse the options

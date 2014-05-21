@@ -18,7 +18,7 @@ require 'pathname'
 module Vagrant
   module Openshift
     class Constants
-      
+
       FILTER_BROKER="broker"
       FILTER_IMAGES="images"
       FILTER_RHC="rhc"
@@ -31,10 +31,10 @@ module Vagrant
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
           'geard' => 'https://github.com/openshift/geard.git',
 
-        }.merge(cartridges)
+        }.merge(geard_images)
       end
 
-      def self.cartridges
+      def self.geard_images
         {
           'wildfly-8-centos' => 'https://github.com/openshift/wildfly-8-centos.git',
           'ruby-19-centos' => 'https://github.com/openshift/ruby-19-centos.git'
@@ -44,7 +44,7 @@ module Vagrant
       def self.images
         [
           'centos'
-        ] + cartridges.map { |c, _| "openshift/#{c}" }
+        ] + geard_images.map { |c, _| "openshift/#{c}" }
       end
 
       def self.git_branch_current
