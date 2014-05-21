@@ -52,7 +52,7 @@ module Vagrant
       end
 
       def self.sync_dir
-        Pathname.new "/vagrant-sync"
+        Pathname.new "~/sync"
       end
 
       def self.build_dir
