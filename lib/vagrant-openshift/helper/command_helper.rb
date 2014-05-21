@@ -124,12 +124,12 @@ pushd /data/src/github.com/openshift/#{repo_name}
   fi
   mkdir -p #{sync_path}
   echo -n $commit_id > #{commit_id_path}
-popd         
+popd
         }
 
       end
 
-      def sync_bash_command_on_dockerfile(repo_name, dockerfile_build_path, build_cmd)              
+      def sync_bash_command_on_dockerfile(repo_name, dockerfile_build_path, build_cmd)
         file_path = "#{dockerfile_build_path}/Dockerfile"
         branch_name=Vagrant::Openshift::Constants.git_branch_current
         sync_path = "#{Vagrant::Openshift::Constants.sync_dir}/dockerfile/#{repo_name}/#{dockerfile_build_path}"
@@ -137,34 +137,44 @@ popd
         sync_bash_command(repo_name, build_cmd, file_path, branch_name, sync_path, commit_id_path)
       end
 
-      def repo_checkout(repo, url)
+      def repo_checkout_bash_command(repo, url)
         repo_path = File.expand_path(repo)
+        command = ""
         if Pathname.new(repo_path).exist?
           if @options[:replace]
-            puts "Replacing: #{repo_path}"
-            system("rm -rf #{repo_path}")
+            command += %{
+echo 'Replacing: #{repo_path}'
+rm -rf #{repo_path}
+}
           else
-            puts "Already cloned: #{repo}"
+            command += "echo 'Already cloned: #{repo}'\n"
           end
-        end
-        cloned = false
-        if @options[:user]
-          if system("git clone git@github.com:#{@options[:user]}/#{repo}")
-            cloned = true
-            Dir.chdir(repo) do
-              system("git remote add upstream #{url} && git fetch upstream")
-            end
-          else
-            @env.ui.warn "Fork of repo #{repo} not found. Cloning read-only copy from upstream"
-          end
-        end
-        if not cloned
-          system("git clone #{url}")
-        end
-        Dir.chdir(repo) do
-          system("git checkout #{@options[:branch]}")
         end
 
+        command += %{
+cloned=false
+echo 'Cloning #{repo} ...'
+}
+
+        if @options[:user]
+          command += %{
+echo 'Cloning #{repo_name}'
+git clone --quiet git@github.com:#{@options[:user]}/#{repo}
+if [ $? -eq 0 ]; then
+cloned=true
+(cd #{repo} && git remote add upstream #{url} && git fetch upstream)
+else
+echo 'Fork of repo #{repo} not found. Cloning read-only copy from upstream'
+fi
+}
+
+        end
+        command += %{
+[ $cloned != true ] && git clone --quiet #{url}
+( cd #{repo} && git checkout #{@options[:branch]} &>/dev/null)
+}
+
+        command
       end
 
     end
