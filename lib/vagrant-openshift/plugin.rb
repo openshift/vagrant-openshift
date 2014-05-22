@@ -147,6 +147,11 @@ module Vagrant
         Commands::SetupGeardBroker
       end
 
+      command "test-geard-image" do
+        require_relative "command/test_geard_image"
+        Commands::TestGeardImage
+      end
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner
