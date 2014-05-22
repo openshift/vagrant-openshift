@@ -326,7 +326,7 @@ Example:
 ----
 AWSAccessKeyId=<AWS API Key>
 AWSSecretKey=<AWS API Secret>
-AWSKeyPair=<Keypair name>
+AWSKeyPairName=<Keypair name>
 AWSPrivateKeyPath=<SSH Private key>
 ----
 
