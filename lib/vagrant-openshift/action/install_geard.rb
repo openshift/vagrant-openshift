@@ -29,6 +29,8 @@ module Vagrant
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], %{
 set -x
+TODO Remove me ASAP
+setenforce 0
 usermod -a -G docker #{ssh_user}
 
 GEARD_PATH=/data/src/github.com/openshift/geard
