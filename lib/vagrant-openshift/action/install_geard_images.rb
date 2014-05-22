@@ -38,7 +38,10 @@ module Vagrant
         def pull_docker_image_cmd(image_name)
           %{
 docker pull '#{image_name}'
-! docker inspect '#{image_name}' 2>&1 > /dev/null && docker pull '#{image_name}'
+if ! docker inspect '#{image_name}' 2>&1 > /dev/null
+then
+  docker pull '#{image_name}'
+fi
           }
         end
 
