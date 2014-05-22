@@ -115,12 +115,7 @@ runcmd:
 
   # Packages that are part of OpenShift Origin code but should not be compiled or installed
 <% if box_info[:os] == :fedora %>
-  config.openshift.ignore_packages = [
-    'openshift-origin-util-scl',
-    'rubygem-openshift-origin-container-libvirt',
-    'openshift-origin-cartridge-jbosseap',
-    'openshift-origin-cartridge-jbossews',
-  ]
+  config.openshift.ignore_packages = []
 <% else %>
   config.openshift.ignore_packages = [
     'openshift-origin-util',
@@ -128,7 +123,6 @@ runcmd:
     'openshift-origin-cartridge-jbosseap',
     'openshift-origin-cartridge-jbossews',
     'openshift-origin-cartridge-jbossas',
-
     'avahi-cname-manager',
     'rubygem-openshift-origin-dns-avahi',
     'openshift-origin-cartridge-mariadb',
