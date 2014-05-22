@@ -45,7 +45,7 @@ namespace :vagrant do
     name = Bundler::GemHelper.instance.send(:name)
     version = Bundler::GemHelper.instance.send(:version).to_s
 
-    system "#{sys_cmd} plugin uninstall vagrant-openshift && #{sys_cmd} plugin install pkg/#{name}-#{version}.gem"
+    system "#{sys_cmd} plugin uninstall vagrant-openshift; #{sys_cmd} plugin install pkg/#{name}-#{version}.gem"
   end
 end
 
