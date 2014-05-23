@@ -43,6 +43,10 @@ module Vagrant
               options[:stop] = true
             end
 
+            o.on("-d", "--detach", String, "Detach the instance from local Vagrant") do |f|
+              options[:detach] = true
+            end
+
             o.on("-h", "--help", "Show this message") do |f|
               options[:help] = true
             end
