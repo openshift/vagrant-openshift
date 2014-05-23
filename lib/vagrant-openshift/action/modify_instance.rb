@@ -36,6 +36,7 @@ module Vagrant
             unless @options[:rename].nil?
               env[:aws_compute].tags.create(:resource_id => machine.identity, :key => 'Name', :value => @options[:rename])
               env[:machine].ui.info("Renamed to #{@options[:rename]}")
+
             end
             if @options[:stop]
               env[:machine].ui.info("Stopping instance #{machine.identity}")
@@ -44,6 +45,12 @@ module Vagrant
                 sleep 5
               end
               env[:machine].ui.info("Stopped!")
+            end
+            if @options[:detach]
+              name = env[:machine].name.to_s
+              aws_dir = File.join(".vagrant", "machines", name, "aws")
+              FileUtils.rm_rf(aws_dir)
+              env[:machine].ui.info("Instance '#{name}' detached from local Vagrant.")
             end
           rescue Excon::Errors::BadRequest => e
             doc = XMLSimple.xml_in(e.response.body)
