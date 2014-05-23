@@ -28,7 +28,7 @@ module Vagrant
         def call(env)          
           sudo(env[:machine], %{            
 echo "Install cartridges into broker"
-switchns --container="origin-broker-1" --env="BROKER_SOURCE=1" --env="HOME=/opt/ruby" --env="OPENSHIFT_BROKER_DIR=/opt/ruby/src/broker" -- /bin/bash --login -c "/opt/ruby/src/docker/openshift_init"
+switchns --container="origin-broker-1" -- /bin/bash --login -c '$HOME/src/docker/openshift_init'
           })
           @app.call(env)
         end
