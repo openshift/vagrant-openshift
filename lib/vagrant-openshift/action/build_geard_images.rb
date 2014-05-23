@@ -20,18 +20,19 @@ module Vagrant
       class BuildGeardImages
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
           # FIXME: Measure what would be the appropriate timeout here as the
           #        docker build command can take quite a long time...
           #
-          Constants.cartridges.each do |repo_name, _|
-            docker_image_name = "openshift/#{repo_name}"
-            sudo(env[:machine], sync_bash_command(repo_name, %{
+          @options[:geard_images].each do |geard_image, _|
+            docker_image_name = "openshift/#{geard_image}"
+            sudo(env[:machine], sync_bash_command(geard_image, %{
 echo "Building #{docker_image_name} image"
 docker build --rm -t #{docker_image_name} .
             }), { :timeout => 60*20 })

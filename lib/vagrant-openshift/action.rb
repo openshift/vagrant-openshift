@@ -91,7 +91,7 @@ module Vagrant
 
       def self.build_geard_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardImages
+          b.use BuildGeardImages, options
         end
       end
 
@@ -138,7 +138,7 @@ module Vagrant
           unless options[:no_build]
             b.use BuildGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
             b.use RestartGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
-            b.use BuildGeardImages if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
+            b.use BuildGeardImages, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
             b.use BuildGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
             b.use RestartGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
             b.use InstallRhc if options[:include].include? Vagrant::Openshift::Constants::FILTER_RHC
