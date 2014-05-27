@@ -29,6 +29,10 @@ module Vagrant
           do_execute(env[:machine], sync_bash_command('geard', %{
 echo "Performing geard build..."
 set -e
+# Temporarely disable CGO (Cgo lets Go packages call C code) due to timestamp
+# issue in Go Fedora package.
+#
+export CGO_ENABLED=0
 contrib/build -s
           }))
 
