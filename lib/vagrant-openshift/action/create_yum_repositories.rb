@@ -30,6 +30,7 @@ module Vagrant
 (
   echo "set /files#{file}/#{repo_name}/baseurl #{baseurl}"
   echo "set /files#{file}/#{repo_name}/gpgcheck 0"
+  echo "set /files#{file}/#{repo_name}/name #{repo_name}"
   echo "rm  /files#{file}/#{repo_name}/mirrorlist"
   echo save
 ) | augtool
