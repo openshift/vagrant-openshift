@@ -38,7 +38,7 @@ popd
           sudo(env[:machine], sync_bash_command('origin-server', %{
 echo "Performing broker build..."
 set -e
-gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker
+gear build /data/src/github.com/openshift/origin-server/ origin-broker-builder origin-broker --verbose
           }), {:timeout => 60*20})
           @app.call(env)
         end

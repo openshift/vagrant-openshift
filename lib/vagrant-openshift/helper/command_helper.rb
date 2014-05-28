@@ -177,6 +177,36 @@ fi
         command
       end
 
+      def bash_systemd_polling_functions
+        command = %{
+function wait_for_success {
+  local retries=1
+  local cmd=$1
+  until [ $retries -ge 11 ]; do
+    /bin/sh -c $cmd
+    [ $? == 0 ] && return 0
+    echo "Command '$cmd' failed ($?). Retry \#${retries}" && sleep 1
+    retries=$[$retries+1]
+  done
+}
+
+function wait_for_activate {
+  local retries=0
+  local unit="$1"
+  until [ $retries -ge 10 ]; do
+    state=$(systemctl is-active ctr-${unit}-1.service)
+    [ "$state" == "active" ] && return 0
+    [ "$state" == "failed" ] && break
+    echo "Waiting for ${unit} to become active (${state})" && sleep 1
+    retries=$[$retries+1]
+  done
+  echo "The unit ctr-${unit}-1.service failed to activate."
+  return 1
+}
+}
+        return command
+      end
+
     end
   end
 end

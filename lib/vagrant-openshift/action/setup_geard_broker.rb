@@ -25,11 +25,42 @@ module Vagrant
           @env = env
         end
 
-        def call(env)          
-          sudo(env[:machine], %{            
+        def call(env)
+          sudo(env[:machine], %{
+#{bash_systemd_polling_functions}
+#
+gear list-units
+
+echo "Waiting for origin-db and origin-broker to become available..."
+
+if ! wait_for_activate origin-db; then
+  echo "WARNING: The 'origin-db' container is not ACTIVE. Trying restart..."
+  gear restart origin-db-1
+  if ! wait_for_activate origin-db; then
+    echo "ERROR: Unable to activate the origin-db container."
+    exit 1
+  fi
+fi
+
+if ! wait_for_activate origin-broker; then
+  echo "WARNING: The 'origin-broker' container is not ACTIVE. Trying restart..."
+  gear restart origin-broker-1
+  if ! wait_for_activate origin-broker; then
+    echo "ERROR: Unable to activate the origin-broker container."
+    exit 1
+  fi
+fi
+
 echo "Install cartridges into broker"
-switchns --container="origin-broker-1" -- /bin/bash --login -c '$HOME/src/docker/openshift_init'
-          })
+
+retries=1
+until [ $retries -ge 5 ]; do
+    switchns --container="origin-broker-1" -- /bin/bash --login -c '$HOME/src/docker/openshift_init'
+    [ $? == 0 ] && break
+    echo "Installing cartridges failed ($?). Retry \#$retries" && sleep 1
+    retries=$[$retries+1]
+done
+})
           @app.call(env)
         end
       end
