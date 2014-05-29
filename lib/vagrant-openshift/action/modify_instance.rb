@@ -28,15 +28,25 @@ module Vagrant
           @options = options
         end
 
+        def detach(env)
+          name = env[:machine].name.to_s
+          aws_dir = File.join(".vagrant", "machines", name, "aws")
+          FileUtils.rm_rf(aws_dir)
+          env[:machine].ui.info("Instance '#{name}' detached from local Vagrant.")
+        end
+
         def call(env)
-          raise VagrantPlugins::AWS::Errors::FogError, :message => "Error: EC2 Machine is not available" unless env[:machine].state.id == :running
+          unless env[:machine].state.id == :running
+            detach(env) if @options[:detach]
+            raise VagrantPlugins::AWS::Errors::FogError,
+              :message => "Error: EC2 Machine is not available"
+          end
 
           begin
             machine = env[:aws_compute].servers.get(env[:machine].id)
             unless @options[:rename].nil?
               env[:aws_compute].tags.create(:resource_id => machine.identity, :key => 'Name', :value => @options[:rename])
               env[:machine].ui.info("Renamed to #{@options[:rename]}")
-
             end
             if @options[:stop]
               env[:machine].ui.info("Stopping instance #{machine.identity}")
@@ -46,12 +56,7 @@ module Vagrant
               end
               env[:machine].ui.info("Stopped!")
             end
-            if @options[:detach]
-              name = env[:machine].name.to_s
-              aws_dir = File.join(".vagrant", "machines", name, "aws")
-              FileUtils.rm_rf(aws_dir)
-              env[:machine].ui.info("Instance '#{name}' detached from local Vagrant.")
-            end
+            detach(env) if @options[:detach]
           rescue Excon::Errors::BadRequest => e
             doc = XMLSimple.xml_in(e.response.body)
             code = doc['Response']['Errors']['Error']['Code'][0]
