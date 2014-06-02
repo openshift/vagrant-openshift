@@ -121,7 +121,7 @@ fi
 
 if [ $status -eq 0 ]; then
   # get the image id
-  image_id=`docker inspect #{image}:latest | grep id | sed -r 's/^\s*"id": "\([^"]\+\)".*/\\1/'`
+  image_id=`docker inspect -f "{{.id}}" #{image}:latest`
 
   # tag it devenv-ready
   docker tag $image_id #{image}:devenv-ready
@@ -134,8 +134,6 @@ fi
 cd /
 rm -rf $temp_dir
 })
-
-            @env.ui.info "RC=#{rc}"
           end
         end
       end
