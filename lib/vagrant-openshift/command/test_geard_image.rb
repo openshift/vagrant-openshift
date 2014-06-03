@@ -79,8 +79,9 @@ module Vagrant
             # just grab the end (centos or ruby-19-centos)
             source_dir = File.basename(image)
             app_name = "test-#{source_dir}"
-
-            out, err, rc = do_execute(machine, %{
+            rc=1
+            begin
+              out, err, rc = do_execute(machine, %{
 set -x
 
 # so we can call sti
@@ -133,8 +134,14 @@ fi
 # clean up
 cd /
 rm -rf $temp_dir
-})
+exit $status
 
+})
+            # Vagrant throws an exception if any execute invocation returns non-zero,
+            # so catch it so we can return a proper output.
+            rescue => e
+              @env.ui.info "Exception: #{e}"  
+            end
             @env.ui.info "RC=#{rc}"
           end
         end
