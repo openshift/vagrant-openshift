@@ -82,6 +82,16 @@ module Vagrant
         Commands::BuildGeardBroker
       end
 
+      command "restart-geard-console" do
+        require_relative "command/restart_geard_console"
+        Commands::RestartGeardConsole
+      end
+
+      command "build-geard-console" do
+        require_relative "command/build_geard_console"
+        Commands::BuildGeardConsole
+      end
+
       command "build-geard-images" do
         require_relative "command/build_geard_images"
         Commands::BuildGeardImages
