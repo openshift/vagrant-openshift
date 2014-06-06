@@ -31,7 +31,7 @@ module Vagrant
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
-          options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_GEARD, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
+          options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_CONSOLE ,Vagrant::Openshift::Constants::FILTER_GEARD, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-geard [vm-name]"

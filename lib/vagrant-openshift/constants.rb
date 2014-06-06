@@ -20,6 +20,7 @@ module Vagrant
     class Constants
 
       FILTER_BROKER="broker"
+      FILTER_CONSOLE="console"
       FILTER_IMAGES="images"
       FILTER_RHC="rhc"
       FILTER_GEARD="geard"
