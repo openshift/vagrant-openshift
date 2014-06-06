@@ -135,7 +135,6 @@ fi
 cd /
 rm -rf $temp_dir
 exit $status
-
 })
             # Vagrant throws an exception if any execute invocation returns non-zero,
             # so catch it so we can return a proper output.
@@ -143,7 +142,8 @@ exit $status
               @env.ui.info "Exception: #{e}"  
             end
             @env.ui.info "RC=#{rc}"
-          end
+            return rc
+          end 
         end
       end
     end
