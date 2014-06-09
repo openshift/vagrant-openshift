@@ -32,10 +32,18 @@ module Vagrant
           #
           @options[:geard_images].each do |geard_image, _|
             docker_image_name = "openshift/#{geard_image}"
-            sudo(env[:machine], sync_bash_command(geard_image, %{
+            docker_file_path = "#{Constants.build_dir}#{geard_image}"
+            build_cmd = %{
 echo "Building #{docker_image_name} image"
-docker build --rm -t #{docker_image_name} .
-            }), { :timeout => 60*20 })
+pushd #{docker_file_path}
+  docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
+popd
+            }
+            if @options[:force]    
+              sudo(env[:machine], build_cmd, { :timeout => 60*20 })
+            else
+              sudo(env[:machine], sync_bash_command(geard_image, build_cmd), { :timeout => 60*20 })
+            end
           end
           @app.call(env)
         end
