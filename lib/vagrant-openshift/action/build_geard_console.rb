@@ -20,27 +20,34 @@ module Vagrant
       class BuildGeardConsole
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options = {})
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
           docker_file_path = "console/docker/origin-console-builder"
-          sudo(env[:machine], sync_bash_command_on_dockerfile('origin-server', docker_file_path, %{
+          build_builder_cmd = %{
 echo "Performing origin-console-builder build..."
 set -e
-pushd #{docker_file_path}
-  docker build --rm -t origin-console-builder .
+pushd #{Constants.build_dir}origin-server/#{docker_file_path}
+  docker build --rm #{@options[:force] ? "--no-cache" : ""} -t origin-console-builder .
 popd
-          }), {:timeout => 60*20})
-
-          sudo(env[:machine], sync_bash_command('origin-server', %{
+          }
+          build_console_cmd = %{
 echo "Performing console build..."
 set -e
-gear build /data/src/github.com/openshift/origin-server/ origin-console-builder origin-console --verbose
-          }), {:timeout => 60*20})
-          @app.call(env)
+gear build #{Constants.build_dir}origin-server/ origin-console-builder origin-console --verbose
+          }
+          if @options[:force]
+            sudo(env[:machine], build_builder_cmd + build_console_cmd, {:timeout => 60*40})
+          else
+            sudo(env[:machine], sync_bash_command_on_dockerfile('origin-server', docker_file_path, build_builder_cmd), {:timeout => 60*20})
+
+            sudo(env[:machine], sync_bash_command('origin-server', build_console_cmd), {:timeout => 60*20})
+            @app.call(env)
+          end
         end
       end
     end

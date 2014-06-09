@@ -37,6 +37,10 @@ module Vagrant
             o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
               options[:branch] = {"origin-server" => f}
             end
+
+            o.on("-f", "--force", "Force a rebuild of the console even if there has not been a change to the source.") do |c|
+              options[:force] = true
+            end            
           end
 
           # Parse the options

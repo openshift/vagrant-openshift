@@ -38,6 +38,10 @@ module Vagrant
               options[:branch] = {"origin-server" => f}
             end
 
+            o.on("-f", "--force", "Force a rebuild of the images even if there has not been a change to the source.") do |c|
+              options[:force] = true
+            end        
+
             o.on("--geard-images [ #{Vagrant::Openshift::Constants.geard_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
               if f.split(" ").include?("all")
                 options[:geard_images] = Vagrant::Openshift::Constants.geard_images.keys

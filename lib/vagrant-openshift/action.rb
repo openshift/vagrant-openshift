@@ -85,7 +85,7 @@ module Vagrant
 
       def self.build_geard_broker(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardBroker
+          b.use BuildGeardBroker, options
         end
       end
 
@@ -97,7 +97,7 @@ module Vagrant
 
       def self.build_geard_console(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardConsole
+          b.use BuildGeardConsole, options
         end
       end      
 
