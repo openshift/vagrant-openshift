@@ -45,6 +45,8 @@ export GOPATH=/data
 export PATH=$GOPATH/bin:$PATH
 DELIM
 
+# Must listen on docker gateway address for container to access host, see: https://github.com/dotcloud/docker/issues/1143
+GEARD_OPTS=http://172.17.42.1:43273
 cat > /usr/lib/systemd/system/geard.service <<DELIM
 [Unit]
 Description=Gear Provisioning Daemon (geard)
@@ -61,7 +63,6 @@ DELIM
 
 systemctl restart sshd
 systemctl enable geard.service
-
           })
 
           @app.call(env)

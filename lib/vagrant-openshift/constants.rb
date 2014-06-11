@@ -52,6 +52,10 @@ module Vagrant
         "$(git rev-parse --abbrev-ref HEAD)"
       end
 
+      def self.plugins_conf_dir
+        Pathname.new "/plugins"
+      end
+
       def self.sync_dir
         Pathname.new "~/sync"
       end

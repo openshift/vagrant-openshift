@@ -36,10 +36,14 @@ pushd #{Constants.build_dir}origin-server/#{docker_file_path}
 popd
           }
           build_broker_cmd = %{
+echo "Copy generated plugin configuration to broker source for use in build"
+PLUGINS_CONF="#{Vagrant::Openshift::Constants.plugins_conf_dir}"
+cp -f --parents $(find $PLUGINS_CONF \\( -name "*.conf" \\)) /data/src/github.com/openshift/origin-server
 echo "Performing broker build..."
 set -e
 gear build #{Constants.build_dir}origin-server/ origin-broker-builder origin-broker --verbose
           }
+
           if @options[:force]
             sudo(env[:machine], build_builder_cmd + build_broker_cmd, {:timeout => 60*40})
           else
