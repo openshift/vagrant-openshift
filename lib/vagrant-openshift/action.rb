@@ -44,7 +44,7 @@ module Vagrant
           b.use InstallGeardBaseDependencies
           b.use InstallGeardImages
           b.use SetHostName
-          #b.use SetupBindDnsKey
+          b.use SetupBindHost
           #b.use CreatePuppetFile
         end
       end
@@ -301,6 +301,7 @@ module Vagrant
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :InstallRhc, action_root.join("install_rhc")
       autoload :SetupGeardBroker, action_root.join("setup_geard_broker")
+      autoload :SetupBindHost, action_root.join("setup_bind_host")
     end
   end
 end
