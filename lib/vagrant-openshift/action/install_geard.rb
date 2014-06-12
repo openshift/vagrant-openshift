@@ -37,8 +37,8 @@ GEARD_PATH=/data/src/github.com/openshift/geard
 chown -R #{ssh_user}:#{ssh_user} /data
 
 # Modify SSHD config to use gear-auth-keys-command to support git clone from repo
-echo 'AuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
-echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
+echo -e '\\nAuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
+echo -e '\\nAuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 
 cat > /etc/profile.d/geard.sh <<DELIM
 export GOPATH=/data
