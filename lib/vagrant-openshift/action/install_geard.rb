@@ -63,6 +63,7 @@ DELIM
 
 systemctl restart sshd
 systemctl enable geard.service
+systemctl start geard
           })
 
           @app.call(env)
