@@ -50,6 +50,8 @@ GEARD_OPTS=http://172.17.42.1:43273
 cat > /usr/lib/systemd/system/geard.service <<DELIM
 [Unit]
 Description=Gear Provisioning Daemon (geard)
+After=docker.service
+Requires=docker.service
 Documentation=https://github.com/openshift/geard
 
 [Service]
