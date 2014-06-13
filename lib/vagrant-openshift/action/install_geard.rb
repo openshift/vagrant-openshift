@@ -57,7 +57,7 @@ Documentation=https://github.com/openshift/geard
 [Service]
 Type=simple
 EnvironmentFile=-/etc/default/gear
-ExecStart=/data/bin/gear daemon $GEARD_OPTS
+ExecStart=/usr/bin/gear daemon $GEARD_OPTS
 
 [Install]
 WantedBy=multi-user.target
@@ -65,7 +65,6 @@ DELIM
 
 systemctl restart sshd
 systemctl enable geard.service
-systemctl start geard
           })
 
           @app.call(env)

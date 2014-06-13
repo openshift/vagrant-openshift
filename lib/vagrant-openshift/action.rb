@@ -56,6 +56,7 @@ module Vagrant
           b.use SetHostName
           b.use InstallGeard
           b.use BuildGeard
+          b.use RestartGeard
         end
       end
 
