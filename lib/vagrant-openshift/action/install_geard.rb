@@ -43,6 +43,7 @@ echo -e '\\nAuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 cat > /etc/profile.d/geard.sh <<DELIM
 export GOPATH=/data
 export PATH=$GOPATH/bin:$PATH
+export GEARD_URI=http://172.17.42.1:43273
 DELIM
 
 # Must listen on docker gateway address for container to access host, see: https://github.com/dotcloud/docker/issues/1143
