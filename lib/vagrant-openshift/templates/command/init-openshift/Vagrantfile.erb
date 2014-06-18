@@ -34,8 +34,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Box to load when booting the vagrant VM. This section applicable only to VirtualBox.
   # Other providers may override this value
-  config.vm.box     = "<%= box_info[:virtualbox][:box_name] %>"
-  config.vm.box_url = "<%= box_info[:virtualbox][:box_url] %>"
+  config.vm.box      = "<%= box_info[:virtualbox][:box_name] %>"
+  config.vm.box_url  = "<%= box_info[:virtualbox][:box_url] %>"
+  config.vm.hostname = 'broker.example.com'
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant.
@@ -43,13 +44,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      vb.gui  = false
      vb.name = "<%= box_info[:instance_name] %>"
      vb.customize ["modifyvm", :id, "--memory", "2048"]
-
-     # set explicit host name for local development
-     config.vm.hostname = "dev.origin.com"
-
-     # ports: geard=43273, dns=53
-     config.vm.network "forwarded_port", guest: 43273, host: 43273
-     config.vm.network "forwarded_port", guest: 53, host: 5353
   end
 
   config.vm.provider "vmware_fusion" do |vmf, override|
@@ -109,10 +103,6 @@ runcmd:
       ]
     <% end %>
   end
-
-<% unless box_info[:os] == :fedora %>
-  config.vm.hostname  = 'broker.example.com'
-<% end %>
 
   config.vm.provision   :openshift
   config.vm.guest     = :<%= box_info[:vagrant_guest]%>

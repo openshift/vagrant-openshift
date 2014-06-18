@@ -25,6 +25,8 @@ require_relative 'lib/test'
 $stdout.sync = true
 $stderr.sync = true
 
+VALID_IP_ADDR_RE = Regexp.new('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+
 task :install_deps do
   spec_files = RPM::get_packages(ignore_packages: OPTIONS[:ignore_packages], ignore_cache: true)
 
@@ -159,7 +161,7 @@ task :create_test_users do
         break if rest_connected
         rest_retries = rest_retries + 1
         print "Could not verify user #{user} via the REST API on attempt #{rest_retries}\n"
-        sleep 5
+        sleep 10
       end
       if not rest_connected
         print "Unable to verify user #{user} via the REST API\n"
