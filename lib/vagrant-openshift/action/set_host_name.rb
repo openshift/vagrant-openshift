@@ -16,6 +16,28 @@
 
 module Vagrant
   module Openshift
-    VERSION = "1.0.7"
+    module Action
+      class SetHostName
+        include CommandHelper
+
+        def initialize(app, env)
+          @app = app
+          @env = env
+        end
+
+        def call(env)
+          hostname = env[:machine].config.vm.hostname
+          remote_write(env[:machine], "/etc/sysconfig/network") {
+            "NETWORKING=yes\nNETWORKING_IPV6=no\nHOSTNAME=#{hostname}\n"
+          }
+          remote_write(env[:machine], "/etc/hostname") {
+            hostname
+          }
+          sudo(env[:machine],"restorecon -v /etc/sysconfig/network /etc/hostname")
+
+          @app.call(env)
+        end
+      end
+    end
   end
 end
