@@ -103,8 +103,8 @@ include "/etc/named.root.key";
 include "/var/named/#{domain}.zones";
 include "#{domain}.key";
 EOF
-if ! cat /etc/dhcp/dhclient.conf | grep 'prepend domain-name-servers 127.0.0.1;' 2>&1 > /dev/null ; then
-  echo "$(cat /etc/dhcp/dhclient.conf)\nprepend domain-name-servers 127.0.0.1;" > /etc/dhcp/dhclient.conf;
+if ! cat /etc/dhcp/dhclient.conf | grep 'prepend domain-name-servers 172.17.42.1;' 2>&1 > /dev/null ; then
+  echo "$(cat /etc/dhcp/dhclient.conf)\nprepend domain-name-servers 172.17.42.1;" > /etc/dhcp/dhclient.conf;
 fi
 systemctl enable named
 systemctl restart named
