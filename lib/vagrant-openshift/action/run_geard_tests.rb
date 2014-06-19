@@ -37,8 +37,17 @@ module Vagrant
             cmd_opts += "-a "
           end
 
-          cmd = "cd #{Constants.build_dir}/geard; contrib/test #{cmd_opts}"
-          _,_,env[:test_exit_code] = do_execute(env[:machine], cmd)
+          # TODO: remove the need for permissive mode once we get through SELinux issues with docker 1.0 and geard
+          sudo(env[:machine], %{
+            if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
+              echo "Disabling requiretty for root user for contrib/test sudo support"
+              echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
+            fi
+            pushd #{Constants.build_dir}/geard
+            setenforce 0
+            contrib/test #{cmd_opts}
+            popd
+            }, {:timeout => 60*60})
 
           @app.call(env)
         end
