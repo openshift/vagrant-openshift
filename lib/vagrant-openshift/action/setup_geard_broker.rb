@@ -38,6 +38,7 @@ if ! wait_for_activate origin-db; then
   gear restart origin-db-1
   if ! wait_for_activate origin-db; then
     echo "ERROR: Unable to activate the origin-db container."
+    gear status origin-db-1
     exit 1
   fi
 fi
@@ -47,6 +48,7 @@ if ! wait_for_activate origin-broker; then
   gear restart origin-broker-1
   if ! wait_for_activate origin-broker; then
     echo "ERROR: Unable to activate the origin-broker container."
+    gear status origin-broker-1
     exit 1
   fi
 fi

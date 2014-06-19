@@ -182,7 +182,7 @@ fi
 function wait_for_success {
   local retries=1
   local cmd=$1
-  until [ $retries -ge 11 ]; do
+  until [ $retries -ge 21 ]; do
     /bin/sh -c $cmd
     [ $? == 0 ] && return 0
     echo "Command '$cmd' failed ($?). Retry \#${retries}" && sleep 1
@@ -193,7 +193,7 @@ function wait_for_success {
 function wait_for_activate {
   local retries=0
   local unit="$1"
-  until [ $retries -ge 10 ]; do
+  until [ $retries -ge 20 ]; do
     state=$(systemctl is-active ctr-${unit}-1.service)
     [ "$state" == "active" ] && return 0
     [ "$state" == "failed" ] && break
