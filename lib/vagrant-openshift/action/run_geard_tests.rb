@@ -39,6 +39,7 @@ module Vagrant
 
           # TODO: remove the need for permissive mode once we get through SELinux issues with docker 1.0 and geard
           sudo(env[:machine], %{
+            set -e
             if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
               echo "Disabling requiretty for root user for contrib/test sudo support"
               echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
