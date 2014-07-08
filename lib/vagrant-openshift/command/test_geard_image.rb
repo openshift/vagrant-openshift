@@ -89,6 +89,10 @@ PATH=/data/bin:$PATH
 
 # create a temp dir to play in
 temp_dir=$(mktemp -d /tmp/image_test.XXXXXXX)
+
+# set correct SELinux context
+chcon -t docker_share_t $temp_dir
+
 cd $temp_dir
 
 # clone the image repo
