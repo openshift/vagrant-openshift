@@ -31,6 +31,7 @@ module Vagrant
             :help     => false,
             :os       => 'centos',
             :stage    => 'inst',
+            :port_mappings => []
           }
 
           valid_stage = ['os','deps','inst']
@@ -46,6 +47,10 @@ module Vagrant
 
             o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos [default]\n\tfedora\n\trhel") do |f|
               options[:os] = f
+            end
+
+            o.on("-p [guest_port:host_port]", "--map-port [guest_port:host_port]", String, "When running on Virtualbox, map port from guest docker vm to host machine") do |f|
+              options[:port_mappings].push(f.split(":"))
             end
 
             o.on("-h", "--help", "Show this message") do |f|

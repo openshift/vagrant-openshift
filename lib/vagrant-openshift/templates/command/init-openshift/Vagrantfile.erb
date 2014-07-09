@@ -44,6 +44,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      vb.gui  = false
      vb.name = "<%= box_info[:instance_name] %>"
      vb.customize ["modifyvm", :id, "--memory", "2048"]
+<% box_info[:port_mappings].each do |guest_port,host_port| %>
+     config.vm.network "forwarded_port", guest: <%=guest_port%>, host: <%=host_port%>
+<% end %>
   end
 
   config.vm.provider "vmware_fusion" do |vmf, override|

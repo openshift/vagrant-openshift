@@ -41,6 +41,7 @@ module Vagrant
           box_info[:instance_name] = @options[:name].nil? ? 'openshift_origin_' + inst_ts : @options[:name]
           box_info[:os] = os
           box_info[:vagrant_guest] = (os == :centos) ? :redhat : os
+          box_info[:port_mappings] = @options[:port_mappings]
 
           @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
           @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
