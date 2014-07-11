@@ -13,6 +13,9 @@
       :ami_ssh_user: root
       :machine_name: origin-centos-65-base
       :ebs_volume_size: 25
+    :openstack:
+      :image: centos-6.5-20140117.0.x86_64
+      :ssh_username: cloud-user
   :deps:
     :virtualbox:
       :box_name: centos_65_virtualbox_deps
@@ -26,6 +29,9 @@
       :ami_ssh_user: root
       :machine_name: origin-centos-65-deps_1
       :ebs_volume_size: 25
+    :openstack:
+      :image: n/a
+      :ssh_username: cloud-user
   :inst:
     :virtualbox:
       :box_name: n/a
@@ -39,6 +45,9 @@
       :ami_ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
+    :openstack:
+      :image: n/a
+      :ssh_username: cloud-user
 :fedora:
   :os:
     :virtualbox:
@@ -54,6 +63,9 @@
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-fedora_
+    :openstack:
+      :image: "Fedora 20 official release"
+      :ssh_username: fedora
   :deps:
     :virtualbox:
       :box_name: fedora_deps
@@ -68,6 +80,9 @@
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora-base_
+    :openstack:
+      :image: n/a
+      :ssh_username: fedora
   :inst:
     :virtualbox:
       :box_name: fedora_inst
@@ -82,3 +97,6 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora_
+    :openstack:
+      :image: n/a
+      :ssh_username: fedora

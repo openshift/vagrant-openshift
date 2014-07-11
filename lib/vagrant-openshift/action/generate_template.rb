@@ -43,6 +43,10 @@ module Vagrant
           box_info[:vagrant_guest] = (os == :centos) ? :redhat : os
           box_info[:port_mappings] = @options[:port_mappings]
 
+          @openstack_creds_file = ENV['OPENSTACK_CREDS'].nil? || ENV['OPENSTACK_CREDS'] == '' ? "~/.openstackcred" : ENV['OPENSTACK_CREDS']
+          @openstack_creds_file = Pathname.new(File.expand_path(@openstack_creds_file))
+          box_info[:openstack_creds_file] = @openstack_creds_file
+
           @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
           @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
           box_info[:aws_creds_file] = @aws_creds_file

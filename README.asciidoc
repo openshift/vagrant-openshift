@@ -188,6 +188,31 @@ NOTE: Requires latest link:https://github.com/mitchellh/vagrant-aws[AWS] provide
 NOTE: You can use the link:https://github.com/mikery/vagrant-ami[Vagrant-AMI] plugin to create an AMI from a running AWS machine.
 
 
+===== OpenStack
+
+* Install the latest vagrant-openstack-plugin. See: https://github.com/cloudbau/vagrant-openstack-plugin.
+
+* Edit the Vagrantfile and update your OpenStack credentials, endpoint and tenant (They can be read automatically from ~/.openstackcred).
+
+----
+os.endpoint                   = "<OPENSTACK ENDPOINT URL>"
+os.tenant                     = "<OPENSTACK TENANT>"
+os.username                   = "<OPENSTACK USERNAME>"
+os.api_key                    = "<OPENSTACK PASSWORD>"
+os.keypair_name               = "<OPENSTACK KEYPAIR NAME>"
+override.ssh.private_key_path = "<PRIVATE KEY FILE>"
+----
+
+* Start the OpenStack machine
+
+[source, sh]
+----
+vagrant up --provider=openstack
+----
+
+NOTE: Requires latest link:https://github.com/cloudbau/vagrant-openstack-plugin[OpenStack] provider.
+
+
 ===== LibVirt
 
 * Install the vagrant-libvirt plugin dependencies

@@ -107,6 +107,42 @@ runcmd:
     <% end %>
   end
 
+  config.vm.provider :openstack do |os, override|
+    # You will need the latest vagrant-openstack-plugin
+    # https://github.com/cloudbau/vagrant-openstack-plugin
+
+    if gopath
+      override.vm.synced_folder gopath, "/data", disabled: true
+    end
+
+    os_creds_file = Pathname.new(File.expand_path("<%= box_info[:openstack_creds_file]%>"))
+    os_creds      = os_creds_file.exist? ? Hash[*(File.open(os_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
+
+    override.vm.box               = "dummy"
+    override.vm.box_url           = "https://github.com/cloudbau/vagrant-openstack-plugin/raw/master/dummy.box"
+    override.ssh.private_key_path = os_creds["OSPrivateKeyPath"] || "PATH TO OPENSTACK KEYPAIR PRIVATE KEY"
+
+    os.endpoint     = os_creds["OSEndpoint"] || "OPENSTACK ENDPOINT URL"
+    os.tenant       = os_creds["OSTenant"] || "OPENSTACK TENANT"
+    os.username     = os_creds["OSUsername"] || "OPENSTACK USERNAME"
+    os.api_key      = os_creds["OSAPIKey"] || "OPENSTACK PASSWORD"
+    os.flavor       = "m1.large"
+    os.image        = "<%= box_info[:openstack][:image] %>"
+    os.keypair_name = os_creds["OSKeyPairName"] || "OPENSTACK KEYPAIR NAME"
+    os.ssh_username = "<%= box_info[:openstack][:ssh_username] %>"
+    os.server_name  = "<%= box_info[:instance_name] %>"
+    os.networks     = []
+    os.user_data    = %{
+#cloud-config
+
+growpart:
+  mode: auto
+  devices: ['/']
+runcmd:
+- [ sh, -xc, "echo 'Defaults:<%= box_info[:openstack][:ssh_username] %> \!requiretty' >> /etc/sudoers"]
+    }
+  end
+
   config.vm.provision   :openshift
   config.vm.guest     = :<%= box_info[:vagrant_guest]%>
 
