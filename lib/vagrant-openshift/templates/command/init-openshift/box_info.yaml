@@ -1,5 +1,5 @@
 ---
-:centos:
+:centos6:
   :os:
     :virtualbox:
       :box_name: centos_65_virtualbox_base
@@ -100,3 +100,52 @@
     :openstack:
       :image: n/a
       :ssh_username: fedora
+:rhel6:
+  :os:
+    :virtualbox:
+      :box_name: n/a
+      :box_url: n/a
+    :vmware:
+      :box_name: n/a
+      :box_url: n/a
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ami_ssh_user: root
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+    :openstack:
+      :image: rhel-guest-image-6.5-20140603.0
+      :ssh_username: cloud-user
+  :deps:
+    :virtualbox:
+      :box_name: n/a
+      :box_url: n/a
+    :vmware:
+      :box_name: n/a
+      :box_url: n/a
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ami_ssh_user: root
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+    :openstack:
+      :image: n/a
+      :ssh_username: cloud-user
+  :inst:
+    :virtualbox:
+      :box_name: n/a
+      :box_url: n/a
+    :vmware:
+      :box_name: n/a
+      :box_url: n/a
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ami_ssh_user: root
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+    :openstack:
+      :image: n/a
+      :ssh_username: cloud-user
