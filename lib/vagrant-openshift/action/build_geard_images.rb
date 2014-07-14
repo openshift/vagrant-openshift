@@ -39,7 +39,7 @@ pushd #{docker_file_path}
   docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
 popd
             }
-            if @options[:force]    
+            if @options[:force]
               sudo(env[:machine], build_cmd, { :timeout => 60*20 })
             else
               sudo(env[:machine], sync_bash_command(geard_image, build_cmd), { :timeout => 60*20 })

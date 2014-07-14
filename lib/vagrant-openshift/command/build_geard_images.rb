@@ -31,7 +31,7 @@ module Vagrant
           options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-geard-images [vm-name]"
+            o.banner = "Usage: vagrant build-geard-images --geard-images image_name [vm-name]"
             o.separator ""
 
             o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
@@ -40,9 +40,9 @@ module Vagrant
 
             o.on("-f", "--force", "Force a rebuild of the images even if there has not been a change to the source.") do |c|
               options[:force] = true
-            end        
+            end
 
-            o.on("--geard-images [ #{Vagrant::Openshift::Constants.geard_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
+            o.on("--geard-images #{Vagrant::Openshift::Constants.geard_images.keys.join(' ')} | all", "Specify which images should be built. Default: []") do |f|
               if f.split(" ").include?("all")
                 options[:geard_images] = Vagrant::Openshift::Constants.geard_images.keys
               else
@@ -53,6 +53,9 @@ module Vagrant
 
           # Parse the options
           argv = parse_options(opts)
+
+          return if !argv
+          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp unless options[:geard_images]
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.build_geard_images(options)
