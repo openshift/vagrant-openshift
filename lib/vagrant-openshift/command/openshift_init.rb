@@ -29,13 +29,13 @@ module Vagrant
           options = {
             :no_base  => false,
             :help     => false,
-            :os       => 'centos',
+            :os       => 'centos6',
             :stage    => 'inst',
             :port_mappings => []
           }
 
           valid_stage = ['os','deps','inst']
-          valid_os = ['centos','fedora','rhel']
+          valid_os = ['centos6','fedora','rhel6']
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
@@ -45,7 +45,7 @@ module Vagrant
               options[:stage] = f
             end
 
-            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos [default]\n\tfedora\n\trhel") do |f|
+            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos6 [default]\n\tfedora\n\trhel6") do |f|
               options[:os] = f
             end
 

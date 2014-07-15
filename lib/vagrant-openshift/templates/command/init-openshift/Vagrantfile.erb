@@ -97,7 +97,7 @@ growpart:
 runcmd:
 - [ sh, -xc, "echo 'Defaults:<%= box_info[:aws][:ami_ssh_user] %> \!requiretty' >> /etc/sudoers"]
     }
-    <% if box_info[:os] == :centos %>
+    <% if [:centos6,:rhel6].include?(box_info[:os]) %>
       aws.block_device_mapping = [
         {
            "DeviceName" => "/dev/sda",

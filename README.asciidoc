@@ -70,9 +70,9 @@ $ vagrant origin-init <instance name>
 .Command options:
 
 * Specify which OS to build with:
-** --os fedora		- Launch a Fedora 20 image
-** --os rhel		  - Launch a RHEL image (where available)
-** --os centos		- Launch a CentOS image (where available)
+** --os fedora		- Launch a Fedora 20 image (used for OpenShift 3 development)
+** --os rhel6		- Launch a RHEL 6 image (where available)
+** --os centos6		- Launch a CentOS 6 image (where available, used for OpenShift 2.x development)
 
 * Specify the stage of image to launch:
 ** --stage os    - Launch the base operating system with no OpenShift dependencies
