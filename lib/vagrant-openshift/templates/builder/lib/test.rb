@@ -259,7 +259,7 @@ Test: #{test[:title]}
     retry_queue
   end
 
-  def build_cucumber_command(title="", tags=[], test_env = {}, old_rerun_file=nil, test_dir="/data/openshift-test/tests",
+  def build_cucumber_command(title="", tags=[], test_env = {}, old_rerun_file=nil, test_dir="/data/src/github.com/openshift/openshift-tests/controller/test/cucumber",
       feature_file="*.feature", require_gemfile_dir=nil, other_outputs = nil)
 
     other_outputs ||= {:junit => '/tmp/rhc/cucumber_results'}
