@@ -26,7 +26,7 @@ module Vagrant
         end
 
         def call(env)
-          sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make tig mlocate bind augeas vim")
+          sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make tig mlocate bind augeas vim libuv libuv-devel createrepo")
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
 
           if is_fedora
