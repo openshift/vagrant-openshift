@@ -32,7 +32,7 @@ module Vagrant
           if is_fedora
             sudo(env[:machine], "yum install -y rubygem-rake rubygem-fakefs")
           else
-            sudo(env[:machine], "yum install -y ruby193-rubygem-rake ruby193-build scl-utils-build")
+            sudo(env[:machine], "yum install -y ruby193-rubygem-rake ruby193-build scl-utils-build libuv libuv-devel http-parser http-parser-devel createrepo")
             #test dependencies
             sudo(env[:machine], "yum install -y ruby193-rubygem-net-ssh ruby193-rubygem-archive-tar-minitar ruby193-rubygem-fakefs ruby193-rubygem-httpclient ruby193-rubygem-test-unit")
             sudo(env[:machine], "yum install -y ruby193-rubygem-cucumber ruby193-rubygem-simplecov ruby193-rubygem-webmock ruby193-rubygem-poltergeist")
