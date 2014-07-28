@@ -24,7 +24,7 @@
       :box_name: centos_65_vmware_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_deps.box
     :aws:
-      :ami: ami-c627d9ae
+      :ami: ami-100ec478
       :ami_region: us-east-1
       :ami_ssh_user: root
       :machine_name: origin-centos-65-deps_1

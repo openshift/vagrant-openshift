@@ -81,7 +81,7 @@ module Vagrant
             dependencies = "#{options.repos_base}/dependencies/x86_64"
           end
 
-          set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "origin-deps", dependencies)
+          set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "openshift-deps", dependencies)
 
           sudo(env[:machine], "yum clean all")
 
