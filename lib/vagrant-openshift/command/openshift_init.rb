@@ -28,7 +28,6 @@ module Vagrant
         def execute
           options = {
             :no_base  => false,
-            :help     => false,
             :os       => 'centos6',
             :stage    => 'inst',
             :port_mappings => []
@@ -52,19 +51,11 @@ module Vagrant
             o.on("-p [guest_port:host_port]", "--map-port [guest_port:host_port]", String, "When running on Virtualbox, map port from guest docker vm to host machine") do |f|
               options[:port_mappings].push(f.split(":"))
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           unless valid_stage.include? options[:stage]
             @env.ui.warn "Unknown stage '#{options[:stage]}'. Please choose from #{valid_stage.join(', ')}"

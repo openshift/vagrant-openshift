@@ -27,7 +27,6 @@ module Vagrant
 
         def execute
           options = {}
-          options[:help] = false
           options[:tag] = nil
 
           opts = OptionParser.new do |o|
@@ -37,19 +36,11 @@ module Vagrant
             o.on("-t", "--tag [name]", String, "Tag the AMI") do |f|
               options[:tag] = f
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = true
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.modify_ami(options)

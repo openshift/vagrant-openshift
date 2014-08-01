@@ -53,7 +53,6 @@ module Vagrant
 
           # Parse the options
           argv = parse_options(opts)
-
           return if !argv
           raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp unless options[:geard_images]
 

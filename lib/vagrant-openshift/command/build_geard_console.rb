@@ -45,6 +45,7 @@ module Vagrant
 
           # Parse the options
           argv = parse_options(opts)
+          return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.build_geard_console(options)

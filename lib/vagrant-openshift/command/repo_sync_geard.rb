@@ -49,10 +49,6 @@ module Vagrant
               options[:no_build] = true
             end
 
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
-
             o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
               options[:include] = f.split " "
             end
@@ -64,18 +60,13 @@ module Vagrant
                 options[:geard_images] = f.split(" ")
               end
             end
-
-
           end
 
           # Parse the options
           argv = parse_options(opts)
-          with_target_vms(argv, :reverse => true) do |machine|
-            if options[:help]
-              machine.env.ui.info opts
-              exit
-            end
+          return if !argv
 
+          with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.repo_sync_geard(options)
             @env.action_runner.run actions, {:machine => machine}
             0

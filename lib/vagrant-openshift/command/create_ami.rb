@@ -27,24 +27,15 @@ module Vagrant
 
         def execute
           options = {}
-          options[:help] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant create-ami"
             o.separator ""
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.create_ami(options)
@@ -52,10 +43,6 @@ module Vagrant
             0
           end
         end
-
-        private
-
-
       end
     end
   end

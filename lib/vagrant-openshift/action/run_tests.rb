@@ -30,7 +30,6 @@ module Vagrant
 
         def call(env)
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-          @options.delete :help
           @options.delete :logs
 
           cmd_opts = ''
