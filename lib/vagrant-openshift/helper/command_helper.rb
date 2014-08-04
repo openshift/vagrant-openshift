@@ -157,9 +157,10 @@ echo 'Cloning #{repo} ...'
 }
 
         if @options[:user]
+          user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
           command += %{
-echo 'Cloning #{repo_name}'
-git clone --quiet git@github.com:#{@options[:user]}/#{repo}
+echo 'Cloning #{user_repo_url}'
+git clone --quiet #{user_repo_url}
 if [ $? -eq 0 ]; then
 cloned=true
 (cd #{repo} && git remote add upstream #{url} && git fetch upstream)

@@ -44,14 +44,14 @@ $ rake vagrant:install
 $ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
 $ source ~/.bash_profile
 $ cd $GOPATH
-$ vagrant geard-local-checkout <github username>
+$ vagrant geard-local-checkout -u <github username>
 ----
 
 ===== OpenShift 2.x
 
 [source, sh]
 ----
-$ vagrant origin-local-checkout <github username>
+$ vagrant origin-local-checkout -u <github username>
 ----
 
 This will clone several repositories from link:http://www.github.com[GitHub] and link them against the upstream repositories.
