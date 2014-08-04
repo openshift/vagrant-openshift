@@ -27,7 +27,6 @@ module Vagrant
 
         def execute
           options = {}
-          options[:help] = false
           options[:download] = false
           options[:all] = false
 
@@ -42,19 +41,11 @@ module Vagrant
             o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
               options[:download] = true
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = true
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.run_geard_tests(options)

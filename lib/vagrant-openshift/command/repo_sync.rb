@@ -55,20 +55,13 @@ module Vagrant
             o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
               options[:download] = true
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-          with_target_vms(argv, :reverse => true) do |machine|
-            if options[:help]
-              machine.env.ui.info opts
-              exit
-            end
+          return if !argv
 
+          with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.repo_sync(options)
             @env.action_runner.run actions, {:machine => machine}
             0

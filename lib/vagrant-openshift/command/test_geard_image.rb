@@ -47,14 +47,11 @@ module Vagrant
             o.on("-s", "--source SOURCE", String, "git repo source url") do |o|
               options[:source] = o
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
+          return if !argv
 
           if options[:image].nil? and options[:ref].nil?
             @env.ui.warn "You must specify an image and a git ref"
@@ -66,11 +63,6 @@ module Vagrant
           end
 
           with_target_vms(argv, :reverse => true) do |machine|
-            if options[:help]
-              machine.env.ui.info opts
-              exit
-            end
-
             image = options[:image]
             ref = options[:ref]
             source = options[:source]

@@ -46,18 +46,11 @@ module Vagrant
             o.on("-r", "--replace", "Delete existing cloned dirs first. Default is to skip repos that are already cloned.") do |f|
               options[:replace] = f
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = f
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           actions = Vagrant::Openshift::Action.local_repo_checkout(options)
           @env.action_runner.run actions

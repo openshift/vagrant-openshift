@@ -29,7 +29,6 @@ module Vagrant
         end
 
         def call(env)
-          @options.delete :help
           @options.delete :logs
 
           cmd_opts = ''

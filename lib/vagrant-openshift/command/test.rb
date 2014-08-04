@@ -31,7 +31,6 @@ module Vagrant
 
         def execute
           options = {}
-          options[:help] = false
           options[:extended] = false
           options[:download] = false
           component_list.each { |component| options[component] = false }
@@ -79,19 +78,11 @@ module Vagrant
             o.on("--fixme", "Run known broken tests to verify test fixes") do |f|
               options[:fixme] = true
             end
-
-            o.on("-h", "--help", "Show this message") do |f|
-              options[:help] = true
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
-
-          if options[:help]
-            @env.ui.info opts
-            exit
-          end
+          return if !argv
 
           # Figure out if we are implicitly running all tests
           do_all = true
