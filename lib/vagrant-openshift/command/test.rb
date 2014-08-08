@@ -43,7 +43,7 @@ module Vagrant
               options[:node] = true
             end
 
-            o.on("-t", "--cart", String, "Run cartridge tests") do |f|
+            o.on("-t", "--cart", "--cartridge", String, "Run cartridge tests") do |f|
               options[:cart] = true
             end
 
