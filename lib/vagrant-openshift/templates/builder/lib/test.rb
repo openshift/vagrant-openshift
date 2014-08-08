@@ -32,49 +32,54 @@ class Test
       (1..4).each do |i|
         test_queues[i-1] << build_rake_command("OpenShift Broker Functionals Ext #{i}", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:functionals_ext#{i}")
       end
-      test_queues[0] << build_rake_command("OpenShift Broker OO Admin Scripts", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:oo_admin_scripts")
+      test_queues[1] << build_rake_command("OpenShift Broker Integration Ext", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:integration_ext")
+      test_queues[2] << build_rake_command("OpenShift Broker OO Admin Scripts", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:oo_admin_scripts")
     end
 
     if options[:node_extended]
       (1..3).each do |i|
         test_queues[i-1] << build_cucumber_command("Extended Node Group #{i}", ["@node_extended#{i}"])
       end
+      test_queues[3] << build_rake_command("OpenShift Node Functionals Ext", "cd /data/src/github.com/openshift/openshift-test/node; rake ext_node_func_test")
     end
 
     if options[:cart_extended]
-      (1..3).each do |i|
-        test_queues[i-1] << build_cucumber_command("Extended Cart Group #{i}", ["@cart_extended#{i}"])
+      (1..4).each do |i|
+        test_queues[i-1] << build_cucumber_command("Extended Cartridge Group #{i}", ["@cartridge_extended#{i}"])
       end
     end
 
     if options[:gear_extended]
-      (1..3).each do |i|
+      (1..4).each do |i|
         test_queues[i-1] << build_cucumber_command("Extended Gear Group #{i}", ["@gear_extended#{i}"])
       end
-      (1..3).each do |i|
+      (1..4).each do |i|
         test_queues[i-1] << build_rake_command("OpenShift Gear Functionals Ext #{i}", "cd /data/src/github.com/openshift/openshift-test/node; rake ext_gear_func_test#{i}")
       end
     end
 
     if options[:rhc_extended]
-      test_queues[0] << build_cucumber_command("RHC Extended", ["@rhc_extended"])
-      test_queues[1] << build_cucumber_command("RHC Integration",[],
+      test_queues[0] << build_cucumber_command("RHC Integration",[],
                                                {"RHC_SERVER" => "broker.example.com", "RHC_DOMAIN" => "example.com"},
                                                nil,"/data/src/github.com/openshift/openshift-test/rhc/cucumber")
     end
 
     if options[:broker]
       test_queues[3] << build_rake_command("OpenShift Broker Units", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:units", {}, false)
-      test_queues[0] << build_rake_command("OpenShift Broker Integration", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:integration", {}, false)
+      test_queues[1] << build_rake_command("OpenShift Broker Integration", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:integration", {}, false)
       (1..3).each do |i|
         test_queues[i-1] << build_rake_command("OpenShift Broker Functional #{i}", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:functionals#{i}", {}, false)
       end
-      #test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:admin_console_functionals", {}, false)
+      test_queues[1] << build_rake_command("OpenShift Admin Console Functional", "cd /data/src/github.com/openshift/openshift-test/broker; rake test:admin_console_functionals", {}, false)
       test_queues[3] << build_cucumber_command("Broker cucumber", ["@broker"])
     end
 
     if options[:node]
-      test_queues[0] << build_rake_command("Node Essentials", "cd /data/src/github.com/openshift/openshift-test/node; rake essentials_test | tail -100; exit ${PIPESTATUS[0]}", {}, false)
+      test_queues[1] << build_rake_command("Node Essentials", "cd /data/src/github.com/openshift/openshift-test/node; rake essentials_test | tail -100; exit ${PIPESTATUS[0]}", {}, false)
+      test_queues[3] << build_rake_command("Node Frontend Plugin ApacheDB", "cd /data/src/github.com/openshift/openshift-test/plugins/frontend/apachedb; rake test", {}, false)
+      test_queues[3] << build_rake_command("Node Frontend Plugin Mod Rewrite", "cd /data/src/github.com/openshift/openshift-test/plugins/frontend/apache-mod-rewrite; rake test", {}, false)
+      test_queues[3] << build_rake_command("Node Frontend Plugin NodeJS Websocket", "cd /data/src/github.com/openshift/openshift-test/plugins/frontend/nodejs-websocket; rake test", {}, false)
+      test_queues[3] << build_rake_command("Node Frontend Plugin Haproxy SNI Proxy", "cd /data/src/github.com/openshift/openshift-test/plugins/frontend/haproxy-sni-proxy; rake test", {}, false)
       (1..3).each do |i|
         test_queues[i] << build_cucumber_command("Node Group #{i.to_s}", ["@node#{i.to_s}"])
       end
@@ -91,6 +96,7 @@ class Test
         test_queues[0] << build_rake_command("RHC Spec", 'cd /data/src/github.com/openshift/openshift-test/rhc; bundle install --local && bundle exec rake spec', {"SKIP_RUNCON" => 1}, false)
       else
         test_queues[0] << build_rake_command("RHC Spec", 'cd /data/src/github.com/openshift/openshift-test/rhc; bundle install --path=/tmp/rhc_bundle && bundle exec rake spec', {}, false)
+        test_queues[0] << build_rake_command("RHC Features", 'cd /data/src/github.com/openshift/openshift-test/rhc; export TEST_INSECURE=1; export TEST_RANDOM_USER=1; export RHC_SERVER=localhost; bundle install --path=/tmp/rhc_bundle && bundle exec rspec features/*_feature.rb', {}, false)
       end
     end
 
@@ -98,13 +104,14 @@ class Test
 
     #These are special tests that cannot be written to work concurrently
     singleton_queue = []
-    idle_all_gears
 
-    if options[:node]
+    if options[:node_extended]
+      idle_all_gears
       singleton_queue << build_cucumber_command("Node singletons", ["@node_singleton"])
     end
 
-    if options[:gear]
+    if options[:gear_extended]
+      idle_all_gears
       singleton_queue << build_cucumber_command("Gear singletons", ["@gear_singleton"])
     end
 
@@ -182,6 +189,30 @@ Test: #{test[:title]}
             end
             print "\n\n\n"
           end
+
+          all_tests=[]
+          test_queues.each do |q|
+            all_tests += q
+          end
+
+          failed_tests = all_tests.select{ |t| t[:success] == false && t[:completed] == true }
+          unless failed_tests.empty?
+            puts "Failed Tests:"
+            failed_tests.each do |t|
+              print "\t#{t[:title]}\n"
+            end
+            puts "\n\n\n"
+          end
+
+          passed_tests = all_tests.select{ |t| t[:success] == true && t[:completed] == true }
+          unless passed_tests.empty?
+            puts "Passed Tests:"
+            passed_tests.each do |t|
+              print "\t#{t[:title]}\n"
+            end
+            puts "\n\n\n"
+          end
+
         end
       end
     end
@@ -259,7 +290,7 @@ Test: #{test[:title]}
     retry_queue
   end
 
-  def build_cucumber_command(title="", tags=[], test_env = {}, old_rerun_file=nil, test_dir="/data/src/github.com/openshift/openshift-test/tests/cucumber",
+  def build_cucumber_command(title="", tags=[], test_env = {}, old_rerun_file=nil, test_dir="/data/src/github.com/openshift/openshift-test/tests",
       feature_file="*.feature", require_gemfile_dir=nil, other_outputs = nil)
 
     other_outputs ||= {:junit => '/tmp/rhc/cucumber_results'}

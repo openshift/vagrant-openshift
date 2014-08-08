@@ -126,7 +126,7 @@ mkdir -p /tmp/rhc/junit
           }
 
   system(%{
-rm -f #{Vagrant::Openshift::Constants.build_dir}/openshift-test/tests;
+rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test/tests;
 ln -s #{Vagrant::Openshift::Constants.build_dir}/openshift-test/controller/test/cucumber #{Vagrant::Openshift::Constants.build_dir}/openshift-test/tests
 })
   print "done\n"
@@ -207,6 +207,7 @@ task :run_tests do
   options = {}
   options[:fixme] = ENV["fixme"] == "true"
   if ENV["extended"] == "true"
+    options[:gear_extended]   = ENV["gear"] == "true"
     options[:node_extended]   = ENV["node"] == "true"
     options[:cart_extended]   = ENV["cart"] == "true"
     options[:broker_extended] = ENV["broker"] == "true"
@@ -218,6 +219,7 @@ task :run_tests do
     options[:rhc]     = false
     options[:console] = false
   else
+    options[:gear]    = ENV["gear"] == "true"
     options[:node]    = ENV["node"] == "true"
     options[:cart]    = ENV["cart"] == "true"
     options[:broker]  = ENV["broker"] == "true"

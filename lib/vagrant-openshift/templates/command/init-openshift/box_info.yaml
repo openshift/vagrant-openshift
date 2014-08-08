@@ -25,9 +25,10 @@
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_deps.box
     :aws:
       :ami: ami-100ec478
+      :ami_tag_prefix: origin-centos-65-deps_
       :ami_region: us-east-1
       :ami_ssh_user: root
-      :machine_name: origin-centos-65-deps_1
+      :machine_name: origin-centos-65-deps
       :ebs_volume_size: 25
     :openstack:
       :image: n/a
