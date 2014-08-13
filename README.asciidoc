@@ -149,8 +149,6 @@ If starting from --stage os, install the build and package dependencies.
 ----
 $ vagrant build-geard-base
 $ vagrant install-geard
-$ vagrant build-geard-broker
-$ vagrant install-geard-broker
 ----
 
 ===== OpenShift 2.x
