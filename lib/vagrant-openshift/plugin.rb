@@ -62,34 +62,9 @@ module Vagrant
         Commands::InstallGeard
       end
 
-      command "install-geard-broker" do
-        require_relative "command/install_geard_broker"
-        Commands::InstallGeardBroker
-      end
-
       command "restart-geard" do
         require_relative "command/restart_geard"
         Commands::RestartGeard
-      end
-
-      command "restart-geard-broker" do
-        require_relative "command/restart_geard_broker"
-        Commands::RestartGeardBroker
-      end
-
-      command "build-geard-broker" do
-        require_relative "command/build_geard_broker"
-        Commands::BuildGeardBroker
-      end
-
-      command "restart-geard-console" do
-        require_relative "command/restart_geard_console"
-        Commands::RestartGeardConsole
-      end
-
-      command "build-geard-console" do
-        require_relative "command/build_geard_console"
-        Commands::BuildGeardConsole
       end
 
       command "build-geard-images" do
@@ -150,11 +125,6 @@ module Vagrant
       command "install-rhc" do
         require_relative "command/install_rhc"
         Commands::InstallRhc
-      end
-
-      command "setup-geard-broker" do
-        require_relative "command/setup_geard_broker"
-        Commands::SetupGeardBroker
       end
 
       command "test-geard-image" do

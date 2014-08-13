@@ -60,12 +60,6 @@ module Vagrant
         end
       end
 
-      def self.install_geard_broker(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallGeardBroker
-        end
-      end
-
       def self.build_geard(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use BuildGeard
@@ -77,30 +71,6 @@ module Vagrant
           b.use RestartGeard
         end
       end
-
-      def self.restart_geard_broker(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use RestartGeardBroker
-        end
-      end
-
-      def self.build_geard_broker(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardBroker, options
-        end
-      end
-
-      def self.restart_geard_console(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use RestartGeardConsole
-        end
-      end
-
-      def self.build_geard_console(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardConsole, options
-        end
-      end      
 
       def self.build_geard_images(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -152,10 +122,6 @@ module Vagrant
             b.use BuildGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
             b.use RestartGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
             b.use BuildGeardImages, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
-            b.use BuildGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
-            b.use RestartGeardBroker if options[:include].include? Vagrant::Openshift::Constants::FILTER_BROKER
-            b.use BuildGeardConsole if options[:include].include? Vagrant::Openshift::Constants::FILTER_CONSOLE
-            b.use RestartGeardConsole if options[:include].include? Vagrant::Openshift::Constants::FILTER_CONSOLE
             b.use InstallRhc if options[:include].include? Vagrant::Openshift::Constants::FILTER_RHC
           end
         end
@@ -247,12 +213,6 @@ module Vagrant
       def self.install_rhc(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use InstallRhc
-        end        
-      end
-
-      def self.setup_geard_broker(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use SetupGeardBroker
         end
       end
 
@@ -269,17 +229,12 @@ module Vagrant
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
-      autoload :BuildGeardBroker, action_root.join("build_geard_broker")
-      autoload :BuildGeardConsole, action_root.join("build_geard_console")
       autoload :BuildGeardImages, action_root.join("build_geard_images")
       autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
       autoload :InstallGeardImages, action_root.join("install_geard_images")
       autoload :InstallGeard, action_root.join("install_geard")
-      autoload :InstallGeardBroker, action_root.join("install_geard_broker")
       autoload :BuildGeard, action_root.join("build_geard")
       autoload :RestartGeard, action_root.join("restart_geard")
-      autoload :RestartGeardBroker, action_root.join("restart_geard_broker")
-      autoload :RestartGeardConsole, action_root.join("restart_geard_console")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
@@ -301,7 +256,6 @@ module Vagrant
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :InstallRhc, action_root.join("install_rhc")
-      autoload :SetupGeardBroker, action_root.join("setup_geard_broker")
       autoload :SetupBindHost, action_root.join("setup_bind_host")
     end
   end
