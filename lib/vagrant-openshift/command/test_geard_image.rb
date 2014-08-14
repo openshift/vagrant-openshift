@@ -135,11 +135,11 @@ exit $status
             # Vagrant throws an exception if any execute invocation returns non-zero,
             # so catch it so we can return a proper output.
             rescue => e
-              @env.ui.info "Exception: #{e}"  
+              @env.ui.info "Exception: #{e}"
             end
             @env.ui.info "RC=#{rc}"
             return rc
-          end 
+          end
         end
       end
     end
