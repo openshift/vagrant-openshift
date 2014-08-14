@@ -38,7 +38,7 @@ module Vagrant
               options[:all] = true
             end
 
-            o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
+            o.on("-d","--artifacts", String, "Download logs") do |f|
               options[:download] = true
             end
           end

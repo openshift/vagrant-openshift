@@ -37,7 +37,7 @@ $ rake vagrant:install
 
 ==== Clone the OpenShift Origin repositories
 
-===== OpenShift 3
+===== Geard
 
 [source, sh]
 ----
@@ -70,7 +70,7 @@ $ vagrant origin-init <instance name>
 .Command options:
 
 * Specify which OS to build with:
-** --os fedora		- Launch a Fedora 20 image (used for OpenShift 3 development)
+** --os fedora		- Launch a Fedora 20 image (used for Geard development)
 ** --os rhel6		- Launch a RHEL 6 image (where available)
 ** --os centos6		- Launch a CentOS 6 image (where available, used for OpenShift 2.x development)
 
@@ -104,7 +104,7 @@ Note: See Other Environments below for launching against other options.
 
 * Syncing and building code from local repository clones
 
-===== OpenShift 3
+===== Geard
 
 [source, sh]
 ----
@@ -122,7 +122,7 @@ $ vagrant sync
 
 ==== Running OpenShift Origin Tests
 
-===== OpenShift 3
+===== Geard
 
 [source, sh]
 ----
@@ -143,7 +143,7 @@ $ vagrant test --all
 
 If starting from --stage os, install the build and package dependencies.
 
-===== OpenShift 3
+===== Geard
 
 [source, sh]
 ----

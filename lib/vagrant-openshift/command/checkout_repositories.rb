@@ -31,12 +31,12 @@ module Vagrant
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant checkout-repos"
             o.separator ""
-            
+
             o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
               options[:branch] = {"origin-server" => f}
             end
-                        
-           #@options[:branch][repo_name]            
+
+           #@options[:branch][repo_name]
           end
 
           # Parse the options
