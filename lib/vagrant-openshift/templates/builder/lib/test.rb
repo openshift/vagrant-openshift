@@ -53,7 +53,7 @@ class Test
       (1..4).each do |i|
         test_queues[i-1] << build_cucumber_command("Extended Gear Group #{i}", ["@gear_extended#{i}"])
       end
-      (1..4).each do |i|
+      (1..3).each do |i|
         test_queues[i-1] << build_rake_command("OpenShift Gear Functionals Ext #{i}", "cd /data/src/github.com/openshift/openshift-test/node; rake ext_gear_func_test#{i}")
       end
     end
