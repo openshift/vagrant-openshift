@@ -18,21 +18,29 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildGeardBase < Vagrant.plugin(2, :command)
+      class TestOpenshift3 < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "install the prereqs for geard"
+          "run the openshift tests"
         end
 
         def execute
           options = {}
-          options[:clean] = false
-          options[:local_source] = false
+          options[:download] = false
+          options[:all] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-geard-base [vm-name]"
+            o.banner = "Usage: vagrant test [machine-name]"
             o.separator ""
+
+            o.on("-a", "--all", String, "Run all tests") do |f|
+              options[:all] = true
+            end
+
+            o.on("-d","--artifacts", String, "Download logs") do |f|
+              options[:download] = true
+            end
           end
 
           # Parse the options
@@ -40,7 +48,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_geard_base(options)
+            actions = Vagrant::Openshift::Action.run_openshift3_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

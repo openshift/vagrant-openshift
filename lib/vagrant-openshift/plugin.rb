@@ -37,9 +37,9 @@ module Vagrant
         Commands::RepoSync
       end
 
-      command "sync-geard" do
-        require_relative "command/repo_sync_geard"
-        Commands::RepoSyncGeard
+      command "sync-openshift3" do
+        require_relative "command/repo_sync_openshift3"
+        Commands::RepoSyncOpenshift3
       end
 
       command "origin-build-base" do
@@ -47,29 +47,29 @@ module Vagrant
         Commands::BuildOriginBase
       end
 
-      command "build-geard-base" do
-        require_relative "command/build_geard_base"
-        Commands::BuildGeardBase
+      command "build-openshift3-base" do
+        require_relative "command/build_openshift3_base"
+        Commands::BuildOpenshift3Base
       end
 
-      command "build-geard" do
-        require_relative "command/build_geard"
-        Commands::BuildGeard
+      command "build-openshift3" do
+        require_relative "command/build_openshift3"
+        Commands::BuildOpenshift3
       end
 
-      command "install-geard" do
-        require_relative "command/install_geard"
-        Commands::InstallGeard
+      command "install-openshift3" do
+        require_relative "command/install_openshift3"
+        Commands::InstallOpenshift3
       end
 
-      command "restart-geard" do
-        require_relative "command/restart_geard"
-        Commands::RestartGeard
+      command "restart-openshift3" do
+        require_relative "command/restart_openshift3"
+        Commands::RestartOpenshift3
       end
 
-      command "build-geard-images" do
-        require_relative "command/build_geard_images"
-        Commands::BuildGeardImages
+      command "build-openshift3-images" do
+        require_relative "command/build_openshift3_images"
+        Commands::BuildOpenshift3Images
       end
 
       command "origin-init" do
@@ -82,9 +82,9 @@ module Vagrant
         Commands::LocalRepoSetup
       end
 
-      command "geard-local-checkout" do
-        require_relative "command/local_geard_setup"
-        Commands::LocalGeardSetup
+      command "openshift3-local-checkout" do
+        require_relative "command/local_openshift3_setup"
+        Commands::LocalOpenshift3Setup
       end
 
       command "test" do
@@ -92,9 +92,9 @@ module Vagrant
         Commands::Test
       end
 
-      command "test-geard" do
-        require_relative "command/test_geard"
-        Commands::TestGeard
+      command "test-openshift3" do
+        require_relative "command/test_openshift3"
+        Commands::TestOpenshift3
       end
 
       command "create-ami" do
@@ -127,9 +127,9 @@ module Vagrant
         Commands::InstallRhc
       end
 
-      command "test-geard-image" do
-        require_relative "command/test_geard_image"
-        Commands::TestGeardImage
+      command "test-openshift3-image" do
+        require_relative "command/test_openshift3_image"
+        Commands::TestOpenshift3Image
       end
 
       provisioner(:openshift) do

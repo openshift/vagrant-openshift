@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class RunGeardTests
+      class RunOpenshift3Tests
         include CommandHelper
 
         @@SSH_TIMEOUT = 4800
@@ -36,16 +36,16 @@ module Vagrant
             cmd_opts += "-a "
           end
 
-          # TODO: remove the need for permissive mode once we get through SELinux issues with docker 1.0 and geard
+          # TODO: remove the need for permissive mode once we get through SELinux issues with Docker
           sudo(env[:machine], %{
             set -e
             if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
               echo "Disabling requiretty for root user for contrib/test sudo support"
               echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
             fi
-            pushd #{Constants.build_dir}/geard
-            setenforce 0
-            contrib/test #{cmd_opts}
+            pushd #{Constants.build_dir}/origin
+            hack/build-go.sh
+            hack/test-go.sh
             popd
             }, {:timeout => 60*60})
 

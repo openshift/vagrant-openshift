@@ -37,44 +37,44 @@ module Vagrant
         end
       end
 
-      def self.build_geard_base(options)
+      def self.build_openshift3_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
-          b.use InstallGeardBaseDependencies
-          b.use InstallGeardImages
+          b.use InstallOpenshift3BaseDependencies
+          b.use InstallOpenshift3Images
           b.use SetHostName
           b.use SetupBindHost
           #b.use CreatePuppetFile
         end
       end
 
-      def self.install_geard(options)
+      def self.install_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallGeard
-          b.use BuildGeard
-          b.use RestartGeard
+          b.use InstallOpenshift3
+          b.use BuildOpenshift3
+          b.use RestartOpenshift3
         end
       end
 
-      def self.build_geard(options)
+      def self.build_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeard
+          b.use BuildOpenshift3
         end
       end
 
-      def self.restart_geard(options)
+      def self.restart_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use RestartGeard
+          b.use RestartOpenshift3
         end
       end
 
-      def self.build_geard_images(options)
+      def self.build_openshift3_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildGeardImages, options
+          b.use BuildOpenshift3Images, options
         end
       end
 
@@ -107,7 +107,7 @@ module Vagrant
         end
       end
 
-      def self.repo_sync_geard(options)
+      def self.repo_sync_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
           if options[:source]
@@ -119,9 +119,9 @@ module Vagrant
             b.use CheckoutRepositories
           end
           unless options[:no_build]
-            b.use BuildGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
-            b.use RestartGeard if options[:include].include? Vagrant::Openshift::Constants::FILTER_GEARD
-            b.use BuildGeardImages, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
+            b.use BuildOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
+            b.use RestartOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
+            b.use BuildOpenshift3Images, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
             b.use InstallRhc if options[:include].include? Vagrant::Openshift::Constants::FILTER_RHC
           end
         end
@@ -135,10 +135,10 @@ module Vagrant
         end
       end
 
-      def self.local_geard_checkout(options)
+      def self.local_openshift3_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
-            b.use LocalGeardCheckout, options
+            b.use LocalOpenshift3Checkout, options
           end
         end
       end
@@ -157,9 +157,9 @@ module Vagrant
         end
       end
 
-      def self.run_geard_tests(options)
+      def self.run_openshift3_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use RunGeardTests, options
+          b.use RunOpenshift3Tests, options
           if options[:download]
             b.use DownloadArtifacts
           end
@@ -229,24 +229,24 @@ module Vagrant
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
-      autoload :BuildGeardImages, action_root.join("build_geard_images")
-      autoload :InstallGeardBaseDependencies, action_root.join("install_geard_base_dependencies")
-      autoload :InstallGeardImages, action_root.join("install_geard_images")
-      autoload :InstallGeard, action_root.join("install_geard")
-      autoload :BuildGeard, action_root.join("build_geard")
-      autoload :RestartGeard, action_root.join("restart_geard")
+      autoload :BuildOpenshift3Images, action_root.join("build_openshift3_images")
+      autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
+      autoload :InstallOpenshift3Images, action_root.join("install_openshift3_images")
+      autoload :InstallOpenshift3, action_root.join("install_openshift3")
+      autoload :BuildOpenshift3, action_root.join("build_openshift3")
+      autoload :RestartOpenshift3, action_root.join("restart_openshift3")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
       autoload :BuildSources, action_root.join("build_sources")
       autoload :LocalRepoCheckout, action_root.join("local_repo_checkout")
-      autoload :LocalGeardCheckout, action_root.join("local_geard_checkout")
+      autoload :LocalOpenshift3Checkout, action_root.join("local_openshift3_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
       autoload :CreateTestUsers, action_root.join("create_test_users")
       autoload :IdleAllGears, action_root.join("idle_all_gears")
       autoload :PreserveMcollectiveLogs, action_root.join("preserve_mcollective_logs")
       autoload :RunTests, action_root.join("run_tests")
-      autoload :RunGeardTests, action_root.join("run_geard_tests")
+      autoload :RunOpenshift3Tests, action_root.join("run_openshift3_tests")
       autoload :CheckoutTests, action_root.join("checkout_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
