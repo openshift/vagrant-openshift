@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSyncGeard < Vagrant.plugin(2, :command)
+      class RepoSyncOpenshift3 < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -27,14 +27,14 @@ module Vagrant
 
         def execute
           options = {}
-          options[:geard_images] = []
+          options[:openshift3_images] = []
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
-          options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_CONSOLE ,Vagrant::Openshift::Constants::FILTER_GEARD, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
+          options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_CONSOLE ,Vagrant::Openshift::Constants::FILTER_ORIGIN, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync-geard [vm-name]"
+            o.banner = "Usage: vagrant sync-openshift3 [vm-name]"
             o.separator ""
 
             o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
@@ -53,11 +53,11 @@ module Vagrant
               options[:include] = f.split " "
             end
 
-            o.on("--geard-images [ #{Vagrant::Openshift::Constants.geard_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
+            o.on("--openshift3-images [ #{Vagrant::Openshift::Constants.openshift3_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
               if f.split(" ").include?("all")
-                options[:geard_images] = Vagrant::Openshift::Constants.geard_images.keys
+                options[:openshift3_images] = Vagrant::Openshift::Constants.openshift3_images.keys
               else
-                options[:geard_images] = f.split(" ")
+                options[:openshift3_images] = f.split(" ")
               end
             end
           end
@@ -67,7 +67,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync_geard(options)
+            actions = Vagrant::Openshift::Action.repo_sync_openshift3(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallGeard
+      class InstallOpenshift3
         include CommandHelper
 
         def initialize(app, env)
@@ -33,39 +33,40 @@ set -x
 setenforce 0
 usermod -a -G docker #{ssh_user}
 
-GEARD_PATH=/data/src/github.com/openshift/geard
+ORIGIN_PATH=/data/src/github.com/openshift/origin
 chown -R #{ssh_user}:#{ssh_user} /data
 
 # Modify SSHD config to use gear-auth-keys-command to support git clone from repo
 echo -e '\\nAuthorizedKeysCommand /usr/sbin/gear-auth-keys-command' >> /etc/ssh/sshd_config
 echo -e '\\nAuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config
 
-cat > /etc/profile.d/geard.sh <<DELIM
+cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$GOPATH/bin:$PATH
-export GEARD_URI=http://172.17.42.1:43273
 DELIM
 
-# Must listen on docker gateway address for container to access host, see: https://github.com/dotcloud/docker/issues/1143
-GEARD_OPTS=http://172.17.42.1:43273
-cat > /usr/lib/systemd/system/geard.service <<DELIM
+source /etc/profile.d/openshift.sh
+
+go get github.com/coreos/etcd
+
+cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]
-Description=Gear Provisioning Daemon (geard)
+Description=OpenShift
 After=docker.service
 Requires=docker.service
-Documentation=https://github.com/openshift/geard
+Documentation=https://github.com/openshift/origin
 
 [Service]
 Type=simple
-EnvironmentFile=-/etc/default/gear
-ExecStart=/usr/bin/gear daemon $GEARD_OPTS
+EnvironmentFile=-/etc/default/openshift
+ExecStart=$ORIGIN_PATH/output/go/bin/openshift start
 
 [Install]
 WantedBy=multi-user.target
 DELIM
 
 systemctl restart sshd
-systemctl enable geard.service
+systemctl enable openshift.service
           })
 
           @app.call(env)

@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildGeard
+      class RestartOpenshift3
         include CommandHelper
 
         def initialize(app, env)
@@ -26,11 +26,9 @@ module Vagrant
         end
 
         def call(env)
-          do_execute(env[:machine], sync_bash_command('geard', %{
-echo "Performing geard build..."
-set -e
-contrib/build -s
-          }))
+          sudo(env[:machine], %{
+systemctl restart openshift
+          })
 
           @app.call(env)
         end

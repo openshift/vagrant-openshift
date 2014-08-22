@@ -37,14 +37,14 @@ $ rake vagrant:install
 
 ==== Clone the OpenShift Origin repositories
 
-===== Geard
+===== OpenShift 3.x
 
 [source, sh]
 ----
 $ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
 $ source ~/.bash_profile
 $ cd $GOPATH
-$ vagrant geard-local-checkout -u <github username>
+$ vagrant openshift3-local-checkout -u <github username>
 ----
 
 ===== OpenShift 2.x
@@ -70,7 +70,7 @@ $ vagrant origin-init <instance name>
 .Command options:
 
 * Specify which OS to build with:
-** --os fedora		- Launch a Fedora 20 image (used for Geard development)
+** --os fedora		- Launch a Fedora 20 image (used for OpenShift 3 development)
 ** --os rhel6		- Launch a RHEL 6 image (where available)
 ** --os centos6		- Launch a CentOS 6 image (where available, used for OpenShift 2.x development)
 
@@ -104,11 +104,11 @@ Note: See Other Environments below for launching against other options.
 
 * Syncing and building code from local repository clones
 
-===== Geard
+===== OpenShift 3.x
 
 [source, sh]
 ----
-$ vagrant sync-geard
+$ vagrant sync-openshift3
 ----
 
 
@@ -122,11 +122,11 @@ $ vagrant sync
 
 ==== Running OpenShift Origin Tests
 
-===== Geard
+===== OpenShift 3.x
 
 [source, sh]
 ----
-$ vagrant test-geard --all
+$ vagrant test-openshift3 --all
 ----
 
 
@@ -143,12 +143,12 @@ $ vagrant test --all
 
 If starting from --stage os, install the build and package dependencies.
 
-===== Geard
+===== OpenShift 3.x
 
 [source, sh]
 ----
-$ vagrant build-geard-base
-$ vagrant install-geard
+$ vagrant build-openshift3-base
+$ vagrant install-openshift3
 ----
 
 ===== OpenShift 2.x

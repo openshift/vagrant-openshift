@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallGeardBaseDependencies
+      class InstallOpenshift3BaseDependencies
         include CommandHelper
 
         def initialize(app, env)
@@ -37,24 +37,6 @@ module Vagrant
           sudo(env[:machine], "yum install -y golang golang-pkg*  golang-src")
           #
           sudo(env[:machine], %{
-cat > /usr/lib/systemd/system/docker.service <<DELIM
-[Unit]
-Description=Docker Application Container Engine
-Documentation=http://docs.docker.io
-After=network.target
-Requires=docker.socket
-
-[Service]
-Type=notify
-EnvironmentFile=-/etc/sysconfig/docker
-ExecStart=/usr/bin/docker -d --selinux-enabled -H fd:// --bip=172.17.42.1/16
-Restart=on-failure
-LimitNOFILE=1048576
-LimitNPROC=1048576
-
-[Install]
-WantedBy=multi-user.target
-DELIM
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker

@@ -23,19 +23,19 @@ module Vagrant
       FILTER_CONSOLE="console"
       FILTER_IMAGES="images"
       FILTER_RHC="rhc"
-      FILTER_GEARD="geard"
+      FILTER_ORIGIN="origin"
 
       def self.repos
         {
           'origin-server' => 'https://github.com/openshift/origin-server.git',
           'rhc' => 'https://github.com/openshift/rhc.git',
           'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
-          'geard' => 'https://github.com/openshift/geard.git',
+          'origin' => 'https://github.com/openshift/origin.git',
 
-        }.merge(geard_images)
+        }.merge(openshift3_images)
       end
 
-      def self.geard_images
+      def self.openshift3_images
         {
           'wildfly-8-centos' => 'https://github.com/openshift/wildfly-8-centos.git',
           'ruby-19-centos' => 'https://github.com/openshift/ruby-19-centos.git'
@@ -45,7 +45,7 @@ module Vagrant
       def self.images
         [
           'centos'
-        ] + geard_images.map { |c, _| "openshift/#{c}" }
+        ] + openshift3_images.map { |c, _| "openshift/#{c}" }
       end
 
       def self.git_branch_current

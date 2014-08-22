@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class LocalGeardCheckout
+      class BuildOpenshift3Images
         include CommandHelper
 
         def initialize(app, env, options)
@@ -27,31 +27,27 @@ module Vagrant
         end
 
         def call(env)
-          if ENV['GOPATH'].nil?
-            @env.ui.warn "You don't seem to have the GOPATH environment variable set on your system."
-            @env.ui.warn "See: 'go help gopath' for more details about GOPATH."
-            return
-          else
-            go_path = FileUtils.mkdir_p(
-              File.join(ENV['GOPATH'], 'src', 'github.com', 'openshift')
-            ).first
-          end
-          Dir.chdir(go_path) do
-            commands = "echo 'Waiting for the cloning process to finish'\n"
-            Constants.repos.each do |repo, url|
-              commands += %{
-( #{repo_checkout_bash_command(repo, url)} ) &
-PIDS+=$!\" \";
-}
+          # FIXME: Measure what would be the appropriate timeout here as the
+          #        docker build command can take quite a long time...
+          #
+          @options[:openshift3_images].each do |openshift3_image, _|
+            docker_image_name = "openshift/#{openshift3_image}"
+            docker_file_path = "#{Constants.build_dir}#{openshift3_image}"
+            build_cmd = %{
+echo "Building #{docker_image_name} image"
+pushd #{docker_file_path}
+  docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
+popd
+            }
+            if @options[:force]
+              sudo(env[:machine], build_cmd, { :timeout => 60*20 })
+            else
+              sudo(env[:machine], sync_bash_command(openshift3_image, build_cmd), { :timeout => 60*20 })
             end
-
-            commands += "[ -n \"$PIDS\" ] && wait $PIDS\n"
-            system(commands)
-            puts "OpenShift repositories cloned into #{Dir.pwd}"
           end
-
           @app.call(env)
         end
+
       end
     end
   end
