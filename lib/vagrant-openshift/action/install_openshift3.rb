@@ -34,7 +34,6 @@ setenforce 0
 usermod -a -G docker #{ssh_user}
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
-chown -R #{ssh_user}:#{ssh_user} /data
 
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
@@ -44,6 +43,9 @@ DELIM
 source /etc/profile.d/openshift.sh
 
 go get github.com/coreos/etcd
+go get code.google.com/p/go.tools/cmd/cover
+
+chown -R #{ssh_user}:#{ssh_user} /data
 
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]

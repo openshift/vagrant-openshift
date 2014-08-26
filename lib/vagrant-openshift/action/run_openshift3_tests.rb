@@ -37,16 +37,16 @@ module Vagrant
           end
 
           # TODO: remove the need for permissive mode once we get through SELinux issues with Docker
-          sudo(env[:machine], %{
-            set -e
-            if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
-              echo "Disabling requiretty for root user for contrib/test sudo support"
-              echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
-            fi
-            pushd #{Constants.build_dir}/origin
-            hack/build-go.sh
-            hack/test-go.sh
-            popd
+          _,_,env[:test_exit_code] = sudo(env[:machine], %{
+set -e
+if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
+  echo "Disabling requiretty for root user for contrib/test sudo support"
+  echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
+fi
+pushd #{Constants.build_dir}/origin
+hack/build-go.sh
+hack/test-go.sh
+popd
             }, {:timeout => 60*60})
 
           @app.call(env)
