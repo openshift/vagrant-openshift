@@ -31,9 +31,12 @@ module Vagrant
         def call(env)
           @options.delete :logs
 
-          cmd_opts = ''
+          opt_tests = ''
           if @options[:all]
-            cmd_opts += "-a "
+            opt_tests += "
+hack/test-cmd.sh
+hack/test-integration.sh
+"
           end
 
           # TODO: remove the need for permissive mode once we get through SELinux issues with Docker
@@ -44,8 +47,10 @@ if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
   echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
 fi
 pushd #{Constants.build_dir}/origin
+export PATH=$GOPATH/bin:$PATH
 hack/build-go.sh
 hack/test-go.sh
+#{opt_tests}
 popd
             }, {:timeout => 60*60})
 

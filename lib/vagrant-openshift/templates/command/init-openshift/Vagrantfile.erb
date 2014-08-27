@@ -36,7 +36,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Other providers may override this value
   config.vm.box      = "<%= box_info[:virtualbox][:box_name] %>"
   config.vm.box_url  = "<%= box_info[:virtualbox][:box_url] %>"
-  config.vm.hostname = 'broker.example.com'
+  config.vm.hostname = 'openshift.example.com'
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant.
