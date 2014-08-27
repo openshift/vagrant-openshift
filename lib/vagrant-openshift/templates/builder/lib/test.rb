@@ -60,7 +60,7 @@ class Test
 
     if options[:rhc_extended]
       test_queues[0] << build_cucumber_command("RHC Integration",[],
-                                               {"RHC_SERVER" => "broker.example.com", "RHC_DOMAIN" => "example.com"},
+                                               {"RHC_SERVER" => "openshift.example.com", "RHC_DOMAIN" => "example.com"},
                                                nil,"/data/src/github.com/openshift/openshift-test/rhc/cucumber")
     end
 
