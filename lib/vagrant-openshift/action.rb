@@ -161,7 +161,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunOpenshift3Tests, options
           if options[:download]
-            b.use DownloadArtifacts
+            b.use DownloadArtifactsOpenShift3
           end
           b.use TestExitCode
         end
@@ -253,6 +253,7 @@ module Vagrant
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifacts, action_root.join("download_artifacts")
+      autoload :DownloadArtifactsOpenShift3, action_root.join("download_artifacts_openshift3")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :InstallRhc, action_root.join("install_rhc")
