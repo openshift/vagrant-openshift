@@ -34,7 +34,7 @@ module Vagrant
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
           download_map = {
-            "/tmp/openshift.log"                       => artifacts_dir + "test_runs/",
+            "/tmp/openshift.log"                       => artifacts_dir + "openshift.log",
             "/var/log/yum.log"                     => artifacts_dir + "yum.log",
             "/var/log/secure"                      => artifacts_dir + "secure",
             "/var/log/audit/audit.log"             => artifacts_dir + "audit.log"
@@ -48,16 +48,15 @@ module Vagrant
               FileUtils.mkdir_p File.dirname(target.to_s)
             end
 
-            # TODO: remove the need for permissive mode once we get through SELinux issues with Docker
-            sudo(env[:machine], %{
+            sudo(machine, %{
 journalctl -u openshift.service > /tmp/openshift.log
             }, {:timeout => 60*60})
+
 
             command = "/usr/bin/rsync -avz -e 'ssh -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
             if not system(command)
-              machine.ui.warn "Unable to download artifact"
-              machine.ui.warn r.stderr
+              machine.ui.warn "Unable to download artifacts"
             end
           end
           @app.call(env)
