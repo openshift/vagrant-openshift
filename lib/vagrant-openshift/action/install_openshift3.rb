@@ -57,7 +57,7 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/default/openshift
-ExecStart=$ORIGIN_PATH/output/go/bin/openshift start
+ExecStart=/bin/sh -c 'pushd $ORIGIN_PATH; output/go/bin/openshift start'
 
 [Install]
 WantedBy=multi-user.target
