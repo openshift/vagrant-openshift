@@ -19,7 +19,6 @@ module Vagrant
     module Action
       class InstallOpenshift3
         include CommandHelper
-
         def initialize(app, env)
           @app = app
           @env = env
@@ -37,7 +36,7 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
-export PATH=$GOPATH/bin:$PATH
+export PATH=$GOPATH/bin:$ORIGIN_PATH/third_party/etcd/bin:$PATH
 DELIM
 
 source /etc/profile.d/openshift.sh
