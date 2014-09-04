@@ -42,8 +42,11 @@ DELIM
 
 source /etc/profile.d/openshift.sh
 
-go get github.com/coreos/etcd
 go get code.google.com/p/go.tools/cmd/cover
+
+pushd $ORIGIN_PATH
+  hack/install-etcd.sh
+popd
 
 chown -R #{ssh_user}:#{ssh_user} /data
 
@@ -57,14 +60,13 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/default/openshift
-ExecStart=/bin/sh -c 'pushd $ORIGIN_PATH; output/go/bin/openshift start'
+ExecStart=$ORIGIN_PATH/output/go/bin/openshift start
 
 [Install]
 WantedBy=multi-user.target
 DELIM
 
-systemctl restart sshd
-systemctl enable openshift.service
+#systemctl enable openshift.service
           })
 
           @app.call(env)
