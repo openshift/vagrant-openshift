@@ -52,7 +52,7 @@ hack/build-go.sh
 hack/test-go.sh
 #{opt_tests}
 popd
-            }, {:timeout => 60*60})
+            }, {:timeout => 60*60, fail_on_error: false})
 
           @app.call(env)
         end
