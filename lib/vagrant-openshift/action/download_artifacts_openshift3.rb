@@ -50,10 +50,10 @@ module Vagrant
 
             sudo(machine, %{
 journalctl -u openshift.service > /tmp/openshift.log
-            }, {:timeout => 60*60})
+            }, {:timeout => 60})
 
 
-            command = "/usr/bin/rsync -avz -e 'ssh -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
+            command = "/usr/bin/rsync -avz -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
             if not system(command)
               machine.ui.warn "Unable to download artifacts"
