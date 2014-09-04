@@ -30,6 +30,7 @@ module Vagrant
 echo "Performing openshift build..."
 set -e
 hack/build-go.sh
+hack/install-etcd.sh
 }))
 
           @app.call(env)

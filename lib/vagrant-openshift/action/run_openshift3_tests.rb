@@ -47,8 +47,7 @@ if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
   echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
 fi
 pushd #{Constants.build_dir}/origin
-export PATH=$GOPATH/bin:./third_party/etcd:$PATH
-hack/build-go.sh
+export PATH=$GOPATH/bin:$PATH
 hack/test-go.sh
 #{opt_tests}
 popd
