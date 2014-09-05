@@ -227,7 +227,7 @@ save
 
   def self.tito_report
     packages = {}
-    Vagrant::Openshift::Constants.repos.each do |name, url|
+    Vagrant::Openshift::Constants.openshift2_repos.each do |name, url|
       Dir.chdir((Vagrant::Openshift::Constants.build_dir + name).to_s) do
         tito_report = `tito report --untagged-commits`
         tito_report = tito_report.split(/[-]+{10,100}[\n]/)
