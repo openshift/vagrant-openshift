@@ -26,10 +26,8 @@ module Vagrant
         end
 
         def call(env)
-          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-
           git_clone_commands = ""
-          Constants.repos.each do |repo_name, url|
+          Constants.repos(env).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             wc_repo_name = repo_name + "-bare-working_copy"
             bare_repo_path = Constants.build_dir + bare_repo_name

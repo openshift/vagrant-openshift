@@ -32,7 +32,7 @@ class RPM
 
     #find all spec files
     spec_files = []
-    Vagrant::Openshift::Constants.repos.each do |name, url|
+    Vagrant::Openshift::Constants.openshift2_repos.each do |name, url|
       repo_dir = parent_dir + name
       spec_files += Dir.glob((repo_dir + "**/*.spec").to_s).map{ |p| {path: p}}
     end

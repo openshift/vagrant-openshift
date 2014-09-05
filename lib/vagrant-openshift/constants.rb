@@ -25,12 +25,26 @@ module Vagrant
       FILTER_RHC="rhc"
       FILTER_ORIGIN="origin"
 
-      def self.repos
+      def self.repos(env)
+        is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+        if is_fedora
+          openshift3_repos
+        else
+          openshift2_repos
+        end
+      end
+
+      def self.openshift2_repos
         {
           'origin-server' => 'https://github.com/openshift/origin-server.git',
           'rhc' => 'https://github.com/openshift/rhc.git',
-          'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git',
-          'origin' => 'https://github.com/openshift/origin.git',
+          'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git'
+        }
+      end
+
+      def self.openshift3_repos
+        {
+          'origin' => 'https://github.com/openshift/origin.git'
 
         }.merge(openshift3_images)
       end

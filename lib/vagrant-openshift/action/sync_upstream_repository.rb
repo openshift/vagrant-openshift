@@ -26,10 +26,10 @@ module Vagrant
         end
 
         def call(env)
-          env[:machine].env.ui.info("Sync'ing upstream sources\n")
+          env[:machine].env.ui.info("Synchronizing upstream sources\n")
           command = ""
 
-          Constants.repos.each do |repo_name, url|
+          Constants.repos(env).each do |repo_name, url|
 
             branch="master"
 

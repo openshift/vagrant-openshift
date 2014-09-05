@@ -26,10 +26,10 @@ module Vagrant
         end
 
         def call(env)
-          env[:machine].env.ui.info("Sync'ing local sources")
+          env[:machine].env.ui.info("Synchronizing local sources")
 
           pids = []
-          Constants.repos.each do |repo_name, url|
+          Constants.repos(env).each do |repo_name, url|
             local_repo = Pathname.new(File.expand_path(env[:machine].env.root_path + repo_name))
             unless local_repo.exist?
               env[:machine].ui.warn "Missing local clone of repository #{local_repo}"

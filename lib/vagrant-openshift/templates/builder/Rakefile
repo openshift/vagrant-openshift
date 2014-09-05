@@ -112,7 +112,7 @@ task :checkout_tests do
   print "Updating remote tests..."
   system "rm -rf #{Vagrant::Openshift::Constants.build_dir}/openshift-test"
   git_archive_commands = ''
-  Vagrant::Openshift::Constants.repos.each do |repo_name, url|
+  Vagrant::Openshift::Constants.openshift2_repos.each do |repo_name, url|
     repo_dir = "#{Vagrant::Openshift::Constants.build_dir}/#{repo_name}-bare"
     git_archive_commands += "pushd #{repo_dir} > /dev/null; git archive --prefix openshift-test/ --format=tar 'HEAD' | (cd #{Vagrant::Openshift::Constants.build_dir} && tar --warning=no-timestamp -xf -); popd > /dev/null; "
   end

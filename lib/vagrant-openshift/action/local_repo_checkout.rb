@@ -28,7 +28,7 @@ module Vagrant
 
         def call(env)
           commands = "echo 'Waiting for the cloning process to finish'\n"
-          Constants.repos.each do |repo, url|
+          Constants.openshift2_repos.each do |repo, url|
             commands += %{
 ( #{repo_checkout_bash_command(repo, url)} ) &
 PIDS+=$!\" \";

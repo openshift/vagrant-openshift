@@ -34,7 +34,7 @@ module Vagrant
           }}
 
           git_clone_commands = ""
-          Constants.repos.each do |repo_name, url|
+          Constants.repos(env).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name
 
