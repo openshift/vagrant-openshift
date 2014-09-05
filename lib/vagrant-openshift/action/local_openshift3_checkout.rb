@@ -28,9 +28,9 @@ module Vagrant
 
         def call(env)
           if ENV['GOPATH'].nil?
-            @env.ui.warn "You don't seem to have the GOPATH environment variable set on your system."
-            @env.ui.warn "See: 'go help gopath' for more details about GOPATH."
-            return
+            puts "You don't seem to have the GOPATH environment variable set on your system."
+            puts "See: 'go help gopath' for more details about GOPATH."
+            go_path = '.'
           else
             go_path = FileUtils.mkdir_p(
               File.join(ENV['GOPATH'], 'src', 'github.com', 'openshift')
