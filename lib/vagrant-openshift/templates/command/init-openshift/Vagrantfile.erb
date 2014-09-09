@@ -87,6 +87,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.ami               = "<%= box_info[:aws][:ami] %>"
     aws.region            = "<%= box_info[:aws][:ami_region] %>"
     aws.instance_type     = "m3.large"
+    aws.instance_ready_timeout = 240
     aws.tags              = { "Name" => "<%= box_info[:instance_name] %>" }
     aws.user_data         = %{
 #cloud-config
