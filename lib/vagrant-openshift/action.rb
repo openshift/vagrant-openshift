@@ -56,7 +56,6 @@ module Vagrant
           b.use SetHostName
           b.use InstallOpenshift3
           b.use BuildOpenshift3
-          b.use RestartOpenshift3
         end
       end
 
