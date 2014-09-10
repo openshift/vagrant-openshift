@@ -34,7 +34,6 @@ module Vagrant
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
           download_map = {
-            "/tmp/openshift.log"                       => artifacts_dir + "openshift.log",
             "/var/log/yum.log"                     => artifacts_dir + "yum.log",
             "/var/log/secure"                      => artifacts_dir + "secure",
             "/var/log/audit/audit.log"             => artifacts_dir + "audit.log"
@@ -47,11 +46,6 @@ module Vagrant
             else
               FileUtils.mkdir_p File.dirname(target.to_s)
             end
-
-            sudo(machine, %{
-journalctl -u openshift.service > /tmp/openshift.log
-            }, {:timeout => 60, fail_on_error: false})
-
 
             command = "/usr/bin/rsync -avz -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
