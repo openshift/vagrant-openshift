@@ -98,14 +98,17 @@ growpart:
 runcmd:
 - [ sh, -xc, "echo 'Defaults:<%= box_info[:aws][:ami_ssh_user] %> \!requiretty' >> /etc/sudoers"]
     }
-    <% if [:centos6,:rhel6].include?(box_info[:os]) %>
-      aws.block_device_mapping = [
-        {
-           "DeviceName" => "/dev/sda",
-           "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>
-        }
-      ]
-    <% end %>
+    aws.block_device_mapping = [
+      {
+      <% if [:centos6,:rhel6].include?(box_info[:os]) %>
+         "DeviceName" => "/dev/sda",
+      <% else %>
+         "DeviceName" => "/dev/sda1",
+      <% end %>
+         "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>,
+         "Ebs.VolumeType" => "gp2"
+      }
+    ]
   end
 
   config.vm.provider :openstack do |os, override|
