@@ -28,10 +28,10 @@ module Vagrant
         stderr = []
         rc = -1
         options[:timeout] = 60*10 unless options.has_key? :timeout
-        options[:retries] = 1 unless options.has_key? :retries
+        options[:retries] = 0 unless options.has_key? :retries
         options[:fail_on_error] = true unless options.has_key? :fail_on_error
 
-        (1..options[:retries]).each do |retry_count|
+        (0..options[:retries]).each do |retry_count|
           begin
             machine.env.ui.info "Running ssh/sudo command '#{command}' with timeout #{options[:timeout]}. Attempt ##{retry_count}"
             Timeout::timeout(options[:timeout]) do
@@ -53,6 +53,7 @@ module Vagrant
             rc = -1
           rescue Exception => e
             machine.env.ui.warn "Error while running ssh/sudo command: #{command}"
+            machine.env.ui.warn e.message
             rc ||= -1
           end
 

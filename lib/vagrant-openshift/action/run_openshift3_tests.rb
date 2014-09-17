@@ -34,12 +34,13 @@ module Vagrant
           opt_tests = ''
           if @options[:all]
             opt_tests += "
+echo 'Running hack/test-cmd.sh'
 hack/test-cmd.sh
+echo 'Running hack/test-integration.sh'
 hack/test-integration.sh
 "
           end
 
-          # TODO: remove the need for permissive mode once we get through SELinux issues with Docker
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
 if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
@@ -48,10 +49,11 @@ if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
 fi
 pushd #{Constants.build_dir}/origin
 export PATH=$GOPATH/bin:$PATH
+echo 'Running hack/test-go.sh'
 hack/test-go.sh
 #{opt_tests}
 popd
-            }, {:timeout => 60*60, fail_on_error: false})
+            }, {:timeout => 60*10, :retries => 1, fail_on_error: false})
 
           @app.call(env)
         end
