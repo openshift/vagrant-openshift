@@ -40,9 +40,13 @@ module Vagrant
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
-docker pull openshift/centos-mongodb
-if ! docker images | grep 'openshift/centos-mongodb' 2>&1 > /dev/null ; then
-  docker pull openshift/centos-mongodb
+docker pull dockerfile/ruby
+if ! docker images | grep 'dockerfile/ruby' 2>&1 > /dev/null ; then
+  docker pull dockerfile/ruby
+fi
+docker pull openshift/docker-builder
+if ! docker images | grep 'openshift/docker-builder' 2>&1 > /dev/null ; then
+  docker pull openshift/docker-builder
 fi
 touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
