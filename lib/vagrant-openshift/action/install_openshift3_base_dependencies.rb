@@ -48,6 +48,10 @@ docker pull openshift/docker-builder
 if ! docker images | grep 'openshift/docker-builder' 2>&1 > /dev/null ; then
   docker pull openshift/docker-builder
 fi
+docker pull registry
+if ! docker images | grep 'registry' 2>&1 > /dev/null ; then
+  docker pull registry
+fi
 touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
           @app.call(env)
