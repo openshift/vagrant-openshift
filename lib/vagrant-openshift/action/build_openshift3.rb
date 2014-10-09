@@ -30,7 +30,7 @@ module Vagrant
 echo "Performing openshift build..."
 set -e
 hack/build-go.sh
-if [ ! -d third_party/etcd ]
+if [ ! -d _output/etcd ]
 then
   hack/install-etcd.sh
 fi
