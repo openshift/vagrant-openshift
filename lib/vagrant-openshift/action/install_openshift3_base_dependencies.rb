@@ -40,18 +40,11 @@ module Vagrant
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
-docker pull dockerfile/ruby
-if ! docker images | grep 'dockerfile/ruby' 2>&1 > /dev/null ; then
-  docker pull dockerfile/ruby
-fi
+
+docker pull openshift/docker-registry
 docker pull openshift/docker-builder
-if ! docker images | grep 'openshift/docker-builder' 2>&1 > /dev/null ; then
-  docker pull openshift/docker-builder
-fi
-docker pull registry
-if ! docker images | grep 'registry' 2>&1 > /dev/null ; then
-  docker pull registry
-fi
+docker pull openshift/sti-builder
+
 touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
           @app.call(env)
