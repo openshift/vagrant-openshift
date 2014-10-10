@@ -52,7 +52,7 @@ module Vagrant
       def self.openshift3_images
         {
           'wildfly-8-centos' => 'https://github.com/openshift/wildfly-8-centos.git',
-          'ruby-19-centos' => 'https://github.com/openshift/ruby-19-centos.git'
+          'ruby-20-centos' => 'https://github.com/openshift/ruby-20-centos.git'
         }
       end
 
