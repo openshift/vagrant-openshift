@@ -38,6 +38,8 @@ echo 'Running hack/test-cmd.sh'
 hack/test-cmd.sh
 echo 'Running hack/test-integration.sh'
 hack/test-integration.sh
+echo 'Running hack/test-end-to-end.sh'
+hack/test-end-to-end.sh
 "
           end
 
