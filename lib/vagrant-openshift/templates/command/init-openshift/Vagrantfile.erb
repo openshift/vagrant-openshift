@@ -106,7 +106,7 @@ runcmd:
          "DeviceName" => "/dev/sda1",
       <% end %>
          "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>,
-         "Ebs.VolumeType" => "gp2"
+         "Ebs.VolumeType" => "standard"
       }
     ]
   end
