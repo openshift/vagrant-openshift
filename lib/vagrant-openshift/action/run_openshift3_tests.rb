@@ -55,7 +55,7 @@ echo 'Running hack/test-go.sh'
 hack/test-go.sh
 #{opt_tests}
 popd
-            }, {:timeout => 60*10, :retries => 1, fail_on_error: false})
+            }, {:timeout => 60*60, :retries => 1, fail_on_error: false})
 
           @app.call(env)
         end
