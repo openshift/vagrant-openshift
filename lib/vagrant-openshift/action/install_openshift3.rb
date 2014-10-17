@@ -29,7 +29,7 @@ module Vagrant
           sudo(env[:machine], %{
 set -x
 # TODO Remove me ASAP
-setenforce 0
+sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
 usermod -a -G docker #{ssh_user}
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
