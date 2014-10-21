@@ -30,6 +30,7 @@ module Vagrant
 set -x
 # TODO Remove me ASAP
 sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
+setenforce 0
 usermod -a -G docker #{ssh_user}
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
