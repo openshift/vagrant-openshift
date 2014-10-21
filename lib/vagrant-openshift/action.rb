@@ -77,6 +77,12 @@ module Vagrant
         end
       end
 
+      def self.build_openshift3_infrastructure_images(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use BuildOpenshift3InfrastructureImages, options
+        end
+      end
+
       def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -228,6 +234,7 @@ module Vagrant
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallBuildDependencies, action_root.join("install_build_dependencies")
       autoload :BuildOpenshift3Images, action_root.join("build_openshift3_images")
+      autoload :BuildOpenshift3InfrastructureImages, action_root.join("build_openshift3_infrastructure_images")
       autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
       autoload :InstallOpenshift3Images, action_root.join("install_openshift3_images")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")

@@ -72,6 +72,11 @@ module Vagrant
         Commands::BuildOpenshift3Images
       end
 
+      command "build-openshift3-infrastructure-images" do
+        require_relative "command/build_openshift3_infrastructure_images"
+        Commands::BuildOpenshift3InfrastructureImages
+      end
+
       command "origin-init" do
         require_relative "command/openshift_init"
         Commands::OpenshiftInit

@@ -56,6 +56,13 @@ module Vagrant
         }
       end
 
+      def self.openshift3_infrastructure_images
+        {
+          'sti-builder' => 'origin/images/builder/docker/sti-builder',
+          'docker-builder' => 'origin/images/builder/docker/docker-builder'
+        }
+      end
+
       def self.images
         [
           'centos'
