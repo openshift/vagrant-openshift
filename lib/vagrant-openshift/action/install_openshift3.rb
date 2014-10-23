@@ -48,6 +48,11 @@ pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
 
+# Force socket reuse
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+# Force using local images instead of always reaching docker hub when doing builds
+export USE_LOCAL_IMAGES=true
+
 chown -R #{ssh_user}:#{ssh_user} /data
 
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
