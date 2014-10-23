@@ -38,6 +38,8 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$GOPATH/bin:$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/go/bin:$PATH
+# Force using local images instead of always reaching docker hub when doing builds
+export USE_LOCAL_IMAGES=true
 DELIM
 
 source /etc/profile.d/openshift.sh
@@ -47,6 +49,9 @@ go get code.google.com/p/go.tools/cmd/cover
 pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
+
+# Force socket reuse
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
 
 chown -R #{ssh_user}:#{ssh_user} /data
 
