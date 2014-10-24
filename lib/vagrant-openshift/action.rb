@@ -65,9 +65,9 @@ module Vagrant
         end
       end
 
-      def self.restart_openshift3(options)
+      def self.try_restart_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use RestartOpenshift3
+          b.use TryRestartOpenshift3
         end
       end
 
@@ -125,7 +125,7 @@ module Vagrant
           end
           unless options[:no_build]
             b.use BuildOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
-            b.use RestartOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
+            b.use TryRestartOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
             b.use BuildOpenshift3Images, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
           end
         end
@@ -239,7 +239,7 @@ module Vagrant
       autoload :InstallOpenshift3Images, action_root.join("install_openshift3_images")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")
       autoload :BuildOpenshift3, action_root.join("build_openshift3")
-      autoload :RestartOpenshift3, action_root.join("restart_openshift3")
+      autoload :TryRestartOpenshift3, action_root.join("try_restart_openshift3")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")

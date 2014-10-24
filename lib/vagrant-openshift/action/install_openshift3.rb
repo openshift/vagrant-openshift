@@ -64,7 +64,7 @@ Documentation=https://github.com/openshift/origin
 
 [Service]
 Type=simple
-EnvironmentFile=-/etc/default/openshift
+EnvironmentFile=-/etc/profile.d/openshift.sh
 ExecStart=$ORIGIN_PATH/_output/go/bin/openshift start
 
 [Install]
