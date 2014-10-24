@@ -62,9 +62,9 @@ module Vagrant
         Commands::InstallOpenshift3
       end
 
-      command "restart-openshift3" do
-        require_relative "command/restart_openshift3"
-        Commands::RestartOpenshift3
+      command "try-restart-openshift3" do
+        require_relative "command/try_restart_openshift3"
+        Commands::TryRestartOpenshift3
       end
 
       command "build-openshift3-images" do

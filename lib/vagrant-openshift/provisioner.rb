@@ -66,9 +66,9 @@ module Vagrant
             ssh_user = machine.ssh_info[:username]
             sync_dir = Vagrant::Openshift::Constants.sync_dir
             ## pause to stabilize environment to try to correct odd sudo error on aws
-            sleep 2            
+            sleep 2
             sudo(machine, "mkdir -p #{sync_dir} && chown -R #{ssh_user}:#{ssh_user} #{sync_dir}")
-          end          
+          end
           unless is_fedora || @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
             @machine.ui.info("Preparing base environment")
             require_relative "command/build_origin_base"

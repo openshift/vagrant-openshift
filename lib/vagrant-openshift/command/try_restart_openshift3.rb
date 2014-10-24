@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RestartOpenshift3 < Vagrant.plugin(2, :command)
+      class TryRestartOpenshift3 < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -31,7 +31,7 @@ module Vagrant
           options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant restart-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant try-restart-openshift3 [vm-name]"
             o.separator ""
           end
 
@@ -40,7 +40,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.restart_openshift3(options)
+            actions = Vagrant::Openshift::Action.try_restart_openshift3(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class RestartOpenshift3
+      class TryRestartOpenshift3
         include CommandHelper
 
         def initialize(app, env)
@@ -27,7 +27,7 @@ module Vagrant
 
         def call(env)
           sudo(env[:machine], %{
-systemctl restart openshift
+systemctl try-restart openshift
           })
 
           @app.call(env)
