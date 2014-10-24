@@ -29,6 +29,7 @@ module Vagrant
           options = {}
           options[:openshift3_images] = []
           options[:no_build] = false
+          options[:no_restart] = false
           options[:clean] = false
           options[:source] = false
           options[:include] = [ Vagrant::Openshift::Constants::FILTER_BROKER , Vagrant::Openshift::Constants::FILTER_CONSOLE ,Vagrant::Openshift::Constants::FILTER_ORIGIN, Vagrant::Openshift::Constants::FILTER_IMAGES, Vagrant::Openshift::Constants::FILTER_RHC]
@@ -47,6 +48,10 @@ module Vagrant
 
             o.on("--dont-install", "Don't build and install updated source") do |f|
               options[:no_build] = true
+            end
+
+            o.on("--dont-restart", "Don't restart OpenShift service") do |f|
+              options[:no_restart] = true
             end
 
             o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
