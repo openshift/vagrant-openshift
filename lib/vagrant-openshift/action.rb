@@ -125,9 +125,9 @@ module Vagrant
           end
           unless options[:no_build]
             b.use BuildOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
-            b.use RestartOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
             b.use BuildOpenshift3Images, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
           end
+          b.use RestartOpenshift3 if !options[:no_restart] && options[:include].include?(Vagrant::Openshift::Constants::FILTER_ORIGIN)
         end
       end
 
