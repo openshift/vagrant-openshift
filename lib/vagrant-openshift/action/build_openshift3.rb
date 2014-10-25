@@ -34,6 +34,7 @@ if [ ! -d _output/etcd ]
 then
   hack/install-etcd.sh
 fi
+hack/build-images.sh
 }))
 
           @app.call(env)
