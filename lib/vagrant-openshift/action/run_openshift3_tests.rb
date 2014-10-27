@@ -31,30 +31,39 @@ module Vagrant
         def call(env)
           @options.delete :logs
 
-          opt_tests = ''
+          cmds = ['hack/test-go.sh']
+
           if @options[:all]
-            opt_tests += "
-echo 'Running hack/test-cmd.sh'
-hack/test-cmd.sh
-echo 'Running hack/test-integration.sh'
-hack/test-integration.sh
-echo 'Running hack/test-end-to-end.sh'
-hack/test-end-to-end.sh
+            cmds << 'hack/test-cmd.sh'
+            cmds << 'hack/test-integration.sh'
+            cmds << 'hack/test-end-to-end.sh'
+          end
+
+          tests = ''
+          cmds.each do |cmd|
+            tests += "
+
+
+echo '***************************************************'
+echo 'Running #{cmd}...'
+time #{cmd}
+echo 'Finished #{cmd}'
+echo '***************************************************'
+
+
 "
           end
 
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
 if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
-  echo "Disabling requiretty for root user for contrib/test sudo support"
+  echo "Disabling requiretty for root user for sudo support"
   echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
 fi
-pushd #{Constants.build_dir}/origin
+pushd #{Constants.build_dir}/origin >/dev/null
 export PATH=$GOPATH/bin:$PATH
-echo 'Running hack/test-go.sh'
-hack/test-go.sh
-#{opt_tests}
-popd
+#{tests}
+popd >/dev/null
             }, {:timeout => 60*60, :retries => 1, fail_on_error: false})
 
           @app.call(env)
