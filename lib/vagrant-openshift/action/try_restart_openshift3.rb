@@ -26,7 +26,7 @@ module Vagrant
         end
 
         def call(env)
-          sudo(env[:machine], "systemctl try-restart openshift"})
+          sudo(env[:machine], "systemctl try-restart openshift")
 
           @app.call(env)
         end

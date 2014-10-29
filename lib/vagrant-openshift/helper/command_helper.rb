@@ -34,7 +34,7 @@ module Vagrant
 
         (0..options[:retries]).each do |retry_count|
           begin
-            if verbose
+            if options[:verbose]
               machine.env.ui.info "Running ssh/sudo command '#{command}' with timeout #{options[:timeout]}. Attempt ##{retry_count}"
             elsif retry_count > 0
               machine.env.ui.info "Retrying. Attempt ##{retry_count} with timeout #{options[:timeout]}"
@@ -75,7 +75,7 @@ module Vagrant
         rc = -1
         options[:verbose] = true unless options.has_key? :verbose
 
-        machine.env.ui.info "Running command '#{command}'" if verbose
+        machine.env.ui.info "Running command '#{command}'" if options[:verbose]
         rc = machine.communicate.execute(command) do |type, data|
           if [:stderr, :stdout].include?(type)
             if type == :stdout
