@@ -28,12 +28,17 @@ module Vagrant
         stderr = []
         rc = -1
         options[:timeout] = 60*10 unless options.has_key? :timeout
+        options[:verbose] = true unless options.has_key? :verbose
         options[:retries] = 0 unless options.has_key? :retries
         options[:fail_on_error] = true unless options.has_key? :fail_on_error
 
         (0..options[:retries]).each do |retry_count|
           begin
-            machine.env.ui.info "Running ssh/sudo command '#{command}' with timeout #{options[:timeout]}. Attempt ##{retry_count}"
+            if verbose
+              machine.env.ui.info "Running ssh/sudo command '#{command}' with timeout #{options[:timeout]}. Attempt ##{retry_count}"
+            elsif retry_count > 0
+              machine.env.ui.info "Retrying. Attempt ##{retry_count} with timeout #{options[:timeout]}"
+            end
             Timeout::timeout(options[:timeout]) do
               rc = machine.communicate.sudo(command) do |type, data|
                 if [:stderr, :stdout].include?(type)
@@ -64,12 +69,13 @@ module Vagrant
         [stdout, stderr, rc]
       end
 
-      def do_execute(machine, command)
+      def do_execute(machine, command, options={})
         stdout = []
         stderr = []
         rc = -1
+        options[:verbose] = true unless options.has_key? :verbose
 
-        machine.env.ui.info "Running command '#{command}'"
+        machine.env.ui.info "Running command '#{command}'" if verbose
         rc = machine.communicate.execute(command) do |type, data|
           if [:stderr, :stdout].include?(type)
             if type == :stdout
