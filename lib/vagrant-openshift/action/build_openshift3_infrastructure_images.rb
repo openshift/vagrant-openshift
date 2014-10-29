@@ -39,7 +39,7 @@ pushd #{docker_file_path}
   docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
 popd
             }
-            sudo(env[:machine], build_cmd, { :timeout => 60*20 })            
+            sudo(env[:machine], build_cmd, { :timeout => 60*20, :verbose => false })
           end
           @app.call(env)
         end

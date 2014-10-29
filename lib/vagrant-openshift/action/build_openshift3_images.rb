@@ -40,9 +40,9 @@ pushd #{docker_file_path}
 popd
             }
             if @options[:force]
-              sudo(env[:machine], build_cmd, { :timeout => 60*20 })
+              sudo(env[:machine], build_cmd, { :timeout => 60*20, :verbose => false })
             else
-              sudo(env[:machine], sync_bash_command(openshift3_image, build_cmd), { :timeout => 60*20 })
+              sudo(env[:machine], sync_bash_command(openshift3_image, build_cmd), { :timeout => 60*20, :verbose => false })
             end
           end
           @app.call(env)
