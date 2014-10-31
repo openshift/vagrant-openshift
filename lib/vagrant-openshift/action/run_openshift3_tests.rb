@@ -60,7 +60,7 @@ pushd #{Constants.build_dir}/origin >/dev/null
 export PATH=$GOPATH/bin:$PATH
 #{tests}
 popd >/dev/null
-            }, {:timeout => 60*60, :retries => 1, fail_on_error: false, :verbose => false})
+            }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
 
           @app.call(env)
         end
