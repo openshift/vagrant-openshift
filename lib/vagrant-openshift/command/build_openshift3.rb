@@ -29,10 +29,19 @@ module Vagrant
           options = {}
           options[:clean] = false
           options[:local_source] = false
+          options[:images] = false
+          options[:force] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant build-openshift3 [vm-name]"
             o.separator ""
+
+            o.on("--images", "Build the images as well as core content.") do |c|
+              options[:images] = true
+            end
+            o.on("--force", "Build regardless of whether there have been changes.") do |c|
+              options[:force] = true
+            end
           end
 
           # Parse the options

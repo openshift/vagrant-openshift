@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildOpenshift3Images < Vagrant.plugin(2, :command)
+      class PushOpenshift3Release < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "builds openshift docker images"
+          "pushes openshift docker images to a registry"
         end
 
         def execute
@@ -31,33 +31,24 @@ module Vagrant
           options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-openshift3-images --openshift3-images image_name [vm-name]"
+            o.banner = "Usage: vagrant push-openshift3-release --registry [registry_name] --include-base [vm-name]"
             o.separator ""
 
-            o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
-              options[:branch] = {"origin-server" => f}
+            o.on("--registry [registry_name]", String, "A Docker registry to push images to (include a trailing slash)") do |f|
+              options[:registry_name] = f
             end
 
-            o.on("-f", "--force", "Force a rebuild of the images even if there has not been a change to the source.") do |c|
-              options[:force] = true
-            end
-
-            o.on("--openshift3-images #{Vagrant::Openshift::Constants.openshift3_images.keys.join(' ')} | all", "Specify which images should be built. Default: []") do |f|
-              if f.split(" ").include?("all")
-                options[:openshift3_images] = Vagrant::Openshift::Constants.openshift3_images.keys
-              else
-                options[:openshift3_images] = f.split(" ")
-              end
+            o.on("--include-base", "Include the base infrastructure images in the push.") do |c|
+              options[:push_base_images] = true
             end
           end
 
           # Parse the options
           argv = parse_options(opts)
           return if !argv
-          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp unless options[:openshift3_images]
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_openshift3_images(options)
+            actions = Vagrant::Openshift::Action.push_openshift3_release(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

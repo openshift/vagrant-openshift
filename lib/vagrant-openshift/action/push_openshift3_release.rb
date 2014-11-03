@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOpenshift3InfrastructureImages
+      class PushOpenshift3Release
         include CommandHelper
 
         def initialize(app, env, options)
@@ -27,20 +27,16 @@ module Vagrant
         end
 
         def call(env)
-          # FIXME: Measure what would be the appropriate timeout here as the
-          #        docker build command can take quite a long time...
-          #
-          @options[:openshift3_infrastructure_images].each do |openshift3_image, _|
-            docker_image_name = "openshift/#{openshift3_image}"
-            docker_file_path = "#{Constants.build_dir}#{Vagrant::Openshift::Constants.openshift3_infrastructure_images[openshift3_image]}"
-            build_cmd = %{
-echo "Building #{docker_image_name} image"
-pushd #{docker_file_path}
-  docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
+          registry_name = @options[:registry_name]
+          push_base = !!@options[:push_base_images]
+          do_execute(env[:machine], %{
+echo "Pushing release images"
+set -e
+pushd /data/src/github.com/openshift/origin
+  OS_PUSH_BASE_IMAGES="#{push_base ? 'true' : ''}" OS_PUSH_BASE_REGISTRY="#{registry_name}" hack/push-release.sh
 popd
-            }
-            sudo(env[:machine], build_cmd, { :timeout => 60*20, :verbose => false })
-          end
+},
+            { :timeout => 60*20, :verbose => false })
           @app.call(env)
         end
 

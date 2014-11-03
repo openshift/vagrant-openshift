@@ -20,21 +20,41 @@ module Vagrant
       class BuildOpenshift3
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
-          do_execute(env[:machine], sync_bash_command('origin', %{
+          if @options[:images]
+            cmd = %{
+echo "Performing openshift release build..."
+set -e
+hack/verify-gofmt.sh
+hack/build-release.sh
+hack/build-images.sh
+if [ ! -d _output/etcd ]
+then
+  hack/install-etcd.sh
+fi
+}
+          else
+            cmd = %{
 echo "Performing openshift build..."
 set -e
+hack/verify-gofmt.sh
 hack/build-go.sh
 if [ ! -d _output/etcd ]
 then
   hack/install-etcd.sh
 fi
-}))
+}
+          end
+          unless @options[:force]
+            cmd = sync_bash_command('origin', cmd)
+          end
+          do_execute(env[:machine], cmd)
 
           @app.call(env)
         end

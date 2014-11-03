@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOpenshift3Images
+      class BuildOpenshift3BaseImages
         include CommandHelper
 
         def initialize(app, env, options)
@@ -27,24 +27,14 @@ module Vagrant
         end
 
         def call(env)
-          # FIXME: Measure what would be the appropriate timeout here as the
-          #        docker build command can take quite a long time...
-          #
-          @options[:openshift3_images].each do |openshift3_image, _|
-            docker_image_name = "openshift/#{openshift3_image}"
-            docker_file_path = "#{Constants.build_dir}#{openshift3_image}"
-            build_cmd = %{
-echo "Building #{docker_image_name} image"
-pushd #{docker_file_path}
-  docker build --rm #{@options[:force] ? "--no-cache" : ""} -t #{docker_image_name} .
+          do_execute(env[:machine], %{
+echo "Building base images..."
+set -e
+pushd /data/src/github.com/openshift/origin
+  hack/build-base-images.sh
 popd
-            }
-            if @options[:force]
-              sudo(env[:machine], build_cmd, { :timeout => 60*20, :verbose => false })
-            else
-              sudo(env[:machine], sync_bash_command(openshift3_image, build_cmd), { :timeout => 60*20, :verbose => false })
-            end
-          end
+},
+            { :timeout => 60*20, :verbose => false })
           @app.call(env)
         end
 

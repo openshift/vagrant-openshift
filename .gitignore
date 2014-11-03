@@ -22,3 +22,4 @@ test/origin-server
 test/puppet-openshift_origin
 test/rhc
 tmp
+vendor

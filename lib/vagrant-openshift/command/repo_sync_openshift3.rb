@@ -27,7 +27,7 @@ module Vagrant
 
         def execute
           options = {}
-          options[:openshift3_images] = []
+          options[:images] = true
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
@@ -51,14 +51,6 @@ module Vagrant
 
             o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
               options[:include] = f.split " "
-            end
-
-            o.on("--openshift3-images [ #{Vagrant::Openshift::Constants.openshift3_images.keys.join(' ')} | all ]", "Specify which images should be synced.   Default: []") do |f|
-              if f.split(" ").include?("all")
-                options[:openshift3_images] = Vagrant::Openshift::Constants.openshift3_images.keys
-              else
-                options[:openshift3_images] = f.split(" ")
-              end
             end
           end
 

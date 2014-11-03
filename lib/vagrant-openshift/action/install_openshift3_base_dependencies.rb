@@ -42,8 +42,6 @@ systemctl enable docker
 systemctl start docker
 
 docker pull openshift/docker-registry
-docker pull openshift/docker-builder
-docker pull openshift/sti-builder
 
 touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
