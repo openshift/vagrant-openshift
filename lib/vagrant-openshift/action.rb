@@ -44,8 +44,6 @@ module Vagrant
           b.use InstallOpenshift3BaseDependencies
           b.use InstallOpenshift3Images
           b.use SetHostName
-          b.use SetupBindHost
-          #b.use CreatePuppetFile
         end
       end
 
