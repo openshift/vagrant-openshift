@@ -30,10 +30,13 @@ module Vagrant
 
           pids = []
           Constants.repos(env).each do |repo_name, url|
-            local_repo = Pathname.new(File.expand_path(env[:machine].env.root_path + repo_name))
+            local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, "..", repo_name)))
             unless local_repo.exist?
-              env[:machine].ui.warn "Missing local clone of repository #{local_repo}"
-              next
+              local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, repo_name)))
+              unless local_repo.exist?
+                env[:machine].ui.warn "Missing local clone of repository #{repo_name}"
+                next
+              end
             end
 
             pids << fork {

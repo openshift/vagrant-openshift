@@ -52,15 +52,11 @@ echo '***************************************************'
 
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
-if [[ $(cat /etc/sudoers | grep 'Defaults:root !requiretty') = "" ]]; then
-  echo "Disabling requiretty for root user for sudo support"
-  echo -e '\\nDefaults:root !requiretty\\n' >> /etc/sudoers
-fi
 pushd #{Constants.build_dir}/origin >/dev/null
 export PATH=$GOPATH/bin:$PATH
 #{tests}
 popd >/dev/null
-            }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
+          }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
 
           @app.call(env)
         end
