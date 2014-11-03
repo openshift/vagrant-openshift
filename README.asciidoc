@@ -45,6 +45,7 @@ $ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
 $ source ~/.bash_profile
 $ cd $GOPATH
 $ vagrant openshift3-local-checkout -u <github username>
+$ cd github.com/src/openshift/origin
 ----
 
 ===== OpenShift 2.x
@@ -291,7 +292,7 @@ certtool --generate-certificate --load-privkey clientkey.pem \
 
 ----
 LIBVIRTD_ARGS="--listen"
----- 
+----
 
 ** Restart libvirtd
 

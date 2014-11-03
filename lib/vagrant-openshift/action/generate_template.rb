@@ -52,9 +52,46 @@ module Vagrant
           box_info[:aws_creds_file] = @aws_creds_file
           find_ami_from_tag(box_info)
 
-          contents = Vagrant::Util::TemplateRenderer.render(template_path.to_s[0..-5], box_info: box_info)
-          File.open("Vagrantfile", "w+") do |f|
-            f.write(contents)
+          if os == :fedora
+
+            gopath = nil
+            if ENV['GOPATH'] && !ENV['GOPATH'].empty?
+              gopath = File.expand_path(ENV['GOPATH'].split(/:/).last)
+            else
+              gopath = '.'
+            end
+
+            vagrant_openshift_config = {
+              'instance_name' => box_info[:instance_name],
+              'os' => os,
+              'dev_cluster' => false,
+              'num_minions' => 2,
+              'rebuild_yum_cache' => false,
+              'sync_to' => '/data/src',
+              'sync_from' => "#{gopath}/src",
+              'virtualbox' => {
+                'box_name' => box_info[:virtualbox][:box_name],
+                'box_url' => box_info[:virtualbox][:box_url]
+              },
+              'vmware' => {
+                'box_name' => box_info[:vmware][:box_name],
+                'box_url' => box_info[:vmware][:box_url]
+              },
+              'aws' => {
+                  'ami' => box_info[:aws][:ami],
+                  'ami_region' => box_info[:aws][:ami_region],
+                  'ssh_user' => box_info[:aws][:ssh_user]
+              }
+            }
+
+            File.open(".vagrant-openshift.json","w") do |f|
+              f.write(JSON.pretty_generate(vagrant_openshift_config))
+            end
+          else
+            contents = Vagrant::Util::TemplateRenderer.render(template_path.to_s[0..-5], box_info: box_info)
+            File.open("Vagrantfile", "w+") do |f|
+              f.write(contents)
+            end
           end
 
           @app.call(env)

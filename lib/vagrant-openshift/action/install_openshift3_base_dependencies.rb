@@ -29,12 +29,12 @@ module Vagrant
           # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
           #        add the image into 'repositories' constants
           #
-          sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++")
+          sudo(env[:machine], "yum install -y puppet git tito yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs")
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg*  golang-src")
+          sudo(env[:machine], "yum install -y golang golang-pkg* golang-src")
           #
           sudo(env[:machine], %{
 systemctl daemon-reload

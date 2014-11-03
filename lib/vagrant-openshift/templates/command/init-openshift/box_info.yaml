@@ -10,7 +10,7 @@
     :aws:
       :ami: ami-8f9d81e6
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: origin-centos-65-base
       :ebs_volume_size: 25
     :openstack:
@@ -27,7 +27,7 @@
       :ami: ami-100ec478
       :ami_tag_prefix: origin-centos-65-deps_
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: origin-centos-65-deps
       :ebs_volume_size: 25
     :openstack:
@@ -43,7 +43,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
     :openstack:
@@ -60,7 +60,7 @@
     :aws:
       :ami: ami-9c9376f4
       :ami_region: us-east-1
-      :ami_ssh_user: fedora
+      :ssh_user: fedora
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-fedora_
@@ -77,7 +77,7 @@
     :aws:
       :ami: ami-a8a94fc0
       :ami_region: us-east-1
-      :ami_ssh_user: fedora
+      :ssh_user: fedora
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora-base_
@@ -94,7 +94,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ami_ssh_user: fedora
+      :ssh_user: fedora
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora_
@@ -112,7 +112,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
     :openstack:
@@ -128,7 +128,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
     :openstack:
@@ -144,7 +144,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ami_ssh_user: root
+      :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
     :openstack:
