@@ -100,11 +100,7 @@ runcmd:
     }
     aws.block_device_mapping = [
       {
-      <% if [:centos6,:rhel6].include?(box_info[:os]) %>
          "DeviceName" => "/dev/sda",
-      <% else %>
-         "DeviceName" => "/dev/sda1",
-      <% end %>
          "Ebs.VolumeSize" => <%= box_info[:aws][:ebs_volume_size] %>,
          "Ebs.VolumeType" => "standard"
       }
@@ -154,9 +150,6 @@ runcmd:
   config.openshift.cloud_domain = "example.com"
 
   # Packages that are part of OpenShift Origin code but should not be compiled or installed
-<% if box_info[:os] == :fedora %>
-  config.openshift.ignore_packages = []
-<% else %>
   config.openshift.ignore_packages = [
     'openshift-origin-util',
     'rubygem-openshift-origin-container-libvirt',
@@ -167,7 +160,6 @@ runcmd:
     'rubygem-openshift-origin-dns-avahi',
     'openshift-origin-cartridge-mariadb',
   ]
-<% end %>
 
 # Any additional services on the machine which should be restarted after installing OpenShift packages
 # config.openshift.additional_services = [
