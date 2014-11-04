@@ -31,7 +31,7 @@ module Vagrant
           options[:all] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant test [machine-name]"
+            o.banner = "Usage: vagrant test-openshift3 [machine-name]"
             o.separator ""
 
             o.on("-a", "--all", String, "Run all tests") do |f|

@@ -17,18 +17,28 @@
 module Vagrant
   module Openshift
     module Action
-      class UninstallOpenShiftRpms
+      class LocalOpenshift2Checkout
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
-          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-          sudo env[:machine], "cd #{Constants.build_dir + "builder; #{scl_wrapper(is_fedora,'rake clean_rpms')}"}"
-          sudo env[:machine], "rm -rf #{Constants.build_dir + "origin-rpms"} #{Constants.build_dir + "origin-srpms"} #{Constants.build_dir + ".built_packages"} #{Constants.build_dir + ".spec_cache"}"
+          commands = "echo 'Waiting for the cloning process to finish'\n"
+          Constants.openshift2_repos.each do |repo, url|
+            commands += %{
+( #{repo_checkout_bash_command(repo, url)} ) &
+PIDS+=$!\" \";
+}
+          end
+
+          commands += "[ -n \"$PIDS\" ] && wait $PIDS\n"
+
+          system(commands)
+
           @app.call(env)
         end
       end

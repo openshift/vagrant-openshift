@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class CreateTestUsers
+      class BuildOpenshift2
         include CommandHelper
 
         def initialize(app, env)
@@ -27,7 +27,10 @@ module Vagrant
 
         def call(env)
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-          sudo env[:machine], "cd #{Constants.build_dir}/builder; #{scl_wrapper(is_fedora,'rake create_test_users')}"
+          hostname = env[:machine].config.vm.hostname
+          sudo(env[:machine],"echo #{hostname} > /proc/sys/kernel/hostname")
+          sudo(env[:machine], "cd #{Constants.build_dir + "builder"}; #{scl_wrapper(is_fedora,'rake update_packages')}", {timeout: 60*30})
+
           @app.call(env)
         end
       end

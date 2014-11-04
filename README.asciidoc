@@ -95,7 +95,7 @@ $ vagrant test-openshift3 --all
 
 [source, sh]
 ----
-$ vagrant origin-local-checkout -u <github username>
+$ vagrant openshift2-local-checkout -u <github username>
 ----
 
 This will clone several repositories from link:http://www.github.com[GitHub] and link them against the upstream repositories.
@@ -131,7 +131,7 @@ Note: See Other Environments below for launching against other options.
 
 [source, sh]
 ----
-$ vagrant sync
+$ vagrant sync-openshift2
 ----
 
 
@@ -139,7 +139,7 @@ $ vagrant sync
 
 [source, sh]
 ----
-$ vagrant test --all
+$ vagrant test-openshift2 --all
 ----
 
 

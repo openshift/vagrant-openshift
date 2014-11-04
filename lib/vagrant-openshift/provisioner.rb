@@ -71,8 +71,8 @@ module Vagrant
           end
           unless is_fedora || @machine.communicate.test("test -f #{Vagrant::Openshift::Constants.deps_marker}")
             @machine.ui.info("Preparing base environment")
-            require_relative "command/build_origin_base"
-            Vagrant::Openshift::Commands::BuildOriginBase.new([], @machine.env).execute
+            require_relative "command/build_openshift2_base"
+            Vagrant::Openshift::Commands::BuildOpenshift2Base.new([], @machine.env).execute
             @machine.communicate.sudo("touch #{Vagrant::Openshift::Constants.deps_marker}")
           end
         end

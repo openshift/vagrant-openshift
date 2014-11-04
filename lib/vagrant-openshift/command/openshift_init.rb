@@ -69,7 +69,7 @@ module Vagrant
 
           options[:name] = argv[0] if argv[0]
 
-          actions = Vagrant::Openshift::Action.gen_vagrant_file(options)
+          actions = Vagrant::Openshift::Action.gen_template(options)
           @env.action_runner.run actions
           0
         end

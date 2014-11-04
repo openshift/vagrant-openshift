@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class CreatePuppetFile
+      class CreateOpenshift2PuppetFile
         include CommandHelper
 
         def initialize(app, env)

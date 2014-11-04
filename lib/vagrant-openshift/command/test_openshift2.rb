@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class Test < Vagrant.plugin(2, :command)
+      class TestOpenshift2 < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -36,7 +36,7 @@ module Vagrant
           component_list.each { |component| options[component] = false }
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant test [machine-name]"
+            o.banner = "Usage: vagrant test-openshift2 [machine-name]"
             o.separator ""
 
             o.on("-n", "--node", String, "Run node tests") do |f|
@@ -97,7 +97,7 @@ module Vagrant
           end
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.run_tests(options)
+            actions = Vagrant::Openshift::Action.run_openshift2_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
