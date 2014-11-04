@@ -33,11 +33,9 @@ Compile an install the plugin using Rake
 $ rake vagrant:install
 ----
 
-=== Getting started
+=== Getting started with Openshift v3
 
 ==== Clone the OpenShift Origin repositories
-
-===== OpenShift 3.x
 
 [source, sh]
 ----
@@ -48,7 +46,52 @@ $ vagrant openshift3-local-checkout -u <github username>
 $ cd github.com/src/openshift/origin
 ----
 
-===== OpenShift 2.x
+
+==== Initialize the Vagrantfile
+
+Generate a .vagrant-openshift.json it to match your requirements:
+
+[source, sh]
+----
+$ vagrant origin-init --stage inst --os fedora <instance name>
+----
+
+
+==== Start the machine
+
+===== VirtualBox
+
+Running with the default VirtualBox provider
+
+[source, sh]
+----
+vagrant up
+----
+
+Note: See Other Environments below for launching against other options.
+
+
+==== Making Subsequent Changes
+
+* Syncing and building code from local repository clones
+
+[source, sh]
+----
+$ vagrant sync-openshift3
+----
+
+
+==== Running Tests
+
+[source, sh]
+----
+$ vagrant test-openshift3 --all
+----
+
+
+=== Getting started with Openshift v2
+
+==== Clone the OpenShift Origin repositories
 
 [source, sh]
 ----
@@ -65,26 +108,7 @@ Create a Vagrantfile and customize it to match your requirements:
 
 [source, sh]
 ----
-$ vagrant origin-init <instance name>
-----
-
-.Command options:
-
-* Specify which OS to build with:
-** --os fedora		- Launch a Fedora 20 image (used for OpenShift 3 development)
-** --os rhel6		- Launch a RHEL 6 image (where available)
-** --os centos6		- Launch a CentOS 6 image (where available, used for OpenShift 2.x development)
-
-* Specify the stage of image to launch:
-** --stage os    - Launch the base operating system with no OpenShift dependencies
-** --stage deps  - Launch the image with OpenShift dependencies already installed
-** --stage inst  - Launch the image with OpenShift fully installed
-
-.So to launch the latest OpenShift instance:
-
-[source, sh]
-----
-$ vagrant origin-init --stage inst --os fedora <instance name>
+$ vagrant origin-init --stage inst --os centos6 <instance name>
 ----
 
 ==== Start the machine
@@ -105,60 +129,21 @@ Note: See Other Environments below for launching against other options.
 
 * Syncing and building code from local repository clones
 
-===== OpenShift 3.x
-
-[source, sh]
-----
-$ vagrant sync-openshift3
-----
-
-
-===== OpenShift 2.x
-
 [source, sh]
 ----
 $ vagrant sync
 ----
 
 
-==== Running OpenShift Origin Tests
-
-===== OpenShift 3.x
-
-[source, sh]
-----
-$ vagrant test-openshift3 --all
-----
-
-
-===== OpenShift 2.x
+==== Running Tests
 
 [source, sh]
 ----
 $ vagrant test --all
 ----
 
+
 == Other Notes
-
-==== Install OpenShift and its Dependencies
-
-If starting from --stage os, install the build and package dependencies.
-
-===== OpenShift 3.x
-
-[source, sh]
-----
-$ vagrant build-openshift3-base
-$ vagrant install-openshift3
-----
-
-===== OpenShift 2.x
-
-[source, sh]
-----
-$ vagrant origin-build-base
-$ vagrant sync --clean
-----
 
 ==== Other Environments
 
