@@ -18,7 +18,7 @@ require 'pathname'
 module Vagrant
   module Openshift
     module Action
-      class DownloadArtifacts
+      class DownloadArtifactsOpenshift2
         include CommandHelper
 
         def initialize(app, env)

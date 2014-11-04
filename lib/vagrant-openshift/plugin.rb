@@ -32,9 +32,9 @@ module Vagrant
         Config
       end
 
-      command "sync" do
-        require_relative "command/repo_sync"
-        Commands::RepoSync
+      command "sync-openshift2" do
+        require_relative "command/repo_sync_openshift2"
+        Commands::RepoSyncOpenshift2
       end
 
       command "sync-openshift3" do
@@ -42,9 +42,9 @@ module Vagrant
         Commands::RepoSyncOpenshift3
       end
 
-      command "origin-build-base" do
-        require_relative "command/build_origin_base"
-        Commands::BuildOriginBase
+      command "build-openshift2-base" do
+        require_relative "command/build_openshift2_base"
+        Commands::BuildOpenshift2Base
       end
 
       command "build-openshift3-base" do
@@ -82,9 +82,9 @@ module Vagrant
         Commands::OpenshiftInit
       end
 
-      command "origin-local-checkout" do
-        require_relative "command/local_repo_setup"
-        Commands::LocalRepoSetup
+      command "openshift2-local-checkout" do
+        require_relative "command/local_openshift2_setup"
+        Commands::LocalOpenshift2Setup
       end
 
       command "openshift3-local-checkout" do
@@ -92,9 +92,9 @@ module Vagrant
         Commands::LocalOpenshift3Setup
       end
 
-      command "test" do
-        require_relative "command/test"
-        Commands::Test
+      command "test-openshift2" do
+        require_relative "command/test_openshift2"
+        Commands::TestOpenshift2
       end
 
       command "test-openshift3" do

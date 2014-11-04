@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class CheckoutTests
+      class CheckoutOpenshift2Tests
         include CommandHelper
 
         def initialize(app, env)

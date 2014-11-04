@@ -18,43 +18,21 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSync < Vagrant.plugin(2, :command)
+      class BuildOpenshift2Base < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "syncs and installs(by default) your local repos to the current instance"
+          "installs the prereqs for origin"
         end
 
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = true
-          options[:no_build] = false
-          options[:deps] = false
+          options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync [vm-name]"
+            o.banner = "Usage: vagrant build-openshift2-base [vm-name]"
             o.separator ""
-
-            o.on("-c", "--clean", "Delete existing repo and uninstall all OpenShift RPMs before syncing") do |f|
-              options[:clean] = f
-            end
-
-            o.on("-u", "--upstream", "Build base VM based on local source") do |f|
-              options[:local_source] = false
-            end
-
-            o.on("--install-deps", "Install any missing dependencies") do |f|
-              options[:deps] = f
-            end
-
-            o.on("--dont-install", "Don't build and install RPMs") do |f|
-              options[:no_build] = f
-            end
-
-            o.on("-d","--artifacts", String, "Download logs and rpms") do |f|
-              options[:download] = true
-            end
           end
 
           # Parse the options
@@ -62,7 +40,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync(options)
+            actions = Vagrant::Openshift::Action.build_openshift2_base(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

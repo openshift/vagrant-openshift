@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class IdleAllGears
+      class IdleAllGearsOpenshift2
         include CommandHelper
 
         def initialize(app, env)

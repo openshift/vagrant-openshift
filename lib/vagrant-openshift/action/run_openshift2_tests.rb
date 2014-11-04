@@ -17,27 +17,27 @@
 module Vagrant
   module Openshift
     module Action
-      class LocalRepoCheckout
+      class RunOpenshift2Tests
         include CommandHelper
+
+        @@SSH_TIMEOUT = 4800
 
         def initialize(app, env, options)
           @app = app
           @env = env
-          @options = options
+          @options = options.clone
         end
 
         def call(env)
-          commands = "echo 'Waiting for the cloning process to finish'\n"
-          Constants.openshift2_repos.each do |repo, url|
-            commands += %{
-( #{repo_checkout_bash_command(repo, url)} ) &
-PIDS+=$!\" \";
-}
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          @options.delete :logs
+
+          cmd_opts = ''
+          @options.each do |k,v|
+            cmd_opts += "#{k}=#{v} "
           end
-
-          commands += "[ -n \"$PIDS\" ] && wait $PIDS\n"
-
-          system(commands)
+          cmd = "cd #{Constants.build_dir + 'builder'}; #{scl_wrapper(is_fedora,'rake run_tests ' + cmd_opts)} "
+          _,_,env[:test_exit_code] = sudo(env[:machine], cmd, {timeout: 0, fail_on_error: false})
 
           @app.call(env)
         end
