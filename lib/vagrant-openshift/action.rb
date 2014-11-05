@@ -43,7 +43,7 @@ module Vagrant
           b.use YumUpdate
           b.use SetHostName
           b.use InstallOpenshift3BaseDependencies
-          b.use BuildOpenshift3BaseImages
+          b.use BuildOpenshift3BaseImages, options
         end
       end
 
