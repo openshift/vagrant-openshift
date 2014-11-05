@@ -36,7 +36,8 @@ module Vagrant
           download_map = {
             "/var/log/yum.log"                     => artifacts_dir + "yum.log",
             "/var/log/secure"                      => artifacts_dir + "secure",
-            "/var/log/audit/audit.log"             => artifacts_dir + "audit.log"
+            "/var/log/audit/audit.log"             => artifacts_dir + "audit.log",
+            "/tmp/origin/e2e/"                     => artifacts_dir + "e2e/",
           }
 
           download_map.each do |source,target|
