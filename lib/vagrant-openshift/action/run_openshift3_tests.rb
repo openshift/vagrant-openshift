@@ -34,9 +34,9 @@ module Vagrant
           cmds = ['hack/test-go.sh']
 
           if @options[:all]
-            cmds << 'hack/test-cmd.sh'
             cmds << 'hack/test-integration.sh'
-            cmds << 'hack/test-end-to-end.sh'
+            cmds << 'hack/test-cmd.sh'
+            cmds << 'LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
           end
 
           tests = ''
