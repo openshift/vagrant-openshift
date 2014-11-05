@@ -29,8 +29,6 @@ module Vagrant
           sudo(env[:machine], %{
 set -x
 
-chown -R #{ssh_user}:#{ssh_user} /data
-
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
@@ -60,6 +58,8 @@ WantedBy=multi-user.target
 DELIM
 
 #systemctl enable openshift.service
+
+chown -R #{ssh_user}:#{ssh_user} /data
           })
 
           @app.call(env)
