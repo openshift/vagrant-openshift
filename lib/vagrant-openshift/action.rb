@@ -41,9 +41,9 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
-          b.use InstallOpenshift3BaseDependencies
-          b.use InstallOpenshift3Images
           b.use SetHostName
+          b.use InstallOpenshift3BaseDependencies
+          b.use BuildOpenshift3BaseImages
         end
       end
 
@@ -53,13 +53,12 @@ module Vagrant
           b.use YumUpdate
           b.use SetHostName
           b.use InstallOpenshift3
-          b.use BuildOpenshift3
         end
       end
 
       def self.build_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift3
+          b.use BuildOpenshift3, options
         end
       end
 
@@ -69,15 +68,9 @@ module Vagrant
         end
       end
 
-      def self.build_openshift3_images(options)
+      def self.build_openshift3_base_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift3Images, options
-        end
-      end
-
-      def self.build_openshift3_infrastructure_images(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift3InfrastructureImages, options
+          b.use BuildOpenshift3BaseImages, options
         end
       end
 
@@ -122,9 +115,9 @@ module Vagrant
             b.use CheckoutRepositories
           end
           unless options[:no_build]
-            b.use BuildOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
-            b.use TryRestartOpenshift3 if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
-            b.use BuildOpenshift3Images, options if options[:include].include? Vagrant::Openshift::Constants::FILTER_IMAGES
+            b.use(BuildOpenshift3BaseImages, options) if options[:images] && options[:include].include?(Vagrant::Openshift::Constants::FILTER_ORIGIN)
+            b.use(BuildOpenshift3, options) if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
+            b.use(TryRestartOpenshift3) if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
           end
         end
       end
@@ -200,6 +193,12 @@ module Vagrant
         end
       end
 
+      def self.push_openshift3_release(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PushOpenshift3Release, options
+        end
+      end
+
       def self.clone_upstream_repositories(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CloneUpstreamRepositories, options
@@ -231,10 +230,9 @@ module Vagrant
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
       autoload :InstallOpenshift2BuildDependencies, action_root.join("install_openshift2_build_dependencies")
-      autoload :BuildOpenshift3Images, action_root.join("build_openshift3_images")
-      autoload :BuildOpenshift3InfrastructureImages, action_root.join("build_openshift3_infrastructure_images")
       autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
-      autoload :InstallOpenshift3Images, action_root.join("install_openshift3_images")
+      autoload :BuildOpenshift3BaseImages, action_root.join("build_openshift3_base_images")
+      autoload :PushOpenshift3Release, action_root.join("push_openshift3_release")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")
       autoload :BuildOpenshift3, action_root.join("build_openshift3")
       autoload :TryRestartOpenshift3, action_root.join("try_restart_openshift3")

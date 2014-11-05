@@ -67,14 +67,9 @@ module Vagrant
         Commands::TryRestartOpenshift3
       end
 
-      command "build-openshift3-images" do
-        require_relative "command/build_openshift3_images"
-        Commands::BuildOpenshift3Images
-      end
-
-      command "build-openshift3-infrastructure-images" do
-        require_relative "command/build_openshift3_infrastructure_images"
-        Commands::BuildOpenshift3InfrastructureImages
+      command "build-openshift3-base-images" do
+        require_relative "command/build_openshift3_base_images"
+        Commands::BuildOpenshift3BaseImages
       end
 
       command "origin-init" do
@@ -90,6 +85,11 @@ module Vagrant
       command "openshift3-local-checkout" do
         require_relative "command/local_openshift3_setup"
         Commands::LocalOpenshift3Setup
+      end
+
+      command "push-openshift3-release" do
+        require_relative "command/push_openshift3_release"
+        Commands::PushOpenshift3Release
       end
 
       command "test-openshift2" do
