@@ -25,13 +25,8 @@ module Vagrant
         end
 
         def call(env)
-          ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], %{
 set -x
-# TODO Remove me ASAP
-sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
-setenforce 0
-usermod -a -G docker #{ssh_user}
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 
@@ -44,16 +39,9 @@ DELIM
 
 source /etc/profile.d/openshift.sh
 
-go get code.google.com/p/go.tools/cmd/cover
-
 pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
-
-# Force socket reuse
-echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
-
-chown -R #{ssh_user}:#{ssh_user} /data
 
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]

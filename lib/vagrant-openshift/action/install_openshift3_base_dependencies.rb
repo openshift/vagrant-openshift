@@ -26,6 +26,7 @@ module Vagrant
         end
 
         def call(env)
+          ssh_user = env[:machine].ssh_info[:username]
           # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
           #        add the image into 'repositories' constants
           #
@@ -34,9 +35,24 @@ module Vagrant
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg* golang-src")
+          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src")
           #
           sudo(env[:machine], %{
+
+set -x
+# TODO Remove me ASAP
+sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
+setenforce 0
+
+usermod -a -G docker #{ssh_user}
+
+# Force socket reuse
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+
+go get code.google.com/p/go.tools/cmd/cover
+
+chown -R #{ssh_user}:#{ssh_user} /data
+
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
