@@ -25,16 +25,16 @@ module Vagrant
         end
 
         def call(env)
+          ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], %{
 set -x
 
-ORIGIN_PATH=/data/src/github.com/openshift/origin
+chown -R #{ssh_user}:#{ssh_user} /data
 
+ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$GOPATH/bin:$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/go/bin:$PATH
-# Force using local images instead of always reaching docker hub when doing builds
-export USE_LOCAL_IMAGES=true
 DELIM
 
 source /etc/profile.d/openshift.sh

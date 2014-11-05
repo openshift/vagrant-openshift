@@ -49,8 +49,8 @@ usermod -a -G docker #{ssh_user}
 # Force socket reuse
 echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
 
-go get code.google.com/p/go.tools/cmd/cover
-
+mkdir /data
+GOPATH=/data go get code.google.com/p/go.tools/cmd/cover
 chown -R #{ssh_user}:#{ssh_user} /data
 
 systemctl daemon-reload
