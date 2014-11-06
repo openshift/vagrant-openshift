@@ -114,9 +114,9 @@ module Vagrant
             b.use CheckoutRepositories
           end
           unless options[:no_build]
-            b.use(BuildOpenshift3BaseImages, options) if options[:images] && options[:include].include?(Vagrant::Openshift::Constants::FILTER_ORIGIN)
-            b.use(BuildOpenshift3, options) if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
-            b.use(TryRestartOpenshift3) if options[:include].include? Vagrant::Openshift::Constants::FILTER_ORIGIN
+            b.use(BuildOpenshift3BaseImages, options) if options[:images]
+            b.use(BuildOpenshift3, options)
+            b.use(TryRestartOpenshift3)
           end
         end
       end
@@ -133,7 +133,7 @@ module Vagrant
             b.use CheckoutRepositories
           end
           unless options[:no_build]
-            b.use(BuildSti, options) if options[:include].include? Vagrant::Openshift::Constants::FILTER_STI
+            b.use(BuildSti, options)
           end
         end
       end

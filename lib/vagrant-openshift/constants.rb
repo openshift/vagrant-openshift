@@ -19,13 +19,6 @@ module Vagrant
   module Openshift
     class Constants
 
-      FILTER_BROKER="broker"
-      FILTER_CONSOLE="console"
-      FILTER_IMAGES="images"
-      FILTER_RHC="rhc"
-      FILTER_ORIGIN="origin"
-      FILTER_STI="sti"
-
       def self.repos(env)
         is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
         if is_fedora

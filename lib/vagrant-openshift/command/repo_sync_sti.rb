@@ -27,11 +27,9 @@ module Vagrant
 
         def execute
           options = {}
-          options[:images] = true
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
-          options[:include] = [ Vagrant::Openshift::Constants::FILTER_STI, Vagrant::Openshift::Constants::FILTER_IMAGES ]
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-sti [vm-name]"
@@ -49,9 +47,6 @@ module Vagrant
               options[:no_build] = true
             end
 
-            o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
-              options[:include] = f.split " "
-            end
           end
 
           # Parse the options
