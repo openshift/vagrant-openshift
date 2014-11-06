@@ -38,6 +38,8 @@ module Vagrant
             "/var/log/secure"                      => artifacts_dir + "secure",
             "/var/log/audit/audit.log"             => artifacts_dir + "audit.log",
             "/tmp/origin/e2e/"                     => artifacts_dir + "e2e/",
+
+            "/data/src/github.com/openshift/origin/_output/local/releases/" => artifacts_dir + "release/",
           }
 
           download_map.each do |source,target|
