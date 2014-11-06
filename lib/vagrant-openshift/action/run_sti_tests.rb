@@ -17,26 +17,44 @@
 module Vagrant
   module Openshift
     module Action
-      class Clean
+      class RunStiTests
         include CommandHelper
 
-        def initialize(app, env)
+        @@SSH_TIMEOUT = 4800
+
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options.clone
         end
 
         def call(env)
-          git_clone_commands = ""
-          Constants.repos(env).each do |repo_name, url|
-            bare_repo_name = repo_name + "-bare"
-            wc_repo_name = repo_name + "-bare-working_copy"
-            bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
-            wc_repo_path = Constants.build_dir + wc_repo_name
+          @options.delete :logs
 
-            git_clone_commands += "rm -rf #{bare_repo_path}; \n"
+          cmds = ['hack/test-go.sh']
+
+          if @options[:all]
+            cmds << 'hack/test-integration.sh'
           end
-          do_execute env[:machine], git_clone_commands
+
+          tests = ''
+          cmds.each do |cmd|
+            tests += "
+echo '***************************************************'
+echo 'Running #{cmd}...'
+time #{cmd}
+echo 'Finished #{cmd}'
+echo '***************************************************'
+"
+          end
+
+          _,_,env[:test_exit_code] = sudo(env[:machine], %{
+set -e
+pushd #{Constants.build_dir}/origin >/dev/null
+export PATH=$GOPATH/bin:$PATH
+#{tests}
+popd >/dev/null
+          }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
 
           @app.call(env)
         end

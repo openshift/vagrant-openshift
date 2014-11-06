@@ -27,7 +27,7 @@ module Vagrant
           b.use YumUpdate
           b.use InstallOpenshift2BuildDependencies
           b.use SetupBuilderFiles
-          b.use Clean
+          b.use CleanOpenshift2
           b.use CloneUpstreamRepositories
           b.use SetHostName
           b.use SetupBindDnsKey
@@ -77,7 +77,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
           if options[:clean]
-            b.use Clean
+            b.use CleanOpenshift2
             b.use SetupBuilderFiles
             b.use CreateOpenshift2PuppetFile
             if options[:local_source]
@@ -121,6 +121,23 @@ module Vagrant
         end
       end
 
+      def self.repo_sync_sti(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PrepareSshConfig
+          if options[:source]
+            if options[:clean]
+              b.use Clean
+              b.use CloneUpstreamRepositories
+            end
+            b.use SyncLocalRepository
+            b.use CheckoutRepositories
+          end
+          unless options[:no_build]
+            b.use(BuildSti, options) if options[:include].include? Vagrant::Openshift::Constants::FILTER_STI
+          end
+        end
+      end
+
       def self.local_openshift2_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
@@ -156,6 +173,16 @@ module Vagrant
           b.use RunOpenshift3Tests, options
           if options[:download]
             b.use DownloadArtifactsOpenshift3
+          end
+          b.use TestExitCode
+        end
+      end
+
+      def self.run_sti_tests(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunStiTests, options
+          if options[:download]
+            b.use DownloadArtifactsSti
           end
           b.use TestExitCode
         end
@@ -217,6 +244,7 @@ module Vagrant
       end
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
+      autoload :CleanOpenshift2, action_root.join("clean_openshift2")
       autoload :Clean, action_root.join("clean")
       autoload :UninstallOpenshift2Rpms, action_root.join("uninstall_openshift2_rpms")
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
@@ -234,6 +262,7 @@ module Vagrant
       autoload :PushOpenshift3Release, action_root.join("push_openshift3_release")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")
       autoload :BuildOpenshift3, action_root.join("build_openshift3")
+      autoload :BuildSti, action_root.join("build_sti")
       autoload :TryRestartOpenshift3, action_root.join("try_restart_openshift3")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
@@ -247,6 +276,7 @@ module Vagrant
       autoload :PreserveMcollectiveLogs, action_root.join("preserve_mcollective_logs")
       autoload :RunOpenshift2Tests, action_root.join("run_openshift2_tests")
       autoload :RunOpenshift3Tests, action_root.join("run_openshift3_tests")
+      autoload :RunStiTests, action_root.join("run_sti_tests")
       autoload :CheckoutOpenshift2Tests, action_root.join("checkout_openshift2_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
@@ -254,6 +284,7 @@ module Vagrant
       autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifactsOpenshift2, action_root.join("download_artifacts_openshift2")
       autoload :DownloadArtifactsOpenshift3, action_root.join("download_artifacts_openshift3")
+      autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :InstallRhc, action_root.join("install_rhc")

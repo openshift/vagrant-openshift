@@ -42,6 +42,11 @@ module Vagrant
         Commands::RepoSyncOpenshift3
       end
 
+      command "sync-sti" do
+        require_relative "command/repo_sync_sti"
+        Commands::RepoSyncSti
+      end
+
       command "build-openshift2-base" do
         require_relative "command/build_openshift2_base"
         Commands::BuildOpenshift2Base
@@ -100,6 +105,11 @@ module Vagrant
       command "test-openshift3" do
         require_relative "command/test_openshift3"
         Commands::TestOpenshift3
+      end
+
+      command "test-sti" do
+        require_relative "command/test_sti"
+        Commands::TestSti
       end
 
       command "create-ami" do

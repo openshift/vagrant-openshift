@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSyncOpenshift3 < Vagrant.plugin(2, :command)
+      class RepoSyncSti < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -31,10 +31,10 @@ module Vagrant
           options[:no_build] = false
           options[:clean] = false
           options[:source] = false
-          options[:include] = [ Vagrant::Openshift::Constants::FILTER_CONSOLE, Vagrant::Openshift::Constants::FILTER_ORIGIN, Vagrant::Openshift::Constants::FILTER_IMAGES ]
+          options[:include] = [ Vagrant::Openshift::Constants::FILTER_STI, Vagrant::Openshift::Constants::FILTER_IMAGES ]
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant sync-sti [vm-name]"
             o.separator ""
 
             o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
@@ -59,7 +59,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync_openshift3(options)
+            actions = Vagrant::Openshift::Action.repo_sync_sti(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
