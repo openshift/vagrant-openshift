@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class Clean
+      class CleanOpenshift2
         include CommandHelper
 
         def initialize(app, env)
@@ -38,6 +38,8 @@ module Vagrant
           end
           do_execute env[:machine], git_clone_commands
 
+          sudo env[:machine], "rm -rf /etc/yum.repos.d/openshift-origin.repo"
+          sudo env[:machine], "rm -f /etc/openshift/.mongo-setup-complete"
           @app.call(env)
         end
       end

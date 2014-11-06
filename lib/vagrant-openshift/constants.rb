@@ -24,6 +24,7 @@ module Vagrant
       FILTER_IMAGES="images"
       FILTER_RHC="rhc"
       FILTER_ORIGIN="origin"
+      FILTER_STI="sti"
 
       def self.repos(env)
         is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
@@ -44,8 +45,8 @@ module Vagrant
 
       def self.openshift3_repos
         {
-          'origin' => 'https://github.com/openshift/origin.git'
-
+          'origin' => 'https://github.com/openshift/origin.git',
+          'source-to-image' => 'https://github.com/openshift/source-to-image.git'
         }.merge(openshift3_images)
       end
 

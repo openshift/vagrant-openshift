@@ -17,29 +17,31 @@
 module Vagrant
   module Openshift
     module Action
-      class Clean
+      class BuildSti
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
-          git_clone_commands = ""
-          Constants.repos(env).each do |repo_name, url|
-            bare_repo_name = repo_name + "-bare"
-            wc_repo_name = repo_name + "-bare-working_copy"
-            bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
-            wc_repo_path = Constants.build_dir + wc_repo_name
 
-            git_clone_commands += "rm -rf #{bare_repo_path}; \n"
+            cmd = %{
+echo "Performing sti build..."
+set -e
+hack/verify-gofmt.sh
+hack/build-go.sh
+}
+          unless @options[:force]
+            cmd = sync_bash_command('source-to-image', cmd)
           end
-          do_execute env[:machine], git_clone_commands
+          do_execute(env[:machine], cmd)
 
           @app.call(env)
         end
+
       end
     end
   end

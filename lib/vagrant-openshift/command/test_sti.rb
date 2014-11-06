@@ -18,39 +18,28 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSyncOpenshift3 < Vagrant.plugin(2, :command)
+      class TestSti < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "syncs your local repos to the current instance"
+          "run the sti tests"
         end
 
         def execute
           options = {}
-          options[:images] = true
-          options[:no_build] = false
-          options[:clean] = false
-          options[:source] = false
-          options[:include] = [ Vagrant::Openshift::Constants::FILTER_CONSOLE, Vagrant::Openshift::Constants::FILTER_ORIGIN, Vagrant::Openshift::Constants::FILTER_IMAGES ]
+          options[:download] = false
+          options[:all] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant test-sti [machine-name]"
             o.separator ""
 
-            o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
-              options[:clean] = f
+            o.on("-a", "--all", String, "Run all tests") do |f|
+              options[:all] = true
             end
 
-            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
-              options[:source] = f
-            end
-
-            o.on("--dont-install", "Don't build and install updated source") do |f|
-              options[:no_build] = true
-            end
-
-            o.on("-i [comp comp]", "--include", String, "Sync specified components.  Default: #{options[:include].join " "}") do |f|
-              options[:include] = f.split " "
+            o.on("-d","--artifacts", String, "Download logs") do |f|
+              options[:download] = true
             end
           end
 
@@ -59,7 +48,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync_openshift3(options)
+            actions = Vagrant::Openshift::Action.run_sti_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
