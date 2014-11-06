@@ -34,7 +34,7 @@ module Vagrant
           cmds = ['hack/test-go.sh']
 
           if @options[:all]
-            cmds << 'hack/test-integration.sh'
+            cmds << 'STI_TIMEOUT="--timeout 60s" hack/test-integration.sh'
           end
 
           tests = ''
