@@ -50,7 +50,7 @@ echo '***************************************************'
 
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
-pushd #{Constants.build_dir}/origin >/dev/null
+pushd #{Constants.build_dir}/source-to-image >/dev/null
 export PATH=$GOPATH/bin:$PATH
 #{tests}
 popd >/dev/null
