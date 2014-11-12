@@ -27,8 +27,6 @@ module Vagrant
 
         def execute
           options = {}
-          options[:clean] = false
-          options[:local_source] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant push-openshift3-release --registry [registry_name] --include-base [vm-name]"

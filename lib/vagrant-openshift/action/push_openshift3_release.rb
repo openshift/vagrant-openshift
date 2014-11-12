@@ -29,6 +29,7 @@ module Vagrant
         def call(env)
           registry_name = @options[:registry_name]
           push_base = !!@options[:push_base_images]
+          env[:machine].config.ssh.pty = true
           do_execute(env[:machine], %{
 echo "Pushing release images"
 set -e
