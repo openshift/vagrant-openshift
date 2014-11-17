@@ -327,11 +327,11 @@ on the vagrant VM.
 === AWS Credentials
 
 Rather than have to add AWS credentials every time the Vagrantfile is created using origin-init command, you can
-specify your credentials in the '~/.awscreds' file and it will be automatically added to the Vagrantfile.
+specify your credentials in the '~/.awscred' file and it will be automatically added to the Vagrantfile.
 
 Example:
 
-.'~/.awscreds'
+.'~/.awscred'
 ----
 AWSAccessKeyId=<AWS API Key>
 AWSSecretKey=<AWS API Secret>
