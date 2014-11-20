@@ -61,7 +61,7 @@ class { 'openshift_origin' :
   conf_broker_auth_salt              => 'salt salt salt',
   conf_broker_multi_haproxy_per_node => true,
   conf_valid_gear_sizes              => ['small','medium'],
-  node_frontend_plugins              => ['apache-mod-rewrite','nodejs-websocket','haproxy-sni-proxy'],
+  node_frontend_plugins              => ['apache-vhost','nodejs-websocket','haproxy-sni-proxy'],
   node_unmanaged_users               => ['#{env[:machine].ssh_info[:username]}'],
   node_container_plugin              => '#{env[:machine].config.openshift.container}',"
             env[:machine].config.openshift.advanced_puppet_values.each do |k,v|
