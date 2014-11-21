@@ -19,7 +19,8 @@ module Vagrant
     class Config < Vagrant.plugin(2, :config)
       attr_accessor :cloud_domain, :ignore_packages, :additional_services, :container,
                     :advanced_puppet_values, :repos_base, :os_repo, :os_updates_repo,
-                    :jenkins_repo_base, :optional_repo, :os_extras_repo, :os_scl_repo
+                    :jenkins_repo_base, :optional_repo, :os_extras_repo, :os_scl_repo,
+                    :os_puppet_repo, :os_puppet_deps_repo
 
       def initialize
         super
@@ -35,6 +36,8 @@ module Vagrant
         @jenkins_repo_base    = UNSET_VALUE
         @optional_repo        = nil
         @os_scl_repo          = nil
+        @os_puppet_repo       = nil
+        @os_puppet_deps_repo  = nil
 
         @advanced_puppet_values = UNSET_VALUE
       end

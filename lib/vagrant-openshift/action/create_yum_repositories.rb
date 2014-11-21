@@ -46,18 +46,23 @@ module Vagrant
 
           sudo(env[:machine], "yum install -y augeas")
           if is_centos
-            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64 http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm")
+            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64 http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm")
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "base", options.os_repo)
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "updates", options.os_updates_repo)
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "extras", options.os_extras_repo)
             set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/puppetlabs.repo", "puppetlabs-products", options.os_puppet_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/puppetlabs.repo", "puppetlabs-deps", options.os_puppet_deps_repo)
             set_yum_repo(env, "/etc/yum.repos.d/CentOS-SCL.repo", "scl", options.os_scl_repo)
           end
 
           if is_rhel
+            sudo(env[:machine], "yum install -y https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm")
             set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "base", options.os_repo)
             set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "updates", options.os_updates_repo)
             set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/puppetlabs.repo", "puppetlabs-products", options.os_puppet_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/puppetlabs.repo", "puppetlabs-deps", options.os_puppet_deps_repo)
             set_yum_repo(env, "/etc/yum.repos.d/RHEL-SCL.repo", "scl", options.os_scl_repo)
 
           end
