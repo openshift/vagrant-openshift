@@ -31,12 +31,20 @@ module Vagrant
         def call(env)
           @options.delete :logs
 
-          cmds = ['OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage hack/test-go.sh']
+          if @options[:report_coverage]
+            cmds = ['OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage hack/test-go.sh']
+          else
+            cmds = ['hack/test-go.sh']
+          end
 
           if @options[:all]
             cmds << 'hack/test-integration.sh'
             cmds << 'hack/test-cmd.sh'
-            cmds << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
+            if @options[:skip_image_cleanup]
+              cmds << 'SKIP_IMAGE_CLEANUP=1 ARTIFACT_DIR=/tmp/origin/e2e/artifacts LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
+            else
+              cmds << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
+            end
           end
 
           tests = ''

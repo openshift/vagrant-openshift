@@ -41,6 +41,14 @@ module Vagrant
             o.on("-d","--artifacts", String, "Download logs") do |f|
               options[:download] = true
             end
+
+            o.on("-s","--skip-image-cleanup", String, "Skip Docker image teardown for E2E test") do |f|
+              options[:skip_image_cleanup] = true
+            end
+
+            o.on("-c","--report-coverage", String, "Generate code coverage report in Jenkins") do |f|
+              options[:report_coverage] = true
+            end
           end
 
           # Parse the options
