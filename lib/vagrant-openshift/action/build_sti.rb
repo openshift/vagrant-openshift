@@ -33,7 +33,7 @@ echo "Performing sti build..."
 set -e
 hack/verify-gofmt.sh
 hack/build-go.sh
-hack/build-images.sh
+hack/build-test-images.sh
 }
           unless @options[:force]
             cmd = sync_bash_command('source-to-image', cmd)
