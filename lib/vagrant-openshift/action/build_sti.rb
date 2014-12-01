@@ -27,22 +27,37 @@ module Vagrant
         end
 
         def call(env)
-
+          if @options[:binary_only]
+            
             cmd = %{
-echo "Performing sti build..."
+echo "Performing source-to-image build..."
+set -e
+hack/build-go.sh
+}
+          else
+            
+            cmd = %{
+echo "Performing source-to-image build..."
 set -e
 hack/verify-gofmt.sh
 hack/build-go.sh
-hack/build-test-images.sh
+hack/build-images.sh
 }
-          unless @options[:force]
+          end
+          
+          if @options[:force]
+            build_cmd = cmd
+            cmd = %{
+pushd /data/src/github.com/openshift/source-to-image
+#{build_cmd}
+popd
+}
+          else
             cmd = sync_bash_command('source-to-image', cmd)
           end
-          do_execute(env[:machine], cmd)
-
+          do_execute(env[:machine], cmd)           
           @app.call(env)
-        end
-
+        end 
       end
     end
   end

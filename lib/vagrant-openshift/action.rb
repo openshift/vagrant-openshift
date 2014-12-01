@@ -61,6 +61,12 @@ module Vagrant
         end
       end
 
+      def self.build_sti(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use BuildSti, options
+        end
+      end
+
       def self.try_restart_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use TryRestartOpenshift3
