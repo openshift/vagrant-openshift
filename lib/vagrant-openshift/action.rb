@@ -125,6 +125,7 @@ module Vagrant
             end
             b.use SyncLocalRepository
             b.use CheckoutRepositories
+            b.use InstallOpenshift3AssetDependencies
           end
           unless options[:no_build]
             b.use(BuildOpenshift3BaseImages, options) if options[:images]
