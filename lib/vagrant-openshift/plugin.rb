@@ -62,6 +62,11 @@ module Vagrant
         Commands::BuildOpenshift3
       end
 
+      command "build-sti" do
+        require_relative "command/build_sti"
+        Commands::BuildSti
+      end
+
       command "install-openshift3" do
         require_relative "command/install_openshift3"
         Commands::InstallOpenshift3

@@ -51,14 +51,19 @@ then
 fi
 }
           end
-          unless @options[:force]
+          if @options[:force]
+            build_cmd = cmd
+            cmd = %{
+pushd /data/src/github.com/openshift/origin
+#{build_cmd}
+popd
+}
+          else
             cmd = sync_bash_command('origin', cmd)
           end
-          do_execute(env[:machine], cmd)
-
+          do_execute(env[:machine], cmd) 
           @app.call(env)
         end
-
       end
     end
   end

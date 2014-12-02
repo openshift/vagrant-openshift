@@ -77,7 +77,7 @@ module Vagrant
 set -x
 
 # so we can call sti
-PATH=/data/bin:$PATH
+PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:$PATH
 
 # create a temp dir to play in
 temp_dir=$(mktemp -d /tmp/image_test.XXXXXXX)
