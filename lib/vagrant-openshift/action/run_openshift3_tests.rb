@@ -28,6 +28,33 @@ module Vagrant
           @options = options.clone
         end
 
+        def run_tests(env, cmds, as_root=true)
+          tests = ''
+          cmds.each do |cmd|
+            tests += "
+echo '***************************************************'
+echo 'Running #{cmd}...'
+time #{cmd}
+echo 'Finished #{cmd}'
+echo '***************************************************'
+"
+          end
+          cmd = %{
+set -e
+pushd #{Constants.build_dir}/origin >/dev/null
+export PATH=$GOPATH/bin:$PATH
+#{tests}
+popd >/dev/null
+        }
+          exit_code = 0
+          if as_root
+            _,_,exit_code = sudo(env[:machine], cmd, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
+          else
+            _,_,exit_code = do_execute(env[:machine], cmd, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
+          end
+          exit_code
+        end
+
         def call(env)
           @options.delete :logs
 
@@ -47,24 +74,13 @@ module Vagrant
             end
           end
 
-          tests = ''
-          cmds.each do |cmd|
-            tests += "
-echo '***************************************************'
-echo 'Running #{cmd}...'
-time #{cmd}
-echo 'Finished #{cmd}'
-echo '***************************************************'
-"
-          end
+          env[:test_exit_code] = run_tests(env, cmds, true)
 
-          _,_,env[:test_exit_code] = sudo(env[:machine], %{
-set -e
-pushd #{Constants.build_dir}/origin >/dev/null
-export PATH=$GOPATH/bin:$PATH
-#{tests}
-popd >/dev/null
-          }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
+          # any other tests that should not be run as sudo
+          if env[:test_exit_code] == 0 && @options[:all]
+            cmds = ['hack/test-assets.sh']
+            env[:test_exit_code] = run_tests(env, cmds, false)
+          end
 
           @app.call(env)
         end
