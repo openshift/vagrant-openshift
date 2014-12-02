@@ -67,6 +67,11 @@ module Vagrant
         Commands::InstallOpenshift3
       end
 
+      command "install-openshift3-assets-base" do
+        require_relative "command/install_openshift3_assets_base"
+        Commands::InstallOpenshift3AssetsBase
+      end
+
       command "try-restart-openshift3" do
         require_relative "command/try_restart_openshift3"
         Commands::TryRestartOpenshift3
