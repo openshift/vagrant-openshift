@@ -32,7 +32,7 @@ module Vagrant
             o.banner = "Usage: vagrant checkout-repos"
             o.separator ""
 
-            o.on("-b [branch_name]", "--branch [branch_name]", String, "Check out the specified branch. Default is 'master'.") do |f|
+            o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
               options[:branch] = {"origin-server" => f}
             end
 
