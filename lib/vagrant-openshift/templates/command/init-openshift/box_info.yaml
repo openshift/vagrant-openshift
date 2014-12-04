@@ -57,6 +57,9 @@
     :vmware:
       :box_name: fedora_base
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_vmware_os.box
+    :libvirt:
+      :box_name: fedora_base
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_libvirt_os.box
     :aws:
       :ami: ami-9c9376f4
       :ami_region: us-east-1
@@ -74,6 +77,9 @@
     :vmware:
       :box_name: fedora_deps
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_vmware_deps.box
+    :libvirt:
+      :box_name: fedora_deps
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_libvirt_deps.box
     :aws:
       :ami: ami-a8a94fc0
       :ami_region: us-east-1
@@ -91,6 +97,9 @@
     :vmware:
       :box_name: fedora_inst
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_vmware_inst.box
+    :libvirt:
+      :box_name: fedora_inst
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_libvirt_inst.box
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1

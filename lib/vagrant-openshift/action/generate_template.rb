@@ -66,6 +66,8 @@ module Vagrant
               'os' => os,
               'dev_cluster' => false,
               'num_minions' => 2,
+              'cpus' => 2,
+              'memory' => 1024,
               'rebuild_yum_cache' => false,
               'sync_to' => '/data/src',
               'sync_from' => "#{gopath}/src",
@@ -76,6 +78,10 @@ module Vagrant
               'vmware' => {
                 'box_name' => box_info[:vmware][:box_name],
                 'box_url' => box_info[:vmware][:box_url]
+              },
+              'libvirt' => {
+                'box_name' => box_info[:libvirt][:box_name],
+                'box_url' => box_info[:libvirt][:box_url]
               },
               'aws' => {
                   'ami' => box_info[:aws][:ami],
