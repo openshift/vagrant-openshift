@@ -60,6 +60,7 @@ class { 'openshift_origin' :
   broker_auth_plugin                 => 'htpasswd',
   conf_broker_auth_salt              => 'salt salt salt',
   conf_broker_multi_haproxy_per_node => true,
+  conf_broker_require_districts      => false,
   conf_valid_gear_sizes              => ['small','medium'],
   node_frontend_plugins              => ['apache-vhost','nodejs-websocket','haproxy-sni-proxy'],
   node_unmanaged_users               => ['#{env[:machine].ssh_info[:username]}'],
