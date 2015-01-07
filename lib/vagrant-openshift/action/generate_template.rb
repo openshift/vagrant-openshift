@@ -109,7 +109,8 @@ module Vagrant
           return if box_info[:aws][:ami_tag_prefix].nil?
           @env[:ui].info("Reading AWS credentials from #{@aws_creds_file.to_s}")
           if @aws_creds_file.exist?
-            aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.split('=') }.flatten.map{ |i| i.strip })] : {}
+            aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.strip!
+                                                          l.split('=') }.flatten)] : {}
 
             fog_config = {
                 :provider              => :aws,
