@@ -97,28 +97,19 @@ git checkout #{ref}
 # get git sha1
 git_sha1=`git rev-parse --short #{ref}`
 
-# grab the latest image from the index
-docker pull #{image}:latest
+# Build the STI image we use for testing
+docker build -t #{image}-candidate .
+status=$?
 
-status=0
-
-# build and test the sample app, if it exists
-if [ -d test-app -a -f .sti/bin/test ]; then
-  # build
-  sti build test-app #{image} #{app_name} --clean
+# Run the STI image test framework
+if [ $status -eq 0 ]; then
+  IMAGE_NAME=#{image}-candidate ./test/run
   status=$?
-
-  if [ $status -eq 0 ]; then
-    # run tests
-    docker run --rm -v $temp_dir/#{source_dir}/.sti/bin:/tmp/sti #{app_name} /tmp/sti/test
-
-    status=$?
-  fi
 fi
 
 if [ $status -eq 0 ]; then
   # get the image id
-  image_id=`docker inspect --format="{{ .Id }}" #{image}:latest`
+  image_id=`docker inspect --format="{{ .Id }}" #{image}-candidate:latest`
 
   # tag it devenv-ready
   docker tag $image_id #{image}:devenv-ready
