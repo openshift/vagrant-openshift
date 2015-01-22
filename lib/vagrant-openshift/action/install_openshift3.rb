@@ -32,7 +32,7 @@ set -x
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
-export PATH=$GOPATH/bin:$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/go/bin:$PATH
+export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
 DELIM
 
 source /etc/profile.d/openshift.sh
