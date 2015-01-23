@@ -33,6 +33,7 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
+export KUBERNETES_MASTER=http://localhost:8080
 DELIM
 
 source /etc/profile.d/openshift.sh
@@ -51,7 +52,7 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/profile.d/openshift.sh
-ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start
+ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --listen=http://0.0.0.0:8080
 
 [Install]
 WantedBy=multi-user.target
