@@ -43,7 +43,7 @@ $ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
 $ source ~/.bash_profile
 $ cd $GOPATH
 $ vagrant openshift3-local-checkout -u <github username>
-$ cd github.com/src/openshift/origin
+$ cd src/github.com/openshift/origin
 ----
 
 
