@@ -21,22 +21,6 @@ module Vagrant
     module Action
       include Vagrant::Action::Builtin
 
-      def self.build_openshift2_base(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use CreateYumRepositories
-          b.use YumUpdate
-          b.use InstallOpenshift2BuildDependencies
-          b.use SetupBuilderFiles
-          b.use CleanOpenshift2
-          b.use CloneUpstreamRepositories
-          b.use SetHostName
-          b.use SetupBindDnsKey
-          b.use CheckoutRepositories
-          b.use InstallOpenshift2BaseDependencies
-          b.use CreateOpenshift2PuppetFile
-        end
-      end
-
       def self.build_openshift3_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
@@ -86,35 +70,6 @@ module Vagrant
         end
       end
 
-      def self.repo_sync_openshift2(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:clean]
-            b.use CleanOpenshift2
-            b.use SetupBuilderFiles
-            b.use CreateOpenshift2PuppetFile
-            if options[:local_source]
-              b.use CreateBareRepoPlaceholders
-            else
-              b.use CloneUpstreamRepositories
-            end
-          end
-
-          if options[:local_source]
-            b.use SyncLocalRepository
-          else
-            b.use SyncUpstreamRepository
-          end
-          b.use CheckoutRepositories
-          b.use InstallOpenshift2BaseDependencies if options[:deps]
-          b.use UninstallOpenshift2Rpms if options[:clean]
-          b.use BuildOpenshift2 unless options[:no_build]
-          if options[:download]
-            b.use DownloadArtifactsOpenshift2
-          end
-        end
-      end
-
       def self.repo_sync_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -152,33 +107,11 @@ module Vagrant
         end
       end
 
-      def self.local_openshift2_checkout(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          if not options[:no_build]
-            b.use LocalOpenshift2Checkout, options
-          end
-        end
-      end
-
       def self.local_openshift3_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
             b.use LocalOpenshift3Checkout, options
           end
-        end
-      end
-
-      def self.run_openshift2_tests(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use CreateOpenshift2TestUsers
-          b.use PreserveMcollectiveLogs
-          b.use IdleAllGearsOpenshift2
-          b.use CheckoutOpenshift2Tests
-          b.use RunOpenshift2Tests, options
-          if options[:download]
-            b.use DownloadArtifactsOpenshift2
-          end
-          b.use TestExitCode
         end
       end
 
@@ -258,19 +191,13 @@ module Vagrant
       end
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
-      autoload :CleanOpenshift2, action_root.join("clean_openshift2")
       autoload :Clean, action_root.join("clean")
-      autoload :UninstallOpenshift2Rpms, action_root.join("uninstall_openshift2_rpms")
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
       autoload :CreateYumRepositories, action_root.join("create_yum_repositories")
-      autoload :CreateOpenshift2PuppetFile, action_root.join("create_openshift2_puppet_file")
-      autoload :InstallOpenshift2BaseDependencies, action_root.join("install_openshift2_base_dependencies")
       autoload :CheckoutRepositories, action_root.join("checkout_repositories")
       autoload :SetupBindDnsKey, action_root.join("setup_bind_dns_key")
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
-      autoload :SetupBuilderFiles, action_root.join("setup_builder_files")
-      autoload :InstallOpenshift2BuildDependencies, action_root.join("install_openshift2_build_dependencies")
       autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
       autoload :InstallOpenshift3AssetDependencies, action_root.join("install_openshift3_asset_dependencies")
       autoload :BuildOpenshift3BaseImages, action_root.join("build_openshift3_base_images")
@@ -282,27 +209,18 @@ module Vagrant
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
-      autoload :BuildOpenshift2, action_root.join("build_openshift2")
-      autoload :LocalOpenshift2Checkout, action_root.join("local_openshift2_checkout")
       autoload :LocalOpenshift3Checkout, action_root.join("local_openshift3_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
-      autoload :CreateOpenshift2TestUsers, action_root.join("create_openshift2_test_users")
-      autoload :IdleAllGearsOpenshift2, action_root.join("idle_all_gears_openshift2")
-      autoload :PreserveMcollectiveLogs, action_root.join("preserve_mcollective_logs")
-      autoload :RunOpenshift2Tests, action_root.join("run_openshift2_tests")
       autoload :RunOpenshift3Tests, action_root.join("run_openshift3_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")
-      autoload :CheckoutOpenshift2Tests, action_root.join("checkout_openshift2_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
-      autoload :DownloadArtifactsOpenshift2, action_root.join("download_artifacts_openshift2")
       autoload :DownloadArtifactsOpenshift3, action_root.join("download_artifacts_openshift3")
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
-      autoload :InstallRhc, action_root.join("install_rhc")
       autoload :SetupBindHost, action_root.join("setup_bind_host")
     end
   end

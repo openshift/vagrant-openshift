@@ -20,20 +20,7 @@ module Vagrant
     class Constants
 
       def self.repos(env)
-        is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
-        if is_fedora
-          openshift3_repos
-        else
-          openshift2_repos
-        end
-      end
-
-      def self.openshift2_repos
-        {
-          'origin-server' => 'https://github.com/openshift/origin-server.git',
-          'rhc' => 'https://github.com/openshift/rhc.git',
-          'puppet-openshift_origin' => 'https://github.com/openshift/puppet-openshift_origin.git'
-        }
+        openshift3_repos
       end
 
       def self.openshift3_repos
@@ -72,48 +59,10 @@ module Vagrant
         Pathname.new "/data/src/github.com/openshift/"
       end
 
-      def self.deps_marker
-        Pathname.new "/.origin_deps_installed"
-      end
-
       def self.git_ssh
         ""
       end
 
-      def self.restart_services_cmd(is_fedora)
-        services = [ 'mongod', 'activemq', 'cgconfig', 'cgred', 'named',
-                     'openshift-broker', 'openshift-console',
-                     'openshift-node-web-proxy', 'openshift-watchman',
-                     'sshd', 'httpd' ]
-
-        if(is_fedora)
-          services << 'mcollective'
-        else
-          services << 'ruby193-mcollective'
-        end
-
-        cmd = []
-        cmd += services.map do |service|
-          "/sbin/service #{service} stop;"
-        end
-        cmd << "rm -f /var/www/openshift/broker/httpd/run/httpd.pid;"
-        cmd << "rm -f /var/www/openshift/console/httpd/run/httpd.pid;"
-        cmd += services.map do |service|
-          "/sbin/service #{service} start;"
-        end
-        cmd << "rm -rf /var/www/openshift/broker/tmp/cache/*;"
-        cmd << "/etc/cron.minutely/openshift-facts;"
-        cmd << "/sbin/service openshift-tc start || /sbin/service openshift-tc reload;"
-        if(is_fedora)
-          cmd << "/sbin/service network reload;"
-        else
-          cmd << "/sbin/service network restart;"
-        end
-        cmd << "/sbin/service messagebus restart;"
-        cmd << "/sbin/service oddjobd restart;"
-
-        cmd
-      end
     end
   end
 end

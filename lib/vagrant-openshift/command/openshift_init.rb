@@ -28,13 +28,13 @@ module Vagrant
         def execute
           options = {
             :no_base  => false,
-            :os       => 'centos6',
+            :os       => 'centos7',
             :stage    => 'inst',
             :port_mappings => []
           }
 
           valid_stage = ['os','deps','inst']
-          valid_os = ['centos6','fedora','rhel6']
+          valid_os = ['centos7','fedora','rhel7']
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
@@ -44,11 +44,11 @@ module Vagrant
               options[:stage] = f
             end
 
-            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos6 [default]\n\tfedora\n\trhel6") do |f|
+            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos7 [default]\n\tfedora\n\trhel7") do |f|
               options[:os] = f
             end
 
-            o.on("-p [guest_port:host_port]", "--map-port [guest_port:host_port]", String, "When running on Virtualbox, map port from guest docker vm to host machine") do |f|
+            o.on("-p [guest_port:host_port]", "--map-port [guest_port:host_port]", String, "When running on VirtualBox, map port from guest docker vm to host machine") do |f|
               options[:port_mappings].push(f.split(":"))
             end
           end

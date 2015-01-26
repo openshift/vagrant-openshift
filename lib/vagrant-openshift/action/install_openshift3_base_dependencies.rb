@@ -60,8 +60,6 @@ systemctl enable docker
 systemctl start docker
 
 docker pull openshift/docker-registry
-
-touch #{Vagrant::Openshift::Constants.deps_marker}
           }, {:timeout=>60*20})
           @app.call(env)
         end

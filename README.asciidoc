@@ -91,6 +91,8 @@ $ vagrant test-openshift3 --all
 
 === Getting started with Openshift v2
 
+Note: v2 (aka M4) is not longer supported on the master branch or in the published rubygems.org version of this plugin.  You must checkout the v2 branch of this repository in order to use the plugin with v2.
+
 ==== Clone the OpenShift Origin repositories
 
 [source, sh]
