@@ -1,54 +1,48 @@
 ---
-:centos6:
+:centos7:
   :os:
     :virtualbox:
-      :box_name: centos_65_virtualbox_base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_base.box
-    :vmware:
-      :box_name: centos_65_vmware_base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_base.box
-    :aws:
-      :ami: ami-8f9d81e6
-      :ami_region: us-east-1
-      :ssh_user: root
-      :machine_name: origin-centos-65-base
-      :ebs_volume_size: 25
-    :openstack:
-      :image: centos-6.5-20140117.0.x86_64
-      :ssh_username: cloud-user
-  :deps:
-    :virtualbox:
-      :box_name: centos_65_virtualbox_deps
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_virtualbox_deps.box
-    :vmware:
-      :box_name: centos_65_vmware_deps
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_65_vmware_deps.box
-    :aws:
-      :ami: ami-100ec478
-      :ami_tag_prefix: origin-centos-65-deps_
-      :ami_region: us-east-1
-      :ssh_user: root
-      :machine_name: origin-centos-65-deps
-      :ebs_volume_size: 25
-    :openstack:
-      :image: n/a
-      :ssh_username: cloud-user
-  :inst:
-    :virtualbox:
-      :box_name: n/a
-      :box_url: n/a
+      :box_name: centos_7_virtualbox_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_7_virtualbox_base.box
     :vmware:
       :box_name: n/a
       :box_url: n/a
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ssh_user: root
+      :ssh_user: centos
+      :machine_name: origin-centos-7-base
+      :ebs_volume_size: 25
+      :ami_tag_prefix: openshift-centos7_
+  :deps:
+    :virtualbox:
+      :box_name: centos_7_virtualbox_deps
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_7_virtualbox_deps.box
+    :vmware:
+      :box_name: n/a
+      :box_url: n/a
+    :aws:
+      :ami: <AMI_ID>
+      :ami_tag_prefix: origin-centos-7-deps_
+      :ami_region: us-east-1
+      :ssh_user: centos
+      :machine_name: origin-centos-7-deps
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-centos7-base_
+  :inst:
+    :virtualbox:
+      :box_name: centos_7_virtualbox_inst
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_7_virtualbox_inst.box
+    :vmware:
+      :box_name: n/a
+      :box_url: n/a
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: centos
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
-    :openstack:
-      :image: n/a
-      :ssh_username: cloud-user
+      :ami_tag_prefix: devenv-centos7_
 :fedora:
   :os:
     :virtualbox:
@@ -61,15 +55,12 @@
       :box_name: fedora_base
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_libvirt_os.box
     :aws:
-      :ami: ami-9c9376f4
+      :ami: <AMI_ID>
       :ami_region: us-east-1
       :ssh_user: fedora
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-fedora_
-    :openstack:
-      :image: "Fedora 20 official release"
-      :ssh_username: fedora
   :deps:
     :virtualbox:
       :box_name: fedora_deps
@@ -81,15 +72,12 @@
       :box_name: fedora_deps
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_20_libvirt_deps.box
     :aws:
-      :ami: ami-a8a94fc0
+      :ami: <AMI_ID>
       :ami_region: us-east-1
       :ssh_user: fedora
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora-base_
-    :openstack:
-      :image: n/a
-      :ssh_username: fedora
   :inst:
     :virtualbox:
       :box_name: fedora_inst
@@ -107,10 +95,7 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora_
-    :openstack:
-      :image: n/a
-      :ssh_username: fedora
-:rhel6:
+:rhel7:
   :os:
     :virtualbox:
       :box_name: n/a
@@ -124,9 +109,6 @@
       :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
-    :openstack:
-      :image: rhel-guest-image-6.5-20140603.0
-      :ssh_username: cloud-user
   :deps:
     :virtualbox:
       :box_name: n/a
@@ -140,9 +122,6 @@
       :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
-    :openstack:
-      :image: n/a
-      :ssh_username: cloud-user
   :inst:
     :virtualbox:
       :box_name: n/a
@@ -156,6 +135,3 @@
       :ssh_user: root
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
-    :openstack:
-      :image: n/a
-      :ssh_username: cloud-user

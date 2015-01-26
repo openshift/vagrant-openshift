@@ -19,9 +19,6 @@ require "timeout"
 module Vagrant
   module Openshift
     module CommandHelper
-      def scl_wrapper(is_fedora, command)
-        is_fedora ? command : %{scl enable ruby193 "#{command}"}
-      end
 
       def sudo(machine, command, options={})
         stdout = []
