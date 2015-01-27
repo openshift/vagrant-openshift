@@ -46,7 +46,7 @@ setenforce 0
 
 usermod -a -G docker #{ssh_user}
 
-sed -i "s,^OPTIONS='\(.*\)',OPTIONS='\1 --insecure-registry=172.121.17.1:5001 --insecure-registry=172.121.17.3:5001 --insecure-registry=\"172.121.17.0/24\" --insecure-registry=\"172.30.17.0/24\"'," /etc/sysconfig/docker
+sed -i "s,^OPTIONS='\(.*\)',OPTIONS='--insecure-registry=\"172.121.17.0/24\" --insecure-registry=\"172.30.17.0/24\" \1'," /etc/sysconfig/docker
 
 # Force socket reuse
 echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
