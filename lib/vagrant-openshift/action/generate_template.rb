@@ -67,25 +67,25 @@ module Vagrant
             'memory' => 1024,
             'rebuild_yum_cache' => false,
             'sync_to' => '/data/src',
-            'sync_from' => "#{gopath}/src",
-            'virtualbox' => {
-              'box_name' => box_info[:virtualbox][:box_name],
-              'box_url' => box_info[:virtualbox][:box_url]
-            },
-            'vmware' => {
-              'box_name' => box_info[:vmware][:box_name],
-              'box_url' => box_info[:vmware][:box_url]
-            },
-            'libvirt' => {
-              'box_name' => box_info[:libvirt][:box_name],
-              'box_url' => box_info[:libvirt][:box_url]
-            },
-            'aws' => {
-                'ami' => box_info[:aws][:ami],
-                'ami_region' => box_info[:aws][:ami_region],
-                'ssh_user' => box_info[:aws][:ssh_user]
-            }
+            'sync_from' => "#{gopath}/src"
           }
+          vagrant_openshift_config['virtualbox'] = {
+            'box_name' => box_info[:virtualbox][:box_name],
+            'box_url' => box_info[:virtualbox][:box_url]
+          } if box_info[:virtualbox]
+          vagrant_openshift_config['vmware'] = {
+            'box_name' => box_info[:vmware][:box_name],
+            'box_url' => box_info[:vmware][:box_url]
+          } if box_info[:vmware]
+          vagrant_openshift_config['libvirt'] = {
+            'box_name' => box_info[:libvirt][:box_name],
+            'box_url' => box_info[:libvirt][:box_url]
+          } if box_info[:libvirt]
+          vagrant_openshift_config['aws'] = {
+            'ami' => box_info[:aws][:ami],
+            'ami_region' => box_info[:aws][:ami_region],
+            'ssh_user' => box_info[:aws][:ssh_user]
+          } if box_info[:aws]
 
           File.open(".vagrant-openshift.json","w") do |f|
             f.write(JSON.pretty_generate(vagrant_openshift_config))
