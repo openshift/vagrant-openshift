@@ -3,7 +3,7 @@
   :os:
     :virtualbox:
       :box_name: centos_7_virtualbox_base
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos_7_virtualbox_base.box
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/centos7_virtualbox_base.box
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
