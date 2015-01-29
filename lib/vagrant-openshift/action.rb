@@ -32,7 +32,6 @@ module Vagrant
 
       def self.install_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use CreateYumRepositories
           b.use YumUpdate
           b.use SetHostName
           b.use InstallOpenshift3
