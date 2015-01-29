@@ -2,7 +2,7 @@
 :centos7:
   :os:
     :virtualbox:
-      :box_name: centos_7_virtualbox_base
+      :box_name: centos7_virtualbox_base
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_os.box
     :aws:
       :ami: <AMI_ID>
@@ -13,7 +13,7 @@
       :ami_tag_prefix: openshift-centos7_
   :deps:
     :virtualbox:
-      :box_name: centos_7_virtualbox_deps
+      :box_name: centos7_virtualbox_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_deps.box
     :aws:
       :ami: <AMI_ID>
@@ -25,7 +25,7 @@
       :ami_tag_prefix: devenv-centos7-base_
   :inst:
     :virtualbox:
-      :box_name: centos_7_virtualbox_inst
+      :box_name: centos7_virtualbox_inst
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_inst.box
     :aws:
       :ami: <AMI_ID>
