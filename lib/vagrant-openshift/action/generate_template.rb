@@ -87,6 +87,11 @@ module Vagrant
             'ami_region' => box_info[:aws][:ami_region],
             'ssh_user' => box_info[:aws][:ssh_user]
           } if box_info[:aws]
+          vagrant_openshift_config['openstack'] = {
+            'image' => box_info[:openstack][:image],
+            'flavor' => box_info[:openstack][:flavor],
+            'ssh_user' => box_info[:openstack][:ssh_user]
+          } if box_info[:openstack]
 
           File.open(".vagrant-openshift.json","w") do |f|
             f.write(JSON.pretty_generate(vagrant_openshift_config))
