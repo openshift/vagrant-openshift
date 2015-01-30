@@ -28,7 +28,7 @@ module Vagrant
         def execute
           options = {}
           options[:images] = true
-          options[:no_build] = false
+          options[:build] = true
           options[:clean] = false
           options[:source] = false
 
@@ -36,16 +36,20 @@ module Vagrant
             o.banner = "Usage: vagrant sync-openshift3 [vm-name]"
             o.separator ""
 
-            o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
-              options[:clean] = f
-            end
-
             o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
               options[:source] = f
             end
 
+            o.on("-c", "--clean", "Delete existing repo before syncing source") do |f|
+              options[:clean] = f
+            end
+
             o.on("--dont-install", "Don't build and install updated source") do |f|
-              options[:no_build] = true
+              options[:build] = false
+            end
+
+            o.on("--no-images", "Don't build updated component Docker images") do |f|
+              options[:images] = false
             end
 
           end

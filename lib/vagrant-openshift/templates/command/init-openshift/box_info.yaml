@@ -4,6 +4,9 @@
     :virtualbox:
       :box_name: centos7_base
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_os.box
+    :libvirt:
+      :box_name: centos7_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_libvirt_os.box
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
@@ -11,10 +14,17 @@
       :machine_name: openshift-centos7
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-centos7_
+    :openstack:
+      :image: <CentOS 7>
+      :flavor: m1.small
+      :ssh_user: centos
   :deps:
     :virtualbox:
       :box_name: centos7_deps
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_deps.box
+    :libvirt:
+      :box_name: centos7_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_libvirt_deps.box
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
@@ -22,10 +32,17 @@
       :machine_name: devenv-centos7-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-centos7-base_
+    :openstack:
+      :image: <CentOS 7>
+      :flavor: m1.small
+      :ssh_user: centos
   :inst:
     :virtualbox:
       :box_name: centos7_inst
       :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_inst.box
+    :libvirt:
+      :box_name: centos7_base
+      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_libvirt_inst.box
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
@@ -33,6 +50,10 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-centos7_
+    :openstack:
+      :image: <CentOS 7>
+      :flavor: m1.small
+      :ssh_user: centos
 :fedora:
   :os:
     :virtualbox:
@@ -45,6 +66,13 @@
       :machine_name: openshift-fedora
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-fedora_
+    :openstack:
+      :image: <Fedora>
+      :flavor: m1.small
+      :ssh_user: fedora
+    :libvirt:
+      :box_name: fedora_base
+      :box_url: https://download.gluster.org/pub/gluster/purpleidea/vagrant/fedora-20/fedora-20.box
   :deps:
     :virtualbox:
       :box_name: fedora_deps
@@ -56,6 +84,13 @@
       :machine_name: devenv-fedora-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora-base_
+    :openstack:
+      :image: <Fedora>
+      :flavor: m1.small
+      :ssh_user: fedora
+    :libvirt:
+      :box_name: fedora_deps
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_libvirt_deps.box
   :inst:
     :virtualbox:
       :box_name: fedora_inst
@@ -67,6 +102,13 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-fedora_
+    :openstack:
+      :image: <Fedora>
+      :flavor: m1.small
+      :ssh_user: fedora
+    :libvirt:
+      :box_name: fedora_inst
+      :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_libvirt_inst.box
 :rhel7:
   :os:
     :aws:
@@ -76,6 +118,10 @@
       :machine_name: openshift-rhel7
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-rhel7_
+    :openstack:
+      :image: <RHEL 7>
+      :flavor: m1.small
+      :ssh_user: root
   :deps:
     :aws:
       :ami: <AMI_ID>
@@ -84,6 +130,10 @@
       :machine_name: devenv-rhel7-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7-base_
+    :openstack:
+      :image: <RHEL 7>
+      :flavor: m1.small
+      :ssh_user: root
   :inst:
     :aws:
       :ami: <AMI_ID>
@@ -92,3 +142,7 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7_
+    :openstack:
+      :image: <RHEL 7>
+      :flavor: m1.small
+      :ssh_user: root

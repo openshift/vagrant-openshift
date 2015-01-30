@@ -81,7 +81,7 @@ module Vagrant
             b.use CheckoutRepositories
             b.use InstallOpenshift3AssetDependencies
           end
-          unless options[:no_build]
+          if options[:build]
             b.use(BuildOpenshift3BaseImages, options) if options[:images]
             b.use(BuildOpenshift3, options)
             b.use(TryRestartOpenshift3)

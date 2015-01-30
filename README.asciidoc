@@ -1,19 +1,33 @@
 == OpenShift Origin Build Tools
 
-This is a link:http://www.vagrantup.com[Vagrant] 1.2+ plugin that adds command and provisioner to
+This is a link:http://www.vagrantup.com[Vagrant] 1.2+ plugin that adds vagrant commands and provisioners to
 build and test link:http://openshift.github.io[OpenShift Origin].
 
-NOTE: This plugin requires Vagrant 1.2+
+NOTE: This plugin requires link:https://www.vagrantup.com/downloads.html[Vagrant 1.2+]
+
+NOTE: Instructions below generally assume a Linux-like command line and may require modifications for other environments.
 
 === Features
 
-* Compatible with VMs run via link:https://www.virtualbox.org[VirtualBox], link:https://github.com/mitchellh/vagrant-aws[AWS]
+* Compatible with VMs run via link:https://www.virtualbox.org[VirtualBox], link:https://github.com/mitchellh/vagrant-aws[AWS],
+  link:https://github.com/pradels/vagrant-libvirt[libvirt], link:https://github.com/cloudbau/vagrant-openstack-plugin[OpenStack],
   or link:https://github.com/tknerr/vagrant-managed-servers[managed] providers.
 * Provides commands to install build dependencies, sync repositories, and run tests
 
+===== Using with Openshift v2
+
+v2 (aka M4) is no longer supported on the master branch or in the
+published rubygems.org version of this plugin.  You must checkout the
+link:https://github.com/openshift/vagrant-openshift/tree/v2[v2 branch of this repository]
+in order to use the plugin with v2 and follow the documentation there.
+
 === Installing
 
-To work on the *vagrant-openshift* plugin, clone this repository out, and use
+Like other plugins, this gem will be installed in your `~/.vagrant.d/gems/` directory.
+
+===== From source
+
+To work on the *vagrant-openshift* plugin, clone this repository and use
 link:http://gembundler.com[Bundler] to get the dependencies:
 
 [source, sh]
@@ -21,65 +35,92 @@ link:http://gembundler.com[Bundler] to get the dependencies:
 $ bundle
 ----
 
-Install prereq plugins to Vagrant
-----
-$ vagrant plugin install vagrant-aws
-----
-
-Compile an install the plugin using Rake
+Compile and install using Rake:
 
 [source, sh]
 ----
 $ rake vagrant:install
 ----
 
+===== From rubygems.org
+
+Install the published version of this plugin:
+
+[source, sh]
+----
+$ vagrant plugin install vagrant-openshift
+----
+
 === Getting started with Openshift v3
+
+This plugin works in concert with the
+link:https://github.com/openshift/origin/blob/master/Vagrantfile[OpenShift Origin Vagrantfile]
+to build and update OpenShift v3 development environments.
 
 ==== Clone the OpenShift Origin repositories
 
+The upstream OpenShift Origin projects will be git-cloned locally
+under your GOPATH (you don't need to have golang or other build
+requirements installed locally).  These will be set as the git "upstream"
+remote. Projects you have forked into your github account will also have
+that account as the git "origin" remote.
+
+Add your GOPATH if you don't already have one for golang:
 [source, sh]
 ----
 $ echo "export GOPATH=~/code" >> ~/.bash_profile   # ~/code can be any dir
 $ source ~/.bash_profile
+$ mkdir -p $GOPATH
+----
+
+Then clone the repositories into your GOPATH.
+[source, sh]
+----
 $ cd $GOPATH
 $ vagrant openshift3-local-checkout -u <github username>
 $ cd src/github.com/openshift/origin
 ----
 
+==== Initialize local vagrant conf
 
-==== Initialize the Vagrantfile
-
-Generate a .vagrant-openshift.json it to match your requirements:
+Generate a `.vagrant-openshift.json` in your OpenShift Origin repo that
+you may modify later to match your vagrant requirements:
 
 [source, sh]
 ----
 $ vagrant origin-init --stage inst --os fedora <instance name>
 ----
 
-
 ==== Start the machine
 
 ===== VirtualBox
 
-Running with the default VirtualBox provider
+Running with the default VirtualBox provider:
 
 [source, sh]
 ----
 vagrant up
 ----
 
-Note: See Other Environments below for launching against other options.
+NOTE: See link:#other-providers[Other Providers] below for launching VMs from other providers.
 
 
 ==== Making Subsequent Changes
 
-* Syncing and building code from local repository clones
+* Building updated code from edits in your local repository clones:
 
 [source, sh]
 ----
 $ vagrant sync-openshift3
 ----
 
+For some providers, your local repositories are automatically synchronized
+to the remote VM. If not, the `--source` option can be used to do so
+before building.
+
+In addition to the OpenShift binary itself, by default a number of
+component Docker images are built as well, which can take a long time. To
+rebuild only the OpenShift binary, use the `--no-images` option.
 
 ==== Running Tests
 
@@ -89,78 +130,65 @@ $ vagrant test-openshift3 --all
 ----
 
 
-=== Getting started with Openshift v2
+=== Developer environment
 
-Note: v2 (aka M4) is not longer supported on the master branch or in the published rubygems.org version of this plugin.  You must checkout the v2 branch of this repository in order to use the plugin with v2.
+To enable easy customization of the build environment, any files placed under '\~/.openshiftdev/home.d' will be copied to
+the vagrant user home directory. For example: '~/.openshiftdev/home.d/.bash_profile' will be copied to '.bash_profile'
+on the vagrant VM.
 
-==== Clone the OpenShift Origin repositories
+
+=== Other Providers
+
+Your origin repo Vagrantfile can use other providers than the default
+VirtualBox provider for creating VMs. Provider configuration consults
+outside configuration files so that the repository Vagrantfile does not
+have to be modified in most cases. See the relevant provider section in
+the Vagrantfile to learn what parameters are available.
+
+If you are starting with a plain operating system host image (which is
+likely to be the case) then you have a bit of setup to do to prepare
+your host for building and running after creation. Consult the
+link:#initial-setup[Initial Setup] section for details.
+
+==== AWS/EC2
+
+* Install the latest vagrant-aws plugin.
+
+Install plugin from rubygems:
+----
+$ vagrant plugin install vagrant-aws
+----
+
+Or follow the link:https://github.com/mitchellh/vagrant-aws/blob/master/README.md#development[build steps] to build from source.
+
+You now need some AWS-specific configuration to specify which AMI to use.
+
+* Ensure your AWS credentials file is present at `~/.awscred`; it should have the following entries filled in:
+
+.'~/.awscred'
+----
+AWSAccessKeyId=<AWS API Key>
+AWSSecretKey=<AWS API Secret>
+AWSKeyPairName=<Keypair name>
+AWSPrivateKeyPath=<SSH Private key>
+----
+
+* Re-create your `.vagrant-openshift.json` file with updated AWS settings:
 
 [source, sh]
 ----
-$ vagrant openshift2-local-checkout -u <github username>
+$ vagrant origin-init --stage inst --os fedora <instance name>
 ----
 
-This will clone several repositories from link:http://www.github.com[GitHub] and link them against the upstream repositories.
+The instance name will be applied as a tag and should generally be
+specific to you and OpenShift so that you can identify the VM among any
+others in your account. It will be stored in the config file.
 
-NOTE: Skip this step if building upstream code
-
-==== Initialize the Vagrantfile
-
-Create a Vagrantfile and customize it to match your requirements:
-
-[source, sh]
-----
-$ vagrant origin-init --stage inst --os centos6 <instance name>
-----
-
-==== Start the machine
-
-===== VirtualBox
-
-Running with the default VirtualBox provider
-
-[source, sh]
-----
-vagrant up
-----
-
-Note: See Other Environments below for launching against other options.
-
-
-==== Making Subsequent Changes
-
-* Syncing and building code from local repository clones
-
-[source, sh]
-----
-$ vagrant sync-openshift2
-----
-
-
-==== Running Tests
-
-[source, sh]
-----
-$ vagrant test-openshift2 --all
-----
-
-
-== Other Notes
-
-==== Other Environments
-
-===== AWS/EC2
-
-* Install the latest vagrant-aws plugin. Follow the link:https://github.com/mitchellh/vagrant-aws/blob/master/README.md#development[build steps].
-
-* Edit the Vagrantfile and update your EC2 credentials.
-
-----
-aws.access_key_id = "<API KEY>"
-aws.secret_access_key = "<API SECRET>"
-aws.keypair_name = "<SSH KEY NAME>"
-override.ssh.private_key_path = "<PRIVATE KEY FILE>"
-----
+The Red Hat OpenShift team shares an account that provides pre-built
+AMIs for the quickest startup possible, so this command will search for
+the latest version of that AMI. If your account doesn't have this AMI, you'll need to supply
+a base AMI in your repository's `.vagrant-openshift.json` file under the
+`aws.ami` key.
 
 * Start the AWS machine
 
@@ -174,19 +202,38 @@ NOTE: Requires latest link:https://github.com/mitchellh/vagrant-aws[AWS] provide
 NOTE: You can use the link:https://github.com/mikery/vagrant-ami[Vagrant-AMI] plugin to create an AMI from a running AWS machine.
 
 
-===== OpenStack
+==== OpenStack
 
 * Install the latest vagrant-openstack-plugin. See: https://github.com/cloudbau/vagrant-openstack-plugin.
 
-* Edit the Vagrantfile and update your OpenStack credentials, endpoint and tenant (They can be read automatically from ~/.openstackcred).
-
+Install plugin from rubygems:
 ----
-os.endpoint                   = "<OPENSTACK ENDPOINT URL>"
-os.tenant                     = "<OPENSTACK TENANT>"
-os.username                   = "<OPENSTACK USERNAME>"
-os.api_key                    = "<OPENSTACK PASSWORD>"
-os.keypair_name               = "<OPENSTACK KEYPAIR NAME>"
-override.ssh.private_key_path = "<PRIVATE KEY FILE>"
+$ vagrant plugin install vagrant-openstack-plugin
+----
+
+* Edit `~/.openstackcred` and update your OpenStack credentials, endpoint and tenant name.
+
+.'~/.openstackcred'
+----
+OSEndpoint=<OpenStack Endpoint URL>
+OSUsername=<OpenStack Username>
+OSAPIKey=<OpenStack Password>
+OSKeyPairName=<Keypair name>
+OSPrivateKeyPath=<SSH Private key path>
+OSTenant=<OpenStack Tenant Name>
+----
+
+* Edit `.vagrant-openshift.json` and update the openstack provider
+  section. You'll need to indicate at least the base image and host flavor
+  you'd like to start, as well as the user to access with.
+
+.'.vagrant-openshift.json'
+----
+  "openstack": {
+    "image": "Fedora-Cloud-Base-20141203-21.x86_64",
+    "flavor": "m1.small",
+    "ssh_user": "fedora"
+  }
 ----
 
 * Start the OpenStack machine
@@ -199,7 +246,7 @@ vagrant up --provider=openstack
 NOTE: Requires latest link:https://github.com/cloudbau/vagrant-openstack-plugin[OpenStack] provider.
 
 
-===== LibVirt
+==== LibVirt
 
 * Install the vagrant-libvirt plugin dependencies
 
@@ -214,6 +261,14 @@ yum install libxslt-devel libxml2-devel libvirt-devel
 ----
 vagrant plugin install vagrant-libvirt
 ----
+
+NOTE: This may require modifying the system linker as described in
+      link:https://github.com/mitchellh/vagrant/issues/5118[this issue]:
+
+----
+# alternatives --set ld /usr/bin/ld.gold
+----
+
 
 * Configure LibVirt to allow remote TLS connections
 ** Create TLS certificates and key pairs. Follow the guide at http://libvirt.org/remote.html#Remote_certificates
@@ -320,45 +375,53 @@ vagrant up --provider=managed
 
 NOTE: Requires latest link:https://github.com/tknerr/vagrant-managed-servers[Managed] provider
 
-=== Developer environment
+=== Initial Setup
 
-To enable easy customization of the build environment, any files placed under '\~/.openshiftdev/home.d' will be copied to
-the vagrant user home directory. For example: '~/.openshiftdev/home.d/.bash_profile' will be copied to '.bash_profile'
-on the vagrant VM.
+Ideally you would be able to use an image with the operating system,
+dependencies, and OpenShift already installed so you can just start
+hacking. But at this time that is not available for all providers.
 
-=== AWS Credentials
+Images may be thought of as being at one of three stages:
 
-Rather than have to add AWS credentials every time the Vagrantfile is created using origin-init command, you can
-specify your credentials in the '~/.awscred' file and it will be automatically added to the Vagrantfile.
+1. "os" - The base OS image (use a "minimal" one).
+2. "deps" - OpenShift runtime dependencies and build requirements are installed.
+3. "inst" - OpenShift code, images, and binaries are built and installed
 
-Example:
+You may want to create images that snapshot the output at each of
+these stages, as the rate of change and amount of time to create each
+is different.
 
-.'~/.awscred'
+After using `vagrant up --provider=<provider>` to start a host with only
+a basic operating system on it (Fedora 20+ or CentOS 7 should suffice),
+you will need to install the build tools and other dependencies for
+building and running OpenShift. The following vagrant commands should
+help with this:
+
 ----
-AWSAccessKeyId=<AWS API Key>
-AWSSecretKey=<AWS API Secret>
-AWSKeyPairName=<Keypair name>
-AWSPrivateKeyPath=<SSH Private key>
-----
-
-
-=== OpenStack Credentials
-
-Rather than have to add OpenStack credentials every time the Vagrantfile is created using origin-init command, you can
-specify your credentials in the '~/.openstackcred' file and it will be automatically added to the Vagrantfile.
-
-Example:
-
-.'~/.openstackcred'
-----
-OSEndpoint=<OpenStack Endpoint URL>
-OSUsername=<OpenStack Username>
-OSAPIKey=<OpenStack Password>
-OSKeyPairName=<Keypair name >
-OSPrivateKeyPath=<SSH Private key path>
-OSTenant=<OpenStack Tenant Name>
+$ vagrant build-openshift3-base
+$ vagrant build-openshift3-base-images
+$ vagrant install-openshift3-assets-base
 ----
 
+Given this base foundation, you may want to `vagrant package` the result before proceeding to install OpenShift code.
+
+----
+$ vagrant install-openshift3
+$ vagrant build-openshift3-base-images  # pick up updates if older "deps" base reused
+$ vagrant build-openshift3 --images
+$ vagrant build-sti --binary-only
+----
+
+You may again wish to package this in order to reuse.
+
+If your provider is not set up to automatically sync changes from a local,
+you may do the following to get the host prepared for a git-based sync
+and then use that:
+
+----
+$ vagrant clone-upstream-repos  # and then to git sync and build:
+$ vagrant sync-openshift3 -s
+----
 
 == Notice of Export Control Law
 
