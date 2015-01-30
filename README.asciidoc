@@ -88,7 +88,7 @@ you may modify later to match your vagrant requirements:
 
 [source, sh]
 ----
-$ vagrant origin-init --stage inst --os fedora <instance name>
+$ vagrant origin-init --stage inst --os (fedora|centos7|rhel7) <instance name>
 ----
 
 ==== Start the machine
@@ -97,9 +97,11 @@ $ vagrant origin-init --stage inst --os fedora <instance name>
 
 Running with the default VirtualBox provider:
 
+NOTE: If you are trying to refresh an existing image, you'll want to remove the current image with `vagrant box list` and `vagrant box remove <box_name>`
+
 [source, sh]
 ----
-vagrant up
+$ vagrant up
 ----
 
 NOTE: See link:#other-providers[Other Providers] below for launching VMs from other providers.
@@ -177,7 +179,7 @@ AWSPrivateKeyPath=<SSH Private key>
 
 [source, sh]
 ----
-$ vagrant origin-init --stage inst --os fedora <instance name>
+$ vagrant origin-init --stage inst --os (fedora|centos7|rhel7) <instance name>
 ----
 
 The instance name will be applied as a tag and should generally be
