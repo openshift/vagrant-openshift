@@ -35,6 +35,7 @@ module Vagrant
           b.use YumUpdate
           b.use SetHostName
           b.use InstallOpenshift3
+          b.use InstallOpenshift3Rhel7
           b.use InstallOpenshift3AssetDependencies
         end
       end
@@ -202,6 +203,7 @@ module Vagrant
       autoload :BuildOpenshift3BaseImages, action_root.join("build_openshift3_base_images")
       autoload :PushOpenshift3Release, action_root.join("push_openshift3_release")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")
+      autoload :InstallOpenshift3Rhel7, action_root.join("install_openshift3_rhel7")
       autoload :BuildOpenshift3, action_root.join("build_openshift3")
       autoload :BuildSti, action_root.join("build_sti")
       autoload :TryRestartOpenshift3, action_root.join("try_restart_openshift3")
