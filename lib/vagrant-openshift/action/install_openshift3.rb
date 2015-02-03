@@ -29,6 +29,14 @@ module Vagrant
           sudo(env[:machine], %{
 set -x
 
+#systemctl enable firewalld
+#systemctl start firewalld
+#firewall-cmd --permanent --zone=public --add-port=8443/tcp
+#firewall-cmd --permanent --zone=public --add-port=8444/tcp
+#firewall-cmd --reload
+#firewall-cmd --list-all
+
+
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
@@ -42,6 +50,20 @@ pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
 
+HOST=`facter ec2_public_hostname 2>/dev/null | xargs echo -n`
+if [ -z "$HOST" ]
+then
+  HOST=`ip -f inet addr show | grep -Po 'inet \K[\d.]+' | grep 10.245 | head -1`
+  if [ -z "$HOST" ]
+  then
+    HOST=`ip -f inet addr show | grep -Po 'inet \K[\d.]+' | grep 10. | head -1`
+    if [ -z "$HOST" ]
+    then
+      HOST=localhost
+    fi
+  fi
+fi
+
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]
 Description=OpenShift
@@ -52,7 +74,7 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/profile.d/openshift.sh
-ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --listen=http://0.0.0.0:8080
+ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://${HOST}:8443
 
 [Install]
 WantedBy=multi-user.target
