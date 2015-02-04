@@ -50,19 +50,23 @@ pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
 
-HOST=`facter ec2_public_hostname 2>/dev/null | xargs echo -n`
-if [ -z "$HOST" ]
+cat > /usr/bin/generate_openshift_service <<OUTERDELIM
+
+HOST=\\`facter ec2_public_hostname 2>/dev/null | xargs echo -n\\`
+if [ -z "\\$HOST" ]
 then
-  HOST=`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10.245 | head -1`
-  if [ -z "$HOST" ]
+  HOST=\\`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10.245 | head -1\\`
+  if [ -z "\\$HOST" ]
   then
-    HOST=`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10. | head -1`
-    if [ -z "$HOST" ]
+    HOST=\\`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10. | head -1\\`
+    if [ -z "\\$HOST" ]
     then
       HOST=localhost
     fi
   fi
 fi
+
+echo Host: \\$HOST
 
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]
@@ -74,11 +78,16 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/profile.d/openshift.sh
-ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://${HOST}:8443
+ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
 
 [Install]
 WantedBy=multi-user.target
 DELIM
+systemctl daemon-reload
+OUTERDELIM
+
+chmod +x /usr/bin/generate_openshift_service
+/usr/bin/generate_openshift_service
 
 #systemctl enable openshift.service
 
