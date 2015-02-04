@@ -53,10 +53,10 @@ popd
 HOST=`facter ec2_public_hostname 2>/dev/null | xargs echo -n`
 if [ -z "$HOST" ]
 then
-  HOST=`ip -f inet addr show | grep -Po 'inet \K[\d.]+' | grep 10.245 | head -1`
+  HOST=`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10.245 | head -1`
   if [ -z "$HOST" ]
   then
-    HOST=`ip -f inet addr show | grep -Po 'inet \K[\d.]+' | grep 10. | head -1`
+    HOST=`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10. | head -1`
     if [ -z "$HOST" ]
     then
       HOST=localhost
