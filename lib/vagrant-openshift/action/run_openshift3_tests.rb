@@ -55,26 +55,40 @@ popd >/dev/null
           exit_code
         end
 
+        #
+        # Build and run the make commands
+        #   for testing all run make test
+        #   for testing unit tests only run make build check
+        #   for testing assets run hack/test-assets.sh
+        #
+        # All env vars will be added to the beginning of the command like VAR=1 make test
+        #
         def call(env)
           @options.delete :logs
 
-          if @options[:report_coverage]
-            cmds = ['OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage hack/test-go.sh']
-          else
-            cmds = ['hack/test-go.sh']
-          end
+          cmd_env = []
+          build_targets = ["make"]
 
           if @options[:all]
-            cmds << 'hack/test-integration.sh'
-            cmds << 'hack/test-cmd.sh'
+            cmd_env << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts'
+            cmd_env << 'LOG_DIR=/tmp/origin/e2e/logs'
+            build_targets << 'test'
+            # we want to test the output of build-release, this flag tells the makefile to skip the build dependency
+            # so the command comes out to <cmd_env settings> make test SKIP_BUILD=true
+            build_targets << "SKIP_BUILD=true"
+
             if @options[:skip_image_cleanup]
-              cmds << 'SKIP_IMAGE_CLEANUP=1 ARTIFACT_DIR=/tmp/origin/e2e/artifacts LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
-            else
-              cmds << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts LOG_DIR=/tmp/origin/e2e/logs hack/test-end-to-end.sh'
+              cmd_env << 'SKIP_IMAGE_CLEANUP=1'
+            end
+          else
+            build_targets << "check"
+            if @options[:report_coverage]
+              cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
             end
           end
 
-          env[:test_exit_code] = run_tests(env, cmds, true)
+          cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
+          env[:test_exit_code] = run_tests(env, [cmd], true)
 
           # any other tests that should not be run as sudo
           if env[:test_exit_code] == 0 && @options[:all]
