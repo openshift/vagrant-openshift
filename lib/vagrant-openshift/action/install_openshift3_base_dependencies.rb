@@ -45,6 +45,8 @@ set -x
 sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
 setenforce 0
 
+groupadd docker
+chown root:docker /var/run/docker.sock
 usermod -a -G docker #{ssh_user}
 
 sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='--insecure-registry=172.30.17.0/24 \\1'," /etc/sysconfig/docker
