@@ -34,10 +34,6 @@ set -e
 hack/verify-gofmt.sh
 hack/build-release.sh
 hack/build-images.sh
-if [ ! -d _output/etcd ]
-then
-  hack/install-etcd.sh
-fi
 }
           else
             cmd = %{
@@ -45,12 +41,15 @@ echo "Performing openshift build..."
 set -e
 hack/verify-gofmt.sh
 hack/build-go.sh
+}
+          end
+          cmd += %{
+
 if [ ! -d _output/etcd ]
 then
   hack/install-etcd.sh
 fi
 }
-          end
           if @options[:force]
             build_cmd = cmd
             cmd = %{
