@@ -41,7 +41,8 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
-export KUBERNETES_MASTER=http://localhost:8080
+#export KUBERNETES_MASTER=http://localhost:8080
+export KUBECONFIG=/openshift.local.certificates/admin/.kubeconfig
 DELIM
 
 source /etc/profile.d/openshift.sh
@@ -58,11 +59,7 @@ then
   HOST=\\`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10.245 | head -1\\`
   if [ -z "\\$HOST" ]
   then
-    HOST=\\`ip -f inet addr show | grep -Po 'inet \\K[\\d.]+' | grep 10. | head -1\\`
-    if [ -z "\\$HOST" ]
-    then
-      HOST=localhost
-    fi
+    HOST=localhost
   fi
 fi
 
@@ -79,6 +76,7 @@ Documentation=https://github.com/openshift/origin
 Type=simple
 EnvironmentFile=-/etc/profile.d/openshift.sh
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
+ExecStartPost=/bin/chmod a+r -R /openshift.local.certificates/admin
 
 [Install]
 WantedBy=multi-user.target
