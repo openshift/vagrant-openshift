@@ -76,6 +76,7 @@ Documentation=https://github.com/openshift/origin
 Type=simple
 EnvironmentFile=-/etc/profile.d/openshift.sh
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
+ExecStartPost=/bin/sleep 8
 ExecStartPost=/bin/chmod a+r -R /openshift.local.certificates/admin
 
 [Install]
