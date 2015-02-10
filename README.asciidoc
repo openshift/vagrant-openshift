@@ -199,6 +199,8 @@ a base AMI in your repository's `.vagrant-openshift.json` file under the
 vagrant up --provider=aws
 ----
 
+TIP: Be sure to rerun origin-init for each subsequent run of `vagrant up --provider=aws` to pick up the last built ami.
+
 NOTE: Requires latest link:https://github.com/mitchellh/vagrant-aws[AWS] provider.
 
 NOTE: You can use the link:https://github.com/mikery/vagrant-ami[Vagrant-AMI] plugin to create an AMI from a running AWS machine.

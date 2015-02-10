@@ -45,6 +45,10 @@ export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GO
 export KUBECONFIG=/openshift.local.certificates/admin/.kubeconfig
 DELIM
 
+cat > /etc/sysconfig/openshift <<DELIM
+GOPATH=/data
+DELIM
+
 source /etc/profile.d/openshift.sh
 
 pushd $ORIGIN_PATH
@@ -74,7 +78,7 @@ Documentation=https://github.com/openshift/origin
 
 [Service]
 Type=simple
-EnvironmentFile=-/etc/profile.d/openshift.sh
+EnvironmentFile=-/etc/sysconfig/openshift
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
 ExecStartPost=/bin/sleep 8
 ExecStartPost=/bin/chmod a+r -R /openshift.local.certificates/admin
