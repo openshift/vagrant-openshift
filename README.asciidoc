@@ -1,9 +1,9 @@
 == OpenShift Origin Build Tools
 
-This is a link:http://www.vagrantup.com[Vagrant] 1.2+ plugin that adds vagrant commands and provisioners to
+This is a link:http://www.vagrantup.com[Vagrant] 1.7.2+ plugin that adds vagrant commands and provisioners to
 build and test link:http://openshift.github.io[OpenShift Origin].
 
-NOTE: This plugin requires link:https://www.vagrantup.com/downloads.html[Vagrant 1.2+]
+NOTE: This plugin requires link:https://www.vagrantup.com/downloads.html[Vagrant 1.7.2+]
 
 NOTE: Instructions below generally assume a Linux-like command line and may require modifications for other environments.
 
