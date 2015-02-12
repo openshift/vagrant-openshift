@@ -31,7 +31,7 @@ module Vagrant
         def call(env)
           @options.delete :logs
 
-          cmds = ['hack/test-go.sh']
+          cmds = ['OUTPUT_COVERAGE=/tmp/sti/artifacts/coverage hack/test-go.sh']
 
           if @options[:all]
             cmds << 'STI_TIMEOUT="--timeout 240s" hack/test-integration.sh'
