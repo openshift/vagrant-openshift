@@ -46,7 +46,7 @@ module Vagrant
               options[:skip_image_cleanup] = true
             end
 
-            o.on("-c","--report-coverage", String, "Generate code coverage report in Jenkins") do |f|
+            o.on("-c","--report-coverage", String, "Generate code coverage report") do |f|
               options[:report_coverage] = true
             end
           end

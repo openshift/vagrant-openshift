@@ -82,9 +82,10 @@ popd >/dev/null
             end
           else
             build_targets << "check"
-            if @options[:report_coverage]
-              cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
-            end
+          end
+
+          if @options[:report_coverage]
+            cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
           end
 
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
