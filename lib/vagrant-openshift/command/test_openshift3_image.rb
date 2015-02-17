@@ -30,6 +30,7 @@ module Vagrant
           options = {}
           options[:image] = nil
           options[:ref] = 'master'
+          options[:image_version] = ""
           options[:source] = nil
 
           opts = OptionParser.new do |o|
@@ -44,8 +45,8 @@ module Vagrant
               options[:ref] = o
             end
 
-            o.on("-v", "--version VERSION", String, "version of the software") do |o|
-              options[:version] = o
+            o.on("-m", "--image_version VERSION", String, "version of the software") do |o|
+              options[:image_version] = o
             end
 
             o.on("-s", "--source SOURCE", String, "git repo source url") do |o|
@@ -69,7 +70,7 @@ module Vagrant
           with_target_vms(argv, :reverse => true) do |machine|
             image = options[:image]
             ref = options[:ref]
-            version = options[:version]
+            image_version = options[:image_version]
             source = options[:source]
 
             # image could be centos or openshift/ruby-20-centos
@@ -103,7 +104,7 @@ git checkout #{ref}
 git_sha1=`git rev-parse --short #{ref}`
 
 # If software version is set, change directory to it
-[ -n "#{version}" ] && pushd #{version} > /dev/null
+[ -n "#{image_version}" ] && pushd #{image_version} > /dev/null
 
 # Build the STI image we use for testing
 docker build -t #{image}-candidate .
@@ -115,7 +116,7 @@ if [ $status -eq 0 ]; then
   status=$?
 
   # If software version is set, go back to the repository root
-  [ -n "#{version}" ] && popd > /dev/null
+  [ -n "#{image_version}" ] && popd > /dev/null
 fi
 
 if [ $status -eq 0 ]; then
