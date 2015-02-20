@@ -72,6 +72,7 @@ popd >/dev/null
           if @options[:all]
             cmd_env << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts'
             cmd_env << 'LOG_DIR=/tmp/origin/e2e/logs'
+            cmd_env << 'TEST_ASSETS=true'
             build_targets << 'test'
             # we want to test the output of build-release, this flag tells the makefile to skip the build dependency
             # so the command comes out to <cmd_env settings> make test SKIP_BUILD=true
