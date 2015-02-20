@@ -40,6 +40,7 @@ module Vagrant
             "/tmp/origin/e2e/"                     => artifacts_dir + "e2e/",
 
             "/data/src/github.com/openshift/origin/_output/local/releases/" => artifacts_dir + "release/",
+            "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/",
           }
 
           download_map.each do |source,target|
