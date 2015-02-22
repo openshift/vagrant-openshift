@@ -67,6 +67,7 @@ systemctl enable docker
 systemctl start docker
 
 docker pull openshift/docker-registry
+docker pull openshift/origin-docker-registry
           }, {:timeout=>60*20})
           @app.call(env)
         end
