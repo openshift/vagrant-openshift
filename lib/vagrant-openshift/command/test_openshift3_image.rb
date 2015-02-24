@@ -97,11 +97,11 @@ cd $temp_dir
 git clone #{source}
 cd #{source_dir}
 
+# Fetch refs from Github pull requests
+git fetch --quiet --tags --progress #{source} +refs/pull/*:refs/remotes/origin/pr/*
+
 # switch to the desired ref
 git checkout #{ref}
-
-# get git sha1
-git_sha1=`git rev-parse --short #{ref}`
 
 # If software version is set, change directory to it
 [ -n "#{image_version}" ] && pushd #{image_version} > /dev/null
@@ -127,7 +127,7 @@ if [ $status -eq 0 ]; then
   docker tag $image_id #{image}:devenv-ready
 
   # tag it with the git ref
-  docker tag $image_id #{image}:git-$git_sha1
+  docker tag $image_id #{image}:git-#{ref}
 fi
 
 # clean up
