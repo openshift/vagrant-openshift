@@ -73,8 +73,8 @@ module Vagrant
             image_version = options[:image_version]
             source = options[:source]
 
-            # image could be centos or openshift/ruby-20-centos
-            # just grab the end (centos or ruby-20-centos)
+            # image could be centos or openshift/ruby-20-centos7
+            # just grab the end (centos or ruby-20-centos7)
             source_dir = File.basename(image)
             app_name = "test-#{source_dir}"
             rc=1
