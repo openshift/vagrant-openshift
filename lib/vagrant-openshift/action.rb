@@ -52,6 +52,12 @@ module Vagrant
         end
       end
 
+      def self.push_openshift3_images(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PushOpenshift3Images, options
+        end
+      end
+
       def self.build_sti(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use BuildSti, options
@@ -201,6 +207,7 @@ module Vagrant
       autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
       autoload :InstallOpenshift3AssetDependencies, action_root.join("install_openshift3_asset_dependencies")
       autoload :BuildOpenshift3BaseImages, action_root.join("build_openshift3_base_images")
+      autoload :PushOpenshift3Images, action_root.join("push_openshift3_images")
       autoload :PushOpenshift3Release, action_root.join("push_openshift3_release")
       autoload :InstallOpenshift3, action_root.join("install_openshift3")
       autoload :InstallOpenshift3Rhel7, action_root.join("install_openshift3_rhel7")
