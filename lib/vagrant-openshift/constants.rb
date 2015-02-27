@@ -27,12 +27,12 @@ module Vagrant
         {
           'origin' => 'https://github.com/openshift/origin.git',
           'source-to-image' => 'https://github.com/openshift/source-to-image.git'
-        }.merge(openshift3_images)
+        }
       end
 
       def self.openshift3_images
         {
-          'openshift/base-centos7'    => 'https://github.com/openshift/sti-base.git',
+          'openshift/base-centos7'       => 'https://github.com/openshift/sti-base.git',
           'openshift/ruby-20-centos7'    => 'https://github.com/openshift/sti-ruby.git',
           'openshift/nodejs-010-centos7' => 'https://github.com/openshift/sti-nodejs.git',
           'openshift/mysql-55-centos7'   => 'https://github.com/openshift/mysql.git',
@@ -42,7 +42,7 @@ module Vagrant
       def self.images
         [
           'centos'
-        ] + openshift3_images.map { |c, _| "openshift/#{c}" }
+        ] + openshift3_images.map { |c, _| c }
       end
 
       def self.git_branch_current
