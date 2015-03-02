@@ -61,7 +61,7 @@ module Vagrant
             # FIXME: This is a temporary fix as the RHEL7 AMI should have this
             #        registry here already.
             o.on("--registry [url]", String, "Docker Registry to push images to.") do |o|
-              options[:registry] = c
+              options[:registry] = o
             end
           end
 
