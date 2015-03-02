@@ -57,6 +57,12 @@ module Vagrant
             o.on("-b", "--base_images", "flag whether the base images have to be pre-pulled") do
               options[:base_images] = true
             end
+
+            # FIXME: This is a temporary fix as the RHEL7 AMI should have this
+            #        registry here already.
+            o.on("--registry [url]", String, "Docker Registry to push images to.") do |o|
+              options[:registry] = c
+            end
           end
 
           # Parse the options
@@ -81,6 +87,7 @@ module Vagrant
             image_version = options[:image_version]
             source = options[:source]
             base_images = options[:base_images]
+            registry = options[:registry]
 
             # image could be centos or openshift/ruby-20-centos7
             # just grab the end (centos or ruby-20-centos7)
@@ -90,6 +97,11 @@ module Vagrant
             begin
               out, err, rc = do_execute(machine, %{
 set -x
+
+cat <<EOF > /etc/sysconfig/docker
+OPTIONS='--insecure-registry #{registry} --selinux-enabled -H fd://'
+EOF
+systemctl restart docker
 
 # so we can call sti
 PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
