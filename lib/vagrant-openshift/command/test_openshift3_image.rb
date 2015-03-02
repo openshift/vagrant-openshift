@@ -32,6 +32,7 @@ module Vagrant
           options[:ref] = 'master'
           options[:image_version] = ""
           options[:source] = nil
+          options[:base_image] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-openshift3-image --image IMAGE [vm-name]"
@@ -52,6 +53,10 @@ module Vagrant
             o.on("-s", "--source SOURCE", String, "git repo source url") do |o|
               options[:source] = o
             end
+
+            o.on("-b", "--base_images", "flag whether the base images have to be pre-pulled") do
+              options[:base_images] = true
+            end
           end
 
           # Parse the options
@@ -64,18 +69,22 @@ module Vagrant
           end
 
           if options[:source].nil?
-            options[:source] = "https://github.com/#{options[:image]}"
+            @env.ui.warn "You must specify git repo source url"
+            exit
           end
+
+          options[:source] = "https://github.com/#{options[:source]}"
 
           with_target_vms(argv, :reverse => true) do |machine|
             image = options[:image]
             ref = options[:ref]
             image_version = options[:image_version]
             source = options[:source]
+            base_images = options[:base_images]
 
             # image could be centos or openshift/ruby-20-centos7
             # just grab the end (centos or ruby-20-centos7)
-            source_dir = File.basename(image)
+            source_dir = File.basename(source)
             app_name = "test-#{source_dir}"
             rc=1
             begin
@@ -103,32 +112,53 @@ git fetch --quiet --tags --progress #{source} +refs/pull/*:refs/remotes/origin/p
 # switch to the desired ref
 git checkout #{ref}
 
+if #{base_images} ; then
+  # Pull base images
+  docker pull ci.dev.openshift.redhat.com:5000/openshift/base-centos7 && docker tag ci.dev.openshift.redhat.com:5000/openshift/base-centos7 openshift/base-centos7
+  docker pull ci.dev.openshift.redhat.com:5000/openshift/base-rhel7 && docker tag ci.dev.openshift.redhat.com:5000/openshift/base-rhel7 openshift/base-rhel7
+fi
+
+if [ -n "#{image_version}" ]; then
+  BASE_NAME="#{image}-#{image_version}"
+  pushd #{image_version} > /dev/null
+else 
+  BASE_NAME="#{image}"
+fi
+
 # If software version is set, change directory to it
 [ -n "#{image_version}" ] && pushd #{image_version} > /dev/null
 
-# Build the STI image we use for testing
-docker build -t #{image}-candidate .
+IMAGE_NAME="${BASE_NAME}-centos7"
+
+# Build the CentOS7 STI image we use for testing
+docker build -t ${IMAGE_NAME}-candidate .
 status=$?
 
 # Run the STI image test framework
 if [ $status -eq 0 ]; then
-  IMAGE_NAME=#{image}-candidate ./test/run
+  IMAGE_NAME=${IMAGE_NAME}-candidate ./test/run
+  status=$?
+fi
+
+if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
+  mv Dockerfile Dockerfile.centos7
+  mv Dockerfile.rhel7 Dockerfile
+
+  IMAGE_NAME="${BASE_NAME}-rhel7"
+
+  # Build the RHEL7 based STI image we use for testing
+  docker build -t ${IMAGE_NAME}-candidate .
   status=$?
 
-  # If software version is set, go back to the repository root
-  [ -n "#{image_version}" ] && popd > /dev/null
+  # Run the STI image test framework
+  if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
+    IMAGE_NAME=${IMAGE_NAME}-candidate ./test/run
+    status=$?
+  fi
 fi
 
-if [ $status -eq 0 ]; then
-  # get the image id
-  image_id=`docker inspect --format="{{ .Id }}" #{image}-candidate:latest`
-
-  # tag it devenv-ready
-  docker tag $image_id #{image}:devenv-ready
-
-  # tag it with the git ref
-  docker tag $image_id #{image}:git-#{ref}
-fi
+# If software version is set, go back to the repository root
+[ -n "#{image_version}" ] && popd > /dev/null
 
 # clean up
 cd /
