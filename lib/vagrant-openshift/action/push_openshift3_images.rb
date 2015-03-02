@@ -37,12 +37,35 @@ systemctl restart docker
           }
         end
 
+        def send_mail_notifications(recipients, registry)
+          return %{
+set +x
+if [ ! -f /tmp/push_images_result ]; then
+  echo "noop" && exit 0
+fi
+
+echo "Sending notifications to #{recipients}"
+echo -e "The list of Docker images pushed to #{registry}:\n\n" >> /tmp/mail_template
+
+while read -r line; do
+  ref=$(echo -n $line | cut -d ":" -f 3)
+  name=$(echo -n $line | cut -d "/" -f 2,3 | cut -d ":" -f 1)
+  echo -e "* ${name}" >> /tmp/mail_template
+  echo -e "  $ docker pull ${line}\n" >> /tmp/mail_template
+done < /tmp/push_images_result
+
+count=$(echo -n `cat /tmp/push_images_result | wc -l`)
+cat /tmp/mail_template | mail -r "Jenkins <noreply@redhat.com>" -s "[Jenkins] ${count} Docker images pushed to #{registry}" #{recipients}
+rm -f /tmp/mail_template /tmp/push_images_result
+          }
+        end
+
         def call(env)
           if @options[:registry].nil?
             @app.call(env)
             return
           end
-          do_execute(env[:machine], fix_insecure_registry_cmd(@options[:registry])) 
+          do_execute(env[:machine], fix_insecure_registry_cmd(@options[:registry]))
           cmd = "set -x"
           Vagrant::Openshift::Constants.openshift3_images.each do |name, repo|
             cmd += %{
@@ -53,7 +76,6 @@ rm -rf ./#{name}
 git clone #{repo} ./#{name}
 set +e
 popd
-
 
 pushd /data/src/github.com/#{name}
 git_ref=$(git rev-parse --short HEAD)
@@ -77,14 +99,19 @@ else
     docker push $image_pull_spec
 
     echo "Tagging and pushing #{name}:latest"
-    docker tag #{name} #{@options[:registry]}/#{name}:latest 
+    docker tag #{name} #{@options[:registry]}/#{name}:latest
     docker push #{@options[:registry]}/#{name}:latest
+    echo "${image_pull_spec}" >> /tmp/push_images_result
   fi
 fi
 popd
             }
           end
-          do_execute(env[:machine], cmd) 
+          do_execute(env[:machine], cmd)
+          do_execute(env[:machine], send_mail_notifications(
+            "libra-dev@redhat.com,jhadvig@redhat.com,mfojtik@redhat.com",
+            @options[:registry]
+          ))
           @app.call(env)
         end
       end
