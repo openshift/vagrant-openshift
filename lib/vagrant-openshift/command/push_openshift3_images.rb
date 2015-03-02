@@ -35,6 +35,9 @@ module Vagrant
             o.on("--registry [url]", String, "Docker Registry to push images to.") do |c|
               options[:registry] = c
             end
+            o.on("--image [name]", String, "Image to build and push.") do |i|
+              options[:image] = i
+            end
             o.separator ""
           end
 
