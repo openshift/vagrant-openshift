@@ -38,7 +38,7 @@ systemctl restart docker
         end
 
         def send_mail_notifications(recipients, registry)
-          return %{
+          %{
 set +x
 if [ ! -f /tmp/push_images_result ]; then
   echo "noop" && exit 0
@@ -61,14 +61,19 @@ rm -f /tmp/mail_template /tmp/push_images_result
           }
         end
 
-        def repos
-          return {}.merge(Vagrant::Openshift::Constants.openshift3_centos7_base).
-            merge(Vagrant::Openshift::Constants.openshift3_rhel7_base).
-            merge(Vagrant::Openshift::Constants.openshift3_centos7_images).
-            merge(Vagrant::Openshift::Constants.openshift3_rhel7_images)
+        def rhel7_images
+          Vagrant::Openshift::Constants.openshift3_rhel7_base.merge(
+            Vagrant::Openshift::Constants.openshift3_rhel7_images
+          )
         end
 
-        def clone_image_repos_cmd(registry)
+        def centos7_images
+          Vagrant::Openshift::Constants.openshift3_centos7_base.merge(
+            Vagrant::Openshift::Constants.openshift3_centos7_images
+          )
+        end
+
+        def clone_image_repos_cmd(repos, registry)
           cmd = %{set -e; set -x; cd /data/src/github.com; }
           # Perform git clone for all images repos in parallel
           repos.each do |name, git_url|
@@ -87,7 +92,7 @@ rm -rf /tmp/force_rebuild*
 pushd /data/src/github.com/#{name}
 git rev-parse --short HEAD > .git-head
 git_ref=`echo -n $(<.git-head)`
-echo -n "#{registry}/#{name}:$git_ref" > .docker-pull-name
+echo -n "#{registry}#{name}:$git_ref" > .docker-pull-name
 set +e
 docker pull $(<.docker-pull-name)
 [ "$?" == "0" ] && touch .docker-build-skip
@@ -98,9 +103,8 @@ popd
           return cmd
         end
 
-        def build_image(name, target, base_image, options)
+        def build_image(name, target, base_image, registry)
           cmd = %{
-set +e
 pushd /data/src/github.com/#{name}
 git_ref=$(<.git-head)
 image_name=$(<.docker-pull-name)
@@ -115,14 +119,14 @@ else
     echo "ERROR: Failed to build ${image_name}"
   else
     echo "Tagging and pushing $image_name"
-    docker tag #{name} $image_name
-    docker push $image_name
+    if [ "#{registry}" != "" ]; then
+      docker tag #{name} $image_name && docker push $image_name
+      echo "${image_name}" >> /tmp/push_images_result
+    else
+      echo "#{name}:latest" >> /tmp/push_images_result
+    fi
+    docker tag #{name} #{registry}#{name}:latest && docker push #{registry}#{name}:latest
 
-    echo "Tagging and pushing #{name}:latest"
-    docker tag #{name} #{options[:registry]}/#{name}:latest
-    docker push #{options[:registry]}/#{name}:latest
-
-    echo "${image_name}" >> /tmp/push_images_result
 
     # If this is a base image, force rebuild all image using it
     [ -z "#{base_image}" ] && touch /tmp/force_rebuild_#{target}
@@ -138,22 +142,36 @@ popd
             @app.call(env)
             return
           end
+
           cmd = fix_insecure_registry_cmd(@options[:registry])
-          cmd += clone_image_repos_cmd(@options[:registry])
-          # Build base images first
-          Vagrant::Openshift::Constants.openshift3_centos7_base.each do |name, _|
-            cmd += build_image(name, "centos7", "", @options)
+
+          if !@options[:registry].end_with?('/')
+            @options[:registry] += "/"
           end
+
+          cmd += clone_image_repos_cmd(rhel7_images, @options[:registry])
+          cmd += clone_image_repos_cmd(centos7_images, "")
+          cmd += %{
+            set +e
+          }
+          # RHEL7 Docker images
           Vagrant::Openshift::Constants.openshift3_rhel7_base.each do |name, _|
-            cmd += build_image(name, "rhel7", "", @options)
+            cmd += build_image(name, "rhel7", "", @options[:registry])
+          end
+          Vagrant::Openshift::Constants.openshift3_rhel7_images.each do |name, _|
+            cmd += build_image(name, "rhel7", "rhel7", @options[:registry])
+
+          end
+
+          # Centos images goes to Docker hub
+          Vagrant::Openshift::Constants.openshift3_centos7_base.each do |name, _|
+            cmd += build_image(name, "centos7", "", "")
           end
           # Other language && STI images
           Vagrant::Openshift::Constants.openshift3_centos7_images.each do |name, _|
-            cmd += build_image(name, "centos7", "centos7", @options)
+            cmd += build_image(name, "centos7", "centos7", "")
           end
-          Vagrant::Openshift::Constants.openshift3_rhel7_images.each do |name, _|
-            cmd += build_image(name, "rhel7", "rhel7", @options)
-          end
+
 
           do_execute(env[:machine], cmd)
           do_execute(env[:machine], send_mail_notifications(
