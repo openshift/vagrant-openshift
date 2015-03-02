@@ -78,7 +78,6 @@ wait
           }
           repos.each do |name, _|
             cmd += %{
-rm -rf /tmp/force_rebuild*
 pushd /data/src/github.com/#{name}
 git rev-parse --short HEAD > .git-head
 git_ref=`echo -n $(<.git-head)`
@@ -135,6 +134,8 @@ popd
             return
           end
 
+          cmd = ""
+
           # Allow to select images to build
           centos_images, rhel_images = {}, {}
           if @options[:image] == "all" || @options[:image].nil?
@@ -143,9 +144,13 @@ popd
           else
             centos_images["#{@options[:image]}-centos7"] = Vagrant::Openshift::Constants.openshift3_centos7_images["#{@options[:image]}-centos7"]
             rhel_images["#{@options[:image]}-rhel7"] = Vagrant::Openshift::Constants.openshift3_rhel7_images["#{@options[:image]}-rhel7"]
+            cmd += %{
+touch /tmp/force_rebuild-centos7
+touch /tmp/force_rebuild-rhel7
+            }
           end
 
-          cmd = fix_insecure_registry_cmd(@options[:registry])
+          cmd += fix_insecure_registry_cmd(@options[:registry])
 
           if !@options[:registry].end_with?('/')
             @options[:registry] += "/"
