@@ -119,14 +119,14 @@ else
     echo "ERROR: Failed to build ${image_name}"
   else
     echo "Tagging and pushing $image_name"
+    docker tag #{name} $image_name && docker push $image_name
+    docker tag #{name} #{registry}#{name}:latest && docker push #{registry}#{name}:latest
+
     if [ "#{registry}" != "" ]; then
-      docker tag #{name} $image_name && docker push $image_name
       echo "${image_name}" >> /tmp/push_images_result
     else
       echo "#{name}:latest" >> /tmp/push_images_result
     fi
-    docker tag #{name} #{registry}#{name}:latest && docker push #{registry}#{name}:latest
-
 
     # If this is a base image, force rebuild all image using it
     [ -z "#{base_image}" ] && touch /tmp/force_rebuild_#{target}
