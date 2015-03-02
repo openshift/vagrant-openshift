@@ -30,19 +30,32 @@ module Vagrant
         }
       end
 
-      def self.openshift3_images
+      def self.openshift3_centos7_base
         {
           'openshift/base-centos7'       => 'https://github.com/openshift/sti-base.git',
+        }
+      end
+
+      def self.openshift3_rhel7_base
+        {
+          'openshift/base-rhel7'       => 'https://github.com/openshift/sti-base.git',
+        }
+      end
+
+      def self.openshift3_centos7_images
+        {
           'openshift/ruby-20-centos7'    => 'https://github.com/openshift/sti-ruby.git',
           'openshift/nodejs-010-centos7' => 'https://github.com/openshift/sti-nodejs.git',
           'openshift/mysql-55-centos7'   => 'https://github.com/openshift/mysql.git',
         }
       end
 
-      def self.images
-        [
-          'centos'
-        ] + openshift3_images.map { |c, _| c }
+      def self.openshift3_rhel7_images
+        {
+          'openshift/ruby-20-rhel7'    => 'https://github.com/openshift/sti-ruby.git',
+          'openshift/nodejs-010-rhel7' => 'https://github.com/openshift/sti-nodejs.git',
+          'openshift/mysql-55-rhel7'   => 'https://github.com/openshift/mysql.git',
+        }
       end
 
       def self.git_branch_current
