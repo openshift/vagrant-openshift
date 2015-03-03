@@ -32,7 +32,7 @@ module Vagrant
           options[:ref] = 'master'
           options[:image_version] = ""
           options[:source] = nil
-          options[:base_image] = false
+          options[:base_images] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-openshift3-image --image IMAGE [vm-name]"
