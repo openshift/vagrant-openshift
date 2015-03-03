@@ -83,8 +83,9 @@ git rev-parse --short HEAD > .git-head
 git_ref=`echo -n $(<.git-head)`
 echo -n "#{registry}#{name}:$git_ref" > .docker-pull-name
 set +e
-docker pull $(<.docker-pull-name)
-[ "$?" == "0" ] && touch .docker-build-skip
+echo "Determining if #{name}:$git_ref is already pushed to #{registry}..."
+curl -q http://#{registry}v1/repositories/#{name}/tags/$git_ref | grep -q error
+[ "$?" != "0" ] && touch .docker-build-skip
 set -e
 popd
             }
