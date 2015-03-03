@@ -33,6 +33,7 @@ module Vagrant
           options[:image_version] = ""
           options[:source] = nil
           options[:base_images] = false
+          options[:registry] = ""
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-openshift3-image --image IMAGE [vm-name]"
@@ -98,10 +99,13 @@ module Vagrant
               out, err, rc = do_execute(machine, %{
 set -x
 
-cat <<EOF > /etc/sysconfig/docker
+# NOTE: This is only for rhel7
+if [ -n "#{registry}" -a -f /etc/sysconfig/docker ]; then
+  cat <<EOF > /etc/sysconfig/docker
 OPTIONS='--insecure-registry #{registry} --selinux-enabled -H fd://'
 EOF
-systemctl restart docker
+  systemctl restart docker
+fi
 
 # so we can call sti
 PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
@@ -124,10 +128,10 @@ git fetch --quiet --tags --progress #{source} +refs/pull/*:refs/remotes/origin/p
 # switch to the desired ref
 git checkout #{ref}
 
-if #{base_images} ; then
+if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   # Pull base images
-  docker pull ci.dev.openshift.redhat.com:5000/openshift/base-centos7 && docker tag ci.dev.openshift.redhat.com:5000/openshift/base-centos7 openshift/base-centos7
-  docker pull ci.dev.openshift.redhat.com:5000/openshift/base-rhel7 && docker tag ci.dev.openshift.redhat.com:5000/openshift/base-rhel7 openshift/base-rhel7
+  docker pull #{registry}/openshift/base-centos7 && docker tag #{registry}/openshift/base-centos7 openshift/base-centos7
+  docker pull #{registry}/openshift/base-rhel7 && docker tag #{registry}/openshift/base-rhel7 openshift/base-rhel7
 fi
 
 if [ -n "#{image_version}" ]; then
@@ -136,9 +140,6 @@ if [ -n "#{image_version}" ]; then
 else 
   BASE_NAME="#{image}"
 fi
-
-# If software version is set, change directory to it
-[ -n "#{image_version}" ] && pushd #{image_version} > /dev/null
 
 IMAGE_NAME="${BASE_NAME}-centos7"
 
