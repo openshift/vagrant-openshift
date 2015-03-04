@@ -30,31 +30,12 @@ module Vagrant
         }
       end
 
-      def self.openshift3_centos7_base
+      def self.openshift3_images
         {
-          'openshift/base-centos7'       => 'https://github.com/openshift/sti-base.git',
-        }
-      end
-
-      def self.openshift3_rhel7_base
-        {
-          'openshift/base-rhel7'       => 'https://github.com/openshift/sti-base.git',
-        }
-      end
-
-      def self.openshift3_centos7_images
-        {
-          'openshift/ruby-20-centos7'    => 'https://github.com/openshift/sti-ruby.git',
-          'openshift/nodejs-010-centos7' => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/mysql-55-centos7'   => 'https://github.com/openshift/mysql.git',
-        }
-      end
-
-      def self.openshift3_rhel7_images
-        {
-          'openshift/ruby-20-rhel7'    => 'https://github.com/openshift/sti-ruby.git',
-          'openshift/nodejs-010-rhel7' => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/mysql-55-rhel7'   => 'https://github.com/openshift/mysql.git',
+          'openshift/base'       => 'https://github.com/openshift/sti-base.git',
+          'openshift/ruby-20'    => 'https://github.com/openshift/sti-ruby.git',
+          'openshift/nodejs-010' => 'https://github.com/openshift/sti-nodejs.git',
+          'openshift/mysql-55'   => 'https://github.com/openshift/mysql.git',
         }
       end
 
