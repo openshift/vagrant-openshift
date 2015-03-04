@@ -35,8 +35,8 @@ module Vagrant
             o.on("--registry [url]", String, "Docker Registry to push images to.") do |c|
               options[:registry] = c
             end
-            o.on("--image [name]", String, "Image to build and push.") do |i|
-              options[:image] = i
+            o.on("--build_images [list]", String, "List of IMAGE:REF pairs, delimited by ','") do |i|
+              options[:build_images] = i
             end
             o.separator ""
           end
@@ -47,6 +47,11 @@ module Vagrant
 
           if options[:registry].nil?
             @env.ui.warn "You must specify target Docker registry"
+            exit
+          end
+
+          if options[:build_images].nil?
+            @env.ui.warn "You must specify list of images to build"
             exit
           end
 
