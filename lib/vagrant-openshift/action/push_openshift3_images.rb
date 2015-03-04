@@ -79,7 +79,9 @@ rm -rf ~/latest_images ; touch ~/latest_images
             cmd += %{
 git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
 curl -s http://#{registry}v1/repositories/#{name}-rhel7/tags/${git_ref} | grep -q "error"
-[ "$?" != "0" ] && echo "#{name};$git_ref" >> ~/latest_images
+if [[ "$?" != "0" ]]; then
+  echo "#{name};$git_ref" >> ~/latest_images
+fi
             }
           end
           return cmd
