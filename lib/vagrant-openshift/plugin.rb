@@ -137,6 +137,11 @@ module Vagrant
         Commands::TestOpenshift3Image
       end
 
+      command "install-openshift3-router" do
+        require_relative "command/install_openshift3_router"
+        Commands::InstallOpenshift3Router
+      end
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner

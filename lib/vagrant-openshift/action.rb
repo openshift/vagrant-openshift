@@ -40,6 +40,14 @@ module Vagrant
         end
       end
 
+      def self.install_openshift3_router(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunSystemctl, {:action => "start", :service => "openshift"}
+          b.use InstallOpenshift3Router
+          b.use RunSystemctl, {:action => "stop", :service => "openshift"}
+        end
+      end
+
       def self.install_openshift3_assets_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use InstallOpenshift3AssetDependencies
@@ -66,7 +74,7 @@ module Vagrant
 
       def self.try_restart_openshift3(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use TryRestartOpenshift3
+          b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
         end
       end
 
@@ -91,7 +99,7 @@ module Vagrant
           if options[:build]
             b.use(BuildOpenshift3BaseImages, options) if options[:images]
             b.use(BuildOpenshift3, options)
-            b.use(TryRestartOpenshift3)
+            b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
           end
         end
       end
@@ -213,7 +221,6 @@ module Vagrant
       autoload :InstallOpenshift3Rhel7, action_root.join("install_openshift3_rhel7")
       autoload :BuildOpenshift3, action_root.join("build_openshift3")
       autoload :BuildSti, action_root.join("build_sti")
-      autoload :TryRestartOpenshift3, action_root.join("try_restart_openshift3")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
@@ -230,6 +237,8 @@ module Vagrant
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :SetupBindHost, action_root.join("setup_bind_host")
+      autoload :InstallOpenshift3Router, action_root.join("install_openshift3_router")
+      autoload :RunSystemctl, action_root.join("run_systemctl")
     end
   end
 end

@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class TryRestartOpenshift3
+      class InstallOpenshift3Router
         include CommandHelper
 
         def initialize(app, env)
@@ -26,11 +26,28 @@ module Vagrant
         end
 
         def call(env)
-          sudo(env[:machine], "systemctl try-restart openshift")
+          puts 'Installing router'
+          sudo(env[:machine], '
+ROUTER_EXISTS=$(openshift ex router 2>&1 | grep "does not exist")
+OS_RUNNING=$(systemctl status openshift | grep "(running)")
+CMD="openshift ex router --create --credentials=${KUBECONFIG}"
+
+if [[ $OS_RUNNING ]]; then
+  if [[ -n $ROUTER_EXISTS ]]; then
+    echo "Installing OpenShift router"
+    ${CMD}
+  else
+    echo "Router already exists, skipping"
+  fi
+else
+  echo "The OpenShift process is not running.  To install a router please start OpenShift and run ${CMD}"
+fi
+
+
+')
 
           @app.call(env)
         end
-
       end
     end
   end
