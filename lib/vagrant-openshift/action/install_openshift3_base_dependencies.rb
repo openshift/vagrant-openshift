@@ -30,7 +30,7 @@ module Vagrant
           # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
           #        add the image into 'repositories' constants
           #
-          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 screen java-1.?.0-openjdk")
+          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk")
           sudo(env[:machine], "yum install -y facter", {fail_on_error: false})
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
@@ -44,6 +44,8 @@ set -x
 # TODO Remove me ASAP
 sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
 setenforce 0
+
+systemctl enable ntpd
 
 groupadd docker
 chown root:docker /var/run/docker.sock
