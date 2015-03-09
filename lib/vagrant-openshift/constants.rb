@@ -32,10 +32,10 @@ module Vagrant
 
       def self.openshift3_images
         {
-          'openshift/base-centos7'       => 'https://github.com/openshift/sti-base.git',
-          'openshift/ruby-20-centos7'    => 'https://github.com/openshift/sti-ruby.git',
-          'openshift/nodejs-010-centos7' => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/mysql-55-centos7'   => 'https://github.com/openshift/mysql.git'
+          'openshift/base'       => 'https://github.com/openshift/sti-base.git',
+          'openshift/ruby-20'    => 'https://github.com/openshift/sti-ruby.git',
+          'openshift/nodejs-010' => 'https://github.com/openshift/sti-nodejs.git',
+          'openshift/mysql-55'   => 'https://github.com/openshift/mysql.git'
         }
       end
 
