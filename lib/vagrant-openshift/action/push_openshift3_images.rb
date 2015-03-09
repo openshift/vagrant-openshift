@@ -31,7 +31,7 @@ module Vagrant
         def fix_insecure_registry_cmd(registry_url)
           %{
 cat <<EOF > /etc/sysconfig/docker
-OPTIONS='--insecure-registry #{registry_url} --selinux-enabled -H fd://'
+OPTIONS='--insecure-registry #{registry_url} --selinux-enabled'
 EOF
 systemctl restart docker
           }
