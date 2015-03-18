@@ -35,7 +35,7 @@ module Vagrant
           'openshift/base'       => 'https://github.com/openshift/sti-base.git',
           'openshift/ruby-20'    => 'https://github.com/openshift/sti-ruby.git',
           'openshift/nodejs-010' => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/mysql-55'   => 'https://github.com/openshift/mysql.git'
+          'openshift/mysql-55'   => 'https://github.com/openshift/mysql.git',
           'openshift/mongodb-24' => 'https://github.com/openshift/mongodb.git'
         }
       end
