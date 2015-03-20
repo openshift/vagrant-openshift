@@ -65,35 +65,50 @@ popd >/dev/null
         #
         def call(env)
           @options.delete :logs
-
           cmd_env = []
           build_targets = ["make"]
+          test_run = false
 
-          if @options[:all]
+          if @options[:assets] || @options[:all]
+            cmd_env << 'TEST_ASSETS=true'
+          end
+
+          if @options[:integration] || @options[:extended] || @options[:all]
             cmd_env << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts'
             cmd_env << 'LOG_DIR=/tmp/origin/e2e/logs'
-            cmd_env << 'TEST_ASSETS=true'
             build_targets << 'test'
-            # we want to test the output of build-release, this flag tells the makefile to skip the build dependency
+            # we want to test the output of build-release, this flag tells
+            # the makefile to skip the build dependency
             # so the command comes out to <cmd_env settings> make test SKIP_BUILD=true
             build_targets << "SKIP_BUILD=true"
+            test_run = true
+          end
 
-            if @options[:skip_image_cleanup]
-              cmd_env << 'SKIP_IMAGE_CLEANUP=1'
-            end
-          else
-            build_targets << "check"
+          # If we run 'make test' the 'check' is always called so there is no
+          # reason to execute it twice.
+          # The '--unit' option is valid only when no --integration or
+          # --extended are present
+          if @options[:unit] && !test_run
+            build_targets << 'check'
+          end
+
+          if @options[:skip_image_cleanup]
+            cmd_env << 'SKIP_IMAGE_CLEANUP=1'
           end
 
           if @options[:report_coverage]
             cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
           end
 
+          if @options[:extended] || @options[:all]
+            cmd_env << 'EXTENDED=true'
+          end
+
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
           env[:test_exit_code] = run_tests(env, [cmd], true)
 
           # any other tests that should not be run as sudo
-          if env[:test_exit_code] == 0 && @options[:all]
+          if env[:test_exit_code] == 0 && (@options[:assets] || @options[:all])
             cmds = ['hack/test-assets.sh']
             env[:test_exit_code] = run_tests(env, cmds, false)
           end
