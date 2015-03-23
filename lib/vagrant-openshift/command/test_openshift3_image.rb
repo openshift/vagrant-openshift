@@ -164,7 +164,7 @@ if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
   status=$?
 
   # Run the STI image test framework
-  if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
+  if [ $status -eq 0 ]; then
     IMAGE_NAME=${IMAGE_NAME}-candidate ./test/run
     status=$?
   fi
