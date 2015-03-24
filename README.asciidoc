@@ -256,7 +256,7 @@ NOTE: Requires latest link:https://github.com/cloudbau/vagrant-openstack-plugin[
 
 [source, sh]
 ----
-yum install libxslt-devel libxml2-devel libvirt-devel
+yum install libxslt-devel libxml2-devel libvirt-devel ruby-devel rubygems
 ----
 
 * Install the vagrant-libvirt plugin
