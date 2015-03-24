@@ -80,7 +80,7 @@ Documentation=https://github.com/openshift/origin
 Type=simple
 EnvironmentFile=-/etc/sysconfig/openshift
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
-ExecStartPost=/bin/sleep 8
+ExecStartPost=/usr/bin/timeout 60 bash -c 'while [ ! -d /openshift.local.certificates/admin ] ; do sleep 2; done'
 ExecStartPost=/bin/chmod a+r -R /openshift.local.certificates/admin
 
 [Install]
