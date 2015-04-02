@@ -61,7 +61,7 @@ echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
 mkdir -p /data/src
 mkdir -p /data/pkg
 mkdir -p /data/bin
-GOPATH=/data go get code.google.com/p/go.tools/cmd/cover
+GOPATH=/data go get golang.org/x/tools/cmd/cover
 chown -R #{ssh_user}:#{ssh_user} /data
 
 systemctl daemon-reload
