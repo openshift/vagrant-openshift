@@ -1,3 +1,4 @@
+[[build-tools]]
 == OpenShift Origin Build Tools
 
 This is a link:http://www.vagrantup.com[Vagrant] 1.7.2+ plugin that adds vagrant commands and provisioners to
@@ -390,6 +391,9 @@ Images may be thought of as being at one of three stages:
 1. "os" - The base OS image (use a "minimal" one).
 2. "deps" - OpenShift runtime dependencies and build requirements are installed.
 3. "inst" - OpenShift code, images, and binaries are built and installed
+4. "bootstrap" - Everything from "inst" plus all binaries enabled and
+                 configured for a project called "Turbo" with
+                 credentials admin=admin password=password
 
 You may want to create images that snapshot the output at each of
 these stages, as the rate of change and amount of time to create each
@@ -426,6 +430,27 @@ and then use that:
 $ vagrant clone-upstream-repos  # and then to git sync and build:
 $ vagrant sync-openshift3 -s
 ----
+
+=== Getting started as a Openshift v3 Container Developer
+
+You will need to have the link:README.asciidoc#installing[build tools] installed prior to building this image.
+
+==== Start the machine
+
+===== VirtualBox
+
+[source, sh]
+----
+$ vagrant up
+----
+
+===== Installing boot strapped environment
+
+[source, sh]
+----
+$ vagrant bootstrap-openshift3
+----
+
 
 == Notice of Export Control Law
 
