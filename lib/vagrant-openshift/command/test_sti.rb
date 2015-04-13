@@ -28,14 +28,14 @@ module Vagrant
         def execute
           options = {}
           options[:download] = false
-          options[:all] = false
+          options[:integration] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-sti [machine-name]"
             o.separator ""
 
-            o.on("-a", "--all", String, "Run all tests") do |f|
-              options[:all] = true
+            o.on("-i", "--integration", String, "Run only integration tests") do |f|
+              options[:integration] = true
             end
 
             o.on("-d","--artifacts", String, "Download logs") do |f|

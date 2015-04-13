@@ -28,15 +28,15 @@ module Vagrant
         def execute
           options = {}
           options[:download] = false
-          options[:all] = false
+          # By default run all tests
+          options[:integration] = false
+          options[:extended] = false
+          options[:assets] = false
+          options[:unit] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-openshift3 [machine-name]"
             o.separator ""
-
-            o.on("-a", "--all", String, "Run all tests") do |f|
-              options[:all] = true
-            end
 
             o.on("-d","--artifacts", String, "Download logs") do |f|
               options[:download] = true
@@ -49,12 +49,28 @@ module Vagrant
             o.on("-c","--report-coverage", String, "Generate code coverage report") do |f|
               options[:report_coverage] = true
             end
+
+            o.on("-e","--extended", String, "Run only extended tests") do |f|
+              options[:extended] = true
+            end
+
+            o.on("-i","--integration", String, "Run only integration tests") do |f|
+              options[:integration]= true
+            end
+
+            o.on("-a","--assets", String, "Run only assets tests") do |f|
+              options[:assets] = true
+            end
+
+            o.on("-u","--unit", String, "Run only unit tests") do |f|
+              options[:unit] = true
+            end
           end
 
           # Parse the options
           argv = parse_options(opts)
           return if !argv
-
+          options[:all] = !options[:integration] && !options[:extended] && !options[:unit] && !options[:assets]
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.run_openshift3_tests(options)
             @env.action_runner.run actions, {:machine => machine}
