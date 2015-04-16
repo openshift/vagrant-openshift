@@ -60,7 +60,17 @@ echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
 mkdir -p /data/src
 mkdir -p /data/pkg
 mkdir -p /data/bin
-GOPATH=/data go get golang.org/x/tools/cmd/cover
+
+GO_VERSION=($(go version))
+echo "Detected go version: $(go version)"
+
+if [[ ${GO_VERSION[2]} == "go1.4"* ]]; then
+  go get golang.org/x/tools/cmd/cover
+  GOPATH=/data go get golang.org/x/tools/cmd/cover
+else
+  GOPATH=/data go get code.google.com/p/go.tools/cmd/cover
+fi
+
 chown -R #{ssh_user}:#{ssh_user} /data
 
 systemctl daemon-reload
@@ -70,7 +80,7 @@ systemctl start docker
 docker pull openshift/docker-registry
 docker pull openshift/origin-sti-builder
 docker pull openshift/origin-deployer
-          }, {:timeout=>60*20})
+          }, {:timeout=>60*30})
           @app.call(env)
         end
       end
