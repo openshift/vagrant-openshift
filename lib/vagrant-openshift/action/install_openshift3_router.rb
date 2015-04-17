@@ -30,7 +30,7 @@ module Vagrant
           sudo(env[:machine], '
 ROUTER_EXISTS=$(openshift ex router 2>&1 | grep "does not exist")
 OS_RUNNING=$(systemctl status openshift | grep "(running)")
-CMD="openshift ex router --create --credentials=${KUBECONFIG}"
+CMD="openshift ex router --create --credentials=${OPENSHIFTCONFIG}"
 
 if [[ $OS_RUNNING ]]; then
   if [[ -n $ROUTER_EXISTS ]]; then
