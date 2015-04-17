@@ -42,7 +42,7 @@ cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
 #export KUBERNETES_MASTER=http://localhost:8080
-export KUBECONFIG=/openshift.local.certificates/admin/.kubeconfig
+export OPENSHIFTCONFIG=/openshift.local.certificates/admin/.kubeconfig
 DELIM
 
 cat > /etc/sysconfig/openshift <<DELIM
