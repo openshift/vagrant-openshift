@@ -28,12 +28,12 @@ module Vagrant
         def call(env)
           puts 'Installing router'
           sudo(env[:machine], '
-ROUTER_EXISTS=$(openshift ex router 2>&1 | grep "does not exist")
 OS_RUNNING=$(systemctl status openshift | grep "(running)")
 CMD="openshift ex router --create --credentials=${OPENSHIFTCONFIG}"
 
 if [[ $OS_RUNNING ]]; then
-  if [[ -n $ROUTER_EXISTS ]]; then
+  ROUTER_EXISTS=$(openshift ex router --credentials=${OPENSHIFTCONFIG} 2>&1 | grep "service exists")
+  if [[ -z $ROUTER_EXISTS ]]; then
     echo "Installing OpenShift router"
     ${CMD}
   else
