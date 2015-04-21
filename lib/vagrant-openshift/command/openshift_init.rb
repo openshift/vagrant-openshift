@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,17 +30,18 @@ module Vagrant
             :no_base  => false,
             :os       => 'centos7',
             :stage    => 'inst',
-            :port_mappings => []
+            :port_mappings => [],
+            :local_source => false,
           }
 
-          valid_stage = ['os','deps','inst']
+          valid_stage = ['os','deps','inst', 'bootstrap']
           valid_os = ['centos7','fedora','rhel7']
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
             o.separator ""
 
-            o.on("-s [stage]", "--stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]") do |f|
+            o.on("-s [stage]", "--stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]\n\tbootstrap = running environment") do |f|
               options[:stage] = f
             end
 
@@ -50,6 +51,10 @@ module Vagrant
 
             o.on("-p [guest_port:host_port]", "--map-port [guest_port:host_port]", String, "When running on VirtualBox, map port from guest docker vm to host machine") do |f|
               options[:port_mappings].push(f.split(":"))
+            end
+
+            o.on('--local-source', 'Checkout source into image rather than mapping from host system') do |f|
+              options[:local_source] = true
             end
           end
 

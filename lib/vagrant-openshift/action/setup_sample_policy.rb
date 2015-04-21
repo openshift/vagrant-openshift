@@ -1,5 +1,5 @@
 #--
-# Copyright 2013-2015 Red Hat, Inc.
+# Copyright 2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,20 +17,24 @@
 module Vagrant
   module Openshift
     module Action
-      class RunSystemctl
+      class SetupSamplePolicy
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
-          @env = env
-          @options = options
         end
 
         def call(env)
-          unless @options[:action].nil? || @options[:service].nil?
-            sudo(env[:machine], "systemctl #{@options[:action]} #{@options[:service]} #{@options[:argv]}")
-            @app.call(env)
-          end
+          puts 'Creating cluster-admin policy'
+
+          sudo(env[:machine], %q[
+#set -x
+
+source /etc/profile.d/openshift.sh
+openshift admin policy add-role-to-group cluster-admin system:authenticated --config=${OPENSHIFTCONFIG} --namespace=master
+          ])
+
+          @app.call(env)
         end
       end
     end

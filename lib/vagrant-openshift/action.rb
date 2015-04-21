@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -204,6 +204,26 @@ module Vagrant
         end
       end
 
+      def self.install_docker_registry
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use InstallDockerRegistry
+        end
+      end
+
+      def self.bootstrap_openshift3(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunSystemctl, {:action => 'restart', :service => 'docker'}
+          b.use BootstrapOpenshift3
+          b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
+          b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
+          b.use WaitForOpenshift3
+          b.use InstallOpenshift3Router
+          b.use InstallDockerRegistry
+          b.use SetupSamplePolicy
+          b.use CreateSampleProject
+        end
+      end
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :Clean, action_root.join("clean")
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
@@ -239,6 +259,11 @@ module Vagrant
       autoload :SetupBindHost, action_root.join("setup_bind_host")
       autoload :InstallOpenshift3Router, action_root.join("install_openshift3_router")
       autoload :RunSystemctl, action_root.join("run_systemctl")
+      autoload :InstallDockerRegistry, action_root.join("install_docker_registry")
+      autoload :WaitForOpenshift3, action_root.join("wait_for_openshift3")
+      autoload :CreateSampleProject, action_root.join("create_sample_project")
+      autoload :SetupSamplePolicy, action_root.join("setup_sample_policy")
+      autoload :BootstrapOpenshift3, action_root.join("bootstrap_openshift3")
     end
   end
 end

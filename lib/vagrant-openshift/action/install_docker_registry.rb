@@ -1,5 +1,5 @@
 #--
-# Copyright 2013-2015 Red Hat, Inc.
+# Copyright 2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,20 +17,29 @@
 module Vagrant
   module Openshift
     module Action
-      class RunSystemctl
+      class InstallDockerRegistry
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options
         end
 
         def call(env)
-          unless @options[:action].nil? || @options[:service].nil?
-            sudo(env[:machine], "systemctl #{@options[:action]} #{@options[:service]} #{@options[:argv]}")
-            @app.call(env)
-          end
+          puts 'Installing docker registry'
+          sudo(env[:machine], %q[
+#set -x
+source /etc/profile.d/openshift.sh
+
+CMD="openshift admin registry --create --credentials=${OPENSHIFTCONFIG}"
+OS_RUNNING=$(systemctl status openshift | /bin/grep "(running)")
+if [[ $OS_RUNNING ]]; then
+  ${CMD}
+else
+  echo "The OpenShift process is not running.  To install a docker registry please start OpenShift and run ${CMD}"
+fi
+])
+          @app.call(env)
         end
       end
     end
