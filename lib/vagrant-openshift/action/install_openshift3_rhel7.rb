@@ -44,7 +44,7 @@ cp /etc/yum.repos.d/* $contextdir/repos
 
 # create Dockerfile
 cat <<EOF > $contextdir/Dockerfile
-FROM rhel7:latest
+FROM registry.access.redhat.com/rhel7:latest
 
 RUN yum remove -y subscription-manager
 
