@@ -39,6 +39,7 @@ systemctl restart docker
 
         def build_image(image_name, git_ref, repo_url, registry)
           %{
+set -e
 dest_dir="/data/src/github/openshift/#{image_name}"
 rm -rf ${dest_dir}; mkdir -p ${dest_dir}
 if git clone #{repo_url} ${dest_dir}; then
@@ -48,23 +49,25 @@ if git clone #{repo_url} ${dest_dir}; then
     echo "Building #{image_name}:$git_ref"
 
     if make build TARGET=centos7; then
-      docker tag #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
-      docker tag #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
-      docker tag #{image_name}-centos7 #{image_name}-centos7:latest
+      docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
+      docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
+      docker tag -f #{image_name}-centos7 #{image_name}-centos7:latest
       docker push #{registry}#{image_name}-centos7:$git_ref
       docker push #{registry}#{image_name}-centos7:latest
       docker push #{image_name}-centos7:latest
     else
       echo "ERROR: Failed to build #{image_name}-centos7"
+      exit 1
     fi
 
     if make build TARGET=rhel7; then
-      docker tag #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
-      docker tag #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
+      docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
+      docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
       docker push #{registry}#{image_name}-rhel7:$git_ref
       docker push #{registry}#{image_name}-rhel7:latest
     else
       echo "ERROR: Failed to build #{image_name}-rhel7"
+      exit 1
     fi
   popd
 fi
@@ -114,7 +117,7 @@ docker pull #{@options[:registry]}openshift/base-rhel7
             name, git_ref = image.split(':')
             repo_url = Vagrant::Openshift::Constants.openshift3_images[name]
             if repo_url == nil
-              puts "Unregistred image: #{name}, skipping"
+              puts "Unregistered image: #{name}, skipping"
               next
             end
             cmd += build_image(name, git_ref, repo_url, @options[:registry])
