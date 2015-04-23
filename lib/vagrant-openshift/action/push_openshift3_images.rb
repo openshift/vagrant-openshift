@@ -80,6 +80,7 @@ rm -rf ~/latest_images ; touch ~/latest_images
           }
           Vagrant::Openshift::Constants.openshift3_images.each do |name, git_url|
             cmd += %{
+set +e
 git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
 curl -s http://#{registry}v1/repositories/#{name}-rhel7/tags/${git_ref} | grep -q "error"
 if [[ "$?" != "0" ]]; then
