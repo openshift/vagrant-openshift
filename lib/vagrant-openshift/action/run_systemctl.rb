@@ -28,7 +28,7 @@ module Vagrant
 
         def call(env)
           unless @options[:action].nil? || @options[:service].nil?
-            sudo(env[:machine], "systemctl #{@options[:action]} #{@options[:service]}")
+            sudo(env[:machine], "systemctl #{@options[:action]} #{@options[:service]} #{@options[:argv]}")
             @app.call(env)
           end
         end

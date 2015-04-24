@@ -47,7 +47,7 @@ setenforce 0
 
 systemctl enable ntpd
 
-groupadd docker
+groupadd -f docker
 usermod -a -G docker #{ssh_user}
 
 sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='--insecure-registry=172.30.0.0/16 \\1'," /etc/sysconfig/docker

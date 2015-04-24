@@ -1,5 +1,5 @@
 #--
-# Copyright 2014 Red Hat, Inc.
+# Copyright 2013 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,32 +17,19 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshift3Router
+      class CreateSampleProject
         include CommandHelper
 
         def initialize(app, env)
           @app = app
-          @env = env
         end
 
         def call(env)
-          puts 'Installing router'
-          sudo(env[:machine], '
-OS_RUNNING=$(systemctl status openshift | /bin/grep "(running)")
-if [[ $OS_RUNNING ]]; then
-  ROUTER_EXISTS=$(openshift ex router --credentials=${OPENSHIFTCONFIG} 2>&1 | /bin/grep "service exists")
-  if [[ -z $ROUTER_EXISTS ]]; then
-    echo "Installing OpenShift router"
-    openshift ex router --create --credentials=${OPENSHIFTCONFIG}
-  else
-    echo "Router already exists, skipping"
-  fi
-else
-  echo "The OpenShift process is not running.  To install a router please start OpenShift and run ${CMD}"
-fi
+          puts 'Creating sample project'
 
-
-')
+          sudo(env[:machine],
+               %q[openshift admin new-project turbo --admin=admin --description='Turbo Sample' --display-name='Turbo Sample']
+          )
 
           @app.call(env)
         end
