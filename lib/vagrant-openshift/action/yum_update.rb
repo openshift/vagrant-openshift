@@ -28,6 +28,7 @@ module Vagrant
         def call(env)
           sudo env[:machine], "rm -rf /etc/yum.repos.d/openshift-origin.repo"
           sudo env[:machine], "yum clean all"
+          sudo env[:machine], "yum -y install deltarpm", {fail_on_error: false}
           sudo env[:machine], "yum -y update --skip-broken --exclude=kernel*", {fail_on_error: false, :timeout=>60*10}
           sudo env[:machine], "yum list installed"
 
