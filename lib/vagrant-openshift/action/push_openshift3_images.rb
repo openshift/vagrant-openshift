@@ -52,9 +52,9 @@ if git clone #{repo_url} ${dest_dir}; then
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
       docker tag -f #{image_name}-centos7 #{image_name}-centos7:latest
-      docker push #{registry}#{image_name}-centos7:$git_ref
-      docker push #{registry}#{image_name}-centos7:latest
-      docker push #{image_name}-centos7:latest
+      docker push -f #{registry}#{image_name}-centos7:$git_ref
+      docker push -f #{registry}#{image_name}-centos7:latest
+      docker push -f #{image_name}-centos7:latest
     else
       echo "ERROR: Failed to build #{image_name}-centos7"
       exit 1
@@ -63,8 +63,8 @@ if git clone #{repo_url} ${dest_dir}; then
     if make build TARGET=rhel7; then
       docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
       docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
-      docker push #{registry}#{image_name}-rhel7:$git_ref
-      docker push #{registry}#{image_name}-rhel7:latest
+      docker push -f #{registry}#{image_name}-rhel7:$git_ref
+      docker push -f #{registry}#{image_name}-rhel7:latest
     else
       echo "ERROR: Failed to build #{image_name}-rhel7"
       exit 1
