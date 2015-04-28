@@ -41,7 +41,6 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
-#export KUBERNETES_MASTER=http://localhost:8080
 export OPENSHIFTCONFIG=/openshift.local.config/master/admin.kubeconfig
 DELIM
 
@@ -54,6 +53,12 @@ source /etc/profile.d/openshift.sh
 pushd $ORIGIN_PATH
   hack/install-etcd.sh
 popd
+
+
+mkdir -p /openshift.local.config/master/
+touch /openshift.local.config/master/admin.kubeconfig
+chmod a+r /openshift.local.config/master/admin.kubeconfig
+
 
 cat > /usr/bin/generate_openshift_service <<OUTERDELIM
 
@@ -80,9 +85,6 @@ Documentation=https://github.com/openshift/origin
 Type=simple
 EnvironmentFile=-/etc/sysconfig/openshift
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
-ExecStartPost=/usr/bin/timeout 60 bash -c 'while [ ! -f /openshift.local.config/master/admin.kubeconfig ] ; do sleep 1; done'
-ExecStartPost=/bin/sleep 1
-ExecStartPost=/bin/chmod a+r /openshift.local.config/master/admin*
 
 [Install]
 WantedBy=multi-user.target
