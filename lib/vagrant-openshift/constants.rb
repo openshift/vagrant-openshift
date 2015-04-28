@@ -33,10 +33,11 @@ module Vagrant
       def self.openshift3_images
         {
           'openshift/base'          => 'https://github.com/openshift/sti-base.git',
-          'openshift/ruby-20'       => 'https://github.com/openshift/sti-ruby.git',
           'openshift/nodejs-010'    => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/python-33'     => 'https://github.com/openshift/sti-python.git',
           'openshift/perl-516'      => 'https://github.com/openshift/sti-perl.git',
+          'openshift/php-55'        => 'https://github.com/openshift/sti-php.git',
+          'openshift/python-33'     => 'https://github.com/openshift/sti-python.git',
+          'openshift/ruby-20'       => 'https://github.com/openshift/sti-ruby.git',
           'openshift/mysql-55'      => 'https://github.com/openshift/mysql.git',
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git'
