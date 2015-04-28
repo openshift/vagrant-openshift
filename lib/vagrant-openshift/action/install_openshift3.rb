@@ -42,7 +42,7 @@ cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
 #export KUBERNETES_MASTER=http://localhost:8080
-export OPENSHIFTCONFIG=/openshift.local.certificates/admin/.kubeconfig
+export OPENSHIFTCONFIG=/openshift.local.config/master/admin.kubeconfig
 DELIM
 
 cat > /etc/sysconfig/openshift <<DELIM
@@ -80,9 +80,9 @@ Documentation=https://github.com/openshift/origin
 Type=simple
 EnvironmentFile=-/etc/sysconfig/openshift
 ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
-ExecStartPost=/usr/bin/timeout 60 bash -c 'while [ ! -d /openshift.local.certificates/admin ] ; do sleep 1; done'
+ExecStartPost=/usr/bin/timeout 60 bash -c 'while [ ! -f /openshift.local.config/master/admin.kubeconfig ] ; do sleep 1; done'
 ExecStartPost=/bin/sleep 1
-ExecStartPost=/bin/chmod a+r -R /openshift.local.certificates/admin
+ExecStartPost=/bin/chmod a+r /openshift.local.config/master/admin*
 
 [Install]
 WantedBy=multi-user.target
