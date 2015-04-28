@@ -17,26 +17,18 @@
 module Vagrant
   module Openshift
     class Config < Vagrant.plugin(2, :config)
-      attr_accessor :cloud_domain, :repos_base, :os_repo, :os_updates_repo,
-                    :optional_repo, :os_extras_repo, :os_scl_repo
+      attr_accessor :cloud_domain
 
       def initialize
         super
 
         @cloud_domain         = UNSET_VALUE
-        @repos_base           = UNSET_VALUE
-        @os_repo              = nil
-        @os_updates_repo      = nil
-        @os_extras_repo       = nil
-        @optional_repo        = nil
-        @os_scl_repo          = nil
       end
 
       def finalize!
         super
 
         @cloud_domain    = "example.com"  if @cloud_domain    == UNSET_VALUE
-        @repos_base = nil         if @repos_base == UNSET_VALUE
       end
     end
   end

@@ -44,42 +44,12 @@ module Vagrant
           is_centos = env[:machine].communicate.test("test -e /etc/centos-release")
           is_rhel   = env[:machine].communicate.test("test -e /etc/redhat-release") && !is_centos && !is_fedora
 
-          sudo(env[:machine], "yum install -y augeas")
+          sudo(env[:machine], "yum -y install deltarpm", {fail_on_error: false})
+          sudo(env[:machine], "yum -y install augeas")
           if is_centos
             sudo(env[:machine], "yum install -y centos-release-SCL.x86_64 http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm")
-            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "base", options.os_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "updates", options.os_updates_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/CentOS-Base.repo", "extras", options.os_extras_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/CentOS-SCL.repo", "scl", options.os_scl_repo)
+            set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "openshift-deps", "https://mirror.openshift.com/pub/openshift-v3/dependencies/centos7/x86_64/")
           end
-
-          if is_rhel
-            set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "base", options.os_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/RHEL-Base.repo", "updates", options.os_updates_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/epel.repo", "epel", options.optional_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/RHEL-SCL.repo", "scl", options.os_scl_repo)
-
-          end
-
-          if is_fedora
-            set_yum_repo(env, "/etc/yum.repos.d/fedora.repo", "fedora", options.os_repo)
-            set_yum_repo(env, "/etc/yum.repos.d/fedora.repo", "updates", options.os_updates_repo)
-          end
-
-          #if options.repos_base == nil
-            #if is_fedora
-                #options.repos_base = "http://mirror.openshift.com/pub/openshift-origin/nightly/fedora-19/"
-            #elsif is_centos or is_rhel
-                #options.repos_base = "http://mirror.openshift.com/pub/openshift-origin/nightly/rhel-6/"
-            #end
-
-            #dependencies = "#{options.repos_base}/dependencies/x86_64"
-          #else
-            #dependencies = "#{options.repos_base}/dependencies/x86_64"
-          #end
-
-          #set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "openshift-deps", dependencies)
 
           sudo(env[:machine], "yum clean all")
 
