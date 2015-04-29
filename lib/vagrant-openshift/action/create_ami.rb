@@ -33,11 +33,27 @@ module Vagrant
           begin
             machine = env[:aws_compute].servers.get(env[:machine].id)
             image_req = env[:aws_compute].create_image(machine.identity, machine.tags["Name"], machine.tags["Name"], false)
-            image = env[:aws_compute].images.get(image_req.body["imageId"])
-            env[:machine].ui.info "Creating AMI #{image.id}"
-            while not image.ready?
-              sleep 10
+            image = nil
+            retries = 0
+            while !image && retries < 12
               image = env[:aws_compute].images.get(image_req.body["imageId"])
+              if image
+                break
+              else
+                retries += 1
+                sleep 5
+              end
+            end
+            env[:machine].ui.info "Creating AMI #{image.id}"
+            retries = 0
+            while retries < 90
+              image = env[:aws_compute].images.get(image_req.body["imageId"])
+              if image.ready?
+                break
+              else
+                retries += 1
+                sleep 10
+              end
             end
             env[:machine].ui.info("Done")
           rescue Excon::Errors::BadRequest => e
