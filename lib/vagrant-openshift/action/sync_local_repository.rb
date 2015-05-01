@@ -28,7 +28,6 @@ module Vagrant
         def call(env)
           env[:machine].env.ui.info("Synchronizing local sources")
 
-          pids = []
           Constants.repos(env).each do |repo_name, url|
             local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, "..", repo_name)))
             unless local_repo.exist?
@@ -39,11 +38,8 @@ module Vagrant
               end
             end
 
-            pids << fork {
-              Dir.chdir(local_repo) { sync_repo(env[:machine], repo_name) }
-            }
+            Dir.chdir(local_repo) { sync_repo(env[:machine], repo_name) }
           end
-          Process.waitall
 
           @app.call(env)
         end
