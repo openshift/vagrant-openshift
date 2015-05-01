@@ -126,7 +126,7 @@ pushd /data/src/github.com/openshift/#{repo_name}
   else
     echo "Commit ID: $commit_id"
     echo "Previous Commit ID: $previous_commit_id"
-    echo Git Status: $git_status
+    echo "Git Status: $git_status"
     echo "No update for #{repo_name}, #{refname}"
   fi
   mkdir -p #{sync_path}
