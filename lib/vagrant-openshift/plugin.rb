@@ -147,9 +147,9 @@ module Vagrant
         Commands::InstallDockerRegistry
       end
 
-      command "bootstrap-openshift3" do
-        require_relative 'command/bootstrap_openshift3'
-        Commands::BootstrapOpenshift3
+      command "bootstrap-openshift" do
+        require_relative 'command/bootstrap_openshift'
+        Commands::BootstrapOpenshift
       end
 
       provisioner(:openshift) do

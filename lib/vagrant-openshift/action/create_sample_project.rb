@@ -25,7 +25,7 @@ module Vagrant
         end
 
         def call(env)
-          puts %q[Creating sample OpenShift3 project 'Turbo']
+          puts %q[Creating sample OpenShift project 'Turbo']
 
           sudo(env[:machine], %q[
               openshift admin new-project turbo --admin=admin --description='Turbo Sample' --display-name='Turbo Sample'

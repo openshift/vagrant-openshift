@@ -18,20 +18,19 @@ require_relative '../action'
 module Vagrant
   module Openshift
     module Commands
-      class BootstrapOpenshift3 < Vagrant.plugin(2, :command)
+      class BootstrapOpenshift < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          'Configures openshift3 with sample project "Turbo"'
+          'Configures OpenShift with sample project "Turbo"'
         end
 
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant bootstrap-openshift3 [vm-name]'
+            o.banner = 'Usage: vagrant bootstrap-openshift [vm-name]'
             o.separator ''
           end
 
@@ -40,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.bootstrap_openshift3(options)
+            actions = Vagrant::Openshift::Action.bootstrap_openshift(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

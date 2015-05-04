@@ -66,11 +66,13 @@ module Vagrant
             'num_minions' => 2,
             'cpus' => 2,
             'memory' => 1024,
-            'rebuild_yum_cache' => false,
+            'rebuild_yum_cache' => false
           }
 
-          vagrant_openshift_config['local_source'] = @options[:local_source]
-          unless @options[:local_source]
+          vagrant_openshift_config['no_synced_folders'] = @options[:no_synced_folders]
+          if @options[:no_synced_folders]
+            vagrant_openshift_config[:no_synced_folders] = true
+          else
             vagrant_openshift_config['sync_to']   = '/data/src'
             vagrant_openshift_config['sync_from'] = "#{gopath}/src"
           end

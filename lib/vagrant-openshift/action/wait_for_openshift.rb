@@ -20,7 +20,7 @@ require 'uri'
 module Vagrant
   module Openshift
     module Action
-      class WaitForOpenshift3
+      class WaitForOpenshift
         include CommandHelper
 
         def initialize(app, env)

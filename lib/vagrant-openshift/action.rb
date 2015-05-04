@@ -210,13 +210,13 @@ module Vagrant
         end
       end
 
-      def self.bootstrap_openshift3(options)
+      def self.bootstrap_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => 'restart', :service => 'docker'}
-          b.use BootstrapOpenshift3
+          b.use BootstrapOpenshift
           b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
           b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
-          b.use WaitForOpenshift3
+          b.use WaitForOpenshift
           b.use InstallOpenshift3Router
           b.use InstallDockerRegistry
           b.use SetupSamplePolicy
@@ -260,10 +260,10 @@ module Vagrant
       autoload :InstallOpenshift3Router, action_root.join("install_openshift3_router")
       autoload :RunSystemctl, action_root.join("run_systemctl")
       autoload :InstallDockerRegistry, action_root.join("install_docker_registry")
-      autoload :WaitForOpenshift3, action_root.join("wait_for_openshift3")
+      autoload :WaitForOpenshift, action_root.join("wait_for_openshift")
       autoload :CreateSampleProject, action_root.join("create_sample_project")
       autoload :SetupSamplePolicy, action_root.join("setup_sample_policy")
-      autoload :BootstrapOpenshift3, action_root.join("bootstrap_openshift3")
+      autoload :BootstrapOpenshift, action_root.join("bootstrap_openshift")
     end
   end
 end

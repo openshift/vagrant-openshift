@@ -91,19 +91,6 @@ you may modify later to match your vagrant requirements:
 $ vagrant origin-init --stage inst --os (fedora|centos7|rhel7) <instance name>
 ----
 
-If you are building a +bootstrap+ image to package and share with others, use the following:
-
-[source, sh]
-----
-$ vagrant origin-init --stage bootstrap --os (fedora|centos7|rhel7) <instance name> --local-source
-----
-NOTES:
-
-1. See link:#initial-setup[Initial Setup] below for a discussion on your choices for +--stage+.
-
-2. If you use the --local-source flag, a copy of the github origin repository will be installed in the image rather than sync'ed folders.
-This is true for all providers. You can change the brand from +master+ in the `.vagrant-openshift.json` file.
-
 ==== Start the machine
 
 ===== VirtualBox
@@ -403,7 +390,7 @@ Images may be thought of as being at one of four stages:
 1. "os" - The base OS image (use a "minimal" one).
 2. "deps" - OpenShift runtime dependencies and build requirements are installed.
 3. "inst" - OpenShift code, images, and binaries are built and installed
-4. "bootstrap" -  OpenShift installed and running
+4. "bootstrap" - OpenShift installed and running
 
 You may want to create images that snapshot the output at each of
 these stages, as the rate of change and amount of time to create each
@@ -428,56 +415,29 @@ Given this base foundation, you may want to `vagrant package` the result before 
 ----
 $ vagrant install-openshift3
 $ vagrant build-openshift3-base-images  # pick up updates if older "deps" base reused
-$ vagrant build-openshift3 --images # --images not needed for bootstrap stages
+$ vagrant build-openshift3 --images
 $ vagrant build-sti --binary-only
 ----
 
-You may again wish to package this in order to reuse.
-
-If you want an image with:
-* enabled and running openshift
-* deployed docker registry
-* deployed routing layer
-* Sample project named 'Turbo'
-
-[source, sh]
-----
-$ vagrant bootstrap-openshift3
-----
-
-You should package this image so it will be easier for you to restore to a known state. If you used the +--local-source+ flag during the +origin-init+ this packed image may be shared with others.
-
-If you want to use this image for OpenShift platform development and if your provider is not set up to automatically sync changes from a local, you may do the following to get the host prepared for a git-based sync and then use that:
-[source, sh]
-----
-$ vagrant clone-upstream-repos  # and then to git sync and build:
-$ vagrant sync-openshift3 -s
-----
-
-=== Cliff Notes for bootstrap stage vagrant box
+=== Creating a "bootstrap" Vagrant Box
 
 Assuming you are targeting the v0.4.4 for your vagrant box
 
 [source, sh]
 ----
-$ unset GOPATH
 $ cd ~/tmp
-$ vagrant openshift3-local-checkout --replace  --branch v0.4.4
+$ vagrant openshift3-local-checkout --replace --branch v0.4.4
 $ pushd origin
-$ vagrant origin-init --stage bootstrap --os fedora openshift3-bootstrap --local-source
-$ cp ~jhonce/Projects/go/src/github.com/openshift/origin/Vagrantfile .
+$ vagrant origin-init --stage inst --os fedora openshift3-bootstrap --no-synced-folders
 $ vagrant up
 $ vagrant clone-upstream-repos --clean
 $ vagrant checkout-repos --branch v0.4.4
-$ vagrant install-openshift3
-$ vagrant build-openshift3-base
-$ vagrant build-openshift3-base-images
-$ vagrant build-openshift3 --images  # test --no-images
+$ vagrant build-openshift3 --images
 $ vagrant build-sti --binary-only
-$ vagrant bootstrap-openshift3
+$ vagrant bootstrap-openshift
 
-$ rm -f /tmp/openshift3-bootstrap.box
-$ vagrant package --output /tmp/openshift3-bootstrap.box
+$ rm -f /tmp/fedora_virtualbox_bootstrap.box
+$ vagrant package --output /tmp/fedora_virtualbox_bootstrap.box
 ----
 
 == Notice of Export Control Law

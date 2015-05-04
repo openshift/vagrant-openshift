@@ -22,13 +22,12 @@ module Vagrant
         include CommandHelper
 
         def self.synopsis
-          "restarts openshift"
+          "restarts openshift if it's already running"
         end
 
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant try-restart-openshift3 [vm-name]"

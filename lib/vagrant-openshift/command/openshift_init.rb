@@ -22,7 +22,7 @@ module Vagrant
         include CommandHelper
 
         def self.synopsis
-          "creates an OpenShift Vagrantfile based on the options supplied"
+          "creates an .vagrant-openshift.json config file based on the options supplied"
         end
 
         def execute
@@ -31,7 +31,7 @@ module Vagrant
             :os       => 'centos7',
             :stage    => 'inst',
             :port_mappings => [],
-            :local_source => false,
+            :no_synced_folders => false
           }
 
           valid_stage = ['os','deps','inst', 'bootstrap']
@@ -53,8 +53,8 @@ module Vagrant
               options[:port_mappings].push(f.split(":"))
             end
 
-            o.on('--local-source', 'Checkout source into image rather than mapping from host system') do |f|
-              options[:local_source] = true
+            o.on('--no-synced-folders', 'Checkout source into image rather than mapping from host system') do |f|
+              options[:no_synced_folders] = true
             end
           end
 

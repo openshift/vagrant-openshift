@@ -27,7 +27,7 @@ module Vagrant
         end
 
         def call(env)
-          remote_write(env[:machine], "/root/.ssh/config", "root:root", "0600") {
+          remote_write(env[:machine], "/#{ssh_user}/.ssh/config", "#{ssh_user}:#{ssh_user}", "0600") {
             %{Host github.com
    StrictHostKeyChecking no
    UserKnownHostsFile=/dev/null

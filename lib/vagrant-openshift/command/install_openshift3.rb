@@ -28,7 +28,6 @@ module Vagrant
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant install-openshift3 [vm-name]"
