@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,10 +66,17 @@ module Vagrant
             'num_minions' => 2,
             'cpus' => 2,
             'memory' => 1024,
-            'rebuild_yum_cache' => false,
-            'sync_to' => '/data/src',
-            'sync_from' => "#{gopath}/src"
+            'rebuild_yum_cache' => false
           }
+
+          vagrant_openshift_config['no_synced_folders'] = @options[:no_synced_folders]
+          if @options[:no_synced_folders]
+            vagrant_openshift_config[:no_synced_folders] = true
+          else
+            vagrant_openshift_config['sync_to']   = '/data/src'
+            vagrant_openshift_config['sync_from'] = "#{gopath}/src"
+          end
+
           vagrant_openshift_config['virtualbox'] = {
             'box_name' => box_info[:virtualbox][:box_name],
             'box_url' => box_info[:virtualbox][:box_url]
@@ -103,7 +110,7 @@ module Vagrant
         private
 
         def find_ami_from_tag(box_info)
-          return if box_info[:aws][:ami_tag_prefix].nil?
+          return if box_info[:aws].nil? || box_info[:aws][:ami_tag_prefix].nil?
           @env[:ui].info("Reading AWS credentials from #{@aws_creds_file.to_s}")
           if @aws_creds_file.exist?
             aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.strip!

@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -140,6 +140,16 @@ module Vagrant
       command "install-openshift3-router" do
         require_relative "command/install_openshift3_router"
         Commands::InstallOpenshift3Router
+      end
+
+      command "install-docker-registry" do
+        require_relative 'command/install_docker_registry'
+        Commands::InstallDockerRegistry
+      end
+
+      command "bootstrap-openshift" do
+        require_relative 'command/bootstrap_openshift'
+        Commands::BootstrapOpenshift
       end
 
       provisioner(:openshift) do

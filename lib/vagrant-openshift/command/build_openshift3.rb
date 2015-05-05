@@ -28,7 +28,6 @@ module Vagrant
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = false
           options[:images] = false
           options[:force] = false
 

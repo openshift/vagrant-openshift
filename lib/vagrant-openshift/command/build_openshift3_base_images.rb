@@ -22,13 +22,12 @@ module Vagrant
         include CommandHelper
 
         def self.synopsis
-          "builds openshift v3 infrastructure images"
+          "builds openshift infrastructure images"
         end
 
         def execute
           options = {}
           options[:clean] = false
-          options[:local_source] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant build-openshift3-base-images"

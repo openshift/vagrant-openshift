@@ -385,11 +385,12 @@ Ideally you would be able to use an image with the operating system,
 dependencies, and OpenShift already installed so you can just start
 hacking. But at this time that is not available for all providers.
 
-Images may be thought of as being at one of three stages:
+Images may be thought of as being at one of four stages:
 
 1. "os" - The base OS image (use a "minimal" one).
 2. "deps" - OpenShift runtime dependencies and build requirements are installed.
 3. "inst" - OpenShift code, images, and binaries are built and installed
+4. "bootstrap" - OpenShift installed and running
 
 You may want to create images that snapshot the output at each of
 these stages, as the rate of change and amount of time to create each
@@ -401,6 +402,7 @@ you will need to install the build tools and other dependencies for
 building and running OpenShift. The following vagrant commands should
 help with this:
 
+[source, sh]
 ----
 $ vagrant build-openshift3-base
 $ vagrant build-openshift3-base-images
@@ -409,6 +411,7 @@ $ vagrant install-openshift3-assets-base
 
 Given this base foundation, you may want to `vagrant package` the result before proceeding to install OpenShift code.
 
+[source, sh]
 ----
 $ vagrant install-openshift3
 $ vagrant build-openshift3-base-images  # pick up updates if older "deps" base reused
@@ -416,15 +419,25 @@ $ vagrant build-openshift3 --images
 $ vagrant build-sti --binary-only
 ----
 
-You may again wish to package this in order to reuse.
+=== Creating a "bootstrap" Vagrant Box
 
-If your provider is not set up to automatically sync changes from a local,
-you may do the following to get the host prepared for a git-based sync
-and then use that:
+Assuming you are targeting the v0.4.4 for your vagrant box
 
+[source, sh]
 ----
-$ vagrant clone-upstream-repos  # and then to git sync and build:
-$ vagrant sync-openshift3 -s
+$ cd ~/tmp
+$ vagrant openshift3-local-checkout --replace --branch v0.4.4
+$ pushd origin
+$ vagrant origin-init --stage inst --os fedora openshift3-bootstrap --no-synced-folders
+$ vagrant up
+$ vagrant clone-upstream-repos --clean
+$ vagrant checkout-repos --branch v0.4.4
+$ vagrant build-openshift3 --images
+$ vagrant build-sti --binary-only
+$ vagrant bootstrap-openshift
+
+$ rm -f /tmp/fedora_virtualbox_bootstrap.box
+$ vagrant package --output /tmp/fedora_virtualbox_bootstrap.box
 ----
 
 == Notice of Export Control Law

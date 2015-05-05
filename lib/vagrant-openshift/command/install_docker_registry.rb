@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class InstallOpenshift3 < Vagrant.plugin(2, :command)
+      class InstallDockerRegistry < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "installs openshift3"
+          "installs docker registry as container"
         end
 
         def execute
@@ -30,7 +30,7 @@ module Vagrant
           options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant install-docker-registry [vm-name]"
             o.separator ""
           end
 
@@ -39,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.install_openshift3(options)
+            actions = Vagrant::Openshift::Action.install_docker_registry(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #++
-require_relative "../action"
+require_relative '../action'
 
 module Vagrant
   module Openshift
     module Commands
-      class InstallOpenshift3 < Vagrant.plugin(2, :command)
+      class BootstrapOpenshift < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "installs openshift3"
+          'Configures OpenShift with sample project "Turbo"'
         end
 
         def execute
@@ -30,8 +30,8 @@ module Vagrant
           options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-openshift3 [vm-name]"
-            o.separator ""
+            o.banner = 'Usage: vagrant bootstrap-openshift [vm-name]'
+            o.separator ''
           end
 
           # Parse the options
@@ -39,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.install_openshift3(options)
+            actions = Vagrant::Openshift::Action.bootstrap_openshift(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

@@ -1,5 +1,5 @@
 #--
-# Copyright 2013-2015 Red Hat, Inc.
+# Copyright 2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,20 +17,21 @@
 module Vagrant
   module Openshift
     module Action
-      class RunSystemctl
+      class CreateSampleProject
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
-          @env = env
-          @options = options
         end
 
         def call(env)
-          unless @options[:action].nil? || @options[:service].nil?
-            sudo(env[:machine], "systemctl #{@options[:action]} #{@options[:service]} #{@options[:argv]}")
-            @app.call(env)
-          end
+          puts %q[Creating sample OpenShift project 'Turbo']
+
+          sudo(env[:machine], %q[
+              openshift admin new-project turbo --admin=admin --description='Turbo Sample' --display-name='Turbo Sample'
+          ])
+
+          @app.call(env)
         end
       end
     end
