@@ -216,8 +216,8 @@ module Vagrant
           b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
           b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
           b.use WaitForOpenshift
-          b.use InstallOpenshiftRouter
           b.use InstallDockerRegistry
+          b.use InstallOpenshiftRouter
           b.use SetupSamplePolicy
           b.use CreateSampleProject
         end

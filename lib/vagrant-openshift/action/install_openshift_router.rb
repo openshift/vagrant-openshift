@@ -28,7 +28,6 @@ module Vagrant
         def call(env)
           puts 'Installing router'
           do_execute(env[:machine], %q[
-source /etc/profile.d/openshift.sh
 openshift ex router --create --credentials=${OPENSHIFTCONFIG}
 ])
 
