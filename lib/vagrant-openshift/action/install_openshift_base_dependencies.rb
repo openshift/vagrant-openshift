@@ -30,8 +30,12 @@ module Vagrant
           # Tell system to abandon the new naming scheme and use eth* instead
           is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
           if is_fedora
-            sudo(env[:machine], "ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules")
-            sudo(env[:machine], "rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3")
+            sudo(env[:machine], %{
+if ! [[ -L /etc/udev/rules.d/80-net-setup-link.rules ]]; then
+  ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+  rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
+fi
+            }
           end
           
           ssh_user = env[:machine].ssh_info[:username]
