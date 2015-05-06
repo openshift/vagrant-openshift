@@ -19,15 +19,22 @@ module Vagrant
     module Action
       class InstallOpenshift
         include CommandHelper
-        def initialize(app, env)
-          @app = app
-          @env = env
+
+        def initialize(app, env, options)
+          @app     = app
+          @env     = env
+          @options = options
         end
 
         def call(env)
           ssh_user = env[:machine].ssh_info[:username]
+
+          label = @options[:image_label].nil? ?
+              nil :
+              '--images=' + @options[:image_label].gsub('$', '\\$\\$')
+
           sudo(env[:machine], %{
-set -x
+#set -x
 
 #systemctl enable firewalld
 #systemctl start firewalld
@@ -42,6 +49,7 @@ cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
 export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
 export OPENSHIFTCONFIG=/openshift.local.config/master/admin.kubeconfig
+export ORIGIN_PATH=$ORIGIN_PATH
 DELIM
 
 cat > /etc/sysconfig/openshift <<DELIM
@@ -74,6 +82,8 @@ fi
 
 echo Host: \\$HOST
 
+OPTIONS='#{label}'
+
 cat > /usr/lib/systemd/system/openshift.service <<DELIM
 [Unit]
 Description=OpenShift
@@ -84,11 +94,12 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/openshift
-ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
+ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443 \\${OPTIONS}
 
 [Install]
 WantedBy=multi-user.target
 DELIM
+
 systemctl daemon-reload
 OUTERDELIM
 

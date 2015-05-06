@@ -20,8 +20,10 @@ module Vagrant
       class CreateSampleProject
         include CommandHelper
 
-        def initialize(app, env)
-          @app = app
+        def initialize(app, env, options)
+          @app     = app
+          @env     = env
+          @options = options
         end
 
         def call(env)

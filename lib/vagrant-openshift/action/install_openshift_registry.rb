@@ -17,26 +17,37 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallDockerRegistry
+      class InstallOpenshiftRegistry
         include CommandHelper
 
-        def initialize(app, env)
-          @app = app
-          @env = env
+        def initialize(app, env, options)
+          @app         = app
+          @env         = env
+          @options     = options
         end
 
         def call(env)
-          puts 'Installing docker registry'
-          sudo(env[:machine], %q[
+          puts 'Installing OpenShift registry'
+
+          proxy_command = @options[:with_registry_proxy].nil? ?
+              nil :
+              %q[osc create -f $ORIGIN_PATH/images/proxyregistry/pod.json]
+
+          label = @options[:image_label].nil? ?
+              nil :
+              %Q[--images=#{@options[:image_label].gsub('$', '\\$')}]
+
+          sudo(env[:machine], %Q[
 #set -x
 source /etc/profile.d/openshift.sh
 
-CMD="openshift admin registry --create --credentials=${OPENSHIFTCONFIG}"
-OS_RUNNING=$(systemctl status openshift | /bin/grep "(running)")
-if [[ $OS_RUNNING ]]; then
+CMD="openshift admin registry --credentials=${OPENSHIFTCONFIG} #{label}"
+
+if systemctl -q is-active openshift; then
   ${CMD}
+  #{proxy_command}
 else
-  echo "The OpenShift process is not running.  To install a docker registry please start OpenShift and run ${CMD}"
+  echo "The OpenShift process is not running.  To install a registry please start openshift.service and run ${CMD}"
 fi
 ])
           @app.call(env)

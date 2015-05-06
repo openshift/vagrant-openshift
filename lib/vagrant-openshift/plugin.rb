@@ -142,9 +142,9 @@ module Vagrant
         Commands::InstallOpenshiftRouter
       end
 
-      command "install-docker-registry" do
-        require_relative 'command/install_docker_registry'
-        Commands::InstallDockerRegistry
+      command "install-openshift-registry" do
+        require_relative 'command/install_openshift_registry'
+        Commands::InstallOpenshiftRegistry
       end
 
       command "bootstrap-openshift" do

@@ -20,18 +20,25 @@ module Vagrant
       class InstallOpenshiftRouter
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
-          puts 'Installing router'
-          sudo(env[:machine], '
-OS_RUNNING=$(systemctl status openshift | grep "(running)")
-CMD="openshift ex router --create --credentials=${OPENSHIFTCONFIG}"
+          puts 'Installing OpenShift router'
 
-if [[ $OS_RUNNING ]]; then
+          label = @options[:image_label].nil? ?
+              nil :
+              %Q[--images=#{@options[:image_label].gsub('$', '\\$')}]
+
+          sudo(env[:machine], %Q[
+#{}set -x
+
+CMD="openshift ex router --create --credentials=${OPENSHIFTCONFIG} #{label}"
+
+if systemctl -q is-active openshift; then
   ROUTER_EXISTS=$(openshift ex router --credentials=${OPENSHIFTCONFIG} 2>&1 | grep "service exists")
   if [[ -z $ROUTER_EXISTS ]]; then
     echo "Installing OpenShift router"
@@ -40,12 +47,9 @@ if [[ $OS_RUNNING ]]; then
     echo "Router already exists, skipping"
   fi
 else
-  echo "The OpenShift process is not running.  To install a router please start OpenShift and run ${CMD}"
+  echo "The OpenShift process is not running.  To install a router please start openshift.service and run ${CMD}"
 fi
-
-
-')
-
+])
           @app.call(env)
         end
       end

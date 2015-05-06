@@ -26,12 +26,17 @@ module Vagrant
         end
 
         def execute
-          options = {}
-          options[:clean] = false
+          options = {
+              image_label: nil,
+          }
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant install-openshift-router [vm-name]"
             o.separator ""
+
+            o.on('-i [label]', '--images [label]', String, 'Set default label for registry image') do |f|
+              options[:image_label] = f.gsub(/\A["']|['"]\Z/, '')
+            end
           end
 
           # Parse the options

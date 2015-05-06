@@ -127,6 +127,8 @@ module Vagrant
             @env[:ui].info("Searching for latest base AMI")
             images = aws_compute.images.all({'Owner' => 'self', 'name' => "#{box_info[:aws][:ami_tag_prefix]}*",
                                              'state' => 'available' })
+            return if images.empty?
+
             latest_image = images.sort_by{ |i| i.name.split("_")[-1].to_i }.last
             box_info[:aws][:ami] = latest_image.id
             @env[:ui].info("Found: #{latest_image.id} (#{latest_image.name})")

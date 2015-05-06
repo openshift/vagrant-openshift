@@ -18,20 +18,30 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class InstallDockerRegistry < Vagrant.plugin(2, :command)
+      class InstallOpenshiftRegistry < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "installs docker registry as container"
+          'installs OpenShift registry as container'
         end
 
         def execute
-          options = {}
-          options[:clean] = false
+          options = {
+              with_registry_proxy: false,
+              image_label: nil,
+          }
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-docker-registry [vm-name]"
-            o.separator ""
+            o.banner = 'Usage: vagrant install-openshift-registry [vm-name]'
+            o.separator ''
+
+            o.on('--with-proxy', 'Deploy proxy container for OpenShift registry') do |c|
+              options[:with_registry_proxy] = true
+            end
+
+            o.on('-i [label]', '--images [label]', String, 'Set default label for registry image') do |f|
+              options[:image_label] = f.gsub(/\A["']|['"]\Z/, '')
+            end
           end
 
           # Parse the options
@@ -39,7 +49,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.install_docker_registry(options)
+            actions = Vagrant::Openshift::Action.install_openshift_registry(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

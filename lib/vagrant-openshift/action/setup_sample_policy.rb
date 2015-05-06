@@ -20,8 +20,10 @@ module Vagrant
       class SetupSamplePolicy
         include CommandHelper
 
-        def initialize(app, env)
-          @app = app
+        def initialize(app, env, options)
+          @app     = app
+          @env     = env
+          @options = options
         end
 
         def call(env)
@@ -31,7 +33,7 @@ module Vagrant
 #set -x
 
 source /etc/profile.d/openshift.sh
-openshift admin policy add-role-to-group cluster-admin system:authenticated --config=${OPENSHIFTCONFIG} --namespace=master
+openshift admin policy add-role-to-group cluster-admin system:authenticated --config=${OPENSHIFTCONFIG} --namespace=default
           ])
 
           @app.call(env)

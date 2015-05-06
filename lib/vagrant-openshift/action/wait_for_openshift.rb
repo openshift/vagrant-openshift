@@ -23,9 +23,10 @@ module Vagrant
       class WaitForOpenshift
         include CommandHelper
 
-        def initialize(app, env)
-          @app = app
-          @env = env
+        def initialize(app, env, options)
+          @app     = app
+          @env     = env
+          @options = options
         end
 
         def call(env)

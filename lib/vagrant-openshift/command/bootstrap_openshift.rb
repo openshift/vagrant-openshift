@@ -26,12 +26,22 @@ module Vagrant
         end
 
         def execute
-          options = {}
-          options[:clean] = false
+          options = {
+              image_label: nil,
+              with_registry_proxy: false
+          }
 
           opts = OptionParser.new do |o|
             o.banner = 'Usage: vagrant bootstrap-openshift [vm-name]'
             o.separator ''
+
+            o.on('-i [label]', '--images [label]', String, 'Set default label for registry image') do |f|
+              options[:image_label] = f.gsub(/\A["']|['"]\Z/, '')
+            end
+
+            o.on('--with-registry-proxy', 'Deploy proxy container for OpenShift registry') do |c|
+              options[:with_registry_proxy] = true
+            end
           end
 
           # Parse the options

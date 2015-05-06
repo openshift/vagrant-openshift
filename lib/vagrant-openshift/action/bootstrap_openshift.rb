@@ -19,13 +19,16 @@ module Vagrant
     module Action
       class BootstrapOpenshift
         include CommandHelper
-        def initialize(app, env)
-          @app = app
-          @env = env
+
+        def initialize(app, env, options)
+          @app     = app
+          @env     = env
+          @options = options
         end
 
         def call(env)
-          do_execute(env[:machine], %q[echo "Bootstrap OpenShift Environment"])
+          command = %Q[echo "Bootstrap OpenShift Environment: #{@options}"]
+          do_execute(env[:machine], command)
           @app.call(env)
         end
       end

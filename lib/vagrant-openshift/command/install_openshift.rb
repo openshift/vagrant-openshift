@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,16 +22,21 @@ module Vagrant
         include CommandHelper
 
         def self.synopsis
-          "installs openshift"
+          "installs OpenShift"
         end
 
         def execute
-          options = {}
-          options[:clean] = false
+          options = {
+              image_label: nil,
+          }
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-openshift [vm-name]"
+            o.banner = 'Usage: vagrant install-openshift [vm-name]'
             o.separator ""
+
+            o.on('-i [label]', '--images [label]', String, 'Set default label for registry image') do |f|
+              options[:image_label] = f.gsub(/\A["']|['"]\Z/, '')
+            end
           end
 
           # Parse the options

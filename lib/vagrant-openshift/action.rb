@@ -34,7 +34,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallOpenshift
+          b.use InstallOpenshift, options
           b.use InstallOpenshiftRhel7
           b.use InstallOpenshiftAssetDependencies
         end
@@ -43,7 +43,7 @@ module Vagrant
       def self.install_openshift_router(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => "start", :service => "openshift"}
-          b.use InstallOpenshiftRouter
+          b.use InstallOpenshiftRouter, options
           b.use RunSystemctl, {:action => "stop", :service => "openshift"}
         end
       end
@@ -204,23 +204,23 @@ module Vagrant
         end
       end
 
-      def self.install_docker_registry
+      def self.install_openshift_registry(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallDockerRegistry
+          b.use InstallOpenshiftRegistry, options
         end
       end
 
       def self.bootstrap_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => 'restart', :service => 'docker'}
-          b.use BootstrapOpenshift
+          b.use BootstrapOpenshift, options
           b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
           b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
-          b.use WaitForOpenshift
-          b.use InstallOpenshiftRouter
-          b.use InstallDockerRegistry
-          b.use SetupSamplePolicy
-          b.use CreateSampleProject
+          b.use WaitForOpenshift, options
+          b.use InstallOpenshiftRouter, options
+          b.use InstallOpenshiftRegistry, options
+          b.use SetupSamplePolicy, options
+          b.use CreateSampleProject, options
         end
       end
 
@@ -259,7 +259,7 @@ module Vagrant
       autoload :SetupBindHost, action_root.join("setup_bind_host")
       autoload :InstallOpenshiftRouter, action_root.join("install_openshift_router")
       autoload :RunSystemctl, action_root.join("run_systemctl")
-      autoload :InstallDockerRegistry, action_root.join("install_docker_registry")
+      autoload :InstallOpenshiftRegistry, action_root.join("install_openshift_registry")
       autoload :WaitForOpenshift, action_root.join("wait_for_openshift")
       autoload :CreateSampleProject, action_root.join("create_sample_project")
       autoload :SetupSamplePolicy, action_root.join("setup_sample_policy")

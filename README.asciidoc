@@ -423,18 +423,27 @@ $ vagrant build-sti --binary-only
 
 Assuming you are targeting the v0.4.4 for your vagrant box
 
+Leave IMAGES and BRANCHES below empty to get the latest sources.
+
 [source, sh]
 ----
+$ export IMAGES="--images 'openshift/origin-${component}:v0.4.4'"
+$ export BRANCHES="--branch v0.4.4"
+
 $ cd ~/tmp
-$ vagrant openshift-local-checkout --replace --branch v0.4.4
+$ vagrant openshift-local-checkout --replace $BRANCH
 $ pushd origin
 $ vagrant origin-init --stage inst --os fedora openshift-bootstrap --no-synced-folders
 $ vagrant up
 $ vagrant clone-upstream-repos --clean
-$ vagrant checkout-repos --branch v0.4.4
+$ vagrant vagrant checkout-repos $BRANCH
+
+$ vagrant install-openshift $IMAGES
+$ vagrant build-openshift-base
+$ vagrant build-openshift-base-images
 $ vagrant build-openshift --images
 $ vagrant build-sti --binary-only
-$ vagrant bootstrap-openshift
+$ vagrant bootstrap-openshift --with-registry-proxy $IMAGES
 
 $ rm -f /tmp/fedora_virtualbox_bootstrap.box
 $ vagrant package --output /tmp/fedora_virtualbox_bootstrap.box
