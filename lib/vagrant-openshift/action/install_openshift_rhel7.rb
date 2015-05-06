@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshift3Rhel7
+      class InstallOpenshiftRhel7
         include CommandHelper
         def initialize(app, env)
           @app = app

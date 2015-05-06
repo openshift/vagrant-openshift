@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,27 +18,20 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class PushOpenshift3Release < Vagrant.plugin(2, :command)
+      class BuildOpenshiftBaseImages < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "pushes openshift docker images to a registry"
+          "builds openshift infrastructure images"
         end
 
         def execute
           options = {}
+          options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant push-openshift3-release --registry [registry_name] --include-base [vm-name]"
+            o.banner = "Usage: vagrant build-openshift-base-images"
             o.separator ""
-
-            o.on("--registry [registry_name]", String, "A Docker registry to push images to (include a trailing slash)") do |f|
-              options[:registry_name] = f
-            end
-
-            o.on("--include-base", "Include the base infrastructure images in the push.") do |c|
-              options[:push_base_images] = true
-            end
           end
 
           # Parse the options
@@ -46,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.push_openshift3_release(options)
+            actions = Vagrant::Openshift::Action.build_openshift_base_images(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

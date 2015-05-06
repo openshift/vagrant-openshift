@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOpenshift3BaseImages
+      class PushOpenshiftRelease
         include CommandHelper
 
         def initialize(app, env, options)
@@ -27,11 +27,14 @@ module Vagrant
         end
 
         def call(env)
+          registry_name = @options[:registry_name]
+          push_base = !!@options[:push_base_images]
+          env[:machine].config.ssh.pty = true
           do_execute(env[:machine], %{
-echo "Building base images..."
+echo "Pushing release images"
 set -e
 pushd /data/src/github.com/openshift/origin
-  hack/build-base-images.sh
+  OS_PUSH_BASE_IMAGES="#{push_base ? 'true' : ''}" OS_PUSH_BASE_REGISTRY="#{registry_name}" hack/push-release.sh
 popd
 },
             { :timeout => 60*20, :verbose => false })

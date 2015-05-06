@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class LocalOpenshift3Setup < Vagrant.plugin(2, :command)
+      class LocalOpenshiftSetup < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -32,7 +32,7 @@ module Vagrant
           }
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant openshift3-local-checkout [options]"
+            o.banner = "Usage: vagrant openshift-local-checkout [options]"
             o.separator ""
 
             o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
@@ -52,7 +52,7 @@ module Vagrant
           argv = parse_options(opts)
           return if !argv
 
-          actions = Vagrant::Openshift::Action.local_openshift3_checkout(options)
+          actions = Vagrant::Openshift::Action.local_openshift_checkout(options)
           @env.action_runner.run actions
           0
         end

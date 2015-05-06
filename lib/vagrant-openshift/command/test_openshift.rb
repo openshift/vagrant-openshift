@@ -18,28 +18,36 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildOpenshift3 < Vagrant.plugin(2, :command)
+      class TestOpenshift < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "builds openshift"
+          "run the openshift tests"
         end
 
         def execute
           options = {}
-          options[:clean] = false
-          options[:images] = false
-          options[:force] = false
+          options[:download] = false
+          options[:all] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant test-openshift [machine-name]"
             o.separator ""
 
-            o.on("--images", "Build the images as well as core content.") do |c|
-              options[:images] = true
+            o.on("-a", "--all", String, "Run all tests") do |f|
+              options[:all] = true
             end
-            o.on("--force", "Build regardless of whether there have been changes.") do |c|
-              options[:force] = true
+
+            o.on("-d","--artifacts", String, "Download logs") do |f|
+              options[:download] = true
+            end
+
+            o.on("-s","--skip-image-cleanup", String, "Skip Docker image teardown for E2E test") do |f|
+              options[:skip_image_cleanup] = true
+            end
+
+            o.on("-c","--report-coverage", String, "Generate code coverage report") do |f|
+              options[:report_coverage] = true
             end
           end
 
@@ -48,7 +56,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_openshift3(options)
+            actions = Vagrant::Openshift::Action.run_openshift_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

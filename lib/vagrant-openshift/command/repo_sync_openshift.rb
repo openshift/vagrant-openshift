@@ -18,45 +18,48 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-
-      class PushOpenshift3Images < Vagrant.plugin(2, :command)
+      class RepoSyncOpenshift < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "build and push openshift v3 images"
+          "syncs your local repos to the current instance"
         end
 
         def execute
           options = {}
-          options[:registry] = nil
+          options[:images] = true
+          options[:build] = true
+          options[:clean] = false
+          options[:source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant push-openshift3-images --registry DOCKER_REGISTRY [vm-name]"
-            o.on("--registry [url]", String, "Docker Registry to push images to.") do |c|
-              options[:registry] = c
-            end
-            o.on("--build_images [list]", String, "List of IMAGE:REF pairs, delimited by ','") do |i|
-              options[:build_images] = i
-            end
+            o.banner = "Usage: vagrant sync-openshift [vm-name]"
             o.separator ""
+
+            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
+              options[:source] = f
+            end
+
+            o.on("-c", "--clean", "Delete existing repo before syncing source") do |f|
+              options[:clean] = f
+            end
+
+            o.on("--dont-install", "Don't build and install updated source") do |f|
+              options[:build] = false
+            end
+
+            o.on("--no-images", "Don't build updated component Docker images") do |f|
+              options[:images] = false
+            end
+
           end
 
           # Parse the options
           argv = parse_options(opts)
           return if !argv
 
-          if options[:registry].nil?
-            @env.ui.warn "You must specify target Docker registry"
-            exit
-          end
-
-          if options[:build_images].nil?
-            @env.ui.warn "You must specify list of images to build"
-            exit
-          end
-
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.push_openshift3_images(options)
+            actions = Vagrant::Openshift::Action.repo_sync_openshift(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

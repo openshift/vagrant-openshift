@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class PushOpenshift3Images
+      class PushOpenshiftImages
         include CommandHelper
 
         def initialize(app, env, options)
@@ -78,7 +78,7 @@ fi
           cmd = %{
 rm -rf ~/latest_images ; touch ~/latest_images
           }
-          Vagrant::Openshift::Constants.openshift3_images.each do |name, git_url|
+          Vagrant::Openshift::Constants.openshift_images.each do |name, git_url|
             cmd += %{
 set +e
 git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
@@ -116,7 +116,7 @@ docker pull #{@options[:registry]}openshift/base-rhel7
 
           build_images.each do |image|
             name, git_ref = image.split(':')
-            repo_url = Vagrant::Openshift::Constants.openshift3_images[name]
+            repo_url = Vagrant::Openshift::Constants.openshift_images[name]
             if repo_url == nil
               puts "Unregistered image: #{name}, skipping"
               next

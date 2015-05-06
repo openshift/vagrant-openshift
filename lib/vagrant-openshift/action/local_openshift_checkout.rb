@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class LocalOpenshift3Checkout
+      class LocalOpenshiftCheckout
         include CommandHelper
 
         def initialize(app, env, options)
@@ -38,7 +38,7 @@ module Vagrant
           end
           Dir.chdir(go_path) do
             commands = "echo 'Waiting for the cloning process to finish'\n"
-            Constants.openshift3_repos.each do |repo, url|
+            Constants.openshift_repos.each do |repo, url|
               commands += %{
 ( #{repo_checkout_bash_command(repo, url)} ) &
 PIDS+=$!\" \";

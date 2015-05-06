@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,34 +17,27 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshift3AssetDependencies
+      class BuildOpenshiftBaseImages
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
-          ssh_user = env[:machine].ssh_info[:username]
           do_execute(env[:machine], %{
-
-ORIGIN_PATH=/data/src/github.com/openshift/origin
-
-if ! which bundler > /dev/null 2>&1 ; then
-  gem install bundler
-fi
-
-if ! which npm > /dev/null 2>&1 ; then
-  sudo yum -y install npm
-fi
-
-pushd $ORIGIN_PATH
-  hack/install-assets.sh
+echo "Building base images..."
+set -e
+pushd /data/src/github.com/openshift/origin
+  hack/build-base-images.sh
 popd
-          }, {:timeout=>60*20})
+},
+            { :timeout => 60*20, :verbose => false })
           @app.call(env)
         end
+
       end
     end
   end

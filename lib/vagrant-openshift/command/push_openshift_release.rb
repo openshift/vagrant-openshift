@@ -18,20 +18,27 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class TryRestartOpenshift3 < Vagrant.plugin(2, :command)
+      class PushOpenshiftRelease < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "restarts openshift if it's already running"
+          "pushes openshift docker images to a registry"
         end
 
         def execute
           options = {}
-          options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant try-restart-openshift3 [vm-name]"
+            o.banner = "Usage: vagrant push-openshift-release --registry [registry_name] --include-base [vm-name]"
             o.separator ""
+
+            o.on("--registry [registry_name]", String, "A Docker registry to push images to (include a trailing slash)") do |f|
+              options[:registry_name] = f
+            end
+
+            o.on("--include-base", "Include the base infrastructure images in the push.") do |c|
+              options[:push_base_images] = true
+            end
           end
 
           # Parse the options
@@ -39,7 +46,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.try_restart_openshift3(options)
+            actions = Vagrant::Openshift::Action.push_openshift_release(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

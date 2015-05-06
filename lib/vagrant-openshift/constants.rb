@@ -20,17 +20,17 @@ module Vagrant
     class Constants
 
       def self.repos(env)
-        openshift3_repos
+        openshift_repos
       end
 
-      def self.openshift3_repos
+      def self.openshift_repos
         {
           'origin' => 'https://github.com/openshift/origin.git',
           'source-to-image' => 'https://github.com/openshift/source-to-image.git'
         }
       end
 
-      def self.openshift3_images
+      def self.openshift_images
         {
           'openshift/base'          => 'https://github.com/openshift/sti-base.git',
           'openshift/nodejs-010'    => 'https://github.com/openshift/sti-nodejs.git',

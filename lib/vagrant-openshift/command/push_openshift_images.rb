@@ -18,45 +18,45 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class TestOpenshift3 < Vagrant.plugin(2, :command)
+
+      class PushOpenshiftImages < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "run the openshift tests"
+          "build and push openshift images"
         end
 
         def execute
           options = {}
-          options[:download] = false
-          options[:all] = false
+          options[:registry] = nil
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant test-openshift3 [machine-name]"
+            o.banner = "Usage: vagrant push-openshift-images --registry DOCKER_REGISTRY [vm-name]"
+            o.on("--registry [url]", String, "Docker Registry to push images to.") do |c|
+              options[:registry] = c
+            end
+            o.on("--build_images [list]", String, "List of IMAGE:REF pairs, delimited by ','") do |i|
+              options[:build_images] = i
+            end
             o.separator ""
-
-            o.on("-a", "--all", String, "Run all tests") do |f|
-              options[:all] = true
-            end
-
-            o.on("-d","--artifacts", String, "Download logs") do |f|
-              options[:download] = true
-            end
-
-            o.on("-s","--skip-image-cleanup", String, "Skip Docker image teardown for E2E test") do |f|
-              options[:skip_image_cleanup] = true
-            end
-
-            o.on("-c","--report-coverage", String, "Generate code coverage report") do |f|
-              options[:report_coverage] = true
-            end
           end
 
           # Parse the options
           argv = parse_options(opts)
           return if !argv
 
+          if options[:registry].nil?
+            @env.ui.warn "You must specify target Docker registry"
+            exit
+          end
+
+          if options[:build_images].nil?
+            @env.ui.warn "You must specify list of images to build"
+            exit
+          end
+
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.run_openshift3_tests(options)
+            actions = Vagrant::Openshift::Action.push_openshift_images(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

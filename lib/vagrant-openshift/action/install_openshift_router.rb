@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshift3Router
+      class InstallOpenshiftRouter
         include CommandHelper
 
         def initialize(app, env)

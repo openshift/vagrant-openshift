@@ -1,5 +1,5 @@
 #--
-# Copyright 2014 Red Hat, Inc.
+# Copyright 2013 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,30 +17,34 @@
 module Vagrant
   module Openshift
     module Action
-      class PushOpenshift3Release
+      class InstallOpenshiftAssetDependencies
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options
         end
 
         def call(env)
-          registry_name = @options[:registry_name]
-          push_base = !!@options[:push_base_images]
-          env[:machine].config.ssh.pty = true
+          ssh_user = env[:machine].ssh_info[:username]
           do_execute(env[:machine], %{
-echo "Pushing release images"
-set -e
-pushd /data/src/github.com/openshift/origin
-  OS_PUSH_BASE_IMAGES="#{push_base ? 'true' : ''}" OS_PUSH_BASE_REGISTRY="#{registry_name}" hack/push-release.sh
+
+ORIGIN_PATH=/data/src/github.com/openshift/origin
+
+if ! which bundler > /dev/null 2>&1 ; then
+  gem install bundler
+fi
+
+if ! which npm > /dev/null 2>&1 ; then
+  sudo yum -y install npm
+fi
+
+pushd $ORIGIN_PATH
+  hack/install-assets.sh
 popd
-},
-            { :timeout => 60*20, :verbose => false })
+          }, {:timeout=>60*20})
           @app.call(env)
         end
-
       end
     end
   end
