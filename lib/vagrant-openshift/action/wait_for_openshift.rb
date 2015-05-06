@@ -33,6 +33,7 @@ module Vagrant
 
           uri    = URI.parse('https://localhost:8443/api')
           status = nil
+          retries = 0
           begin
             until '200' == status
               uri.open(ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, read_timeout: 10) do |response|
@@ -45,12 +46,14 @@ module Vagrant
                 end
               end
             end
-          rescue OpenSSL::SSL::SSLError, Errno::ECONNRESET, OpenURI::HTTPError
-            sleep 1
-            retry
           rescue => e
-            puts "#{e.class}: #{e.message}"
-            raise
+            retries += 1
+            if retries < 10
+              sleep 5
+              retry
+            else
+              raise
+            end
           end
 
           @app.call(env)
