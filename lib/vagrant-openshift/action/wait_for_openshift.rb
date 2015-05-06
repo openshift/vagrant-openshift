@@ -29,32 +29,26 @@ module Vagrant
         end
 
         def call(env)
-          puts 'Waiting on openshift...'
+          puts 'Waiting on openshift to become active...'
 
-          uri    = URI.parse('https://localhost:8443/api')
-          status = nil
-          retries = 0
-          begin
-            until '200' == status
-              uri.open(ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, read_timeout: 10) do |response|
-                status = response.status[0]
-                if '200' == status
-                  puts "...#{response.status[1]}"
-                else
-                  puts "...#{response.status[1]}:#{status}"
-                  sleep 1
-                end
-              end
-            end
-          rescue => e
-            retries += 1
-            if retries < 10
-              sleep 5
-              retry
-            else
-              raise
-            end
-          end
+          sudo(env[:machine], %{
+active=false
+i=0
+while [ $i -lt 10 ]
+do
+  if systemctl is-active openshift 2>&1 > /dev/null
+  then
+    active=true
+    break
+  fi
+  sleep 2
+  i=$[$i+1]
+done
+if ! $active
+then
+  exit 1
+fi
+          })
 
           @app.call(env)
         end
