@@ -28,16 +28,7 @@ module Vagrant
         def call(env)
           puts 'Installing docker registry'
           sudo(env[:machine], %q[
-#set -x
-source /etc/profile.d/openshift.sh
-
-CMD="openshift admin registry --create --credentials=${OPENSHIFTCONFIG}"
-OS_RUNNING=$(systemctl status openshift | /bin/grep "(running)")
-if [[ $OS_RUNNING ]]; then
-  ${CMD}
-else
-  echo "The OpenShift process is not running.  To install a docker registry please start OpenShift and run ${CMD}"
-fi
+openshift admin registry --create --credentials=${OPENSHIFTCONFIG}
 ])
           @app.call(env)
         end
