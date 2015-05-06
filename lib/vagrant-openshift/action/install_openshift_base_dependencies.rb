@@ -26,6 +26,14 @@ module Vagrant
         end
 
         def call(env)
+          # Workaround to vagrant inability to guess interface naming sequence
+          # Tell system to abandon the new naming scheme and use eth* instead
+          is_fedora = env[:machine].communicate.test("test -e /etc/fedora-release")
+          if is_fedora
+            sudo(env[:machine], "ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules")
+            sudo(env[:machine], "rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3")
+          end
+          
           ssh_user = env[:machine].ssh_info[:username]
           # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
           #        add the image into 'repositories' constants
