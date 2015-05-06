@@ -21,48 +21,48 @@ module Vagrant
     module Action
       include Vagrant::Action::Builtin
 
-      def self.build_openshift3_base(options)
+      def self.build_openshift_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallOpenshift3BaseDependencies
+          b.use InstallOpenshiftBaseDependencies
         end
       end
 
-      def self.install_openshift3(options)
+      def self.install_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallOpenshift3
-          b.use InstallOpenshift3Rhel7
-          b.use InstallOpenshift3AssetDependencies
+          b.use InstallOpenshift
+          b.use InstallOpenshiftRhel7
+          b.use InstallOpenshiftAssetDependencies
         end
       end
 
-      def self.install_openshift3_router(options)
+      def self.install_openshift_router(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => "start", :service => "openshift"}
-          b.use InstallOpenshift3Router
+          b.use InstallOpenshiftRouter
           b.use RunSystemctl, {:action => "stop", :service => "openshift"}
         end
       end
 
-      def self.install_openshift3_assets_base(options)
+      def self.install_openshift_assets_base(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallOpenshift3AssetDependencies
+          b.use InstallOpenshiftAssetDependencies
         end
       end
 
-      def self.build_openshift3(options)
+      def self.build_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift3, options
+          b.use BuildOpenshift, options
         end
       end
 
-      def self.push_openshift3_images(options)
+      def self.push_openshift_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PushOpenshift3Images, options
+          b.use PushOpenshiftImages, options
         end
       end
 
@@ -72,19 +72,19 @@ module Vagrant
         end
       end
 
-      def self.try_restart_openshift3(options)
+      def self.try_restart_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
         end
       end
 
-      def self.build_openshift3_base_images(options)
+      def self.build_openshift_base_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift3BaseImages, options
+          b.use BuildOpenshiftBaseImages, options
         end
       end
 
-      def self.repo_sync_openshift3(options)
+      def self.repo_sync_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
           if options[:source]
@@ -94,11 +94,11 @@ module Vagrant
             end
             b.use SyncLocalRepository
             b.use CheckoutRepositories
-            b.use InstallOpenshift3AssetDependencies
+            b.use InstallOpenshiftAssetDependencies
           end
           if options[:build]
-            b.use(BuildOpenshift3BaseImages, options) if options[:images]
-            b.use(BuildOpenshift3, options)
+            b.use(BuildOpenshiftBaseImages, options) if options[:images]
+            b.use(BuildOpenshift, options)
             b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
           end
         end
@@ -121,19 +121,19 @@ module Vagrant
         end
       end
 
-      def self.local_openshift3_checkout(options)
+      def self.local_openshift_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
-            b.use LocalOpenshift3Checkout, options
+            b.use LocalOpenshiftCheckout, options
           end
         end
       end
 
-      def self.run_openshift3_tests(options)
+      def self.run_openshift_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use RunOpenshift3Tests, options
+          b.use RunOpenshiftTests, options
           if options[:download]
-            b.use DownloadArtifactsOpenshift3
+            b.use DownloadArtifactsOpenshift
           end
           b.use TestExitCode
         end
@@ -180,9 +180,9 @@ module Vagrant
         end
       end
 
-      def self.push_openshift3_release(options)
+      def self.push_openshift_release(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PushOpenshift3Release, options
+          b.use PushOpenshiftRelease, options
         end
       end
 
@@ -217,7 +217,7 @@ module Vagrant
           b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
           b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
           b.use WaitForOpenshift
-          b.use InstallOpenshift3Router
+          b.use InstallOpenshiftRouter
           b.use InstallDockerRegistry
           b.use SetupSamplePolicy
           b.use CreateSampleProject
@@ -232,32 +232,32 @@ module Vagrant
       autoload :SetupBindDnsKey, action_root.join("setup_bind_dns_key")
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
-      autoload :InstallOpenshift3BaseDependencies, action_root.join("install_openshift3_base_dependencies")
-      autoload :InstallOpenshift3AssetDependencies, action_root.join("install_openshift3_asset_dependencies")
-      autoload :BuildOpenshift3BaseImages, action_root.join("build_openshift3_base_images")
-      autoload :PushOpenshift3Images, action_root.join("push_openshift3_images")
-      autoload :PushOpenshift3Release, action_root.join("push_openshift3_release")
-      autoload :InstallOpenshift3, action_root.join("install_openshift3")
-      autoload :InstallOpenshift3Rhel7, action_root.join("install_openshift3_rhel7")
-      autoload :BuildOpenshift3, action_root.join("build_openshift3")
+      autoload :InstallOpenshiftBaseDependencies, action_root.join("install_openshift_base_dependencies")
+      autoload :InstallOpenshiftAssetDependencies, action_root.join("install_openshift_asset_dependencies")
+      autoload :BuildOpenshiftBaseImages, action_root.join("build_openshift_base_images")
+      autoload :PushOpenshiftImages, action_root.join("push_openshift_images")
+      autoload :PushOpenshiftRelease, action_root.join("push_openshift_release")
+      autoload :InstallOpenshift, action_root.join("install_openshift")
+      autoload :InstallOpenshiftRhel7, action_root.join("install_openshift_rhel7")
+      autoload :BuildOpenshift, action_root.join("build_openshift")
       autoload :BuildSti, action_root.join("build_sti")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
-      autoload :LocalOpenshift3Checkout, action_root.join("local_openshift3_checkout")
+      autoload :LocalOpenshiftCheckout, action_root.join("local_openshift_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
-      autoload :RunOpenshift3Tests, action_root.join("run_openshift3_tests")
+      autoload :RunOpenshiftTests, action_root.join("run_openshift_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
-      autoload :DownloadArtifactsOpenshift3, action_root.join("download_artifacts_openshift3")
+      autoload :DownloadArtifactsOpenshift, action_root.join("download_artifacts_openshift")
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :SetupBindHost, action_root.join("setup_bind_host")
-      autoload :InstallOpenshift3Router, action_root.join("install_openshift3_router")
+      autoload :InstallOpenshiftRouter, action_root.join("install_openshift_router")
       autoload :RunSystemctl, action_root.join("run_systemctl")
       autoload :InstallDockerRegistry, action_root.join("install_docker_registry")
       autoload :WaitForOpenshift, action_root.join("wait_for_openshift")

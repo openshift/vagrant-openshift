@@ -29,7 +29,7 @@ module Vagrant
         end
 
         def call(env)
-          puts 'Waiting on origin...'
+          puts 'Waiting on openshift...'
 
           uri    = URI.parse('https://localhost:8443/api')
           status = nil
@@ -50,7 +50,7 @@ module Vagrant
             retry
           rescue => e
             puts "#{e.class}: #{e.message}"
-            exit
+            raise
           end
 
           @app.call(env)

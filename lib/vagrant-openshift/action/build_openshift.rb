@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOpenshift3
+      class BuildOpenshift
         include CommandHelper
 
         def initialize(app, env, options)

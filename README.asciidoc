@@ -55,7 +55,7 @@ $ vagrant plugin install vagrant-openshift
 
 This plugin works in concert with the
 link:https://github.com/openshift/origin/blob/master/Vagrantfile[OpenShift Origin Vagrantfile]
-to build and update OpenShift v3 development environments.
+to build and update OpenShift development environments.
 
 ==== Clone the OpenShift Origin repositories
 
@@ -77,7 +77,7 @@ Then clone the repositories into your GOPATH.
 [source, sh]
 ----
 $ cd $GOPATH
-$ vagrant openshift3-local-checkout -u <github username>
+$ vagrant openshift-local-checkout -u <github username>
 $ cd src/github.com/openshift/origin
 ----
 
@@ -113,7 +113,7 @@ NOTE: See link:#other-providers[Other Providers] below for launching VMs from ot
 
 [source, sh]
 ----
-$ vagrant sync-openshift3
+$ vagrant sync-openshift
 ----
 
 For some providers, your local repositories are automatically synchronized
@@ -128,7 +128,7 @@ rebuild only the OpenShift binary, use the `--no-images` option.
 
 [source, sh]
 ----
-$ vagrant test-openshift3 --all
+$ vagrant test-openshift --all
 ----
 
 
@@ -404,18 +404,18 @@ help with this:
 
 [source, sh]
 ----
-$ vagrant build-openshift3-base
-$ vagrant build-openshift3-base-images
-$ vagrant install-openshift3-assets-base
+$ vagrant build-openshift-base
+$ vagrant build-openshift-base-images
+$ vagrant install-openshift-assets-base
 ----
 
 Given this base foundation, you may want to `vagrant package` the result before proceeding to install OpenShift code.
 
 [source, sh]
 ----
-$ vagrant install-openshift3
-$ vagrant build-openshift3-base-images  # pick up updates if older "deps" base reused
-$ vagrant build-openshift3 --images
+$ vagrant install-openshift
+$ vagrant build-openshift-base-images  # pick up updates if older "deps" base reused
+$ vagrant build-openshift --images
 $ vagrant build-sti --binary-only
 ----
 
@@ -426,13 +426,13 @@ Assuming you are targeting the v0.4.4 for your vagrant box
 [source, sh]
 ----
 $ cd ~/tmp
-$ vagrant openshift3-local-checkout --replace --branch v0.4.4
+$ vagrant openshift-local-checkout --replace --branch v0.4.4
 $ pushd origin
-$ vagrant origin-init --stage inst --os fedora openshift3-bootstrap --no-synced-folders
+$ vagrant origin-init --stage inst --os fedora openshift-bootstrap --no-synced-folders
 $ vagrant up
 $ vagrant clone-upstream-repos --clean
 $ vagrant checkout-repos --branch v0.4.4
-$ vagrant build-openshift3 --images
+$ vagrant build-openshift --images
 $ vagrant build-sti --binary-only
 $ vagrant bootstrap-openshift
 

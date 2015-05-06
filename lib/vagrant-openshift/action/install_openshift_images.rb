@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshift3Images
+      class InstallOpenshiftImages
         include CommandHelper
 
         def initialize(app, env)

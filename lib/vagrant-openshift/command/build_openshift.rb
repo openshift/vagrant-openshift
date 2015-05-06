@@ -18,20 +18,29 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class InstallOpenshift3Router < Vagrant.plugin(2, :command)
+      class BuildOpenshift < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "installs openshift3 router"
+          "builds openshift"
         end
 
         def execute
           options = {}
           options[:clean] = false
+          options[:images] = false
+          options[:force] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-openshift3-router [vm-name]"
+            o.banner = "Usage: vagrant build-openshift [vm-name]"
             o.separator ""
+
+            o.on("--images", "Build the images as well as core content.") do |c|
+              options[:images] = true
+            end
+            o.on("--force", "Build regardless of whether there have been changes.") do |c|
+              options[:force] = true
+            end
           end
 
           # Parse the options
@@ -39,7 +48,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.install_openshift3_router(options)
+            actions = Vagrant::Openshift::Action.build_openshift(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

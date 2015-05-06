@@ -19,7 +19,7 @@ module Vagrant
   module Openshift
     module Commands
 
-      class TestOpenshift3Image < Vagrant.plugin(2, :command)
+      class TestOpenshiftImage < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -36,7 +36,7 @@ module Vagrant
           options[:registry] = ""
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant test-openshift3-image --image IMAGE [vm-name]"
+            o.banner = "Usage: vagrant test-openshift-image --image IMAGE [vm-name]"
             o.separator ""
 
             o.on("-i", "--image IMAGE", String, "image to test") do |o|

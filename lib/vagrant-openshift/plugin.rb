@@ -32,9 +32,9 @@ module Vagrant
         Config
       end
 
-      command "sync-openshift3" do
-        require_relative "command/repo_sync_openshift3"
-        Commands::RepoSyncOpenshift3
+      command "sync-openshift" do
+        require_relative "command/repo_sync_openshift"
+        Commands::RepoSyncopenshift
       end
 
       command "sync-sti" do
@@ -42,14 +42,14 @@ module Vagrant
         Commands::RepoSyncSti
       end
 
-      command "build-openshift3-base" do
-        require_relative "command/build_openshift3_base"
-        Commands::BuildOpenshift3Base
+      command "build-openshift-base" do
+        require_relative "command/build_openshift_base"
+        Commands::BuildopenshiftBase
       end
 
-      command "build-openshift3" do
-        require_relative "command/build_openshift3"
-        Commands::BuildOpenshift3
+      command "build-openshift" do
+        require_relative "command/build_openshift"
+        Commands::Buildopenshift
       end
 
       command "build-sti" do
@@ -57,29 +57,29 @@ module Vagrant
         Commands::BuildSti
       end
 
-      command "install-openshift3" do
-        require_relative "command/install_openshift3"
-        Commands::InstallOpenshift3
+      command "install-openshift" do
+        require_relative "command/install_openshift"
+        Commands::Installopenshift
       end
 
-      command "install-openshift3-assets-base" do
-        require_relative "command/install_openshift3_assets_base"
-        Commands::InstallOpenshift3AssetsBase
+      command "install-openshift-assets-base" do
+        require_relative "command/install_openshift_assets_base"
+        Commands::InstallopenshiftAssetsBase
       end
 
-      command "try-restart-openshift3" do
-        require_relative "command/try_restart_openshift3"
-        Commands::TryRestartOpenshift3
+      command "try-restart-openshift" do
+        require_relative "command/try_restart_openshift"
+        Commands::TryRestartopenshift
       end
 
-      command "build-openshift3-base-images" do
-        require_relative "command/build_openshift3_base_images"
-        Commands::BuildOpenshift3BaseImages
+      command "build-openshift-base-images" do
+        require_relative "command/build_openshift_base_images"
+        Commands::BuildopenshiftBaseImages
       end
 
-      command "push-openshift3-images" do
-        require_relative "command/push_openshift3_images"
-        Commands::PushOpenshift3Images
+      command "push-openshift-images" do
+        require_relative "command/push_openshift_images"
+        Commands::PushopenshiftImages
       end
 
       command "origin-init" do
@@ -87,19 +87,19 @@ module Vagrant
         Commands::OpenshiftInit
       end
 
-      command "openshift3-local-checkout" do
-        require_relative "command/local_openshift3_setup"
-        Commands::LocalOpenshift3Setup
+      command "openshift-local-checkout" do
+        require_relative "command/local_openshift_setup"
+        Commands::LocalopenshiftSetup
       end
 
-      command "push-openshift3-release" do
-        require_relative "command/push_openshift3_release"
-        Commands::PushOpenshift3Release
+      command "push-openshift-release" do
+        require_relative "command/push_openshift_release"
+        Commands::PushopenshiftRelease
       end
 
-      command "test-openshift3" do
-        require_relative "command/test_openshift3"
-        Commands::TestOpenshift3
+      command "test-openshift" do
+        require_relative "command/test_openshift"
+        Commands::Testopenshift
       end
 
       command "test-sti" do
@@ -132,14 +132,14 @@ module Vagrant
         Commands::CheckoutRepositories
       end
 
-      command "test-openshift3-image" do
-        require_relative "command/test_openshift3_image"
-        Commands::TestOpenshift3Image
+      command "test-openshift-image" do
+        require_relative "command/test_openshift_image"
+        Commands::TestopenshiftImage
       end
 
-      command "install-openshift3-router" do
-        require_relative "command/install_openshift3_router"
-        Commands::InstallOpenshift3Router
+      command "install-openshift-router" do
+        require_relative "command/install_openshift_router"
+        Commands::InstallopenshiftRouter
       end
 
       command "install-docker-registry" do
