@@ -34,7 +34,7 @@ module Vagrant
 
       command "sync-openshift" do
         require_relative "command/repo_sync_openshift"
-        Commands::RepoSyncopenshift
+        Commands::RepoSyncOpenshift
       end
 
       command "sync-sti" do
@@ -44,12 +44,12 @@ module Vagrant
 
       command "build-openshift-base" do
         require_relative "command/build_openshift_base"
-        Commands::BuildopenshiftBase
+        Commands::BuildOpenshiftBase
       end
 
       command "build-openshift" do
         require_relative "command/build_openshift"
-        Commands::Buildopenshift
+        Commands::BuildOpenshift
       end
 
       command "build-sti" do
@@ -59,27 +59,27 @@ module Vagrant
 
       command "install-openshift" do
         require_relative "command/install_openshift"
-        Commands::Installopenshift
+        Commands::InstallOpenshift
       end
 
       command "install-openshift-assets-base" do
         require_relative "command/install_openshift_assets_base"
-        Commands::InstallopenshiftAssetsBase
+        Commands::InstallOpenshiftAssetsBase
       end
 
       command "try-restart-openshift" do
         require_relative "command/try_restart_openshift"
-        Commands::TryRestartopenshift
+        Commands::TryRestartOpenshift
       end
 
       command "build-openshift-base-images" do
         require_relative "command/build_openshift_base_images"
-        Commands::BuildopenshiftBaseImages
+        Commands::BuildOpenshiftBaseImages
       end
 
       command "push-openshift-images" do
         require_relative "command/push_openshift_images"
-        Commands::PushopenshiftImages
+        Commands::PushOpenshiftImages
       end
 
       command "origin-init" do
@@ -89,17 +89,17 @@ module Vagrant
 
       command "openshift-local-checkout" do
         require_relative "command/local_openshift_setup"
-        Commands::LocalopenshiftSetup
+        Commands::LocalOpenshiftSetup
       end
 
       command "push-openshift-release" do
         require_relative "command/push_openshift_release"
-        Commands::PushopenshiftRelease
+        Commands::PushOpenshiftRelease
       end
 
       command "test-openshift" do
         require_relative "command/test_openshift"
-        Commands::Testopenshift
+        Commands::TestOpenshift
       end
 
       command "test-sti" do
@@ -134,12 +134,12 @@ module Vagrant
 
       command "test-openshift-image" do
         require_relative "command/test_openshift_image"
-        Commands::TestopenshiftImage
+        Commands::TestOpenshiftImage
       end
 
       command "install-openshift-router" do
         require_relative "command/install_openshift_router"
-        Commands::InstallopenshiftRouter
+        Commands::InstallOpenshiftRouter
       end
 
       command "install-docker-registry" do
