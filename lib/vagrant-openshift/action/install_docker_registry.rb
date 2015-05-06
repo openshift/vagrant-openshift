@@ -27,7 +27,8 @@ module Vagrant
 
         def call(env)
           puts 'Installing docker registry'
-          sudo(env[:machine], %q[
+          do_execute(env[:machine], %q[
+source /etc/profile.d/openshift.sh
 openshift admin registry --create --credentials=${OPENSHIFTCONFIG}
 ])
           @app.call(env)

@@ -213,7 +213,6 @@ module Vagrant
       def self.bootstrap_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => 'restart', :service => 'docker'}
-          b.use BootstrapOpenshift
           b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
           b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
           b.use WaitForOpenshift
@@ -263,7 +262,6 @@ module Vagrant
       autoload :WaitForOpenshift, action_root.join("wait_for_openshift")
       autoload :CreateSampleProject, action_root.join("create_sample_project")
       autoload :SetupSamplePolicy, action_root.join("setup_sample_policy")
-      autoload :BootstrapOpenshift, action_root.join("bootstrap_openshift")
     end
   end
 end
