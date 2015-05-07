@@ -40,6 +40,10 @@ systemctl restart docker
         def build_image(image_name, git_ref, repo_url, registry)
           %{
 set -e
+
+# so we can call sti
+PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
+
 dest_dir="/data/src/github/openshift/#{image_name}"
 rm -rf ${dest_dir}; mkdir -p ${dest_dir}
 if git clone #{repo_url} ${dest_dir}; then
