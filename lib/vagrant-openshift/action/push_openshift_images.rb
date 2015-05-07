@@ -46,8 +46,11 @@ if git clone #{repo_url} ${dest_dir}; then
   pushd ${dest_dir}
     git checkout #{git_ref}
     git_ref=$(git rev-parse --short HEAD)
-    echo "Building #{image_name}:$git_ref"
-
+    echo "Building and testing #{image_name}:$git_ref"
+    if ! make test TARGET=centos7; then
+      echo "ERROR: #{image_name}-centos7 failed testing."
+      exit 1
+    fi
     if make build TARGET=centos7; then
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
@@ -60,6 +63,10 @@ if git clone #{repo_url} ${dest_dir}; then
       exit 1
     fi
 
+    if ! make test TARGET=rhel7; then
+      echo "ERROR: #{image_name}-centos7 failed testing."
+      exit 1
+    fi
     if make build TARGET=rhel7; then
       docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
       docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
