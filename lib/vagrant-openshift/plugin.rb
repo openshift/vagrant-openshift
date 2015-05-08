@@ -137,16 +137,6 @@ module Vagrant
         Commands::TestOpenshiftImage
       end
 
-      command "install-openshift-router" do
-        require_relative "command/install_openshift_router"
-        Commands::InstallOpenshiftRouter
-      end
-
-      command "install-docker-registry" do
-        require_relative 'command/install_docker_registry'
-        Commands::InstallDockerRegistry
-      end
-
       command "bootstrap-openshift" do
         require_relative 'command/bootstrap_openshift'
         Commands::BootstrapOpenshift

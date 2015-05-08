@@ -31,7 +31,8 @@ module Vagrant
             :os       => 'centos7',
             :stage    => 'inst',
             :port_mappings => [],
-            :no_synced_folders => false
+            :no_synced_folders => false,
+            :no_insert_key => false
           }
 
           valid_stage = ['os','deps','inst', 'bootstrap']
@@ -55,6 +56,10 @@ module Vagrant
 
             o.on('--no-synced-folders', 'Checkout source into image rather than mapping from host system') do |f|
               options[:no_synced_folders] = true
+            end
+
+            o.on('--no-insert-key', 'Insert a secure ssh key on vagrant up') do |f|
+              options[:no_insert_key] = true
             end
           end
 

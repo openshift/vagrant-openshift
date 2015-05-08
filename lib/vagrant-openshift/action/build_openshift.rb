@@ -60,7 +60,7 @@ popd
           else
             cmd = sync_bash_command('origin', cmd)
           end
-          do_execute(env[:machine], cmd) 
+          do_execute(env[:machine], cmd)
           @app.call(env)
         end
       end

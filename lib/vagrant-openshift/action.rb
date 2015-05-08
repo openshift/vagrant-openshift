@@ -40,14 +40,6 @@ module Vagrant
         end
       end
 
-      def self.install_openshift_router(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use RunSystemctl, {:action => "start", :service => "openshift"}
-          b.use InstallOpenshiftRouter
-          b.use RunSystemctl, {:action => "stop", :service => "openshift"}
-        end
-      end
-
       def self.install_openshift_assets_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use InstallOpenshiftAssetDependencies
@@ -204,25 +196,6 @@ module Vagrant
         end
       end
 
-      def self.install_docker_registry
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallDockerRegistry
-        end
-      end
-
-      def self.bootstrap_openshift(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use RunSystemctl, {:action => 'restart', :service => 'docker'}
-          b.use RunSystemctl, {:action => 'enable', :service => 'openshift'}
-          b.use RunSystemctl, {:action => 'start', :service => 'openshift', argv: '--force'}
-          b.use WaitForOpenshift
-          b.use InstallDockerRegistry
-          b.use InstallOpenshiftRouter
-          b.use SetupSamplePolicy
-          b.use CreateSampleProject
-        end
-      end
-
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :Clean, action_root.join("clean")
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
@@ -256,12 +229,7 @@ module Vagrant
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :SetupBindHost, action_root.join("setup_bind_host")
-      autoload :InstallOpenshiftRouter, action_root.join("install_openshift_router")
       autoload :RunSystemctl, action_root.join("run_systemctl")
-      autoload :InstallDockerRegistry, action_root.join("install_docker_registry")
-      autoload :WaitForOpenshift, action_root.join("wait_for_openshift")
-      autoload :CreateSampleProject, action_root.join("create_sample_project")
-      autoload :SetupSamplePolicy, action_root.join("setup_sample_policy")
     end
   end
 end
