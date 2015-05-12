@@ -65,7 +65,7 @@ module Vagrant
             'insert_key' => ((stage == :inst) || (stage == :bootstrap)) && !@options[:no_insert_key],
             'num_minions' => 2,
             'cpus' => 2,
-            'memory' => 1024,
+            'memory' => 2048,
             'rebuild_yum_cache' => false
           }
 
