@@ -84,7 +84,7 @@ Documentation=https://github.com/openshift/origin
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/openshift
-ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --public-master=https://\\${HOST}:8443
+ExecStart=$ORIGIN_PATH/_output/local/go/bin/openshift start --cors-allowed-origins=.* --public-master=https://\\${HOST}:8443
 
 [Install]
 WantedBy=multi-user.target
