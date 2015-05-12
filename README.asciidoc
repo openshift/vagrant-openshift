@@ -215,16 +215,20 @@ Install plugin from rubygems:
 $ vagrant plugin install vagrant-openstack-plugin
 ----
 
+NOTE: On some systems (e.g. mac) doing `export NOKOGIRI_USE_SYSTEM_LIBRARIES=1` can help make the above command work.
+
 * Edit `~/.openstackcred` and update your OpenStack credentials, endpoint and tenant name.
 
 .'~/.openstackcred'
 ----
-OSEndpoint=<OpenStack Endpoint URL>
+OSEndpoint=<OpenStack Endpoint URL, e.g. http://openshift.example.com:5000/v2.0/tokens>
 OSUsername=<OpenStack Username>
 OSAPIKey=<OpenStack Password>
-OSKeyPairName=<Keypair name>
-OSPrivateKeyPath=<SSH Private key path>
-OSTenant=<OpenStack Tenant Name>
+OSKeyPairName=<Keypair name as registered in OpenStack>
+OSPrivateKeyPath=<path to that SSH Private key>
+OSTenant=<OpenStack Tenant/Project Name, see it at the top in OpenStack web UI>
+OSFloatingIP=<specific floating ip or ':auto' if floating ip is desired>
+OSFloatingIPPool=<specific pool or 'false' (to use first found) if floating ip is desired>
 ----
 
 * Edit `.vagrant-openshift.json` and update the openstack provider
