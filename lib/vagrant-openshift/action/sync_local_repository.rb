@@ -64,6 +64,9 @@ module Vagrant
             end
             command += "git push -q verifier:#{Constants.build_dir + repo_name }-bare #{branch}:master --tags --force"
             system(command)
+            if $?.exitstatus != 0
+              exit $?.exitstatus
+            end
           ensure
             reset_temp_commit
           end
