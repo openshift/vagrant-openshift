@@ -58,10 +58,10 @@ if git clone #{repo_url} ${dest_dir}; then
     if make build TARGET=centos7; then
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
       docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
-      docker tag -f #{image_name}-centos7 #{image_name}-centos7:latest
+      docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
       docker push -f #{registry}#{image_name}-centos7:$git_ref
       docker push -f #{registry}#{image_name}-centos7:latest
-      docker push -f #{image_name}-centos7:latest
+      docker push -f docker.io/#{image_name}-centos7:latest
     else
       echo "ERROR: Failed to build #{image_name}-centos7"
       exit 1
