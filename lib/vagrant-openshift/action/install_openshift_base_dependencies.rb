@@ -90,10 +90,6 @@ chown -R #{ssh_user}:#{ssh_user} /data
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
-
-docker pull openshift/docker-registry
-docker pull openshift/origin-sti-builder
-docker pull openshift/origin-deployer
           }, {:timeout=>60*30})
           @app.call(env)
         end
