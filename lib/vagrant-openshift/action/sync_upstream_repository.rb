@@ -27,7 +27,7 @@ module Vagrant
 
         def call(env)
           env[:machine].env.ui.info("Synchronizing upstream sources\n")
-          command = ""
+          command = "set -e"
 
           Constants.repos(env).each do |repo_name, url|
 
@@ -40,7 +40,6 @@ module Vagrant
 
             command += "export GIT_SSH=#{Constants.git_ssh};\n" unless Constants.git_ssh.nil? or Constants.git_ssh.empty?
             command += %{
-(
 if [ ! -d #{bare_repo_wc_path} ]; then
 echo 'Cloning #{repo_name} ...'
 git clone -l --quiet #{bare_repo_path} #{bare_repo_wc_path}
@@ -52,12 +51,8 @@ git fetch upstream
 git checkout master
 git reset --hard upstream/#{branch}
 git push origin master -f
-) &
-PIDS+=$!\" \";
 }
           end
-
-          command += "[ -n \"$PIDS\" ] && wait $PIDS\n"
 
           do_execute(env[:machine], command)
 

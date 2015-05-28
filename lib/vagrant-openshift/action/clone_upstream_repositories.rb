@@ -35,7 +35,7 @@ module Vagrant
    UserKnownHostsFile=/dev/null
           }}
 
-          git_clone_commands = ""
+          git_clone_commands = "set -e"
           Constants.repos(env).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name
@@ -46,13 +46,10 @@ module Vagrant
 
             git_clone_commands += %{
 if [ ! -d #{bare_repo_path} ]; then
-git clone --quiet --bare #{url} #{bare_repo_path} >/dev/null &
-PIDS+=$!\" \"
+git clone --quiet --bare #{url} #{bare_repo_path} >/dev/null
 fi
 }
           end
-
-          git_clone_commands += "[ -n \"$PIDS\" ] && wait $PIDS\n"
 
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
           sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir}")
