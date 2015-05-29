@@ -35,7 +35,7 @@ module Vagrant
    UserKnownHostsFile=/dev/null
           }}
 
-          git_clone_commands = "set -e"
+          git_clone_commands = "set -e\n"
           Constants.repos(env).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name

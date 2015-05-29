@@ -27,7 +27,7 @@ module Vagrant
 
         def call(env)
           env[:machine].env.ui.info("Synchronizing upstream sources\n")
-          command = "set -e"
+          command = "set -e\n"
 
           Constants.repos(env).each do |repo_name, url|
 
