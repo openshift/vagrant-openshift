@@ -39,7 +39,7 @@ Compile and install using Rake:
 
 [source, sh]
 ----
-$ rake vagrant:install
+$ rake
 ----
 
 ===== From rubygems.org
