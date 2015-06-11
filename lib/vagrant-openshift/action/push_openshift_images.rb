@@ -47,40 +47,39 @@ PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/git
 dest_dir="/data/src/github/openshift/#{image_name}"
 rm -rf ${dest_dir}; mkdir -p ${dest_dir}
 if git clone #{repo_url} ${dest_dir}; then
-  pushd ${dest_dir}
-    git checkout #{git_ref}
-    git_ref=$(git rev-parse --short HEAD)
-    echo "Building and testing #{image_name}:$git_ref"
-    if ! make test TARGET=centos7; then
-      echo "ERROR: #{image_name}-centos7 failed testing."
-      exit 1
-    fi
-    if make build TARGET=centos7; then
-      docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
-      docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
-      docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
-      docker push -f #{registry}#{image_name}-centos7:$git_ref
-      docker push -f #{registry}#{image_name}-centos7:latest
-      docker push -f docker.io/#{image_name}-centos7:latest
-    else
-      echo "ERROR: Failed to build #{image_name}-centos7"
-      exit 1
-    fi
+  cd ${dest_dir}
+  git checkout #{git_ref}
+  git_ref=$(git rev-parse --short HEAD)
+  echo "Building and testing #{image_name}:$git_ref"
+  if ! make test TARGET=centos7; then
+    echo "ERROR: #{image_name}-centos7 failed testing."
+    exit 1
+  fi
+  if make build TARGET=centos7; then
+    docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
+    docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
+    docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
+    docker push -f #{registry}#{image_name}-centos7:$git_ref
+    docker push -f #{registry}#{image_name}-centos7:latest
+    docker push -f docker.io/#{image_name}-centos7:latest
+  else
+    echo "ERROR: Failed to build #{image_name}-centos7"
+    exit 1
+  fi
 
-    if ! make test TARGET=rhel7; then
-      echo "ERROR: #{image_name}-centos7 failed testing."
-      exit 1
-    fi
-    if make build TARGET=rhel7; then
-      docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
-      docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
-      docker push -f #{registry}#{image_name}-rhel7:$git_ref
-      docker push -f #{registry}#{image_name}-rhel7:latest
-    else
-      echo "ERROR: Failed to build #{image_name}-rhel7"
-      exit 1
-    fi
-  popd
+  if ! make test TARGET=rhel7; then
+    echo "ERROR: #{image_name}-rhel7 failed testing."
+    exit 1
+  fi
+  if make build TARGET=rhel7; then
+    docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
+    docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
+    docker push -f #{registry}#{image_name}-rhel7:$git_ref
+    docker push -f #{registry}#{image_name}-rhel7:latest
+  else
+    echo "ERROR: Failed to build #{image_name}-rhel7"
+    exit 1
+  fi
 fi
           }
         end
