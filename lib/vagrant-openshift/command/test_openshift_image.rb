@@ -154,13 +154,11 @@ if [ $status -eq 0 ]; then
 fi
 
 if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
-  mv Dockerfile Dockerfile.centos7
-  mv Dockerfile.rhel7 Dockerfile
 
   IMAGE_NAME="${BASE_NAME}-rhel7"
 
   # Build the RHEL7 based STI image we use for testing
-  docker build -t ${IMAGE_NAME}-candidate .
+  docker build -t ${IMAGE_NAME}-candidate -f Dockerfile.rhel7 .
   status=$?
 
   # Run the STI image test framework
