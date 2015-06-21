@@ -37,50 +37,46 @@ systemctl restart docker
           }
         end
 
-        def build_image(image_name, git_ref, repo_url, registry)
+        def push_image(image_name, git_ref, registry)
           %{
 set -e
+pushd /data/src/github/openshift/#{image_name}
+git checkout #{git_ref}
+git_ref=$(git rev-parse --short HEAD)
+echo "Pushing image #{image_name}:$git_ref..."
+docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
+docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
+docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
+docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
+docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
+# FIXME: Paralelize this
+docker push -f #{registry}#{image_name}-centos7:$git_ref
+docker push -f #{registry}#{image_name}-centos7:latest
+docker push -f docker.io/#{image_name}-centos7:latest
+docker push -f #{registry}#{image_name}-rhel7:$git_ref
+docker push -f #{registry}#{image_name}-rhel7:latest
+popd
+set +e
+          }
+        end
 
-# so we can call sti
-PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
-
+        def build_image(image_name, git_ref, repo_url, registry)
+          %{
 dest_dir="/data/src/github/openshift/#{image_name}"
 rm -rf ${dest_dir}; mkdir -p ${dest_dir}
-if git clone #{repo_url} ${dest_dir}; then
-  cd ${dest_dir}
-  git checkout #{git_ref}
-  git_ref=$(git rev-parse --short HEAD)
-  echo "Building and testing #{image_name}:$git_ref"
-  if ! make test TARGET=centos7; then
-    echo "ERROR: #{image_name}-centos7 failed testing."
-    exit 1
-  fi
-  if make build TARGET=centos7; then
-    docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
-    docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
-    docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
-    docker push -f #{registry}#{image_name}-centos7:$git_ref
-    docker push -f #{registry}#{image_name}-centos7:latest
-    docker push -f docker.io/#{image_name}-centos7:latest
-  else
-    echo "ERROR: Failed to build #{image_name}-centos7"
-    exit 1
-  fi
-
-  if ! make test TARGET=rhel7; then
-    echo "ERROR: #{image_name}-rhel7 failed testing."
-    exit 1
-  fi
-  if make build TARGET=rhel7; then
-    docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
-    docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
-    docker push -f #{registry}#{image_name}-rhel7:$git_ref
-    docker push -f #{registry}#{image_name}-rhel7:latest
-  else
-    echo "ERROR: Failed to build #{image_name}-rhel7"
-    exit 1
-  fi
-fi
+set -e
+pushd ${dest_dir}
+git init && git remote add -t master origin #{repo_url}
+git fetch && git checkout #{git_ref}
+git_ref=$(git rev-parse --short HEAD)
+echo "Building and testing #{image_name}-centos7:$git_ref ..."
+make test TARGET=centos7
+make build TARGET=centos7
+echo "Building and testing #{image_name}-rhel7:$git_ref ..."
+make test TARGET=rhel7
+make build TARGET=rhel7
+popd
+set +e
           }
         end
 
@@ -108,12 +104,18 @@ fi
           end
 
           cmd += %{
-set -x; set +e
-echo "Pre-pulling base images"
+set -x
+set +e
+echo "Pre-pulling base images ..."
 docker pull #{@options[:registry]}openshift/base-centos7
 [[ "$?" == "0" ]] && docker tag #{@options[:registry]}openshift/base-centos7 openshift/base-centos7
 docker pull #{@options[:registry]}openshift/base-rhel7
 [[ "$?" == "0" ]] && docker tag #{@options[:registry]}openshift/base-rhel7 openshift/base-rhel7
+          }
+
+          cmd += %{
+# so we can call sti
+PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
           }
 
           # FIXME: We always need to make sure we have the latest base image
@@ -124,6 +126,7 @@ docker pull #{@options[:registry]}openshift/base-rhel7
 
           build_images = @options[:build_images].split(",").map { |i| i.strip }
 
+          push_cmd = ""
           build_images.each do |image|
             name, git_ref = image.split(':')
             repo_url = Vagrant::Openshift::Constants.openshift_images[name]
@@ -132,8 +135,11 @@ docker pull #{@options[:registry]}openshift/base-rhel7
               next
             end
             cmd += build_image(name, git_ref, repo_url, @options[:registry])
+            push_cmd += push_image(name, git_ref, @options[:registry])
           end
 
+          # Push the final images **only** when they all build successfully
+          cmd += push_cmd
           cmd += update_latest_image_cmd(@options[:registry])
 
           do_execute(env[:machine], cmd)
