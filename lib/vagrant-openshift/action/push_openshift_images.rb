@@ -70,10 +70,10 @@ git init && git remote add -t master origin #{repo_url}
 git fetch && git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
 echo "Building and testing #{image_name}-centos7:$git_ref ..."
-make test TARGET=centos7
+SKIP_SQUASH=1 make test TARGET=centos7
 make build TARGET=centos7
 echo "Building and testing #{image_name}-rhel7:$git_ref ..."
-make test TARGET=rhel7
+SKIP_SQUASH=1 make test TARGET=rhel7
 make build TARGET=rhel7
 popd
 set +e
