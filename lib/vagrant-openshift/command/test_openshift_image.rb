@@ -134,44 +134,15 @@ if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   docker pull #{registry}/openshift/base-rhel7 && docker tag #{registry}/openshift/base-rhel7 openshift/base-rhel7
 fi
 
-if [ -n "#{image_version}" ]; then
-  BASE_NAME="#{image}-#{image_version}"
-  pushd #{image_version} > /dev/null
-else 
-  BASE_NAME="#{image}"
+if ! make test TARGET=rhel7; then
+    echo "ERROR: #{image}-rhel7 failed testing."
+    exit 1
 fi
-
-IMAGE_NAME="${BASE_NAME}-centos7"
-
-# Build the CentOS7 STI image we use for testing
-docker build -t ${IMAGE_NAME}-candidate .
-status=$?
-
-# Run the STI image test framework
-if [ $status -eq 0 ]; then
-  IMAGE_NAME=${IMAGE_NAME}-candidate ./test/run
-  status=$?
+  
+if ! make test TARGET=centos7; then
+    echo "ERROR: #{image}-centos7 failed testing."
+    exit 1
 fi
-
-if [ $status -eq 0 -a -f Dockerfile.rhel7 ]; then
-  mv Dockerfile Dockerfile.centos7
-  mv Dockerfile.rhel7 Dockerfile
-
-  IMAGE_NAME="${BASE_NAME}-rhel7"
-
-  # Build the RHEL7 based STI image we use for testing
-  docker build -t ${IMAGE_NAME}-candidate .
-  status=$?
-
-  # Run the STI image test framework
-  if [ $status -eq 0 ]; then
-    IMAGE_NAME=${IMAGE_NAME}-candidate ./test/run
-    status=$?
-  fi
-fi
-
-# If software version is set, go back to the repository root
-[ -n "#{image_version}" ] && popd > /dev/null
 
 # clean up
 cd /
