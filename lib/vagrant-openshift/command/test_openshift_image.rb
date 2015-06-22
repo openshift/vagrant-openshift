@@ -30,7 +30,6 @@ module Vagrant
           options = {}
           options[:image] = nil
           options[:ref] = 'master'
-          options[:image_version] = ""
           options[:source] = nil
           options[:base_images] = false
           options[:registry] = ""
@@ -45,10 +44,6 @@ module Vagrant
 
             o.on("-r", "--ref REF", String, "git ref to test") do |o|
               options[:ref] = o
-            end
-
-            o.on("-m", "--image_version VERSION", String, "version of the software") do |o|
-              options[:image_version] = o
             end
 
             o.on("-s", "--source SOURCE", String, "git repo source url") do |o|
@@ -85,7 +80,6 @@ module Vagrant
           with_target_vms(argv, :reverse => true) do |machine|
             image = options[:image]
             ref = options[:ref]
-            image_version = options[:image_version]
             source = options[:source]
             base_images = options[:base_images]
             registry = options[:registry]
