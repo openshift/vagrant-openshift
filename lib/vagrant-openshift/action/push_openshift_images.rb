@@ -49,7 +49,7 @@ docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
 docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
 docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
 docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
-# FIXME: Paralelize this
+# FIXME: Parallelize this
 docker push -f #{registry}#{image_name}-centos7:$git_ref
 docker push -f #{registry}#{image_name}-centos7:latest
 docker push -f docker.io/#{image_name}-centos7:latest
