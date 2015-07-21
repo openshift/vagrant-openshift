@@ -39,6 +39,7 @@ module Vagrant
           'openshift/python-33'     => 'https://github.com/openshift/sti-python.git',
           'openshift/ruby-20'       => 'https://github.com/openshift/sti-ruby.git',
           'openshift/mysql-55'      => 'https://github.com/openshift/mysql.git',
+          'openshift/mysql-56'      => 'https://github.com/openshift/mysql.git',
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
           'openshift/jenkins-16'    => 'https://github.com/openshift/jenkins.git',
