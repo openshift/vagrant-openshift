@@ -35,7 +35,7 @@ module Vagrant
             o.on("--registry [url]", String, "Docker Registry to push images to.") do |c|
               options[:registry] = c
             end
-            o.on("--build_images [list]", String, "List of IMAGE:REF pairs, delimited by ','") do |i|
+            o.on("--build_images [list]", String, "List of IMAGE:VERSION:REF pairs, delimited by ','") do |i|
               options[:build_images] = i
             end
             o.separator ""
