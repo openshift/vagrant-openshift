@@ -43,7 +43,7 @@ module Vagrant
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
           'openshift/jenkins-16'    => 'https://github.com/openshift/jenkins.git',
-          'openshift/wildfly-8'     => 'https://github.com/openshift/wildfly-8-centos.git'
+          'openshift/wildfly-81'     => 'https://github.com/openshift/sti-wildfly.git'
         }
       end
 
