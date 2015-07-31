@@ -92,6 +92,12 @@ popd >/dev/null
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
           env[:test_exit_code] = run_tests(env, [cmd], true)
 
+          # run extended tests
+          if env[:test_exit_code] == 0 && @options[:all]
+            cmds = ['hack/test-extended/default.sh']
+            env[:test_exit_code] = run_tests(env, cmds, true)
+          end
+
           # any other tests that should not be run as sudo
           if env[:test_exit_code] == 0 && @options[:all]
             cmds = ['hack/test-assets.sh']
