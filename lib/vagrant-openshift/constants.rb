@@ -37,6 +37,7 @@ module Vagrant
           'openshift/perl-516'      => 'https://github.com/openshift/sti-perl.git',
           'openshift/perl-520'      => 'https://github.com/openshift/sti-perl.git',
           'openshift/php-55'        => 'https://github.com/openshift/sti-php.git',
+          'openshift/python-27'     => 'https://github.com/openshift/sti-python.git',
           'openshift/python-33'     => 'https://github.com/openshift/sti-python.git',
           'openshift/ruby-20'       => 'https://github.com/openshift/sti-ruby.git',
           'openshift/mysql-55'      => 'https://github.com/openshift/mysql.git',
