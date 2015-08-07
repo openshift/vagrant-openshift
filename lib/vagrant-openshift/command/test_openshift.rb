@@ -29,6 +29,7 @@ module Vagrant
           options = {}
           options[:download] = false
           options[:all] = false
+          options[:extended_test_packages] = ""
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant test-openshift [machine-name]"
@@ -36,6 +37,10 @@ module Vagrant
 
             o.on("-a", "--all", String, "Run all tests") do |f|
               options[:all] = true
+            end
+
+            o.on("-e", "--extended TEST_BUCKETS", String, "Comma delimited list of extended test packages to run") do |f|
+              options[:extended_test_packages] = f
             end
 
             o.on("-d","--artifacts", String, "Download logs") do |f|
