@@ -33,7 +33,9 @@ module Vagrant
       def self.openshift_images
         {
           'openshift/base'          => 'https://github.com/openshift/sti-base.git',
+          'openshift/jenkins-16'    => 'https://github.com/openshift/jenkins.git',
           'openshift/nodejs-010'    => 'https://github.com/openshift/sti-nodejs.git',
+          'openshift/openldap-2441' => 'https://github.com/openshift/openldap.git',
           'openshift/perl-516'      => 'https://github.com/openshift/sti-perl.git',
           'openshift/perl-520'      => 'https://github.com/openshift/sti-perl.git',
           'openshift/php-55'        => 'https://github.com/openshift/sti-php.git',
@@ -46,7 +48,6 @@ module Vagrant
           'openshift/mysql-56'      => 'https://github.com/openshift/mysql.git',
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
-          'openshift/jenkins-16'    => 'https://github.com/openshift/jenkins.git',
           'openshift/wildfly-81'     => 'https://github.com/openshift/sti-wildfly.git'
         }
       end
