@@ -85,6 +85,8 @@ else
   GOPATH=/data go get code.google.com/p/go.tools/cmd/cover
 fi
 
+GOPATH=/data go get golang.org/x/tools/cmd/vet
+
 chown -R #{ssh_user}:#{ssh_user} /data
 
 systemctl daemon-reload
