@@ -93,6 +93,8 @@ popd >/dev/null
           env[:test_exit_code] = run_tests(env, [cmd], true)
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
+            # for extended tests we need a ginkgo binary
+            do_execute(env[:machine], "go get github.com/onsi/ginkgo/ginkgo", {:timeout => 60*60*2, :fail_on_error => true, :verbose => false})
             extended_cmd = 'hack/test-extended.sh ' + Shellwords.escape(@options[:extended_test_packages])
             env[:test_exit_code] = run_tests(env, [extended_cmd], true)
           end
