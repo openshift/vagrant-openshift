@@ -14,7 +14,7 @@ NOTE: Instructions below generally assume a Linux-like command line and may requ
   or link:https://github.com/tknerr/vagrant-managed-servers[managed] providers.
 * Provides commands to install build dependencies, sync repositories, and run tests
 
-===== Using with Openshift v2
+===== Using with OpenShift v2
 
 v2 (aka M4) is no longer supported on the master branch or in the
 published rubygems.org version of this plugin.  You must checkout the
@@ -51,7 +51,7 @@ Install the published version of this plugin:
 $ vagrant plugin install vagrant-openshift
 ----
 
-=== Getting started with Openshift v3
+=== Getting started with OpenShift v3
 
 This plugin works in concert with the
 link:https://github.com/openshift/origin/blob/master/Vagrantfile[OpenShift Origin Vagrantfile]
@@ -228,14 +228,13 @@ OSTenant=<OpenStack Tenant Name>
 ----
 
 * Edit `.vagrant-openshift.json` and update the openstack provider
-  section. You'll need to indicate at least the base image and host flavor
+  section. You'll need to indicate at least the base image
   you'd like to start, as well as the user to access with.
 
 .'.vagrant-openshift.json'
 ----
   "openstack": {
     "image": "Fedora-Cloud-Base-20141203-21.x86_64",
-    "flavor": "m1.small",
     "ssh_user": "fedora"
   }
 ----
@@ -397,7 +396,7 @@ these stages, as the rate of change and amount of time to create each
 is different.
 
 After using `vagrant up --provider=<provider>` to start a host with only
-a basic operating system on it (Fedora 20+ or CentOS 7 should suffice),
+a basic operating system on it (Fedora 21+ or CentOS 7 should suffice),
 you will need to install the build tools and other dependencies for
 building and running OpenShift. The following vagrant commands should
 help with this:

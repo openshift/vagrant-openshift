@@ -31,6 +31,7 @@ module Vagrant
         def call(env)
           os      = @options[:os].to_sym
           stage   = @options[:stage].to_sym
+          instance_type   = @options[:instance_type].to_sym
           inst_ts = Time.now.getutc.strftime('%Y%m%d_%H%M')
 
           box_info_path = Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/box_info.yaml"))
@@ -66,7 +67,8 @@ module Vagrant
             'num_minions' => 2,
             'cpus' => 2,
             'memory' => 2048,
-            'rebuild_yum_cache' => false
+            'rebuild_yum_cache' => false,
+            'instance_type' => instance_type
           }
 
           vagrant_openshift_config['no_synced_folders'] = @options[:no_synced_folders]
@@ -96,7 +98,6 @@ module Vagrant
           } if box_info[:aws]
           vagrant_openshift_config['openstack'] = {
             'image' => box_info[:openstack][:image],
-            'flavor' => box_info[:openstack][:flavor],
             'ssh_user' => box_info[:openstack][:ssh_user]
           } if box_info[:openstack]
 
