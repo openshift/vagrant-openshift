@@ -201,7 +201,6 @@ module Vagrant
       autoload :CloneUpstreamRepositories, action_root.join("clone_upstream_repositories")
       autoload :CreateYumRepositories, action_root.join("create_yum_repositories")
       autoload :CheckoutRepositories, action_root.join("checkout_repositories")
-      autoload :SetupBindDnsKey, action_root.join("setup_bind_dns_key")
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :InstallOpenshiftBaseDependencies, action_root.join("install_openshift_base_dependencies")
@@ -228,7 +227,6 @@ module Vagrant
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
-      autoload :SetupBindHost, action_root.join("setup_bind_host")
       autoload :RunSystemctl, action_root.join("run_systemctl")
     end
   end

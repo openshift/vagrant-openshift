@@ -16,7 +16,6 @@
       :ami_tag_prefix: openshift-centos7_
     :openstack:
       :image: <CentOS 7>
-      :flavor: m1.small
       :ssh_user: centos
   :deps:
     :virtualbox:
@@ -34,7 +33,6 @@
       :ami_tag_prefix: devenv-centos7-base_
     :openstack:
       :image: <CentOS 7>
-      :flavor: m1.small
       :ssh_user: centos
   :inst:
     :virtualbox:
@@ -52,7 +50,6 @@
       :ami_tag_prefix: devenv-centos7_
     :openstack:
       :image: <CentOS 7>
-      :flavor: m1.small
       :ssh_user: centos
   :bootstrap:
     :virtualbox:
@@ -82,7 +79,6 @@
       :ami_tag_prefix: openshift-fedora_
     :openstack:
       :image: <Fedora>
-      :flavor: m1.small
       :ssh_user: fedora
     :libvirt:
       :box_name: fedora_base
@@ -100,7 +96,6 @@
       :ami_tag_prefix: devenv-fedora-base_
     :openstack:
       :image: <Fedora>
-      :flavor: m1.small
       :ssh_user: fedora
     :libvirt:
       :box_name: fedora_deps
@@ -118,7 +113,6 @@
       :ami_tag_prefix: devenv-fedora_
     :openstack:
       :image: <Fedora>
-      :flavor: m1.small
       :ssh_user: fedora
     :libvirt:
       :box_name: fedora_inst
@@ -148,7 +142,6 @@
       :ami_tag_prefix: openshift-rhel7_
     :openstack:
       :image: <RHEL 7>
-      :flavor: m1.small
       :ssh_user: root
   :deps:
     :aws:
@@ -160,7 +153,6 @@
       :ami_tag_prefix: devenv-rhel7-base_
     :openstack:
       :image: <RHEL 7>
-      :flavor: m1.small
       :ssh_user: root
   :inst:
     :aws:
@@ -172,7 +164,6 @@
       :ami_tag_prefix: devenv-rhel7_
     :openstack:
       :image: <RHEL 7>
-      :flavor: m1.small
       :ssh_user: root
   :bootstrap:
     :aws:
@@ -184,5 +175,4 @@
       :ami_tag_prefix: devenv-rhel7-bootstrap_
     :openstack:
       :image: <RHEL 7>
-      :flavor: m1.small
       :ssh_user: root

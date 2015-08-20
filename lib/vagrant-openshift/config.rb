@@ -17,20 +17,14 @@
 module Vagrant
   module Openshift
     class Config < Vagrant.plugin(2, :config)
-      attr_accessor :cloud_domain
 
       def initialize
         super
-
-        @cloud_domain         = UNSET_VALUE
       end
 
       def finalize!
         super
-
-        @cloud_domain    = "example.com"  if @cloud_domain    == UNSET_VALUE
       end
     end
   end
 end
-

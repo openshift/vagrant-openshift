@@ -30,6 +30,7 @@ module Vagrant
             :no_base  => false,
             :os       => 'centos7',
             :stage    => 'inst',
+            :instance_type => 'c3.large',
             :port_mappings => [],
             :no_synced_folders => false,
             :no_insert_key => false
@@ -60,6 +61,10 @@ module Vagrant
 
             o.on('--no-insert-key', 'Insert a secure ssh key on vagrant up') do |f|
               options[:no_insert_key] = true
+            end
+
+            o.on('--instance-type', "--instance-type [type]", String, "Specify what type of instance to launch") do |f|
+              options[:instance_type] = f
             end
           end
 
