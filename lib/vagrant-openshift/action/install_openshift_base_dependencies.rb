@@ -42,10 +42,10 @@ fi
           # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
           #        add the image into 'repositories' constants
           #
-          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat", {:timeout=>60*20})
+          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat unzip Xvfb", {:timeout=>60*20})
           sudo(env[:machine], "yum install -y facter", {fail_on_error: false, :timeout=>60*10})
 
-          # Install Chrome, chromedriver, and Xvfb for headless testing
+          # Install Chrome and chromedriver for headless UI testing
           sudo(env[:machine], %{
 cd /tmp
 
@@ -56,8 +56,8 @@ rpm --import linux_signing_key.pub
 # Add Chrome yum repo
 yum-config-manager --add-repo=http://dl.google.com/linux/chrome/rpm/stable/x86_64
 
-# Install chrome, unzip, and a virtual framebuffer
-yum install -y google-chrome-stable unzip Xvfb
+# Install chrome
+yum install -y google-chrome-stable 
 
 # Install chromedriver
 wget https://chromedriver.storage.googleapis.com/2.16/chromedriver_linux64.zip
