@@ -30,7 +30,7 @@ module Vagrant
             :no_base  => false,
             :os       => 'centos7',
             :stage    => 'inst',
-            :instance_type => 'c3.large',
+            :instance_type => 't2.medium',
             :port_mappings => [],
             :no_synced_folders => false,
             :no_insert_key => false
