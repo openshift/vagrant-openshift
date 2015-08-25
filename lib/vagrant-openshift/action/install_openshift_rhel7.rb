@@ -42,6 +42,9 @@ cp /var/lib/yum/*.pem $contextdir/certs
 cp /etc/yum/vars/* $contextdir/vars
 cp /etc/yum.repos.d/* $contextdir/repos
 
+# remove google chrome repo
+rm -rf $contextdir/repos/*chrome*.repo
+
 # create Dockerfile
 cat <<EOF > $contextdir/Dockerfile
 FROM registry.access.redhat.com/rhel7:latest
