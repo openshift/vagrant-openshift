@@ -128,19 +128,19 @@ if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   docker pull #{registry}/openshift/base-rhel7 && docker tag #{registry}/openshift/base-rhel7 openshift/base-rhel7
 fi
 
-if ! make test TARGET=rhel7; then
+if ! sudo make test TARGET=rhel7; then
     echo "ERROR: #{image}-rhel7 failed testing."
     exit 1
 fi
   
-if ! make test TARGET=centos7; then
+if ! sudo make test TARGET=centos7; then
     echo "ERROR: #{image}-centos7 failed testing."
     exit 1
 fi
 
 # clean up
 cd /
-rm -rf $temp_dir
+sudo rm -rf $temp_dir
 exit $status
 })
             # Vagrant throws an exception if any execute invocation returns non-zero,
