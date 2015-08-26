@@ -136,7 +136,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ssh_user: root
+      :ssh_user: ec2-user
       :machine_name: openshift-rhel7
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-rhel7_
@@ -147,7 +147,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ssh_user: root
+      :ssh_user: ec2-user
       :machine_name: devenv-rhel7-base
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7-base_
@@ -158,7 +158,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ssh_user: root
+      :ssh_user: ec2-user
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7_
@@ -169,7 +169,7 @@
     :aws:
       :ami: <AMI_ID>
       :ami_region: us-east-1
-      :ssh_user: root
+      :ssh_user: ec2-user
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7-bootstrap_
