@@ -33,7 +33,7 @@ module Vagrant
       def self.openshift_images
         {
           'openshift/base'          => 'https://github.com/openshift/sti-base.git',
-          'openshift/jenkins-16'    => 'https://github.com/openshift/jenkins.git',
+          'openshift/jenkins-1'    => 'https://github.com/openshift/jenkins.git',
           'openshift/nodejs-010'    => 'https://github.com/openshift/sti-nodejs.git',
           'openshift/openldap-2441' => 'https://github.com/openshift/openldap.git',
           'openshift/perl-516'      => 'https://github.com/openshift/sti-perl.git',
