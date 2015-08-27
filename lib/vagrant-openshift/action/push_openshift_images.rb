@@ -104,7 +104,9 @@ set +e
 # "make test"
         def build_image(image_name, version, git_ref, repo_url)
           %{
-dest_dir=$(mktemp -d /tmp/image_test.XXXXX.#{image_name})
+temp_dir=$(mktemp -d /tmp/image_test.XXXXX)
+dest_dir=${temp_dir}/#{image_name}
+mkdir -p ${dest_dir}
 set -e
 pushd ${dest_dir}
 git init && git remote add -t master origin #{repo_url}
