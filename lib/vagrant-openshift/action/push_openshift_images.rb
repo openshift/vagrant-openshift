@@ -40,7 +40,7 @@ sudo systemctl restart docker
         def push_image(image_name, git_ref, registry)
           %{
 set -e
-pushd /data/src/github/openshift/#{image_name}
+pushd /tmp/images/#{image_name}
 git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
 echo "Pushing image #{image_name}:$git_ref..."
@@ -104,9 +104,8 @@ set +e
 # "make test"
         def build_image(image_name, version, git_ref, repo_url)
           %{
-temp_dir=$(mktemp -d /tmp/image_test.XXXXX)
-dest_dir=${temp_dir}/#{image_name}
-mkdir -p ${dest_dir}
+dest_dir=/tmp/images/#{image_name}
+rm -rf ${dest_dir}; mkdir -p ${dest_dir}
 set -e
 pushd ${dest_dir}
 git init && git remote add -t master origin #{repo_url}
