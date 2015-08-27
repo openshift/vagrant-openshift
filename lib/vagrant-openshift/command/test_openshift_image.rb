@@ -95,7 +95,8 @@ set -x
 
 # NOTE: This is only for rhel7
 if [ -n "#{registry}" -a -f /etc/sysconfig/docker ]; then
-  sudo cat <<EOF > /etc/sysconfig/docker
+  sudo chmod a+rw /etc/sysconfig/docker
+  cat <<EOF > /etc/sysconfig/docker
 OPTIONS='--insecure-registry #{registry} --selinux-enabled'
 EOF
   sudo systemctl restart docker
