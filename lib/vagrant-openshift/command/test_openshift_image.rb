@@ -95,10 +95,10 @@ set -x
 
 # NOTE: This is only for rhel7
 if [ -n "#{registry}" -a -f /etc/sysconfig/docker ]; then
-  cat <<EOF > /etc/sysconfig/docker
+  sudo cat <<EOF > /etc/sysconfig/docker
 OPTIONS='--insecure-registry #{registry} --selinux-enabled'
 EOF
-  systemctl restart docker
+  sudo systemctl restart docker
 fi
 
 # so we can call sti
