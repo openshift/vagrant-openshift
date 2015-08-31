@@ -40,7 +40,7 @@ module Vagrant
           box_info = box_info_data[os][stage]
           box_info[:instance_name] = @options[:name].nil? ? 'openshift_origin_' + inst_ts : @options[:name]
           box_info[:os] = os
-          box_info[:vagrant_guest] = [:centos7, :rhel7, :rhelatomic].include?(os) ? :redhat : os
+          box_info[:vagrant_guest] = [:centos7, :rhel7, :rhelatomic7].include?(os) ? :redhat : os
           box_info[:port_mappings] = @options[:port_mappings]
 
           @openstack_creds_file = ENV['OPENSTACK_CREDS'].nil? || ENV['OPENSTACK_CREDS'] == '' ? "~/.openstackcred" : ENV['OPENSTACK_CREDS']
