@@ -37,7 +37,7 @@ module Vagrant
           }
 
           valid_stage = ['os','deps','inst', 'bootstrap']
-          valid_os = ['centos7','fedora','rhel7']
+          valid_os = ['centos7','fedora','rhel7','rhelatomic7']
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
@@ -47,7 +47,7 @@ module Vagrant
               options[:stage] = f
             end
 
-            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos7 [default]\n\tfedora\n\trhel7") do |f|
+            o.on("-o [name]", "--os [name]", String, "Operating system:\n\tcentos7 [default]\n\tfedora\n\trhel7\n\trhelatomic7") do |f|
               options[:os] = f
             end
 

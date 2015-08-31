@@ -176,3 +176,52 @@
     :openstack:
       :image: <RHEL 7>
       :ssh_user: root
+:rhelatomic7:
+  :os:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: cloud-user
+      :machine_name: openshift-rhelatomic7
+      :ebs_volume_size: 25
+      :ami_tag_prefix: openshift-rhelatomic7_
+    :openstack:
+      :image: <ATOMIC>
+      :flavor: m1.small
+      :ssh_user: root
+  :deps:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: cloud-user
+      :machine_name: devenv-rhelatomic7-base
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-rhelatomic7-base_
+    :openstack:
+      :image: <ATOMIC>
+      :flavor: m1.small
+      :ssh_user: root
+  :inst:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: cloud-user
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+      :ami_tag_prefix: openshift-rhelatomic7_
+    :openstack:
+      :image: <ATOMIC>
+      :flavor: m1.small
+      :ssh_user: root
+  :bootstrap:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: cloud-user
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-rhelatomic7-bootstrap_
+    :openstack:
+      :image: <ATOMIC>
+      :flavor: m1.small
+      :ssh_user: root
