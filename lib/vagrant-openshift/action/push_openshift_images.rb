@@ -66,30 +66,30 @@ procs[2]="docker push -f #{registry}#{image_name}-rhel7:$git_ref"
 
 # Run pushes in parallel
 for i in {0..2}; do
-  echo "pushing ${procs[${i}]}" 
-  ${procs[${i}]} & 
+  echo "pushing ${procs[${i}]}"
+  ${procs[${i}]} &
   pids[${i}]=$!
-  echo "push ${procs[${i}]} is pid ${pids[${i}]}" 
-done 
+  echo "push ${procs[${i}]} is pid ${pids[${i}]}"
+done
 
 # Wait for all pushes.  "wait" will check the return code of each process also.
 for pid in ${pids[*]}; do
-  echo "checking $pid" 
-  wait $pid 
+  echo "checking $pid"
+  wait $pid
 done
 
 procs[0]="docker push -f #{registry}#{image_name}-centos7:latest"
 procs[1]="docker push -f #{registry}#{image_name}-rhel7:latest"
 
 # Run pushes in parallel
-for i in {0..1}; do 
-  ${procs[${i}]} & 
+for i in {0..1}; do
+  ${procs[${i}]} &
   pids[${i}]=$!
-done 
+done
 
 # Wait for all pushes.  "wait" will check the return code of each process also.
 for pid in ${pids[*]}; do
-  wait $pid 
+  wait $pid
 done
 
 popd
@@ -100,7 +100,7 @@ set +e
 # Note that this only invokes "make test" on the image, if the tests
 # succeed the candidate produced by "make test" will be pushed.  There
 # is an implicit assumption here that the image produced by make test
-# is identical to what would be produced by a subsequent "make build" 
+# is identical to what would be produced by a subsequent "make build"
 # call, so there's no point in explicitly calling "make build" after
 # "make test"
         def build_image(image_name, version, git_ref, repo_url)
@@ -156,7 +156,7 @@ docker pull #{@options[:registry]}openshift/base-rhel7
 
           cmd += %{
 # so we can call sti
-PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
+export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
           }
 
           # FIXME: We always need to make sure we have the latest base image

@@ -103,7 +103,7 @@ EOF
 fi
 
 # so we can call sti
-PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
+export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
 
 # create a temp dir to play in
 temp_dir=$(mktemp -d /tmp/image_test.XXXXXXX)
@@ -133,7 +133,7 @@ if ! sudo make test TARGET=rhel7; then
     echo "ERROR: #{image}-rhel7 failed testing."
     exit 1
 fi
-  
+
 if ! sudo make test TARGET=centos7; then
     echo "ERROR: #{image}-centos7 failed testing."
     exit 1
