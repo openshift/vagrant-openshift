@@ -113,9 +113,9 @@ git init && git remote add -t master origin #{repo_url}
 git fetch && git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
 echo "Building and testing #{image_name}-centos7:$git_ref ..."
-sudo make test TARGET=centos7 VERSION=#{version} TAG_ON_SUCCESS=true
+sudo env "PATH=$PATH" make test TARGET=centos7 VERSION=#{version} TAG_ON_SUCCESS=true
 echo "Building and testing #{image_name}-rhel7:$git_ref ..."
-sudo make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
+sudo env "PATH=$PATH" make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
 popd
 set +e
           }
