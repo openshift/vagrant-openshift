@@ -48,7 +48,7 @@ module Vagrant
           'openshift/mysql-55'      => 'https://github.com/openshift/mysql.git',
           'openshift/mysql-56'      => 'https://github.com/openshift/mysql.git',
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
-          'openshift/mongodb-26'    => 'https://github.com/openshift/mongodb.git',
+          'rhscl/mongodb-26'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
           'openshift/wildfly-81'     => 'https://github.com/openshift/sti-wildfly.git'
         }
