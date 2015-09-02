@@ -60,12 +60,16 @@ docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
 
 # We can't fully parallelize this because docker fails when you push to the same repo at the
 # same time (using different tags), so we do two groups of push operations.
+
+# this one is failing in parallel for unknown reasons
+docker push -f #{registry}#{image_name}-rhel7:$git_ref
+
 procs[0]="docker push -f #{registry}#{image_name}-centos7:$git_ref"
 procs[1]="docker push -f docker.io/#{image_name}-centos7:latest"
-procs[2]="docker push -f #{registry}#{image_name}-rhel7:$git_ref"
+#procs[2]="docker push -f #{registry}#{image_name}-rhel7:$git_ref"
 
 # Run pushes in parallel
-for i in {0..2}; do
+for i in {0..1}; do
   echo "pushing ${procs[${i}]}"
   ${procs[${i}]} &
   pids[${i}]=$!
