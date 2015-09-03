@@ -32,7 +32,7 @@ module Vagrant
 
       def self.install_openshift(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use YumUpdate
+          #b.use YumUpdate
           b.use SetHostName
           b.use InstallOpenshift
           b.use InstallOpenshiftRhel7
