@@ -123,11 +123,8 @@ git fetch --quiet --tags --progress #{source} +refs/pull/*:refs/remotes/origin/p
 # switch to the desired ref
 git checkout #{ref}
 
-if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
-  # Pull base images
-  docker pull #{registry}/openshift/base-centos7 && docker tag #{registry}/openshift/base-centos7 openshift/base-centos7
-  docker pull #{registry}/openshift/base-rhel7 && docker tag #{registry}/openshift/base-rhel7 openshift/base-rhel7
-fi
+# Must pull/tag the openshift/base-rhel7 image since our Dockerfiles reference it as such and it's not on dockerhub.
+docker pull #{registry}/openshift/base-rhel7 && docker tag -f #{registry}/openshift/base-rhel7 openshift/base-rhel7
 
 if ! sudo env "PATH=$PATH" make test TARGET=rhel7; then
     echo "ERROR: #{image}-rhel7 failed testing."
