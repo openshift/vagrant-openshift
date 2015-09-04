@@ -109,21 +109,18 @@ set +e
 # "make test"
         def build_image(image_name, version, git_ref, repo_url)
           %{
-
-if ! docker pull #{registry}#{image_name}-centos7:$git_ref || ! docker pull #{registry}#{image_name}-rhel7:$git_ref; then
-  dest_dir=/tmp/images/#{image_name}
-  rm -rf ${dest_dir}; mkdir -p ${dest_dir}
-  set -e
-  pushd ${dest_dir}
-  git init && git remote add -t master origin #{repo_url}
-  git fetch && git checkout #{git_ref}
-  git_ref=$(git rev-parse --short HEAD)
-  echo "Building and testing #{image_name}-centos7:$git_ref ..."
-  sudo env "PATH=$PATH" make test TARGET=centos7 VERSION=#{version} TAG_ON_SUCCESS=true
-  echo "Building and testing #{image_name}-rhel7:$git_ref ..."
-  sudo env "PATH=$PATH" make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
-  popd
-fi
+dest_dir=/tmp/images/#{image_name}
+rm -rf ${dest_dir}; mkdir -p ${dest_dir}
+set -e
+pushd ${dest_dir}
+git init && git remote add -t master origin #{repo_url}
+git fetch && git checkout #{git_ref}
+git_ref=$(git rev-parse --short HEAD)
+echo "Building and testing #{image_name}-centos7:$git_ref ..."
+sudo env "PATH=$PATH" make test TARGET=centos7 VERSION=#{version} TAG_ON_SUCCESS=true
+echo "Building and testing #{image_name}-rhel7:$git_ref ..."
+sudo env "PATH=$PATH" make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
+popd
 set +e
           }
         end
@@ -154,10 +151,14 @@ fi
           cmd += %{
 set -x
 set +e
+echo "Pre-pulling base images ..."
+docker pull #{@options[:registry]}openshift/base-centos7
+[[ "$?" == "0" ]] && docker tag -f #{@options[:registry]}openshift/base-centos7 openshift/base-centos7
+docker pull #{@options[:registry]}openshift/base-rhel7
+[[ "$?" == "0" ]] && docker tag -f #{@options[:registry]}openshift/base-rhel7 openshift/base-rhel7
+          }
 
-# Must pull/tag the openshift/base-rhel7 image since our Dockerfiles reference it as such and it's not on dockerhub.
-docker pull #{@options[:registry]}openshift/base-rhel7 && docker tag -f #{@options[:registry]}openshift/base-rhel7 openshift/base-rhel7
-
+          cmd += %{
 # so we can call sti
 export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
           }
