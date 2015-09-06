@@ -44,8 +44,7 @@ module Vagrant
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
             o.separator ""
 
-            o.on("-s [stage]", "
-              --stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]\n\tbootstrap = running environment") do |f|
+            o.on("-s [stage]", "--stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]\n\tbootstrap = running environment") do |f|
               options[:stage] = f
             end
 
