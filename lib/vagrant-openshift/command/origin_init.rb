@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class OpenshiftInit < Vagrant.plugin(2, :command)
+      class OriginInit < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -31,6 +31,7 @@ module Vagrant
             :os       => 'centos7',
             :stage    => 'inst',
             :instance_type => 't2.medium',
+            :volume_size => 25,
             :port_mappings => [],
             :no_synced_folders => false,
             :no_insert_key => false
@@ -43,7 +44,8 @@ module Vagrant
             o.banner = "Usage: vagrant origin-init [vm or instance name]"
             o.separator ""
 
-            o.on("-s [stage]", "--stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]\n\tbootstrap = running environment") do |f|
+            o.on("-s [stage]", "
+              --stage [stage]", String, "Specify what build state to start from:\n\tos = base operating system\n\tdeps = only dependencies installed\n\tinst = dev environment [default]\n\tbootstrap = running environment") do |f|
               options[:stage] = f
             end
 
@@ -65,6 +67,10 @@ module Vagrant
 
             o.on('--instance-type', "--instance-type [type]", String, "Specify what type of instance to launch") do |f|
               options[:instance_type] = f
+            end
+
+            o.on('--volume-size', "--volume-size [size]", String, "Specify the volume size for the instance") do |f|
+              options[:volume_size] = f.to_i
             end
           end
 
