@@ -83,8 +83,8 @@ module Vagrant
       end
 
       command "origin-init" do
-        require_relative "command/openshift_init"
-        Commands::OpenshiftInit
+        require_relative "command/origin_init"
+        Commands::OriginInit
       end
 
       command "openshift-local-checkout" do
