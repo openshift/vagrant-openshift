@@ -42,6 +42,11 @@ module Vagrant
         Commands::RepoSyncSti
       end
 
+      command "build-atomic-host" do
+        require_relative "command/build_atomic_host"
+        Commands::BuildAtomicHost
+      end
+
       command "build-openshift-base" do
         require_relative "command/build_openshift_base"
         Commands::BuildOpenshiftBase

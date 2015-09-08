@@ -21,6 +21,12 @@ module Vagrant
     module Action
       include Vagrant::Action::Builtin
 
+      def self.build_atomic_host(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use AtomicHostUpgrade
+        end
+      end
+
       def self.build_openshift_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
@@ -228,6 +234,7 @@ module Vagrant
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :RunSystemctl, action_root.join("run_systemctl")
+      autoload :AtomicHostUpgrade, action_root.join("atomic_host_upgrade")
     end
   end
 end
