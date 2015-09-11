@@ -50,6 +50,7 @@ module Vagrant
           'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
           'rhscl/mongodb-26'    => 'https://github.com/openshift/mongodb.git',
           'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
+          'rhscl/postgresql-94' => 'https://github.com/openshift/postgresql.git',
           'openshift/wildfly-81'     => 'https://github.com/openshift/sti-wildfly.git'
         }
       end
