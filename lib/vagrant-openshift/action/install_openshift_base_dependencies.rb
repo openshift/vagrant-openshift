@@ -116,7 +116,7 @@ sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd
 
 systemctl daemon-reload
 systemctl enable docker
-systemctl start docker
+time systemctl start docker
           }, {:timeout=>60*30})
           @app.call(env)
         end
