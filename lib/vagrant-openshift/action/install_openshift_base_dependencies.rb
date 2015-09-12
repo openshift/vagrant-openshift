@@ -112,6 +112,8 @@ GOPATH=/data go get golang.org/x/tools/cmd/vet
 
 chown -R #{ssh_user}:#{ssh_user} /data
 
+sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd/system.conf
+
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
