@@ -114,6 +114,7 @@ chown -R #{ssh_user}:#{ssh_user} /data
 
 sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd/system.conf
 
+systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable docker
 time systemctl start docker
