@@ -91,7 +91,7 @@ popd >/dev/null
           end
 
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
-          env[:test_exit_code] = run_tests(env, [cmd], true)
+          env[:test_exit_code] = run_tests(env, [cmd], false)
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             # for extended tests we need a ginkgo binary
