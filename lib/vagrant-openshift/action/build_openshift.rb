@@ -29,18 +29,15 @@ module Vagrant
         def call(env)
           if @options[:images]
             cmd = %{
-echo "Performing openshift release build..."
+echo "Performing openshift release build with images..."
 set -e
-hack/verify-gofmt.sh
-hack/build-release.sh
-hack/build-images.sh
+make release
 }
           else
             cmd = %{
-echo "Performing openshift build..."
+echo "Performing openshift release build..."
 set -e
-hack/verify-gofmt.sh
-hack/build-go.sh
+make release-binaries
 }
           end
           cmd += %{
