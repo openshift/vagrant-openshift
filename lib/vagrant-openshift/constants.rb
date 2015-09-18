@@ -30,30 +30,6 @@ module Vagrant
         }
       end
 
-      def self.openshift_images
-        {
-          'openshift/base'          => 'https://github.com/openshift/sti-base.git',
-          'openshift/jenkins-1'    => 'https://github.com/openshift/jenkins.git',
-          'openshift/nodejs-010'    => 'https://github.com/openshift/sti-nodejs.git',
-          'openshift/openldap-2441' => 'https://github.com/openshift/openldap.git',
-          'openshift/perl-516'      => 'https://github.com/openshift/sti-perl.git',
-          'openshift/perl-520'      => 'https://github.com/openshift/sti-perl.git',
-          'openshift/php-55'        => 'https://github.com/openshift/sti-php.git',
-          'openshift/php-56'        => 'https://github.com/openshift/sti-php.git',
-          'openshift/python-27'     => 'https://github.com/openshift/sti-python.git',
-          'openshift/python-33'     => 'https://github.com/openshift/sti-python.git',
-          'openshift/python-34'     => 'https://github.com/openshift/sti-python.git',
-          'openshift/ruby-20'       => 'https://github.com/openshift/sti-ruby.git',
-          'openshift/ruby-22'       => 'https://github.com/openshift/sti-ruby.git',
-          'openshift/mysql-55'      => 'https://github.com/openshift/mysql.git',
-          'openshift/mysql-56'      => 'https://github.com/openshift/mysql.git',
-          'openshift/mongodb-24'    => 'https://github.com/openshift/mongodb.git',
-          'rhscl/mongodb-26'    => 'https://github.com/openshift/mongodb.git',
-          'openshift/postgresql-92' => 'https://github.com/openshift/postgresql.git',
-          'openshift/wildfly-81'     => 'https://github.com/openshift/sti-wildfly.git'
-        }
-      end
-
       def self.git_branch_current
         "$(git rev-parse --abbrev-ref HEAD)"
       end
