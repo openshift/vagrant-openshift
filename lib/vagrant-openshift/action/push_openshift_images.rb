@@ -119,18 +119,6 @@ set +e
           }
         end
 
-        def update_latest_image_cmd(repo_url,namespace,name,registry)
-            cmd = %{
-set +e
-git_ref=$(git ls-remote #{repo_url} -h refs/heads/master | cut -c1-7)
-curl -s http://#{registry}v1/repositories/#{namespace}/#{name}-rhel7/tags/${git_ref} | grep -q "error"
-if [[ "$?" != "0" ]]; then
-  echo "#{name};$git_ref" >> ~/latest_images
-fi
-            }
-          return cmd
-        end
-
         def call(env)
           cmd = fix_insecure_registry_cmd(@options[:registry])
           if !@options[:registry].end_with?('/')
@@ -167,15 +155,10 @@ export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/
             push_cmd += push_image(centos_namespace,rhel_namespace,name, git_ref, @options[:registry])
           end
 
-          cmd += %{
-rm -rf ~/latest_images ; touch ~/latest_images
-          }
-
           # Push the final images **only** when they all build successfully
           build_images.each do |image|
             _,rhel_namespace,name, _, repo_url, _ = image.split('#')
             cmd += push_cmd
-            cmd += update_latest_image_cmd(repo_url,rhel_namespace,name,@options[:registry])
           end
 
           do_execute(env[:machine], cmd)
