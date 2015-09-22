@@ -38,7 +38,8 @@ sudo systemctl restart docker
           }
         end
 
-        def push_image(image_name, git_ref, registry)
+        def push_image(centos_namespace,rhel_namespace,image_name, git_ref, registry)
+
           %{
 set -e
 pushd /tmp/images/#{image_name}
@@ -46,27 +47,20 @@ git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
 echo "Pushing image #{image_name}:$git_ref..."
 
-docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:$git_ref
-docker tag -f #{image_name}-centos7 #{registry}#{image_name}-centos7:latest
-docker tag -f #{image_name}-centos7 docker.io/#{image_name}-centos7:latest
-docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:$git_ref
-docker tag -f #{image_name}-rhel7 #{registry}#{image_name}-rhel7:latest
-
-#docker push -f #{registry}#{image_name}-centos7:$git_ref
-#docker push -f docker.io/#{image_name}-centos7:latest
-#docker push -f #{registry}#{image_name}-rhel7:$git_ref
-#docker push -f #{registry}#{image_name}-centos7:latest
-#docker push -f #{registry}#{image_name}-rhel7:latest
+docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:$git_ref
+docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:latest
+docker tag -f #{centos_namespace}/#{image_name}-centos7 docker.io/#{centos_namespace}/#{image_name}-centos7:latest
+docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref
+docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
 
 # We can't fully parallelize this because docker fails when you push to the same repo at the
 # same time (using different tags), so we do two groups of push operations.
-
 # this one is failing in parallel for unknown reasons
-docker push -f #{registry}#{image_name}-rhel7:$git_ref
+docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref
 
-procs[0]="docker push -f #{registry}#{image_name}-centos7:$git_ref"
-procs[1]="docker push -f docker.io/#{image_name}-centos7:latest"
-#procs[2]="docker push -f #{registry}#{image_name}-rhel7:$git_ref"
+procs[0]="docker push -f #{registry}#{centos_namespace}/#{image_name}-centos7:$git_ref"
+procs[1]="docker push -f docker.io/#{centos_namespace}/#{image_name}-centos7:latest"
+#procs[2]="docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref"
 
 # Run pushes in parallel
 for i in {0..1}; do
@@ -82,8 +76,8 @@ for pid in ${pids[*]}; do
   wait $pid
 done
 
-procs[0]="docker push -f #{registry}#{image_name}-centos7:latest"
-procs[1]="docker push -f #{registry}#{image_name}-rhel7:latest"
+procs[0]="docker push -f #{registry}#{centos_namespace}/#{image_name}-centos7:latest"
+procs[1]="docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest"
 
 # Run pushes in parallel
 for i in {0..1}; do
@@ -125,20 +119,15 @@ set +e
           }
         end
 
-        def update_latest_image_cmd(registry)
-          cmd = %{
-rm -rf ~/latest_images ; touch ~/latest_images
-          }
-          Vagrant::Openshift::Constants.openshift_images.each do |name, git_url|
-            cmd += %{
+        def update_latest_image_cmd(repo_url,namespace,name,registry)
+            cmd = %{
 set +e
-git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
-curl -s http://#{registry}v1/repositories/#{name}-rhel7/tags/${git_ref} | grep -q "error"
+git_ref=$(git ls-remote #{repo_url} -h refs/heads/master | cut -c1-7)
+curl -s http://#{registry}v1/repositories/#{namespace}/#{name}-rhel7/tags/${git_ref} | grep -q "error"
 if [[ "$?" != "0" ]]; then
   echo "#{name};$git_ref" >> ~/latest_images
 fi
             }
-          end
           return cmd
         end
 
@@ -159,33 +148,35 @@ docker pull #{@options[:registry]}openshift/base-rhel7
           }
 
           cmd += %{
-# so we can call sti
+# so we can call s2i
 export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
           }
 
           # FIXME: We always need to make sure we have the latest base image
           # FIXME: This is because the internal registry is pruned once per month
-          if !@options[:build_images].include?("openshift/base")
-            @options[:build_images] = "openshift/base:1:master,#{@options[:build_images]}"
+          if !@options[:build_images].include?("base")
+            @options[:build_images] = "openshift;openshift;base;1;https://github.com/openshift/sti-base;master,#{@options[:build_images]}"
           end
 
           build_images = @options[:build_images].split(",").map { |i| i.strip }
 
           push_cmd = ""
           build_images.each do |image|
-            name, version, git_ref = image.split(':')
-            repo_url = Vagrant::Openshift::Constants.openshift_images[name]
-            if repo_url == nil
-              puts "Unregistered image: #{name}, skipping"
-              next
-            end
+            centos_namespace,rhel_namespace,name, version, repo_url, git_ref = image.split(';')
             cmd += build_image(name, version, git_ref, repo_url)
-            push_cmd += push_image(name, git_ref, @options[:registry])
+            push_cmd += push_image(centos_namespace,rhel_namespace,name, git_ref, @options[:registry])
           end
 
+          cmd += %{
+rm -rf ~/latest_images ; touch ~/latest_images
+          }
+
           # Push the final images **only** when they all build successfully
-          cmd += push_cmd
-          cmd += update_latest_image_cmd(@options[:registry])
+          build_images.each do |image|
+            _,rhel_namespace,name, _, repo_url, _ = image.split('#')
+            cmd += push_cmd
+            cmd += update_latest_image_cmd(repo_url,rhel_namespace,name,@options[:registry])
+          end
 
           do_execute(env[:machine], cmd)
 
