@@ -120,14 +120,13 @@ set +e
         end
 
         def update_latest_image_cmd(registry,namespace,name,git_url)
-            cmd = %{
+          cmd = %{
         git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
         curl -s http://#{registry}v1/repositories/#{namespace}/#{name}-rhel7/tags/${git_ref} | grep -q "error"
         if [[ "$?" != "0" ]]; then
           echo "#{name};$git_ref" >> ~/latest_images
         fi
             }
-          end
           return cmd
         end
 
