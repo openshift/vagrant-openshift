@@ -45,22 +45,22 @@ set -e
 pushd /tmp/images/#{image_name}
 git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
-echo "Pushing image #{image_name}:$git_ref..."
+echo "Pushing image #{image_name}:#{git_ref}..."
 
-docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:$git_ref
+docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}
 docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:latest
 docker tag -f #{centos_namespace}/#{image_name}-centos7 docker.io/#{centos_namespace}/#{image_name}-centos7:latest
-docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref
+docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
 docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
 
 # We can't fully parallelize this because docker fails when you push to the same repo at the
 # same time (using different tags), so we do two groups of push operations.
 # this one is failing in parallel for unknown reasons
-docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref
+docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
 
-procs[0]="docker push -f #{registry}#{centos_namespace}/#{image_name}-centos7:$git_ref"
+procs[0]="docker push -f #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}"
 procs[1]="docker push -f docker.io/#{centos_namespace}/#{image_name}-centos7:latest"
-#procs[2]="docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:$git_ref"
+#procs[2]="docker push -f #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}"
 
 # Run pushes in parallel
 for i in {0..1}; do
@@ -156,10 +156,7 @@ export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/
           end
 
           # Push the final images **only** when they all build successfully
-          build_images.each do |image|
-            _,rhel_namespace,name, _, repo_url, _ = image.split('#')
-            cmd += push_cmd
-          end
+          cmd += push_cmd
 
           do_execute(env[:machine], cmd)
 
