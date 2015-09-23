@@ -38,6 +38,9 @@ module Vagrant
             o.on("--build_images [list]", String, "List of CENTOS_NAMESPACE;RHEL_NAMESPACE;IMAGE;VERSION;GIT_REPO;REF pairs, delimited by ','") do |i|
               options[:build_images] = i
             end
+            o.on("--check_images [list]", String, "List of CENTOS_NAMESPACE;RHEL_NAMESPACE;IMAGE;VERSION;GIT_REPO;REF pairs, delimited by ','") do |ci|
+              options[:check_images] = ci
+            end
             o.separator ""
           end
 
