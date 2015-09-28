@@ -42,13 +42,13 @@ module Vagrant
           b.use SetHostName
           b.use InstallOpenshift
           b.use InstallOpenshiftRhel7
-          b.use InstallOpenshiftAssetDependencies
+          b.use InstallOpenshiftAssetDependencies, :restore_assets => true
         end
       end
 
       def self.install_openshift_assets_base(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallOpenshiftAssetDependencies
+          b.use InstallOpenshiftAssetDependencies, :backup_assets => true
         end
       end
 
