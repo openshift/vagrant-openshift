@@ -102,13 +102,20 @@ mkdir -p /data/bin
 GO_VERSION=($(go version))
 echo "Detected go version: $(go version)"
 
+# TODO: Remove for go1.5, go vet and go cover will be internal 
 if [[ ${GO_VERSION[2]} == "go1.4"* ]]; then
   GOPATH=/data go get golang.org/x/tools/cmd/cover
-else
-  GOPATH=/data go get code.google.com/p/go.tools/cmd/cover
-fi
 
-GOPATH=/data go get golang.org/x/tools/cmd/vet
+  GOPATH=/data go get golang.org/x/tools/cmd/vet
+
+  # Check out a stable commit for go vet in order to version lock it to something we can work with
+  pushd /data/src/golang.org/x/tools >/dev/null 2>&1
+    git checkout c262de870b618eed648983aa994b03bc04641c72 
+  popd >/dev/null 2>&1
+
+  # Re-install using this version of the tool
+  GOPATH=/data go install golang.org/x/tools/cmd/vet
+fi
 
 chown -R #{ssh_user}:#{ssh_user} /data
 
