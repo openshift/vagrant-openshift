@@ -92,7 +92,7 @@ module Vagrant
             end
             b.use SyncLocalRepository
             b.use CheckoutRepositories
-            b.use InstallOpenshiftAssetDependencies
+            b.use InstallOpenshiftAssetDependencies, :restore_assets => true
           end
           if options[:build]
             b.use(BuildOpenshiftBaseImages, options) if options[:images]
