@@ -20,29 +20,52 @@ module Vagrant
       class InstallOpenshiftAssetDependencies
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options.clone
         end
 
         def call(env)
           ssh_user = env[:machine].ssh_info[:username]
-          do_execute(env[:machine], %{
+          cmd = %{
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
-
-if ! which bundler > /dev/null 2>&1 ; then
-  gem install bundler
-fi
+ASSET_BACKUP_DIR=/data/asset_dependencies
 
 if ! which npm > /dev/null 2>&1 ; then
   sudo yum -y install npm
 fi
 
+}
+          if @options[:restore_assets]
+            cmd += %{
+  # make sure the dirs always exist
+  mkdir -p /data/asset_dependencies/node_modules
+  mkdir -p /data/asset_dependencies/bower_components
+  # copy them to the assets dir
+  cp -rf $ASSET_BACKUP_DIR/node_modules $ORIGIN_PATH/assets/node_modules
+  cp -rf $ASSET_BACKUP_DIR/bower_components $ORIGIN_PATH/assets/bower_components
+  
+}
+          end
+
+          cmd += %{
 pushd $ORIGIN_PATH
   hack/install-assets.sh
 popd
-          }, {:timeout=>60*20})
+
+}
+
+          if @options[:backup_assets]
+            cmd += %{
+  mkdir -p $ASSET_BACKUP_DIR
+  cp -rf $ORIGIN_PATH/assets/node_modules $ASSET_BACKUP_DIR/node_modules
+  cp -rf $ORIGIN_PATH/assets/bower_components $ASSET_BACKUP_DIR/bower_components
+}
+          end
+
+          do_execute(env[:machine], cmd, {:timeout=>60*20})
           @app.call(env)
         end
       end
