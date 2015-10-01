@@ -54,6 +54,10 @@ module Vagrant
             o.on("-c","--report-coverage", String, "Generate code coverage report") do |f|
               options[:report_coverage] = true
             end
+
+            o.on("-j","--parallel", String, "Run parallel make") do |f|
+              options[:parallel] = true
+            end
           end
 
           # Parse the options
