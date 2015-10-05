@@ -68,6 +68,10 @@ popd >/dev/null
 
           cmd_env = []
           build_targets = ["make"]
+          if @options[:parallel]
+            build_targets << '-j'
+            build_targets << '--output-sync=recurse'
+          end
 
           if @options[:all]
             cmd_env << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts'
