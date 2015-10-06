@@ -100,7 +100,7 @@ popd >/dev/null
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             # for extended tests we need a ginkgo binary
             do_execute(env[:machine], "go get github.com/onsi/ginkgo/ginkgo", {:timeout => 60*60*2, :fail_on_error => true, :verbose => false})
-            cmds = @options[:extended_test_packages].split(",").map{ |p| 'test/extended/'+Shellwords.escape(p)+'.sh'}
+            cmds = parse_extended(@options[:extended_test_packages])
             env[:test_exit_code] = run_tests(env, cmds, true)
           end
 
@@ -113,6 +113,26 @@ popd >/dev/null
 
           @app.call(env)
         end
+
+        # parse_extended parses the extended test tag
+        # The valid syntax is:
+        # [test][extended:core] will run **all** test cases in 'core' bucket
+        # [test][extended:core(focus)] will run just test cases that matches 'focus' string in core bucket
+        def parse_extended(tag)
+          buckets = tag.split(",")
+          cmds = []
+          buckets.each do |bucket|
+            if bucket.include?('(')
+              focus = bucket.slice(bucket.index("(")+1..-2).split(" ").map { |i| Shellwords.escape(i.strip) }.join(" ")
+              name = Shellwords.escape(bucket.slice(0..bucket.index("(")-1))
+              cmds << "test/extended/#{name.strip}.sh -focus=\"#{focus}\""
+            else
+              cmds << "test/extended/#{Shellwords.escape(bucket.strip)}.sh"
+            end
+          end
+          return cmds
+        end
+
       end
     end
   end
