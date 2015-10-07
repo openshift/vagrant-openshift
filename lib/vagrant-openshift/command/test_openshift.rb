@@ -39,6 +39,10 @@ module Vagrant
               options[:all] = true
             end
 
+            o.on("", "--skip-check", String, "Skip unit, integration and e2e tests") do |f|
+              options[:skip_check] = true
+            end
+
             o.on("-e", "--extended TEST_BUCKETS", String, "Comma delimited list of extended test packages to run") do |f|
               options[:extended_test_packages] = f
             end

@@ -87,7 +87,7 @@ popd >/dev/null
               cmd_env << 'SKIP_IMAGE_CLEANUP=1'
             end
           else
-            build_targets << "check"
+            build_targets << "check" if !@options[:skip_check]
           end
 
           if @options[:report_coverage]
