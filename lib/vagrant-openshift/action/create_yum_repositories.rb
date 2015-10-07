@@ -46,8 +46,9 @@ module Vagrant
 
           sudo(env[:machine], "yum -y install deltarpm", {fail_on_error: false})
           sudo(env[:machine], "yum -y install augeas")
+
           if is_centos
-            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64 http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm")
+            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64")
             set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "openshift-deps", "https://mirror.openshift.com/pub/openshift-v3/dependencies/centos7/x86_64/")
           end
 
@@ -55,6 +56,8 @@ module Vagrant
 
           unless is_fedora
             unless env[:machine].communicate.test("rpm -q epel-release")
+              sudo(env[:machine], "yum install -y http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm")
+
               #Workaround broken RHEL image which does not recover after restart.
               if "VagrantPlugins::AWS::Provider" == env[:machine].provider.class.to_s
                 remote_write(env[:machine], "/etc/rc.local") {

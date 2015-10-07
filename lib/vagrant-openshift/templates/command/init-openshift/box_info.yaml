@@ -176,6 +176,51 @@
     :openstack:
       :image: <RHEL 7>
       :ssh_user: root
+:rhel7next:
+  :os:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: ec2-user
+      :machine_name: openshift-rhel7next
+      :ebs_volume_size: 25
+      :ami_tag_prefix: openshift-rhel7next_
+    :openstack:
+      :image: <RHEL 7>
+      :ssh_user: root
+  :deps:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: ec2-user
+      :machine_name: devenv-rhel7next-base
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-rhel7next-base_
+    :openstack:
+      :image: <RHEL 7>
+      :ssh_user: root
+  :inst:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: ec2-user
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-rhel7next_
+    :openstack:
+      :image: <RHEL 7>
+      :ssh_user: root
+  :bootstrap:
+    :aws:
+      :ami: <AMI_ID>
+      :ami_region: us-east-1
+      :ssh_user: ec2-user
+      :machine_name: <AMI_NAME>
+      :ebs_volume_size: 25
+      :ami_tag_prefix: devenv-rhel7next-bootstrap_
+    :openstack:
+      :image: <RHEL 7>
+      :ssh_user: root
 :rhelatomic7:
   :os:
     :aws:
