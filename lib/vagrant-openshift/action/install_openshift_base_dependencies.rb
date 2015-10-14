@@ -121,6 +121,10 @@ chown -R #{ssh_user}:#{ssh_user} /data
 
 sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd/system.conf
 
+# Docker 1.8.2 now sets a TimeoutStartSec of 1 minute.  Unfortunately, for some
+# reason the initial docker start up is now taking > 5 minutes.  Until that is fixed need this.
+sed -i 's,TimeoutStartSec=.*,TimeoutStartSec=10min,'  /usr/lib/systemd/system/docker.service
+
 systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable docker
