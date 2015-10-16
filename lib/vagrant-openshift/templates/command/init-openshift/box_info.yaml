@@ -51,20 +51,6 @@
     :openstack:
       :image: <CentOS 7>
       :ssh_user: centos
-  :bootstrap:
-    :virtualbox:
-      :box_name: centos7_bootstrap
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_virtualbox_bootstrap.box
-    :libvirt:
-      :box_name: centos7_bootstrap
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/centos7_libvirt_bootstrap.box
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: centos
-      :machine_name: <AMI_NAME>
-      :ebs_volume_size: 25
-      :ami_tag_prefix: devenv-centos7-bootstrap_
 :fedora:
   :os:
     :virtualbox:
@@ -117,20 +103,6 @@
     :libvirt:
       :box_name: fedora_inst
       :box_url: https://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_libvirt_inst.box
-  :bootstrap:
-    :virtualbox:
-      :box_name: fedora_bootstrap
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_virtualbox_bootstrap.box
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: fedora
-      :machine_name: <AMI_NAME>
-      :ebs_volume_size: 25
-      :ami_tag_prefix: devenv-fedora-bootstrap_
-    :libvirt:
-      :box_name: fedora_bootstrap
-      :box_url: http://mirror.openshift.com/pub/vagrant/boxes/openshift3/fedora_libvirt_bootstrap.box
 :rhel7:
   :os:
     :aws:
@@ -162,17 +134,6 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: devenv-rhel7_
-    :openstack:
-      :image: <RHEL 7>
-      :ssh_user: root
-  :bootstrap:
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: ec2-user
-      :machine_name: <AMI_NAME>
-      :ebs_volume_size: 25
-      :ami_tag_prefix: devenv-rhel7-bootstrap_
     :openstack:
       :image: <RHEL 7>
       :ssh_user: root
@@ -210,17 +171,6 @@
     :openstack:
       :image: <RHEL 7>
       :ssh_user: root
-  :bootstrap:
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: ec2-user
-      :machine_name: <AMI_NAME>
-      :ebs_volume_size: 25
-      :ami_tag_prefix: devenv-rhel7next-bootstrap_
-    :openstack:
-      :image: <RHEL 7>
-      :ssh_user: root
 :rhelatomic7:
   :os:
     :aws:
@@ -254,18 +204,6 @@
       :machine_name: <AMI_NAME>
       :ebs_volume_size: 25
       :ami_tag_prefix: openshift-rhelatomic7_
-    :openstack:
-      :image: <ATOMIC>
-      :flavor: m1.small
-      :ssh_user: root
-  :bootstrap:
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: cloud-user
-      :machine_name: <AMI_NAME>
-      :ebs_volume_size: 25
-      :ami_tag_prefix: devenv-rhelatomic7-bootstrap_
     :openstack:
       :image: <ATOMIC>
       :flavor: m1.small

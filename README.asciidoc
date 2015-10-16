@@ -393,7 +393,6 @@ Images may be thought of as being at one of four stages:
 1. "os" - The base OS image (use a "minimal" one).
 2. "deps" - OpenShift runtime dependencies and build requirements are installed.
 3. "inst" - OpenShift code, images, and binaries are built and installed
-4. "bootstrap" - OpenShift installed and running
 
 You may want to create images that snapshot the output at each of
 these stages, as the rate of change and amount of time to create each
