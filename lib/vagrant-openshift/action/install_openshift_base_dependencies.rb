@@ -109,12 +109,13 @@ if [[ ${GO_VERSION[2]} == "go1.4"* ]]; then
   GOPATH=/data go get golang.org/x/tools/cmd/vet
 
   # Check out a stable commit for go vet in order to version lock it to something we can work with
-  pushd /data/src/golang.org/x/tools >/dev/null 2>&1
-    git checkout c262de870b618eed648983aa994b03bc04641c72 
-  popd >/dev/null 2>&1
-
-  # Re-install using this version of the tool
-  GOPATH=/data go install golang.org/x/tools/cmd/vet
+  pushd /data/src/golang.org/x/tools >/dev/null
+    if git checkout c262de870b618eed648983aa994b03bc04641c72
+    then
+      # Re-install using this version of the tool
+      GOPATH=/data go install golang.org/x/tools/cmd/vet
+    fi
+  popd >/dev/null
 fi
 
 chown -R #{ssh_user}:#{ssh_user} /data
