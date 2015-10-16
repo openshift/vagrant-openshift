@@ -48,7 +48,6 @@ module Vagrant
           sudo(env[:machine], "yum -y install augeas")
 
           if is_centos
-            sudo(env[:machine], "yum install -y centos-release-SCL.x86_64")
             set_yum_repo(env, "/etc/yum.repos.d/openshift-deps.repo", "openshift-deps", "https://mirror.openshift.com/pub/openshift-v3/dependencies/centos7/x86_64/")
           end
 
