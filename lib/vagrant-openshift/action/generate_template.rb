@@ -64,7 +64,7 @@ module Vagrant
             'instance_name' => box_info[:instance_name],
             'os' => os,
             'dev_cluster' => false,
-            'insert_key' => ((stage == :inst) || (stage == :bootstrap)) && !@options[:no_insert_key],
+            'insert_key' => (stage == :inst) && !@options[:no_insert_key],
             'num_minions' => 2,
             'cpus' => 2,
             'memory' => 2048,

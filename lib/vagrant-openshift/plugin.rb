@@ -142,11 +142,6 @@ module Vagrant
         Commands::TestOpenshiftImage
       end
 
-      command "bootstrap-openshift" do
-        require_relative 'command/bootstrap_openshift'
-        Commands::BootstrapOpenshift
-      end
-
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner
