@@ -74,9 +74,7 @@ module Vagrant
           }
 
           vagrant_openshift_config['no_synced_folders'] = @options[:no_synced_folders]
-          if @options[:no_synced_folders]
-            vagrant_openshift_config[:no_synced_folders] = true
-          else
+          unless  @options[:no_synced_folders]
             vagrant_openshift_config['sync_to']   = '/data/src'
             vagrant_openshift_config['sync_from'] = "#{gopath}/src"
           end
