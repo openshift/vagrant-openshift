@@ -47,7 +47,7 @@ rm -rf $contextdir/repos/*chrome*.repo
 
 # create Dockerfile
 cat <<EOF > $contextdir/Dockerfile
-FROM registry.access.redhat.com/rhel7:latest
+FROM registry.access.redhat.com/rhel7.1:latest
 
 RUN yum remove -y subscription-manager
 
@@ -59,9 +59,8 @@ RUN yum update -y && yum clean all
 
 EOF
 
-# make old official image backup and build the new "official"
-docker tag rhel7:latest rhel7:latest_official
 docker build --rm -t rhel7:latest $contextdir
+docker tag rhel7:latest rhel7.1
 
 # cleaning
 rm -rf $contextdir
