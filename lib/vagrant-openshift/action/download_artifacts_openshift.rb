@@ -54,7 +54,7 @@ module Vagrant
               FileUtils.mkdir_p File.dirname(target.to_s)
             end
 
-            command = "/usr/bin/rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
+            command = "/usr/bin/rsync -az -e 'ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
             if not system(command)
               machine.ui.warn "Unable to download artifacts"
