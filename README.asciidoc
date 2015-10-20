@@ -77,7 +77,7 @@ Then clone the repositories into your GOPATH.
 [source, sh]
 ----
 $ cd $GOPATH
-$ vagrant openshift-local-checkout -u <github username>
+$ vagrant origin-local-checkout -u <github username>
 $ cd src/github.com/openshift/origin
 ----
 
@@ -113,7 +113,7 @@ NOTE: See link:#other-providers[Other Providers] below for launching VMs from ot
 
 [source, sh]
 ----
-$ vagrant sync-openshift
+$ vagrant sync-origin
 ----
 
 For some providers, your local repositories are automatically synchronized
@@ -128,7 +128,7 @@ rebuild only the OpenShift binary, use the `--no-images` option.
 
 [source, sh]
 ----
-$ vagrant test-openshift --all
+$ vagrant test-origin --all
 ----
 
 
@@ -406,18 +406,18 @@ help with this:
 
 [source, sh]
 ----
-$ vagrant build-openshift-base
-$ vagrant build-openshift-base-images
-$ vagrant install-openshift-assets-base
+$ vagrant build-origin-base
+$ vagrant build-origin-base-images
+$ vagrant install-origin-assets-base
 ----
 
 Given this base foundation, you may want to `vagrant package` the result before proceeding to install OpenShift code.
 
 [source, sh]
 ----
-$ vagrant install-openshift
-$ vagrant build-openshift-base-images  # pick up updates if older "deps" base reused
-$ vagrant build-openshift --images
+$ vagrant install-origin
+$ vagrant build-origin-base-images  # pick up updates if older "deps" base reused
+$ vagrant build-origin --images
 $ vagrant build-sti --binary-only
 ----
 

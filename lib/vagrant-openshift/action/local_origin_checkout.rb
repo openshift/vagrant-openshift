@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class LocalOpenshiftCheckout
+      class LocalOriginCheckout
         include CommandHelper
 
         def initialize(app, env, options)
@@ -43,7 +43,7 @@ module Vagrant
             end
 
             system(commands)
-            puts "OpenShift repositories cloned into #{Dir.pwd}"
+            puts "Origin repositories cloned into #{Dir.pwd}"
           end
 
           @app.call(env)

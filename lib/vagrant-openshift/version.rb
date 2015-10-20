@@ -16,6 +16,6 @@
 
 module Vagrant
   module Openshift
-    VERSION = "2.0.11"
+    VERSION = "3.0.0"
   end
 end

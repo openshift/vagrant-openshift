@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshiftBaseDependencies
+      class InstallOriginBaseDependencies
         include CommandHelper
 
         def initialize(app, env)
@@ -39,9 +39,6 @@ fi
           end
 
           ssh_user = env[:machine].ssh_info[:username]
-          # FIXME: Move 'openshift/centos-mongodb' into openshift org and then
-          #        add the image into 'repositories' constants
-          #
           sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat unzip Xvfb ethtool openldap-clients jq", {:timeout=>60*20})
           sudo(env[:machine], "yum install -y facter", {fail_on_error: false, :timeout=>60*10})
 
@@ -57,7 +54,7 @@ rpm --import linux_signing_key.pub
 yum-config-manager --add-repo=http://dl.google.com/linux/chrome/rpm/stable/x86_64
 
 # Install chrome
-yum install -y google-chrome-stable 
+yum install -y google-chrome-stable
 
 # Install chromedriver
 wget https://chromedriver.storage.googleapis.com/2.16/chromedriver_linux64.zip
@@ -102,7 +99,7 @@ mkdir -p /data/bin
 GO_VERSION=($(go version))
 echo "Detected go version: $(go version)"
 
-# TODO: Remove for go1.5, go vet and go cover will be internal 
+# TODO: Remove for go1.5, go vet and go cover will be internal
 if [[ ${GO_VERSION[2]} == "go1.4"* ]]; then
   GOPATH=/data go get golang.org/x/tools/cmd/cover
 

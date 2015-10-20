@@ -27,34 +27,34 @@ module Vagrant
         end
       end
 
-      def self.build_openshift_base(options)
+      def self.build_origin_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallOpenshiftBaseDependencies
+          b.use InstallOriginBaseDependencies
         end
       end
 
-      def self.install_openshift(options)
+      def self.install_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use YumUpdate
           b.use SetHostName
-          b.use InstallOpenshift
-          b.use InstallOpenshiftRhel7
-          b.use InstallOpenshiftAssetDependencies, :restore_assets => true
+          b.use InstallOrigin
+          b.use InstallOriginRhel7
+          b.use InstallOriginAssetDependencies, :restore_assets => true
         end
       end
 
-      def self.install_openshift_assets_base(options)
+      def self.install_origin_assets_base(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallOpenshiftAssetDependencies, :backup_assets => true
+          b.use InstallOriginAssetDependencies, :backup_assets => true
         end
       end
 
-      def self.build_openshift(options)
+      def self.build_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshift, options
+          b.use BuildOrigin, options
         end
       end
 
@@ -70,19 +70,19 @@ module Vagrant
         end
       end
 
-      def self.try_restart_openshift(options)
+      def self.try_restart_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
         end
       end
 
-      def self.build_openshift_base_images(options)
+      def self.build_origin_base_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOpenshiftBaseImages, options
+          b.use BuildOriginBaseImages, options
         end
       end
 
-      def self.repo_sync_openshift(options)
+      def self.repo_sync_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
           if options[:source]
@@ -92,11 +92,11 @@ module Vagrant
             end
             b.use SyncLocalRepository
             b.use CheckoutRepositories
-            b.use InstallOpenshiftAssetDependencies, :restore_assets => true
+            b.use InstallOriginAssetDependencies, :restore_assets => true
           end
           if options[:build]
-            b.use(BuildOpenshiftBaseImages, options) if options[:images]
-            b.use(BuildOpenshift, options)
+            b.use(BuildOriginBaseImages, options) if options[:images]
+            b.use(BuildOrigin, options)
             b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
           end
         end
@@ -119,17 +119,17 @@ module Vagrant
         end
       end
 
-      def self.local_openshift_checkout(options)
+      def self.local_origin_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
-            b.use LocalOpenshiftCheckout, options
+            b.use LocalOriginCheckout, options
           end
         end
       end
 
-      def self.run_openshift_tests(options)
+      def self.run_origin_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use RunOpenshiftTests, options
+          b.use RunOriginTests, options
           if options[:download]
             b.use DownloadArtifactsOrigin
           end
@@ -221,21 +221,21 @@ module Vagrant
       autoload :CheckoutRepositories, action_root.join("checkout_repositories")
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
-      autoload :InstallOpenshiftBaseDependencies, action_root.join("install_openshift_base_dependencies")
-      autoload :InstallOpenshiftAssetDependencies, action_root.join("install_openshift_asset_dependencies")
-      autoload :BuildOpenshiftBaseImages, action_root.join("build_openshift_base_images")
+      autoload :InstallOriginBaseDependencies, action_root.join("install_origin_base_dependencies")
+      autoload :InstallOriginAssetDependencies, action_root.join("install_origin_asset_dependencies")
+      autoload :BuildOriginBaseImages, action_root.join("build_origin_base_images")
       autoload :PushOpenshiftImages, action_root.join("push_openshift_images")
       autoload :PushOpenshiftRelease, action_root.join("push_openshift_release")
-      autoload :InstallOpenshift, action_root.join("install_openshift")
-      autoload :InstallOpenshiftRhel7, action_root.join("install_openshift_rhel7")
-      autoload :BuildOpenshift, action_root.join("build_openshift")
+      autoload :InstallOrigin, action_root.join("install_origin")
+      autoload :InstallOriginRhel7, action_root.join("install_origin_rhel7")
+      autoload :BuildOrigin, action_root.join("build_origin")
       autoload :BuildSti, action_root.join("build_sti")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
-      autoload :LocalOpenshiftCheckout, action_root.join("local_openshift_checkout")
+      autoload :LocalOriginCheckout, action_root.join("local_origin_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
-      autoload :RunOpenshiftTests, action_root.join("run_openshift_tests")
+      autoload :RunOriginTests, action_root.join("run_origin_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")

@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class LocalOpenshiftSetup < Vagrant.plugin(2, :command)
+      class LocalOriginSetup < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "clones the openshift repos into the current directory"
+          "clones the origin repos into the current directory"
         end
 
         def execute
@@ -32,14 +32,14 @@ module Vagrant
           }
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant openshift-local-checkout [options]"
+            o.banner = "Usage: vagrant origin-local-checkout [options]"
             o.separator ""
 
             o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
               options[:branch] = f
             end
 
-            o.on("-u [username]", "--user [username]", String, "Your GitHub username. If provided, Vagrant will attempt to clone your forks of the Origin repos. If not provided, or if the forks cannot be found, Vagrant will clone read-only copies of the OpenShift repos.") do |f|
+            o.on("-u [username]", "--user [username]", String, "Your GitHub username. If provided, Vagrant will attempt to clone your forks of the Origin repos. If not provided, or if the forks cannot be found, Vagrant will clone read-only copies of the Origin repos.") do |f|
               options[:user] = f
             end
 
@@ -52,7 +52,7 @@ module Vagrant
           argv = parse_options(opts)
           return if !argv
 
-          actions = Vagrant::Openshift::Action.local_openshift_checkout(options)
+          actions = Vagrant::Openshift::Action.local_origin_checkout(options)
           @env.action_runner.run actions
           0
         end

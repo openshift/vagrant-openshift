@@ -18,20 +18,40 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class TryRestartOpenshift < Vagrant.plugin(2, :command)
+      class RepoSyncOrigin < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "restarts openshift if it's already running"
+          "syncs your local repos to the current instance"
         end
 
         def execute
           options = {}
+          options[:images] = true
+          options[:build] = true
           options[:clean] = false
+          options[:source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant try-restart-openshift [vm-name]"
+            o.banner = "Usage: vagrant sync-origin [vm-name]"
             o.separator ""
+
+            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
+              options[:source] = f
+            end
+
+            o.on("-c", "--clean", "Delete existing repo before syncing source") do |f|
+              options[:clean] = f
+            end
+
+            o.on("--dont-install", "Don't build and install updated source") do |f|
+              options[:build] = false
+            end
+
+            o.on("--no-images", "Don't build updated component Docker images") do |f|
+              options[:images] = false
+            end
+
           end
 
           # Parse the options
@@ -39,7 +59,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.try_restart_openshift(options)
+            actions = Vagrant::Openshift::Action.repo_sync_origin(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

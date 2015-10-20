@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOpenshiftAssetDependencies
+      class InstallOriginAssetDependencies
         include CommandHelper
 
         def initialize(app, env, options)
@@ -46,7 +46,7 @@ fi
   # copy them to the assets dir
   cp -rf $ASSET_BACKUP_DIR/node_modules $ORIGIN_PATH/assets/node_modules
   cp -rf $ASSET_BACKUP_DIR/bower_components $ORIGIN_PATH/assets/bower_components
-  
+
 }
           end
 

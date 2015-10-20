@@ -18,19 +18,18 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildOpenshiftBase < Vagrant.plugin(2, :command)
+      class InstallOriginAssetsBase < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "install the prereqs for openshift"
+          "installs origin asset dependencies"
         end
 
         def execute
           options = {}
-          options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-openshift-base [vm-name]"
+            o.banner = "Usage: vagrant install-origin-assets-base [vm-name]"
             o.separator ""
           end
 
@@ -39,7 +38,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_openshift_base(options)
+            actions = Vagrant::Openshift::Action.install_origin_assets_base(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

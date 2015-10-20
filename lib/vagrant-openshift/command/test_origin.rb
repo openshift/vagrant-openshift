@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class TestOpenshift < Vagrant.plugin(2, :command)
+      class TestOrigin < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "run the openshift tests"
+          "run the origin tests"
         end
 
         def execute
@@ -32,7 +32,7 @@ module Vagrant
           options[:extended_test_packages] = ""
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant test-openshift [machine-name]"
+            o.banner = "Usage: vagrant test-origin [machine-name]"
             o.separator ""
 
             o.on("-a", "--all", String, "Run all tests") do |f|
@@ -69,7 +69,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.run_openshift_tests(options)
+            actions = Vagrant::Openshift::Action.run_origin_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
