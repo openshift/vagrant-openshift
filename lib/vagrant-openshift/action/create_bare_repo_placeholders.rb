@@ -27,9 +27,9 @@ module Vagrant
 
         def call(env)
           remote_write(env[:machine], "/root/.ssh/config", "root:root", "0600") {
-            %{Host github.com
-   StrictHostKeyChecking no
-   UserKnownHostsFile=/dev/null
+%{Host github.com
+StrictHostKeyChecking no
+UserKnownHostsFile=/dev/null
 }}
 
           git_clone_commands = ""

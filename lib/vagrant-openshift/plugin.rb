@@ -112,6 +112,16 @@ module Vagrant
         Commands::TestSti
       end
 
+      command "download-artifacts-origin" do
+        require_relative "command/download_artifacts_origin"
+        Commands::DownloadArtifactsOrigin
+      end
+
+      command "download-artifacts-sti" do
+        require_relative "command/download_artifacts_sti"
+        Commands::DownloadArtifactsSti
+      end
+
       command "create-ami" do
         require_relative "command/create_ami"
         Commands::CreateAMI

@@ -131,7 +131,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunOpenshiftTests, options
           if options[:download]
-            b.use DownloadArtifactsOpenshift
+            b.use DownloadArtifactsOrigin
           end
           b.use TestExitCode
         end
@@ -144,6 +144,18 @@ module Vagrant
             b.use DownloadArtifactsSti
           end
           b.use TestExitCode
+        end
+      end
+
+      def self.download_origin_artifacts(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use DownloadArtifactsOrigin
+        end
+      end
+
+      def self.download_sti_artifacts(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use DownloadArtifactsSti
         end
       end
 
@@ -229,7 +241,7 @@ module Vagrant
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
-      autoload :DownloadArtifactsOpenshift, action_root.join("download_artifacts_openshift")
+      autoload :DownloadArtifactsOrigin, action_root.join("download_artifacts_origin")
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")

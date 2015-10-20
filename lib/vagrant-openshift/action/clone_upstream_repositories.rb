@@ -30,10 +30,10 @@ module Vagrant
           ssh_user = env[:machine].ssh_info[:username]
 
           remote_write(env[:machine], "/#{ssh_user}/.ssh/config", "#{ssh_user}:#{ssh_user}", "0600") {
-            %{Host github.com
-   StrictHostKeyChecking no
-   UserKnownHostsFile=/dev/null
-          }}
+%{Host github.com
+StrictHostKeyChecking no
+UserKnownHostsFile=/dev/null
+}}
 
           git_clone_commands = "set -e\n"
           Constants.repos(env).each do |repo_name, url|
