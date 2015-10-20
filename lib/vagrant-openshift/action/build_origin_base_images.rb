@@ -1,5 +1,5 @@
 #--
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOpenshift
+      class BuildOriginBaseImages
         include CommandHelper
 
         def initialize(app, env, options)
@@ -27,39 +27,17 @@ module Vagrant
         end
 
         def call(env)
-          if @options[:images]
-            cmd = %{
-echo "Performing openshift release build with images..."
+          do_execute(env[:machine], %{
+echo "Building base images..."
 set -e
-make release
-}
-          else
-            cmd = %{
-echo "Performing openshift release build..."
-set -e
-make release-binaries
-}
-          end
-          cmd += %{
-
-if [ ! -d _output/etcd ]
-then
-  hack/install-etcd.sh
-fi
-}
-          if @options[:force]
-            build_cmd = cmd
-            cmd = %{
 pushd /data/src/github.com/openshift/origin
-#{build_cmd}
+  hack/build-base-images.sh
 popd
-}
-          else
-            cmd = sync_bash_command('origin', cmd)
-          end
-          do_execute(env[:machine], cmd)
+},
+            { :timeout => 60*20, :verbose => false })
           @app.call(env)
         end
+
       end
     end
   end

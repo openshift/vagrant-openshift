@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class RunOpenshiftTests
+      class RunOriginTests
         include CommandHelper
 
         @@SSH_TIMEOUT = 4800

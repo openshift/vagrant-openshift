@@ -1,5 +1,5 @@
 #--
-# Copyright 2014 Red Hat, Inc.
+# Copyright 2013 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildOpenshiftBaseImages < Vagrant.plugin(2, :command)
+      class BuildOriginBase < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "builds openshift infrastructure images"
+          "install the prereqs for origin"
         end
 
         def execute
@@ -30,7 +30,7 @@ module Vagrant
           options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-openshift-base-images"
+            o.banner = "Usage: vagrant build-origin-base [vm-name]"
             o.separator ""
           end
 
@@ -39,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_openshift_base_images(options)
+            actions = Vagrant::Openshift::Action.build_origin_base(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

@@ -18,11 +18,11 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class BuildOpenshift < Vagrant.plugin(2, :command)
+      class BuildOrigin < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "builds openshift"
+          "builds origin"
         end
 
         def execute
@@ -32,7 +32,7 @@ module Vagrant
           options[:force] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant build-openshift [vm-name]"
+            o.banner = "Usage: vagrant build-origin [vm-name]"
             o.separator ""
 
             o.on("--images", "Build the images as well as core content.") do |c|
@@ -48,7 +48,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.build_openshift(options)
+            actions = Vagrant::Openshift::Action.build_origin(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

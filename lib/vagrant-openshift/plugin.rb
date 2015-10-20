@@ -32,9 +32,9 @@ module Vagrant
         Config
       end
 
-      command "sync-openshift" do
-        require_relative "command/repo_sync_openshift"
-        Commands::RepoSyncOpenshift
+      command "sync-origin" do
+        require_relative "command/repo_sync_origin"
+        Commands::RepoSyncOrigin
       end
 
       command "sync-sti" do
@@ -47,14 +47,14 @@ module Vagrant
         Commands::BuildAtomicHost
       end
 
-      command "build-openshift-base" do
-        require_relative "command/build_openshift_base"
-        Commands::BuildOpenshiftBase
+      command "build-origin-base" do
+        require_relative "command/build_origin_base"
+        Commands::BuildOriginBase
       end
 
-      command "build-openshift" do
-        require_relative "command/build_openshift"
-        Commands::BuildOpenshift
+      command "build-origin" do
+        require_relative "command/build_origin"
+        Commands::BuildOrigin
       end
 
       command "build-sti" do
@@ -62,24 +62,24 @@ module Vagrant
         Commands::BuildSti
       end
 
-      command "install-openshift" do
-        require_relative "command/install_openshift"
-        Commands::InstallOpenshift
+      command "install-origin" do
+        require_relative "command/install_origin"
+        Commands::InstallOrigin
       end
 
-      command "install-openshift-assets-base" do
-        require_relative "command/install_openshift_assets_base"
-        Commands::InstallOpenshiftAssetsBase
+      command "install-origin-assets-base" do
+        require_relative "command/install_origin_assets_base"
+        Commands::InstallOriginAssetsBase
       end
 
-      command "try-restart-openshift" do
-        require_relative "command/try_restart_openshift"
-        Commands::TryRestartOpenshift
+      command "try-restart-origin" do
+        require_relative "command/try_restart_origin"
+        Commands::TryRestartOrigin
       end
 
-      command "build-openshift-base-images" do
-        require_relative "command/build_openshift_base_images"
-        Commands::BuildOpenshiftBaseImages
+      command "build-origin-base-images" do
+        require_relative "command/build_origin_base_images"
+        Commands::BuildOriginBaseImages
       end
 
       command "push-openshift-images" do
@@ -92,9 +92,9 @@ module Vagrant
         Commands::OriginInit
       end
 
-      command "openshift-local-checkout" do
-        require_relative "command/local_openshift_setup"
-        Commands::LocalOpenshiftSetup
+      command "origin-local-checkout" do
+        require_relative "command/local_origin_setup"
+        Commands::LocalOriginSetup
       end
 
       command "push-openshift-release" do
@@ -102,14 +102,24 @@ module Vagrant
         Commands::PushOpenshiftRelease
       end
 
-      command "test-openshift" do
-        require_relative "command/test_openshift"
-        Commands::TestOpenshift
+      command "test-origin" do
+        require_relative "command/test_origin"
+        Commands::TestOrigin
       end
 
       command "test-sti" do
         require_relative "command/test_sti"
         Commands::TestSti
+      end
+
+      command "download-artifacts-origin" do
+        require_relative "command/download_artifacts_origin"
+        Commands::DownloadArtifactsOrigin
+      end
+
+      command "download-artifacts-sti" do
+        require_relative "command/download_artifacts_sti"
+        Commands::DownloadArtifactsSti
       end
 
       command "create-ami" do
@@ -137,9 +147,9 @@ module Vagrant
         Commands::CheckoutRepositories
       end
 
-      command "test-openshift-image" do
-        require_relative "command/test_openshift_image"
-        Commands::TestOpenshiftImage
+      command "test-origin-image" do
+        require_relative "command/test_origin_image"
+        Commands::TestOriginImage
       end
 
       provisioner(:openshift) do

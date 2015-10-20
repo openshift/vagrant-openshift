@@ -18,40 +18,19 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSyncOpenshift < Vagrant.plugin(2, :command)
+      class DownloadArtifactsOrigin < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "syncs your local repos to the current instance"
+          "download the origin test artifacts"
         end
 
         def execute
           options = {}
-          options[:images] = true
-          options[:build] = true
-          options[:clean] = false
-          options[:source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync-openshift [vm-name]"
+            o.banner = "Usage: vagrant download-artifacts-origin [machine-name]"
             o.separator ""
-
-            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
-              options[:source] = f
-            end
-
-            o.on("-c", "--clean", "Delete existing repo before syncing source") do |f|
-              options[:clean] = f
-            end
-
-            o.on("--dont-install", "Don't build and install updated source") do |f|
-              options[:build] = false
-            end
-
-            o.on("--no-images", "Don't build updated component Docker images") do |f|
-              options[:images] = false
-            end
-
           end
 
           # Parse the options
@@ -59,7 +38,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync_openshift(options)
+            actions = Vagrant::Openshift::Action.download_origin_artifacts(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

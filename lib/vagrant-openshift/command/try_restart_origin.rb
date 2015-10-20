@@ -18,18 +18,19 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class InstallOpenshiftAssetsBase < Vagrant.plugin(2, :command)
+      class TryRestartOrigin < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "installs openshift asset dependencies"
+          "restarts origin if it's already running"
         end
 
         def execute
           options = {}
+          options[:clean] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant install-openshift-assets-base [vm-name]"
+            o.banner = "Usage: vagrant try-restart-origin [vm-name]"
             o.separator ""
           end
 
@@ -38,7 +39,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.install_openshift_assets_base(options)
+            actions = Vagrant::Openshift::Action.try_restart_origin(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
