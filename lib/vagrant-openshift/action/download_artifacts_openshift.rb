@@ -42,8 +42,7 @@ module Vagrant
             "/tmp/openshift-cmd/"                  => artifacts_dir + "cmd/",
 
             "/data/src/github.com/openshift/origin/_output/local/releases/" => artifacts_dir + "release/",
-            "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/",
-            "/data/src/github.com/openshift/origin/assets/phantomjsdriver.log" => artifacts_dir + "e2e/phantomjsdriver.log",
+            "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
           }
 
           download_map.each do |source,target|
