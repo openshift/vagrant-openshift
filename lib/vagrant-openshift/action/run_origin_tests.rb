@@ -48,9 +48,9 @@ popd >/dev/null
         }
           exit_code = 0
           if as_root
-            _,_,exit_code = sudo(env[:machine], cmd, {:timeout => 60*60*2, :fail_on_error => false, :verbose => false})
+            _,_,exit_code = sudo(env[:machine], cmd, {:timeout => 60*60*4, :fail_on_error => false, :verbose => false})
           else
-            _,_,exit_code = do_execute(env[:machine], cmd, {:timeout => 60*60*2, :fail_on_error => false, :verbose => false})
+            _,_,exit_code = do_execute(env[:machine], cmd, {:timeout => 60*60*4, :fail_on_error => false, :verbose => false})
           end
           exit_code
         end
@@ -99,7 +99,7 @@ popd >/dev/null
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             # for extended tests we need a ginkgo binary
-            do_execute(env[:machine], "go get github.com/onsi/ginkgo/ginkgo", {:timeout => 60*60*2, :fail_on_error => true, :verbose => false})
+            do_execute(env[:machine], "go get github.com/onsi/ginkgo/ginkgo", {:timeout => 60*60*4, :fail_on_error => true, :verbose => false})
             cmds = parse_extended(@options[:extended_test_packages])
             env[:test_exit_code] = run_tests(env, cmds, true)
           end
