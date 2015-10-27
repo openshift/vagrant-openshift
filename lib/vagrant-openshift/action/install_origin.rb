@@ -40,7 +40,7 @@ set -x
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 cat > /etc/profile.d/openshift.sh <<DELIM
 export GOPATH=/data
-export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/go/bin/:$GOPATH/bin:$PATH
+export PATH=$ORIGIN_PATH/_output/etcd/bin:$ORIGIN_PATH/_output/local/bin/linux/amd64:$GOPATH/bin:$PATH
 export KUBECONFIG=/openshift.local.config/master/admin.kubeconfig
 DELIM
 
