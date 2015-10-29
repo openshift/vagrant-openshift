@@ -78,7 +78,6 @@ popd >/dev/null
             cmd_env << 'LOG_DIR=/tmp/origin/e2e/logs'
             cmd_env << 'TEST_ASSETS=true'
             cmd_env << 'TEST_ASSETS_HEADLESS=true'
-            cmd_env << 'TEST_REPORT_DIR=/tmp/origin/e2e/artifacts/junit/extended'
             build_targets << 'test'
             # we want to test the output of build-release, this flag tells the makefile to skip the build dependency
             # so the command comes out to <cmd_env settings> make test SKIP_BUILD=true
@@ -99,9 +98,8 @@ popd >/dev/null
           env[:test_exit_code] = run_tests(env, [cmd], false)
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
-            # for extended tests we need a ginkgo binary
-            do_execute(env[:machine], "go get github.com/onsi/ginkgo/ginkgo", {:timeout => 60*60*4, :fail_on_error => true, :verbose => false})
             cmds = parse_extended(@options[:extended_test_packages])
+            cmds = cmds.map{ |s| 'TEST_REPORT_DIR=/tmp/openshift-extended-tests/junit/extended ' + s }
             env[:test_exit_code] = run_tests(env, cmds, true)
           end
 
