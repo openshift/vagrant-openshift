@@ -29,6 +29,7 @@ module Vagrant
         def call(env)
           ssh_user = env[:machine].ssh_info[:username]
           cmd = %{
+set -e
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 ASSET_BACKUP_DIR=/data/asset_dependencies
