@@ -33,7 +33,7 @@ module Vagrant
           remote_write(env[:machine], "/etc/hostname") {
             hostname
           }
-          sudo(env[:machine],"restorecon -v /etc/sysconfig/network /etc/hostname")
+          sudo(env[:machine],"restorecon -v /etc/sysconfig/network /etc/hostname", :verbose => false)
 
           @app.call(env)
         end
