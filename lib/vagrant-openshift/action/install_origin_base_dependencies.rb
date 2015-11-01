@@ -35,15 +35,16 @@ if ! [[ -L /etc/udev/rules.d/80-net-setup-link.rules ]]; then
   ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
   rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
 fi
-            })
+            }, :verbose => false)
           end
 
           ssh_user = env[:machine].ssh_info[:username]
-          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat unzip Xvfb ethtool openldap-clients jq", {:timeout=>60*20})
-          sudo(env[:machine], "yum install -y facter", {fail_on_error: false, :timeout=>60*10})
+          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat unzip Xvfb ethtool openldap-clients jq", :timeout=>60*20, :verbose => false)
+          sudo(env[:machine], "yum install -y facter", fail_on_error: false, :timeout=>60*10, :verbose => false)
 
           # Install Chrome and chromedriver for headless UI testing
           sudo(env[:machine], %{
+set -ex
 cd /tmp
 
 # Add signing key for Chrome repo
@@ -62,20 +63,21 @@ unzip chromedriver_linux64.zip
 mv chromedriver /usr/bin/chromedriver
 chown root /usr/bin/chromedriver
 chmod 755 /usr/bin/chromedriver
-          }, {:timeout=>60*10})
+          }, :timeout=>60*10, :verbose => false)
 
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", {:timeout=>60*10})
+          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", :timeout=>60*10, :verbose => false)
           #
           sudo(env[:machine], %{
-
 set -ex
-# TODO Remove me ASAP
-sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
-setenforce 0
+if ! test -e /etc/fedora-release; then
+  # TODO Remove me ASAP
+  sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
+  setenforce 0
+fi
 
 systemctl enable ntpd
 
@@ -84,7 +86,6 @@ usermod -a -G docker #{ssh_user}
 
 sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='--insecure-registry=172.30.0.0/16 \\1'," /etc/sysconfig/docker
 sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='--insecure-registry=172.30.0.0/16 -\\1'," /etc/sysconfig/docker
-
 sed -i "s,^ADD_REGISTRY='\\(.*\\)',#ADD_REGISTRY='--add-registry=docker.io \\1'," /etc/sysconfig/docker
 
 cat /etc/sysconfig/docker
@@ -127,7 +128,7 @@ systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable docker
 time systemctl start docker
-          }, {:timeout=>60*30})
+          }, :timeout=>60*30, :verbose => false)
           @app.call(env)
         end
       end

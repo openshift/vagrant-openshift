@@ -27,9 +27,8 @@ module Vagrant
         end
 
         def call(env)
-          ssh_user = env[:machine].ssh_info[:username]
           cmd = %{
-set -e
+set -ex
 
 ORIGIN_PATH=/data/src/github.com/openshift/origin
 ASSET_BACKUP_DIR=/data/asset_dependencies
@@ -66,7 +65,7 @@ popd
 }
           end
 
-          do_execute(env[:machine], cmd, {:timeout=>60*20})
+          do_execute(env[:machine], cmd, :verbose => false, :timeout=>60*20)
           @app.call(env)
         end
       end

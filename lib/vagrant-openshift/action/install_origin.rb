@@ -27,7 +27,7 @@ module Vagrant
         def call(env)
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], %{
-set -x
+set -ex
 
 #systemctl enable firewalld
 #systemctl start firewalld
@@ -99,7 +99,7 @@ chmod +x /usr/bin/generate_openshift_service
 #systemctl enable openshift.service
 
 chown -R #{ssh_user}:#{ssh_user} /data
-          })
+          }, :verbose => false)
 
           @app.call(env)
         end
