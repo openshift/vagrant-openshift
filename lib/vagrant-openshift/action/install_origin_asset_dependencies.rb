@@ -47,6 +47,8 @@ SKIP_INSTALL=1
   # copy them to the assets dir
   cp -rf $ASSET_BACKUP_DIR/node_modules $ORIGIN_PATH/assets/node_modules
   cp -rf $ASSET_BACKUP_DIR/bower_components $ORIGIN_PATH/assets/bower_components
+  mkdir -p $ORIGIN_PATH/Godeps/_workspace/bin
+  cp -f $ASSET_BACKUP_DIR/go-bindata $ORIGIN_PATH/Godeps/_workspace/bin/go-bindata
 
   echo "Using restored assets, checking package.json and bower.json for updates..."
   SKIP_INSTALL=0
@@ -68,11 +70,15 @@ fi
 
           if @options[:backup_assets]
             cmd += %{
-  mkdir -p $ASSET_BACKUP_DIR
-  cp -rf $ORIGIN_PATH/assets/node_modules $ASSET_BACKUP_DIR/node_modules
-  cp -rf $ORIGIN_PATH/assets/bower_components $ASSET_BACKUP_DIR/bower_components
-  cp -f $ORIGIN_PATH/assets/package.json $ASSET_BACKUP_DIR/package.json
-  cp -f $ORIGIN_PATH/assets/bower.json $ASSET_BACKUP_DIR/bower.json  
+  if [[ ! SKIP_INSTALL -eq 0 ]]; then
+    rm -rf $ASSET_BACKUP_DIR
+    mkdir -p $ASSET_BACKUP_DIR
+    cp -r $ORIGIN_PATH/assets/node_modules $ASSET_BACKUP_DIR/node_modules
+    cp -r $ORIGIN_PATH/assets/bower_components $ASSET_BACKUP_DIR/bower_components
+    cp $ORIGIN_PATH/assets/package.json $ASSET_BACKUP_DIR/package.json
+    cp $ORIGIN_PATH/assets/bower.json $ASSET_BACKUP_DIR/bower.json  
+    cp $ORIGIN_PATH/Godeps/_workspace/bin/go-bindata $ASSET_BACKUP_DIR/go-bindata
+  fi
 }
           end
 
