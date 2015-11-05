@@ -42,7 +42,7 @@ module Vagrant
           b.use SetHostName
           b.use InstallOrigin
           b.use InstallOriginRhel7
-          b.use InstallOriginAssetDependencies, :restore_assets => true, :backup_assets => true
+          b.use InstallOriginAssetDependencies, :restore_assets => true
         end
       end
 
