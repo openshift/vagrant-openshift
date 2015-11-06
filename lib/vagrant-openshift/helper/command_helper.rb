@@ -31,7 +31,7 @@ module Vagrant
         rc = -1
 
         options = {
-          timeout: 60*10,
+          timeout: 60*30,
           verbose: true,
           retries: 0,
           fail_on_error: true
