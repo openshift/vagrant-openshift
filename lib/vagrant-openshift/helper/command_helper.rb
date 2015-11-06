@@ -21,13 +21,34 @@ module Vagrant
     module CommandHelper
 
       def sudo(machine, command, options={})
+        options[:sudo] = true
+        do_execute(machine, command, options)
+      end
+
+      def do_execute(machine, command, options={})
         stdout = []
         stderr = []
         rc = -1
-        options[:timeout] = 60*10 unless options.has_key? :timeout
-        options[:verbose] = true unless options.has_key? :verbose
-        options[:retries] = 0 unless options.has_key? :retries
-        options[:fail_on_error] = true unless options.has_key? :fail_on_error
+
+        options = {
+          timeout: 60*10,
+          verbose: true,
+          retries: 0,
+          fail_on_error: true
+        }.merge(options || {})
+
+        execute = lambda { |type, data|
+          if [:stderr, :stdout].include?(type)
+            if type == :stdout
+              color = :green
+              stdout << data
+            else
+              color = :red
+              stderr << data
+            end
+            machine.env.ui.info(data, :color => color, :new_line => false, :prefix => false) unless options[:buffered_output] == true
+          end
+        }
 
         (0..options[:retries]).each do |retry_count|
           begin
@@ -37,17 +58,10 @@ module Vagrant
               machine.env.ui.info "Retrying. Attempt ##{retry_count} with timeout #{options[:timeout]}"
             end
             Timeout::timeout(options[:timeout]) do
-              rc = machine.communicate.sudo(command) do |type, data|
-                if [:stderr, :stdout].include?(type)
-                  if type == :stdout
-                    color = :green
-                    stdout << data
-                  else
-                    color = :red
-                    stderr << data
-                  end
-                  machine.env.ui.info(data, :color => color, :new_line => false, :prefix => false) unless options[:buffered_output] == true
-                end
+              if options[:sudo]
+                rc = machine.communicate.sudo(command, nil, &execute)
+              else 
+                rc = machine.communicate.execute(command, nil, &execute)
               end
             end
           rescue Timeout::Error
@@ -58,34 +72,9 @@ module Vagrant
             machine.env.ui.warn e.message
             rc ||= -1
           end
-
           break if rc == 0
         end
         exit rc if options[:fail_on_error] && rc != 0
-
-        [stdout, stderr, rc]
-      end
-
-      def do_execute(machine, command, options={})
-        stdout = []
-        stderr = []
-        rc = -1
-        options[:verbose] = true unless options.has_key? :verbose
-
-        machine.env.ui.info "Running command '#{command}'" if options[:verbose]
-        rc = machine.communicate.execute(command) do |type, data|
-          if [:stderr, :stdout].include?(type)
-            if type == :stdout
-              color = :green
-              stdout << data
-            else
-              color = :red
-              stderr << data
-            end
-            machine.env.ui.info(data, :color => color, :new_line => false, :prefix => false)
-          end
-        end
-
         [stdout, stderr, rc]
       end
 
