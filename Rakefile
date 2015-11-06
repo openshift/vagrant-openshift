@@ -24,18 +24,31 @@ namespace :vagrant do
 
   desc "Install plugin into Vagrant"
   task :install do
+
+    syntax_check_cmd = %{
+set -e
+for f in `find lib -name *.rb`
+do
+  ruby -c $f >/dev/null;
+done
+}
+    `#{syntax_check_cmd}`
+    if $?.exitstatus != 0
+      exit 1
+    end
+
     # We want to install our plugin on the system vagrant. Pull gem paths out of
     # $PATH so that we get the correct vagrant binary.
     dirty_path = `echo $PATH`
     clean_path = dirty_path.split(':').select{ |p| not p.include?('gem') }.join(':')
     sys_cmd = `PATH=#{clean_path} which vagrant`.chomp
-    if not $?.exitstatus == 0
+    if $?.exitstatus != 0
       sys_cmd = `which vagrant`.chomp
       if not $?.exitstatus == 0
-        puts "ERROR: Could not find a Vagrant binary in your PATH.\nEnsure that Vagrant has been installed on this system."
-        exit
+        $stderr.puts "ERROR: Could not find a Vagrant binary in your PATH.\nEnsure that Vagrant has been installed on this system."
+        exit 1
       else
-        puts "WARNING: Could not find a Vagrant binary outside of your gem environments.\nEnsure that the Vagrant package has been installed from the official Vagrant packages and not a gem."
+        $stderr.puts "WARNING: Could not find a Vagrant binary outside of your gem environments.\nEnsure that the Vagrant package has been installed from the official Vagrant packages and not a gem."
       end
     end
 
@@ -45,7 +58,10 @@ namespace :vagrant do
     name = Bundler::GemHelper.instance.send(:name)
     version = Bundler::GemHelper.instance.send(:version).to_s
 
-    system "#{sys_cmd} plugin uninstall vagrant-openshift; #{sys_cmd} plugin install pkg/#{name}-#{version}.gem"
+    install_cmd = %{
+#{sys_cmd} plugin install pkg/#{name}-#{version}.gem
+}
+    system(install_cmd)
   end
 end
 
