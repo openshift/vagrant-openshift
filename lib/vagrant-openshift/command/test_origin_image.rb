@@ -103,7 +103,7 @@ EOF
 fi
 
 # so we can call sti
-export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
+export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64:$PATH
 
 # create a temp dir to play in
 temp_dir=$(mktemp -d /tmp/image_test.XXXXXXX)
