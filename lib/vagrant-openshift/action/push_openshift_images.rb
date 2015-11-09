@@ -148,7 +148,7 @@ docker pull #{@options[:registry]}openshift/base-rhel7
 
           cmd += %{
 # so we can call s2i
-export PATH=/data/src/github.com/openshift/source-to-image/_output/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/go/bin:$PATH
+export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64:$PATH
           }
 
           # FIXME: We always need to make sure we have the latest base image

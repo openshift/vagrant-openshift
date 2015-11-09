@@ -52,7 +52,7 @@ echo '***************************************************'
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
 pushd #{Constants.build_dir}/source-to-image >/dev/null
-export PATH=$GOPATH/bin:$PATH:/data/src/github.com/openshift/source-to-image/_output/local/go/bin
+export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64:$PATH
 #{tests}
 popd >/dev/null
           }, {:timeout => 60*60, :fail_on_error => false, :verbose => false})
