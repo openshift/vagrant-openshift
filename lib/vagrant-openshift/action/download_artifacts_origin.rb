@@ -40,6 +40,7 @@ module Vagrant
             "/tmp/origin/e2e/"                     => artifacts_dir + "e2e/",
             "/tmp/openshift-extended-tests/"       => artifacts_dir + "extended-tests/",
             "/tmp/openshift-cmd/"                  => artifacts_dir + "cmd/",
+            "/tmp/openshift/junit/report"          => artifacts_dir + "junit/",
 
             "/data/src/github.com/openshift/origin/_output/local/releases/" => artifacts_dir + "release/",
             "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
