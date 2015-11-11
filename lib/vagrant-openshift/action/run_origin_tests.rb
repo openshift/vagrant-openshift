@@ -124,7 +124,7 @@ popd >/dev/null
             if bucket.include?('(')
               focus = bucket.slice(bucket.index("(")+1..-2).split(" ").map { |i| Shellwords.escape(i.strip) }.join(" ")
               name = Shellwords.escape(bucket.slice(0..bucket.index("(")-1))
-              cmds << "test/extended/#{name.strip}.sh -focus=\"#{focus}\""
+              cmds << "test/extended/#{name.strip}.sh --ginkgo.focus=\"#{focus}\""
             else
               cmds << "test/extended/#{Shellwords.escape(bucket.strip)}.sh"
             end
