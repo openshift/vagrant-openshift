@@ -39,7 +39,49 @@ fi
           end
 
           ssh_user = env[:machine].ssh_info[:username]
-          sudo(env[:machine], "yum install -y git fontconfig yum-utils wget make mlocate bind augeas vim docker-io hg bzr libselinux-devel vim tig glibc-static btrfs-progs-devel device-mapper-devel sqlite-devel libnetfilter_queue-devel gcc gcc-c++ e2fsprogs tmux tmux httpie ctags hg xfsprogs rubygems openvswitch bridge-utils bzip2 ntp screen java-1.?.0-openjdk bind-utils socat unzip Xvfb ethtool openldap-clients jq", :timeout=>60*20, :verbose => false)
+          sudo(env[:machine], "yum install -y \
+                                augeas \
+                                bzr \
+                                bridge-utils \
+                                bzip2 \
+                                bind \
+                                btrfs-progs-devel \
+                                bind-utils \
+                                ctags \
+                                device-mapper-devel \
+                                docker-io \
+                                ethtool \
+                                e2fsprogs \
+                                fontconfig \
+                                git \
+                                gcc \
+                                gcc-c++ \
+                                glibc-static \
+                                httpie \
+                                hg \
+                                jq \
+                                java-1.?.0-openjdk \
+                                kernel-devel \
+                                libselinux-devel \
+                                libnetfilter_queue-devel \
+                                make \
+                                mlocate \
+                                ntp \
+                                openldap-clients \
+                                openvswitch \
+                                rubygems \
+                                screen \
+                                socat \
+                                sqlite-devel \
+                                tig \
+                                tmux \
+                                unzip \
+                                vim \
+                                wget \
+                                xfsprogs \
+                                Xvfb \
+                                yum-utils",:timeout=>60*20, :verbose => false)
+
           sudo(env[:machine], "yum install -y facter", fail_on_error: false, :timeout=>60*10, :verbose => false)
 
           # Install Chrome and chromedriver for headless UI testing
