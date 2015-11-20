@@ -50,6 +50,10 @@ cat <<EOF > $contextdir/Dockerfile
 FROM registry.access.redhat.com/rhel7.1:latest
 
 RUN yum remove -y subscription-manager
+# we're picking up 7.2 packages in our 7.1 image and these two conflict, so
+# first replace the 7.1 package with the new 7.2 package so later updates/dep
+# installations don't fail.
+RUN yum swap -y -- remove systemd-container\* -- install systemd systemd-libs
 
 ADD vars/* /etc/yum/vars/
 ADD repos/* /etc/yum.repos.d/
