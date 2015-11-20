@@ -62,6 +62,22 @@ EOF
 docker build --rm -t rhel7:latest $contextdir
 docker tag rhel7:latest rhel7.1
 
+# create Dockerfile
+cat <<EOF > $contextdir/Dockerfile
+FROM registry.access.redhat.com/rhel7.2:latest
+
+RUN yum remove -y subscription-manager
+
+ADD vars/* /etc/yum/vars/
+ADD repos/* /etc/yum.repos.d/
+ADD certs/* /var/lib/yum/
+
+RUN yum update -y && yum clean all
+
+EOF
+
+docker build --rm -t rhel7.2 $contextdir
+
 # cleaning
 rm -rf $contextdir
             })
