@@ -180,7 +180,7 @@ export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:
             cmd+= check_latest_image_cmd(@options[:registry],rhel_namespace,name,repo_url)
           end
 
-          do_execute(env[:machine], cmd)
+          do_execute(env[:machine], cmd, :timeout=>60*60*5)
 
           @app.call(env)
         end
