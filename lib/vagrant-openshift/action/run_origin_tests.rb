@@ -95,6 +95,10 @@ popd >/dev/null
             cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
           end
 
+          if @options[:image_registry]
+            cmd_env << "OPENSHIFT_TEST_IMAGE_REGISTRY=#{@options[:image_registry]}"
+          end
+
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
           env[:test_exit_code] = run_tests(env, [cmd], false)
 

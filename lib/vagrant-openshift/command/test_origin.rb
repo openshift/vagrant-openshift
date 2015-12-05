@@ -62,6 +62,10 @@ module Vagrant
             o.on("-j","--parallel", String, "Run parallel make") do |f|
               options[:parallel] = true
             end
+
+            o.on("-r","--image-registry", String, "Image registry to configure tests with") do |f|
+              options[:image_registry] = f
+            end
           end
 
           # Parse the options
