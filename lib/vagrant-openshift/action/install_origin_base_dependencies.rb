@@ -80,9 +80,9 @@ fi
                                 wget \
                                 xfsprogs \
                                 Xvfb \
-                                yum-utils",:timeout=>60*20, :verbose => false)
+                                yum-utils",:timeout=>60*30, :verbose => false)
 
-          sudo(env[:machine], "yum install -y facter", fail_on_error: false, :timeout=>60*10, :verbose => false)
+          sudo(env[:machine], "yum install -y facter", fail_on_error: false, :timeout=>60*20, :verbose => false)
 
           # Install Chrome and chromedriver for headless UI testing
           sudo(env[:machine], %{
@@ -105,13 +105,13 @@ unzip chromedriver_linux64.zip
 mv chromedriver /usr/bin/chromedriver
 chown root /usr/bin/chromedriver
 chmod 755 /usr/bin/chromedriver
-          }, :timeout=>60*10, :verbose => false)
+          }, :timeout=>60*20, :verbose => false)
 
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", :timeout=>60*10, :verbose => false)
+          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", :timeout=>60*20, :verbose => false)
           #
           sudo(env[:machine], %{
 set -ex

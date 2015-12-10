@@ -37,7 +37,7 @@ pushd /data/src/github.com/openshift/origin
   OS_PUSH_BASE_IMAGES="#{push_base ? 'true' : ''}" OS_PUSH_BASE_REGISTRY="#{registry_name}" hack/push-release.sh
 popd
 },
-            { :timeout => 60*20, :verbose => false })
+            { :timeout => 60*30, :verbose => false })
           @app.call(env)
         end
 
