@@ -1,4 +1,4 @@
-#--
+#
 # Copyright 2013 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,30 +17,33 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOriginRpmTest
+      class CreateLocalYumRepo
         include CommandHelper
 
-        def initialize(app, env, options={})
+        def initialize(app, env, options)
           @app = app
           @env = env
           @options = options
         end
 
         def call(env)
+          if @options[:rpmdir_loc]
+            rpmdir_loc = @options[:rpmdir_loc]
+          else
+            rpmdir_loc = '/tmp/tito/x86_64/'
+          end
           ssh_user = env[:machine].ssh_info[:username]
-
-          sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
-          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir}")
 
           sudo(env[:machine], %{
 set -e
 
-sudo yum install -y tito
-
-pushd #{Constants.build_dir}/origin
-sudo yum-builddep ./origin.spec
-sudo tito build --rpm --test
-popd
+sudo yum install -y createrepo
+sudo chmod -R og+w #{rpmdir_loc} /etc/yum.repos.d/
+sudo createrepo #{rpmdir_loc}
+sudo printf "[origin_local]\nname=origin\nbaseurl=file://#{rpmdir_loc}\nenabled=1\ngpgcheck=0\n" > /etc/yum.repos.d/origin_local.repo
+sudo chmod -R og-w /etc/yum.repos.d/
+sudo yum clean all
+sudo yum repolist all
 })
 
           @app.call(env)

@@ -52,6 +52,11 @@ module Vagrant
         Commands::BuildOriginRpmTest
       end
 
+      command "create-local-yum-repo" do
+        require_relative "command/create_local_yum_repo"
+        Commands::CreateLocalYumRepo
+      end
+
       command "build-origin-base" do
         require_relative "command/build_origin_base"
         Commands::BuildOriginBase
