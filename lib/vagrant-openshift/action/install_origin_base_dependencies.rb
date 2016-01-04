@@ -115,6 +115,28 @@ chmod 755 /usr/bin/chromedriver
           #
           sudo(env[:machine], %{
 set -ex
+
+if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
+
+# create rhaos repo
+cat <<EOF > /etc/yum.repos.d/rhaos.repo
+[rhel-7-server-ose-3.1-rpms]
+name=RHEL7 Red Hat Atomic OpenShift 3.1
+baseurl=https://mirror.ops.rhcloud.com/enterprise/enterprise-3.1/RH7-RHAOS-3.1/x86_64/os/
+        https://use-mirror1.ops.rhcloud.com/enterprise/enterprise-3.1/RH7-RHAOS-3.1/x86_64/os/
+        https://use-mirror2.ops.rhcloud.com/enterprise/enterprise-3.1/RH7-RHAOS-3.1/x86_64/os/
+        https://euw-mirror1.ops.rhcloud.com/enterprise/enterprise-3.1/RH7-RHAOS-3.1/x86_64/os/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release,file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta,https://mirror.ops.rhcloud.com/libra/keys/RPM-GPG-KEY-redhat-openshifthosted
+failovermethod=priority
+sslverify=0
+sslclientcert=/var/lib/yum/client-cert.pem
+sslclientkey=/var/lib/yum/client-key.pem
+
+EOF
+fi
+
 if ! test -e /etc/fedora-release; then
   # TODO Remove me ASAP
   sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
