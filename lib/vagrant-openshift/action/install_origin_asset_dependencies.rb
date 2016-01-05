@@ -34,7 +34,7 @@ ORIGIN_PATH=/data/src/github.com/openshift/origin
 ASSET_BACKUP_DIR=/data/asset_dependencies
 
 if ! which npm > /dev/null 2>&1 ; then
-  sudo yum -y install npm
+  sudo yum -y --disablerepo=rhel-7-server-ose-3.1-rpms install npm
 fi
 
 }
