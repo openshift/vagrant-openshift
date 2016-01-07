@@ -168,7 +168,10 @@ echo "Detected go version: $(go version)"
 if [[ ${GO_VERSION[2]} == "go1.4"* ]]; then
   GOPATH=/data go get golang.org/x/tools/cmd/cover
 
+# https://groups.google.com/forum/#!topic/golang-nuts/nZLhcbaa3wQ
+set +e
   GOPATH=/data go get golang.org/x/tools/cmd/vet
+set -e
 
   # Check out a stable commit for go vet in order to version lock it to something we can work with
   pushd /data/src/golang.org/x/tools >/dev/null
