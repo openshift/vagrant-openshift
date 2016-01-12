@@ -57,6 +57,7 @@ fi
                                 gcc \
                                 gcc-c++ \
                                 glibc-static \
+                                gnuplot \
                                 httpie \
                                 hg \
                                 jq \
@@ -73,6 +74,7 @@ fi
                                 screen \
                                 socat \
                                 sqlite-devel \
+                                sysstat \
                                 tig \
                                 tmux \
                                 unzip \
