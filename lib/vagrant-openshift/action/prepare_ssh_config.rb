@@ -73,6 +73,13 @@ Host verifier
             FileUtils.chmod(0600, ssh_config_path.to_s)
           end
 
+          vagrant_openshift_ssh_override_path = Constants.git_ssh
+          vagrant_openshift_ssh_override_str = "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no -i #{ssh_id_file} $@"
+          File.open(vagrant_openshift_ssh_override_path.to_s, "w") do |file|
+            file.write(vagrant_openshift_ssh_override_str)
+          end
+          FileUtils.chmod(0744, vagrant_openshift_ssh_override_path.to_s)
+
           home_dir=File.join(ENV['HOME'], '.openshiftdev/home.d')
           if File.exists?(home_dir)
             Dir.glob(File.join(home_dir, '???*'), File::FNM_DOTMATCH).each {|file|

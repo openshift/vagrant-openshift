@@ -47,7 +47,7 @@ module Vagrant
       end
 
       def self.git_ssh
-        ""
+        Pathname.new(File.expand_path("~/.ssh/vagrant_openshift_ssh_override"))
       end
 
     end
