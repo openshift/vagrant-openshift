@@ -33,51 +33,20 @@ module Vagrant
           if ssh_id_file.kind_of?(Array)
             ssh_id_file = ssh_id_file.first
           end
-          ssh_id   = env[:machine].id.gsub("-","")
 
-          ssh_config_path = Pathname.new(File.expand_path("~/.ssh/config"))
-          ssh_config_str = %{
-Host verifier
-  HostName     #{ssh_host}
-  Port         #{ssh_port}
-  User         #{ssh_user}
-  IdentityFile #{ssh_id_file}
-  StrictHostKeyChecking no
-
-          }
-
-          if ssh_config_path.exist?
-            if system( "grep -n 'Host verifier' #{ssh_config_path}" )
-              lines = File.new(ssh_config_path.to_s).readlines
-              lines.map!{ |line| line.rstrip }
-              idx = lines.index{ |l| l.match(/Host verifier/)}
-
-              lines.delete_at(idx)
-              while(not (lines[idx].nil? or lines[idx].match(/Host /)))
-                lines.delete_at(idx)
-              end
-
-              File.open(ssh_config_path.to_s, "w") do |file|
-                file.write(lines.join("\n"))
-                file.write(ssh_config_str)
-              end
-            else
-              File.open(ssh_config_path.to_s, "a") do |file|
-                file.write(ssh_config_str)
-              end
-            end
-          else
-            File.open(ssh_config_path.to_s, "w") do |file|
-              file.write(ssh_config_str)
-            end
-            FileUtils.chmod(0600, ssh_config_path.to_s)
+          vagrant_openshift_ssh_override_path = Constants.git_ssh
+          vagrant_openshift_ssh_override_str = "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no -i #{ssh_id_file} $@"
+          File.open(vagrant_openshift_ssh_override_path.to_s, "w") do |file|
+            file.write(vagrant_openshift_ssh_override_str)
           end
+          FileUtils.chmod(0744, vagrant_openshift_ssh_override_path.to_s)
 
           home_dir=File.join(ENV['HOME'], '.openshiftdev/home.d')
           if File.exists?(home_dir)
             Dir.glob(File.join(home_dir, '???*'), File::FNM_DOTMATCH).each {|file|
               puts "Installing ~/#{File.basename(file)}"
-              system "scp #{file} verifier:"
+              puts "#{ssh_id_file} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null #{file} #{ssh_user}@#{ssh_host}:#{ssh_port}"
+              system "scp -P #{ssh_port} -i #{ssh_id_file} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null #{file} #{ssh_user}@#{ssh_host}:~"
             }
           end
 

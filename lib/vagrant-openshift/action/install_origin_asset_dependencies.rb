@@ -59,13 +59,17 @@ popd
 
           if @options[:backup_assets]
             cmd += %{
+  # Make sure tests pass before backing up this asset install
+  pushd $ORIGIN_PATH
+    hack/test-assets.sh
+  popd
   mkdir -p $ASSET_BACKUP_DIR
   cp -rf $ORIGIN_PATH/assets/node_modules $ASSET_BACKUP_DIR/node_modules
   cp -rf $ORIGIN_PATH/assets/bower_components $ASSET_BACKUP_DIR/bower_components
 }
           end
 
-          do_execute(env[:machine], cmd, :verbose => false, :timeout=>60*30)
+          do_execute(env[:machine], cmd, :verbose => false, :timeout=>60*60)
           @app.call(env)
         end
       end

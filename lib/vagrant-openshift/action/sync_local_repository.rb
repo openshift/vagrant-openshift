@@ -55,14 +55,16 @@ module Vagrant
 
             puts "Synchronizing [#{repo_name}@#{branch}] from #{File.basename(FileUtils.pwd)}..."
 
-            command = ""
-            unless Constants.git_ssh.nil? or Constants.git_ssh.empty?
-              command += "export GIT_SSH=#{Constants.git_ssh};\n"
-            end
+            ssh_user = machine.ssh_info[:username]
+            ssh_host = machine.ssh_info[:host]
+            ssh_port = machine.ssh_info[:port]
+
+            command = "export GIT_SSH=#{Constants.git_ssh};\n"
+
             if branch == 'origin/master'
-              command += "git push -q verifier:#{Constants.build_dir + repo_name}-bare master:master --tags --force;\n"
+              command += "git push -q ssh://#{ssh_user}@#{ssh_host}:#{ssh_port}#{Constants.build_dir + repo_name}-bare master:master --tags --force;\n"
             end
-            command += "git push -q verifier:#{Constants.build_dir + repo_name }-bare #{branch}:master --tags --force"
+            command += "git push -q ssh://#{ssh_user}@#{ssh_host}:#{ssh_port}#{Constants.build_dir + repo_name}-bare #{branch}:master --tags --force"
 
             exit_status = 1
             retries = 0
