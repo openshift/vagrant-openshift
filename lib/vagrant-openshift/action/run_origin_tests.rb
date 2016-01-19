@@ -74,8 +74,6 @@ popd >/dev/null
           end
 
           if @options[:all]
-            cmd_env << 'ARTIFACT_DIR=/tmp/origin/e2e/artifacts'
-            cmd_env << 'LOG_DIR=/tmp/origin/e2e/logs'
             cmd_env << 'TEST_ASSETS=true'
             cmd_env << 'TEST_ASSETS_HEADLESS=true'
             cmd_env << 'TESTFLAGS=\'"" -p=4\''
