@@ -113,8 +113,13 @@ chmod 755 /usr/bin/chromedriver
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", :timeout=>60*20, :verbose => false)
+          sudo(env[:machine], "yum install -y golang golang-src", :timeout=>60*20, :verbose => false)
           #
+
+          unless is_fedora
+            sudo(env[:machine], "yum install -y golang-pkg-linux-amd64", :timeout=>60*20, :verbose => false)
+          end
+
           sudo(env[:machine], %{
 set -ex
 
