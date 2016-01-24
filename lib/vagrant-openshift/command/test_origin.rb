@@ -35,6 +35,14 @@ module Vagrant
             o.banner = "Usage: vagrant test-origin [machine-name]"
             o.separator ""
 
+            o.on("-t", "--target MAKEFILE_TARGETS", String, "Arguments to pass to the repository Makefile") do |f|
+              options[:target] = f
+            end
+
+            o.on("", "--root", String, "Run tests as root") do |f|
+              options[:root] = true
+            end
+
             o.on("-a", "--all", String, "Run all tests") do |f|
               options[:all] = true
             end

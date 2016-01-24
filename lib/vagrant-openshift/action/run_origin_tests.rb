@@ -67,25 +67,31 @@ popd >/dev/null
           @options.delete :logs
 
           cmd_env = []
+          cmd_env << 'TEST_ASSETS=true'
+          cmd_env << 'TEST_ASSETS_HEADLESS=true'
+          if @options[:skip_image_cleanup]
+            cmd_env << 'SKIP_IMAGE_CLEANUP=1'
+          end
+
           build_targets = ["make"]
           if @options[:parallel]
             build_targets << '-j'
             build_targets << '--output-sync=recurse'
           end
 
-          if @options[:all]
-            cmd_env << 'TEST_ASSETS=true'
-            cmd_env << 'TEST_ASSETS_HEADLESS=true'
+          # call specific make targets
+          if @options[:target]
+            @options[:all] = nil
+            build_targets = build_targets << @options[:target]
+
+          # run bulk tests
+          elsif  @options[:all]
             cmd_env << 'TESTFLAGS=\'"" -p=4\''
             build_targets << 'test'
-            # we want to test the output of build-release, this flag tells the makefile to skip the build dependency
-            # so the command comes out to <cmd_env settings> make test SKIP_BUILD=true
-            build_targets << "SKIP_BUILD=true"
 
-            if @options[:skip_image_cleanup]
-              cmd_env << 'SKIP_IMAGE_CLEANUP=1'
-            end
+          # run the check target only
           else
+
             build_targets << "check" if !@options[:skip_check]
           end
 
@@ -98,19 +104,18 @@ popd >/dev/null
           end
 
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
-          env[:test_exit_code] = run_tests(env, [cmd], false)
+          env[:test_exit_code] = run_tests(env, [cmd], @options[:root])
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             cmds = parse_extended(@options[:extended_test_packages])
             cmds = cmds.map{ |s| 'TEST_REPORT_DIR=/tmp/openshift-extended-tests/junit/extended ' + s }
-            env[:test_exit_code] = run_tests(env, cmds, true)
+            env[:test_exit_code] = run_tests(env, cmds, @options[:root])
           end
-
 
           # any other tests that should not be run as sudo
           if env[:test_exit_code] == 0 && @options[:all]
             cmds = ['hack/test-assets.sh']
-            env[:test_exit_code] = run_tests(env, cmds, false)
+            env[:test_exit_code] = run_tests(env, cmds, @options[:root])
           end
 
           @app.call(env)
