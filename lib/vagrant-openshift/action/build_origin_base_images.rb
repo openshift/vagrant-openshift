@@ -34,7 +34,7 @@ pushd /data/src/github.com/openshift/origin
   hack/build-base-images.sh
 popd
 },
-            { :timeout => 60*30, :verbose => false })
+            { :timeout => 60*60*2, :verbose => false })
           @app.call(env)
         end
 
