@@ -107,7 +107,7 @@ unzip chromedriver_linux64.zip
 mv chromedriver /usr/bin/chromedriver
 chown root /usr/bin/chromedriver
 chmod 755 /usr/bin/chromedriver
-          }, :timeout=>60*20, :verbose => false)
+          }, :timeout=>60*60, :verbose => false)
 
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
