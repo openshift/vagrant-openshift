@@ -48,6 +48,11 @@ module Vagrant
           }
 
           download_map.each do |source,target|
+            if ! machine.communicate.test("sudo ls #{source}")
+              machine.ui.info "#{source} did not exist on the remote system.  This is often the case for tests that were not run."
+              next
+            end
+
             machine.ui.info "Downloading artifacts from '#{source}' to '#{target}'"
             if target.to_s.end_with? '/'
               FileUtils.mkdir_p target.to_s
