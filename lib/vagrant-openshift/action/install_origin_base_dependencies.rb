@@ -160,6 +160,19 @@ sslclientkey=/var/lib/yum/client-key.pem
 
 EOF
 
+cat <<EOF > /etc/yum.repos.d/dockerextra.repo
+[dockerextra]
+name=RHEL Docker Extra
+baseurl=https://mirror.openshift.com/enterprise/rhel/dockerextra/x86_64/os/
+enabled=1
+gpgcheck=0
+failovermethod=priority
+sslverify=False
+sslclientcert=/var/lib/yum/client-cert.pem
+sslclientkey=/var/lib/yum/client-key.pem
+
+EOF
+
 fi
 
 if ! test -e /etc/fedora-release; then
