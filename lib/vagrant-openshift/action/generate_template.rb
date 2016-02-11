@@ -65,10 +65,6 @@ module Vagrant
             'os' => os,
             'dev_cluster' => false,
             'insert_key' => (stage == :inst) && !@options[:no_insert_key],
-            'num_minions' => 2,
-            'cpus' => 2,
-            'memory' => 2048,
-            'rebuild_yum_cache' => false,
             'instance_type' => instance_type,
             'volume_size' => volume_size
           }

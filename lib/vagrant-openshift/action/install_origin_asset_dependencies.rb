@@ -69,7 +69,7 @@ popd
 }
           end
 
-          do_execute(env[:machine], cmd, :verbose => false, :timeout=>60*60)
+          do_execute(env[:machine], cmd, :verbose => false, :timeout=>60*60*2)
           @app.call(env)
         end
       end

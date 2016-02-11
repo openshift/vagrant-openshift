@@ -37,7 +37,7 @@ module Vagrant
             "/var/log/yum.log"               => artifacts_dir + "yum.log",
             "/var/log/secure"                => artifacts_dir + "secure",
             "/var/log/audit/audit.log"       => artifacts_dir + "audit.log",
-            "/tmp/openshift/origin/"         => artifacts_dir,
+            "/tmp/openshift/"                => artifacts_dir,
             "/tmp/origin/e2e/"               => artifacts_dir + "e2e/",
             "/tmp/openshift-extended-tests/" => artifacts_dir + "extended-tests/",
             "/tmp/openshift-cmd/"            => artifacts_dir + "cmd/",
@@ -48,6 +48,11 @@ module Vagrant
           }
 
           download_map.each do |source,target|
+            if ! machine.communicate.test("sudo ls #{source}")
+              machine.ui.info "#{source} did not exist on the remote system.  This is often the case for tests that were not run."
+              next
+            end
+
             machine.ui.info "Downloading artifacts from '#{source}' to '#{target}'"
             if target.to_s.end_with? '/'
               FileUtils.mkdir_p target.to_s
@@ -55,7 +60,7 @@ module Vagrant
               FileUtils.mkdir_p File.dirname(target.to_s)
             end
 
-            command = "/usr/bin/rsync -az -e 'ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
+            command = "/usr/bin/rsync -az -e 'ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i #{private_key_path}' --rsync-path='sudo rsync' --exclude='volumes/*' --exclude='volumes/' #{ssh_info[:username]}@#{ssh_info[:host]}:#{source} #{target}"
 
             if not system(command)
               machine.ui.warn "Unable to download artifacts"

@@ -107,21 +107,26 @@ unzip chromedriver_linux64.zip
 mv chromedriver /usr/bin/chromedriver
 chown root /usr/bin/chromedriver
 chmod 755 /usr/bin/chromedriver
-          }, :timeout=>60*20, :verbose => false)
+          }, :timeout=>60*60, :verbose => false)
 
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
           #
-          sudo(env[:machine], "yum install -y golang golang-pkg-linux-amd64 golang-src", :timeout=>60*20, :verbose => false)
+          sudo(env[:machine], "yum install -y golang golang-src", :timeout=>60*20, :verbose => false)
           #
+
+          unless is_fedora
+            sudo(env[:machine], "yum install -y golang-pkg-linux-amd64", :timeout=>60*20, :verbose => false)
+          end
+
           sudo(env[:machine], %{
 set -ex
 
 if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
 
-# create rhaos repo
-cat <<EOF > /etc/yum.repos.d/rhaos.repo
+# create rhaos3.1 and 3.2 repos
+cat <<EOF > /etc/yum.repos.d/rhaos31.repo
 [rhel-7-server-ose-3.1-rpms]
 name=RHEL7 Red Hat Atomic OpenShift 3.1
 baseurl=https://mirror.ops.rhcloud.com/enterprise/enterprise-3.1/RH7-RHAOS-3.1/x86_64/os/
@@ -137,10 +142,27 @@ sslclientcert=/var/lib/yum/client-cert.pem
 sslclientkey=/var/lib/yum/client-key.pem
 
 EOF
+
+cat <<EOF > /etc/yum.repos.d/rhaos32.repo
+[rhel-7-server-ose-3.2-rpms]
+name=RHEL7 Red Hat Atomic OpenShift 3.2
+baseurl=https://mirror.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
+        https://use-mirror1.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
+        https://use-mirror2.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
+        https://euw-mirror1.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release,file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta,https://mirror.ops.rhcloud.com/libra/keys/RPM-GPG-KEY-redhat-openshifthosted
+failovermethod=priority
+sslverify=0
+sslclientcert=/var/lib/yum/client-cert.pem
+sslclientkey=/var/lib/yum/client-key.pem
+
+EOF
+
 fi
 
 if ! test -e /etc/fedora-release; then
-  # TODO Remove me ASAP
   sed -i 's,^SELINUX=.*,SELINUX=permissive,' /etc/selinux/config
   setenforce 0
 fi
@@ -155,6 +177,11 @@ sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='--insecure-registry=172.30.0.0/16 -\\1'," 
 sed -i "s,^ADD_REGISTRY='\\(.*\\)',#ADD_REGISTRY='--add-registry=docker.io \\1'," /etc/sysconfig/docker
 
 cat /etc/sysconfig/docker
+
+if sudo lvdisplay docker-vg 2>&1>/dev/null
+then
+  sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/docker-vg/docker-data --storage-opt dm.metadatadev=/dev/docker-vg/docker-metadata'," /etc/sysconfig/docker-storage
+fi
 
 # Force socket reuse
 echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
