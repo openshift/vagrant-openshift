@@ -81,6 +81,7 @@ fi
                                 gnuplot \
                                 httpie \
                                 hg \
+                                iscsi-initiator-utils \
                                 jq \
                                 java-1.?.0-openjdk \
                                 kernel-devel \
