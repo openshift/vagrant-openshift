@@ -44,6 +44,10 @@ obsoletes=1
 gpgcheck=0
 plugins=1
 installonly_limit=3
+retries=20
+timeout=120
+
+
 
 #  This is the default, if you make this bigger yum won't see if the metadata
 # is newer on the remote and so you'll "gain" the bandwidth of not having to
