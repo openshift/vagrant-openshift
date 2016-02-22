@@ -38,6 +38,27 @@ fi
             }, :verbose => false)
           end
 
+=begin
+          sudo(env[:machine], %{
+if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
+
+cat <<EOF > /etc/yum.repos.d/dockerextra.repo
+[dockerextra]
+name=RHEL Docker Extra
+baseurl=https://mirror.openshift.com/enterprise/rhel/dockerextra/x86_64/os/
+enabled=1
+gpgcheck=0
+failovermethod=priority
+sslverify=False
+sslclientcert=/var/lib/yum/client-cert.pem
+sslclientkey=/var/lib/yum/client-key.pem
+
+EOF
+
+fi
+          }, :timeout=>60*10, :verbose => false)
+=end
+
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum install -y \
                                 augeas \
@@ -60,6 +81,7 @@ fi
                                 gnuplot \
                                 httpie \
                                 hg \
+                                iscsi-initiator-utils \
                                 jq \
                                 java-1.?.0-openjdk \
                                 kernel-devel \
