@@ -27,6 +27,24 @@ module Vagrant
         end
       end
 
+      def self.build_origin_rpm_test(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use BuildOriginRpmTest
+        end
+      end
+
+      def self.build_origin_images(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use BuildOriginImages, options
+        end
+      end
+
+      def self.create_local_yum_repo(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use CreateLocalYumRepo, options
+        end
+      end
+
       def self.build_origin_base(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use CreateYumRepositories
@@ -247,6 +265,9 @@ module Vagrant
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :RunSystemctl, action_root.join("run_systemctl")
       autoload :AtomicHostUpgrade, action_root.join("atomic_host_upgrade")
+      autoload :BuildOriginRpmTest, action_root.join("build_origin_rpm_test")
+      autoload :CreateLocalYumRepo, action_root.join("create_local_yum_repo")
+      autoload :BuildOriginImages, action_root.join("build_origin_images")
     end
   end
 end

@@ -47,6 +47,21 @@ module Vagrant
         Commands::BuildAtomicHost
       end
 
+      command "build-origin-rpm-test" do
+        require_relative "command/build_origin_rpm_test"
+        Commands::BuildOriginRpmTest
+      end
+
+      command "build-origin-images" do
+        require_relative "command/build_origin_images"
+        Commands::BuildOriginImages
+      end
+
+      command "create-local-yum-repo" do
+        require_relative "command/create_local_yum_repo"
+        Commands::CreateLocalYumRepo
+      end
+
       command "build-origin-base" do
         require_relative "command/build_origin_base"
         Commands::BuildOriginBase
