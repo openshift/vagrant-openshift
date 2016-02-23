@@ -30,7 +30,7 @@ module Vagrant
           if @options[:rpmdir_loc]
             rpmdir_loc = @options[:rpmdir_loc]
           else
-            rpmdir_loc = '/tmp/tito/x86_64/'
+            rpmdir_loc = "#{Constants.build_dir}x86_64"
           end
           ssh_user = env[:machine].ssh_info[:username]
 
@@ -40,7 +40,7 @@ set -e
 sudo yum install -y createrepo
 sudo chmod -R og+w #{rpmdir_loc} /etc/yum.repos.d/
 sudo createrepo #{rpmdir_loc}
-sudo printf "[origin_local]\nname=origin\nbaseurl=file://#{rpmdir_loc}\nenabled=1\ngpgcheck=0\n" > /etc/yum.repos.d/origin_local.repo
+sudo printf "[origin_local]\nname=origin_local\nbaseurl=file://#{rpmdir_loc}\nenabled=1\ngpgcheck=0\n" > /etc/yum.repos.d/origin_local.repo
 sudo chmod -R og-w /etc/yum.repos.d/
 sudo yum clean all
 sudo yum repolist all

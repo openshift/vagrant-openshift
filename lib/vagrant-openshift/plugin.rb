@@ -52,6 +52,11 @@ module Vagrant
         Commands::BuildOriginRpmTest
       end
 
+      command "build-origin-images" do
+        require_relative "command/build_origin_images"
+        Commands::BuildOriginImages
+      end
+
       command "create-local-yum-repo" do
         require_relative "command/create_local_yum_repo"
         Commands::CreateLocalYumRepo

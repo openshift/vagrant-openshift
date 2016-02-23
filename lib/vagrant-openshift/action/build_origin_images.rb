@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class BuildOriginRpmTest
+      class BuildOriginImages
         include CommandHelper
 
         def initialize(app, env, options={})
@@ -35,14 +35,13 @@ module Vagrant
           sudo(env[:machine], %{
 set -e
 
-sudo yum install -y tito
-
-pushd #{Constants.build_dir}/origin
-sudo yum-builddep ./origin.spec
-sudo tito build --rpm --test -o #{Constants.build_dir}
+pushd #{Constants.build_dir}origin/images/base
+sudo cp -r #{Constants.build_dir}x86_64 .
+sudo cp /etc/yum.repos.d/origin_local.repo .
+docker build -t openshift/origin-base -f Dockerfile.rpm .
 popd
 })
-
+          
           @app.call(env)
         end
       end
