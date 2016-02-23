@@ -35,6 +35,8 @@ ASSET_BACKUP_DIR=/data/asset_dependencies
 
 if ! which npm > /dev/null 2>&1 ; then
   sudo yum -y install npm
+  # Update npm, we need a newer version than is installed by yum
+  sudo npm install npm@3.7.3 -g
 fi
 
 }
