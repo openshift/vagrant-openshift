@@ -35,7 +35,7 @@ module Vagrant
 
       def self.build_origin_images(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildOriginImages
+          b.use BuildOriginImages, options
         end
       end
 

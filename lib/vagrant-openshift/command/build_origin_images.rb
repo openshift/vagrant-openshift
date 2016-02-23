@@ -31,12 +31,20 @@ module Vagrant
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant build-origin-images [vm-name]"
+            o.on("--images [list]", String, "List of images delimited by ','") do |i|
+              options[:images] = i
+            end
             o.separator ""
           end
 
           # Parse the options
           argv = parse_options(opts)
           return if !argv
+
+          if options[:images].nil?
+            @env.ui.warn "You must specify list of images to build, delimited by ','"
+            exit
+          end
 
           with_target_vms(argv, :reverse => true) do |machine|
             actions = Vagrant::Openshift::Action.build_origin_images(options)
