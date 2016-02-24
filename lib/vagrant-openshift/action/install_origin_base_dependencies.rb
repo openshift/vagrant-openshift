@@ -226,7 +226,7 @@ set -e
 
   # Check out a stable commit for go vet in order to version lock it to something we can work with
   pushd /data/src/golang.org/x/tools >/dev/null
-    if git checkout c262de870b618eed648983aa994b03bc04641c72
+    if git checkout 108746816ddf01ad0c2dbea08a1baef08bc47313
     then
       # Re-install using this version of the tool
       GOPATH=/data go install golang.org/x/tools/cmd/vet
