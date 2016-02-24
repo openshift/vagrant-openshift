@@ -38,7 +38,7 @@ fi
             }, :verbose => false)
           end
 
-=begin
+
           sudo(env[:machine], %{
 if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
 
@@ -57,7 +57,6 @@ EOF
 
 fi
           }, :timeout=>60*10, :verbose => false)
-=end
 
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum install -y \
