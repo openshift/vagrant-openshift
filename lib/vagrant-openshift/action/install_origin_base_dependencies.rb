@@ -202,7 +202,7 @@ cat /etc/sysconfig/docker
 if sudo lvdisplay docker-vg 2>&1>/dev/null
 then
   sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/docker-vg/docker-data --storage-opt dm.metadatadev=/dev/docker-vg/docker-metadata'," /etc/sysconfig/docker-storage
-elif sudo lvdisplay vg_vagrant 2>&1>/dev/null
+elif sudo lvdisplay vg_vagrant | grep docker-data 2>&1>/dev/null
 then
   sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/vg_vagrant/docker-data --storage-opt dm.metadatadev=/dev/vg_vagrant/docker-metadata'," /etc/sysconfig/docker-storage
 fi
