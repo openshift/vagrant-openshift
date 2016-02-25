@@ -205,6 +205,9 @@ then
 elif sudo lvdisplay vg_vagrant | grep docker-data 2>&1>/dev/null
 then
   sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/vg_vagrant/docker-data --storage-opt dm.metadatadev=/dev/vg_vagrant/docker-metadata'," /etc/sysconfig/docker-storage
+elif sudo lvdisplay centos | grep docker-data 2>&1>/dev/null
+then
+  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/centos/docker-data --storage-opt dm.metadatadev=/dev/centos/docker-metadata'," /etc/sysconfig/docker-storage
 fi
 
 # Force socket reuse
