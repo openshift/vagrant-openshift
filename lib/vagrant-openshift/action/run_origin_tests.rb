@@ -99,6 +99,10 @@ popd >/dev/null
             cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
           end
 
+          if @options[:envs]
+            cmd_env += @options[:envs]
+          end
+
           if @options[:image_registry]
             cmd_env << "OPENSHIFT_TEST_IMAGE_REGISTRY=#{@options[:image_registry]}"
           end
