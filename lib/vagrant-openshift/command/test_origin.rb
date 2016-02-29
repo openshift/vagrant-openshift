@@ -67,6 +67,10 @@ module Vagrant
               options[:report_coverage] = true
             end
 
+            o.on("","--report-junit", String, "Generate jUnit report") do |f|
+              options[:report_junit] = true
+            end
+
             o.on("-j","--parallel", String, "Run parallel make") do |f|
               options[:parallel] = true
             end
