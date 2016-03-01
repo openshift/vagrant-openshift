@@ -74,6 +74,11 @@ module Vagrant
             o.on("-r","--image-registry", String, "Image registry to configure tests with") do |f|
               options[:image_registry] = f
             end
+
+            o.on("", "--env ENV=VALUE", String, "Environment variable to execute tests with") do |f|
+              options[:envs] = [] unless options[:envs]
+              options[:envs] << f
+            end
           end
 
           # Parse the options
