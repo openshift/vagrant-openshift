@@ -20,14 +20,15 @@ module Vagrant
       class Clean
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options={})
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
           git_clone_commands = ""
-          Constants.repos(env).each do |repo_name, url|
+          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             wc_repo_name = repo_name + "-bare-working_copy"
             bare_repo_path = Constants.build_dir + bare_repo_name

@@ -423,6 +423,56 @@ $ vagrant build-origin --images
 $ vagrant build-sti --binary-only
 ----
 
+=== Testing openshift/origin-aggregated-logging
+
+NOTE: You will still need to clone the OpenShift Origin repo as above, in order
+to use the Vagrantfile and the contrib/vagrant directory.
+origin-aggregated-logging currently has no vagrant support.
+
+==== Clone the OpenShift Origin aggregated logging repositories
+
+Use `vagrant origin-local-checkout` as above link:#clone-the-openshift-origin-repositories[Clone the OpenShift Origin repositories], except use `--repo origin-aggregated-logging`:
+[source, sh]
+----
+$ cd $GOPATH
+$ vagrant origin-local-checkout --repo origin-aggregated-logging -u <github
+username>
+# run the remaining vagrant commands from $GOPATH/src/github.com/openshift/origin
+$ pushd $GOPATH/src/github.com/openshift/origin
+----
+
+==== Initialize local vagrant conf
+
+Same as above for origin - see link:#initialize-local-vagrant-conf[Initialize local vagrant conf]
+You must be in `$GOPATH/src/github.com/openshift/origin` to run this.
+
+==== Start the machine
+
+Same as above for origin - see link:#start-the-machine[Start the machine]
+You must be in `$GOPATH/src/github.com/openshift/origin` to run this.
+
+==== Making Subsequent Changes
+
+* Building updated code from edits in your local repository clones:
+
+[source, sh]
+----
+$ vagrant sync-origin-aggregated-logging
+----
+
+For some providers, your local repositories are automatically synchronized
+to the remote VM. If not, the `--source` option can be used to do so
+before building.
+You must be in `$GOPATH/src/github.com/openshift/origin` to run this.
+
+==== Running Tests
+
+[source, sh]
+----
+$ vagrant test-origin-aggregated-logging [--env NAME=VAR] ...
+----
+You must be in `$GOPATH/src/github.com/openshift/origin` to run this.
+
 == Notice of Export Control Law
 
 This software distribution includes cryptographic software that is subject to the U.S. Export Administration Regulations (the "*EAR*") and other U.S. and foreign laws and may not be exported, re-exported or transferred (a) to any country listed in Country Group E:1 in Supplement No. 1 to part 740 of the EAR (currently, Cuba, Iran, North Korea, Sudan & Syria); (b) to any prohibited destination or to any end user who has been prohibited from participating in U.S. export transactions by any federal agency of the U.S. government; or (c) for use in connection with the design, development or production of nuclear, chemical or biological weapons, or rocket systems, space launch vehicles, or sounding rockets, or unmanned air vehicle systems.You may not download this software or technical information if you are located in one of these countries or otherwise subject to these restrictions. You may not provide this software or technical information to individuals or entities located in one of these countries or otherwise subject to these restrictions. You are also responsible for compliance with foreign law requirements applicable to the import, export and use of this software and technical information.

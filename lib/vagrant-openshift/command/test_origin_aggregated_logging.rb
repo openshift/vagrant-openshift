@@ -18,30 +18,37 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class CheckoutRepositories < Vagrant.plugin(2, :command)
+      class TestOriginAggregatedLogging < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "checkout specified branch from cloned upstream repository"
+          "run the origin-aggregated-logging tests"
         end
 
         def execute
           options = {}
-          options[:repo] = 'origin'
+          options[:download] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant checkout-repos"
+            o.banner = "Usage: vagrant test-origin-aggregated-logging [machine-name]"
             o.separator ""
 
-            o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
-              options[:branch] = {"origin-server" => f}
+            o.on("", "--root", String, "Run tests as root") do |f|
+              options[:root] = true
             end
 
-            o.on("-r [repo-name]", "--repo [repo-name]", String, "Check out the specified repo. Default is 'origin'.") do |f|
-              options[:repo] = f
+            o.on("-d","--artifacts", String, "Download logs") do |f|
+              options[:download] = true
             end
 
-           #@options[:branch][repo_name]
+            o.on("-r","--image-registry", String, "Image registry to configure tests with") do |f|
+              options[:image_registry] = f
+            end
+
+            o.on("", "--env ENV=VALUE", String, "Environment variable to execute tests with") do |f|
+              options[:envs] = [] unless options[:envs]
+              options[:envs] << f
+            end
           end
 
           # Parse the options
@@ -49,7 +56,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.checkout_repositories(options)
+            actions = Vagrant::Openshift::Action.run_origin_aggregated_logging_tests(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

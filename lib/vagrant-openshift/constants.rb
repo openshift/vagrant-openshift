@@ -23,6 +23,10 @@ module Vagrant
         openshift_repos
       end
 
+      def self.logging_repos(env)
+        aggregated_logging_repos
+      end
+
       def self.openshift_repos
         {
           'origin' => 'https://github.com/openshift/origin.git',
@@ -30,7 +34,21 @@ module Vagrant
         }
       end
 
-      def self.git_branch_current
+       def self.aggregated_logging_repos
+        {
+          'origin-aggregated-logging' => 'https://github.com/openshift/origin-aggregated-logging.git'
+        }
+      end
+
+      def self.repos_for_name(reponame)
+        {
+          'origin' => openshift_repos,
+          nil => openshift_repos,
+          'origin-aggregated-logging' => aggregated_logging_repos
+        }[reponame]
+      end
+
+     def self.git_branch_current
         "$(git rev-parse --abbrev-ref HEAD)"
       end
 

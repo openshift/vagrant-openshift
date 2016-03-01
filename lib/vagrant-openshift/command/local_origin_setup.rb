@@ -29,6 +29,7 @@ module Vagrant
           options = {
             :branch => 'master',
             :replace => false,
+            :repo => 'origin'
           }
 
           opts = OptionParser.new do |o|
@@ -45,6 +46,10 @@ module Vagrant
 
             o.on("-r", "--replace", "Delete existing cloned dirs first. Default is to skip repos that are already cloned.") do |f|
               options[:replace] = f
+            end
+
+            o.on("", "--repo [reponame]", "Repo to checkout.  Default is 'origin'.") do |f|
+              options[:repo] = f
             end
           end
 

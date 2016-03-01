@@ -18,30 +18,41 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class CheckoutRepositories < Vagrant.plugin(2, :command)
+      class RepoSyncOriginAggregatedLogging < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "checkout specified branch from cloned upstream repository"
+          "syncs your local repos to the current instance"
         end
 
         def execute
           options = {}
-          options[:repo] = 'origin'
+          options[:images] = true
+          options[:build] = true
+          options[:clean] = false
+          options[:source] = false
+          options[:repo] = 'origin-aggregated-logging'
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant checkout-repos"
+            o.banner = "Usage: vagrant sync-origin-aggregated-logging [vm-name]"
             o.separator ""
 
-            o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
-              options[:branch] = {"origin-server" => f}
+            o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
+              options[:source] = f
             end
 
-            o.on("-r [repo-name]", "--repo [repo-name]", String, "Check out the specified repo. Default is 'origin'.") do |f|
-              options[:repo] = f
+            o.on("-c", "--clean", "Delete existing repo before syncing source") do |f|
+              options[:clean] = f
             end
 
-           #@options[:branch][repo_name]
+            o.on("--dont-install", "Don't build and install updated source") do |f|
+              options[:build] = false
+            end
+
+            o.on("--no-images", "Don't build updated component Docker images") do |f|
+              options[:images] = false
+            end
+
           end
 
           # Parse the options
@@ -49,7 +60,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.checkout_repositories(options)
+            actions = Vagrant::Openshift::Action.repo_sync_origin_aggregated_logging(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end
