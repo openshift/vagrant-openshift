@@ -96,7 +96,9 @@ popd >/dev/null
           end
 
           if @options[:report_coverage]
-            cmd_env << 'OUTPUT_COVERAGE=/tmp/origin/e2e/artifacts/coverage'
+            # TODO(skuznets): make this a boolean and pass it through --env instead, to allow
+            # openshift/origin/hack/test-go.sh to choose where it places this artifact
+            cmd_env << 'OUTPUT_COVERAGE=/tmp/openshift/test-go/artifacts'
           end
 
           if @options[:envs]
@@ -112,7 +114,9 @@ popd >/dev/null
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             cmds = parse_extended(@options[:extended_test_packages])
-            cmds = cmds.map{ |s| 'TEST_REPORT_DIR=/tmp/openshift-extended-tests/junit/extended ' + s }
+            # TODO(skuznets): make this a boolean and pass it through --env instead, to allow
+            # openshift/origin/test/extended/util/test.go to choose where it places this artifact
+            cmds = cmds.map{ |s| 'TEST_REPORT_DIR=/tmp/openshift/test-extended/junit ' + s }
             env[:test_exit_code] = run_tests(env, cmds, @options[:root])
           end
 
