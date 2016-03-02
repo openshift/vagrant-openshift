@@ -20,15 +20,16 @@ module Vagrant
       class SyncLocalRepository
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options={})
           @app = app
           @env = env
+          @options = options
         end
 
         def call(env)
           env[:machine].env.ui.info("Synchronizing local sources")
 
-          Constants.repos(env).each do |repo_name, url|
+          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
             local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, "..", repo_name)))
             unless local_repo.exist?
               local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, repo_name)))

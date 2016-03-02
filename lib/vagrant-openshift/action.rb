@@ -137,6 +137,26 @@ module Vagrant
         end
       end
 
+      def self.repo_sync_origin_aggregated_logging(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PrepareSshConfig
+          if options[:source]
+            if options[:clean]
+              b.use(Clean, options)
+              b.use(CloneUpstreamRepositories, options)
+            end
+            b.use(SyncLocalRepository, options)
+            b.use(CheckoutRepositories, options)
+          end
+          # no build support currently
+          # if options[:build]
+          #   b.use(BuildOriginBaseImages, options) if options[:images]
+          #   b.use(BuildOrigin, options)
+          #   b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
+          # end
+        end
+      end
+
       def self.local_origin_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
@@ -150,6 +170,16 @@ module Vagrant
           b.use RunOriginTests, options
           if options[:download]
             b.use DownloadArtifactsOrigin
+          end
+          b.use TestExitCode
+        end
+      end
+
+      def self.run_origin_aggregated_logging_tests(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunOriginAggregatedLoggingTests, options
+          if options[:download]
+            b.use DownloadArtifactsOriginAggregatedLogging
           end
           b.use TestExitCode
         end
@@ -174,6 +204,12 @@ module Vagrant
       def self.download_sti_artifacts(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use DownloadArtifactsSti
+        end
+      end
+
+      def self.download_origin_aggregated_logging_artifacts(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use DownloadArtifactsOriginAggregatedLogging
         end
       end
 
@@ -255,12 +291,14 @@ module Vagrant
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
       autoload :RunOriginTests, action_root.join("run_origin_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")
+      autoload :RunOriginAggregatedLoggingTests, action_root.join("run_origin_aggregated_logging_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifactsOrigin, action_root.join("download_artifacts_origin")
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
+      autoload :DownloadArtifactsOriginAggregatedLogging, action_root.join("download_artifacts_origin_aggregated_logging")
       autoload :TestExitCode, action_root.join("test_exit_code")
       autoload :CleanNetworkSetup, action_root.join("clean_network_setup")
       autoload :RunSystemctl, action_root.join("run_systemctl")

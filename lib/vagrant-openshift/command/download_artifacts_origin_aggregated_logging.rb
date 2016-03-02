@@ -18,30 +18,19 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class CheckoutRepositories < Vagrant.plugin(2, :command)
+      class DownloadArtifactsOriginAggregatedLogging < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "checkout specified branch from cloned upstream repository"
+          "download the origin-aggregated-logging test artifacts"
         end
 
         def execute
           options = {}
-          options[:repo] = 'origin'
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant checkout-repos"
+            o.banner = "Usage: vagrant download-artifacts-origin-aggregated-logging [machine-name]"
             o.separator ""
-
-            o.on("-b [branch-name]", "--branch [branch-name]", String, "Check out the specified branch. Default is 'master'.") do |f|
-              options[:branch] = {"origin-server" => f}
-            end
-
-            o.on("-r [repo-name]", "--repo [repo-name]", String, "Check out the specified repo. Default is 'origin'.") do |f|
-              options[:repo] = f
-            end
-
-           #@options[:branch][repo_name]
           end
 
           # Parse the options
@@ -49,7 +38,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.checkout_repositories(options)
+            actions = Vagrant::Openshift::Action.download_origin_aggregated_logging_artifacts(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

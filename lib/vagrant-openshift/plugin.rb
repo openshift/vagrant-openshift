@@ -127,9 +127,19 @@ module Vagrant
         Commands::TestSti
       end
 
+      command "test-origin-aggregated-logging" do
+        require_relative "command/test_origin_aggregated_logging"
+        Commands::TestOriginAggregatedLogging
+      end
+
       command "download-artifacts-origin" do
         require_relative "command/download_artifacts_origin"
         Commands::DownloadArtifactsOrigin
+      end
+
+      command "download-artifacts-origin-aggregated-logging" do
+        require_relative "command/download_artifacts_origin_aggregated_logging"
+        Commands::DownloadArtifactsOriginAggregatedLogging
       end
 
       command "download-artifacts-sti" do
@@ -165,6 +175,11 @@ module Vagrant
       command "test-origin-image" do
         require_relative "command/test_origin_image"
         Commands::TestOriginImage
+      end
+
+      command "sync-origin-aggregated-logging" do
+        require_relative "command/repo_sync_origin_aggregated_logging"
+        Commands::RepoSyncOriginAggregatedLogging
       end
 
       provisioner(:openshift) do
