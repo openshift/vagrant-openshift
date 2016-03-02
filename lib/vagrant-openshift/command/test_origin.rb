@@ -71,7 +71,7 @@ module Vagrant
               options[:parallel] = true
             end
 
-            o.on("-r","--image-registry", String, "Image registry to configure tests with") do |f|
+            o.on("-r","--image-registry REGISTRY", String, "Image registry to configure tests with") do |f|
               options[:image_registry] = f
             end
 
