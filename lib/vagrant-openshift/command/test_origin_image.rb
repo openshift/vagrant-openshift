@@ -91,7 +91,10 @@ module Vagrant
             rc=1
             begin
               out, err, rc = do_execute(machine, %{
-set -x
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
 
 # NOTE: This is only for rhel7
 if [ -n "#{registry}" -a -f /etc/sysconfig/docker ]; then
@@ -142,7 +145,6 @@ fi
 # clean up
 cd /
 sudo rm -rf $temp_dir
-exit $status
 })
             # Vagrant throws an exception if any execute invocation returns non-zero,
             # so catch it so we can return a proper output.
