@@ -121,11 +121,11 @@ cd $temp_dir
 git clone "#{source}"
 cd "#{source_dir}"
 
-# fetch the pull request's branch
-git fetch origin "pull/#{ref}/head:#{ref}"
+# GitHub automatically merges a PR with master, fetch that branch
+git fetch origin "pull/#{ref}/merge:#{ref}"
 
-# merge PR with master
-git merge --no-ff --no-edit "#{ref}"
+# checkout the PR merged with master
+git checkout "#{ref}"
 
 if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   # Pull base images
