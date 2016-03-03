@@ -105,18 +105,22 @@ popd >/dev/null
             cmd_env += @options[:envs]
           end
 
-          if @options[:image_registry]
-            cmd_env << "OPENSHIFT_TEST_IMAGE_REGISTRY=#{@options[:image_registry]}"
-          end
-
           cmd = cmd_env.join(' ') + ' ' + build_targets.join(' ')
           env[:test_exit_code] = run_tests(env, [cmd], @options[:root])
 
           if env[:test_exit_code] == 0 && @options[:extended_test_packages].length > 0
             cmds = parse_extended(@options[:extended_test_packages])
+
+            extended_cmd_env = []
             # TODO(skuznets): make this a boolean and pass it through --env instead, to allow
             # openshift/origin/test/extended/util/test.go to choose where it places this artifact
-            cmds = cmds.map{ |s| 'TEST_REPORT_DIR=/tmp/openshift/test-extended/junit ' + s }
+            extended_cmd_env << 'TEST_REPORT_DIR=/tmp/openshift/test-extended/junit'
+            if @options[:image_registry]
+              extended_cmd_env << "OPENSHIFT_TEST_IMAGE_REGISTRY=#{@options[:image_registry]}"
+            end
+            extended_cmd_env_str = extended_cmd_env.join(' ')
+
+            cmds = cmds.map{ |s| "#{extended_cmd_env_str} #{s}".strip }
             env[:test_exit_code] = run_tests(env, cmds, @options[:root])
           end
 
