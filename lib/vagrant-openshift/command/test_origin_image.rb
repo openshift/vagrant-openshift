@@ -133,12 +133,12 @@ if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   docker pull #{registry}/openshift/base-rhel7 && docker tag #{registry}/openshift/base-rhel7 openshift/base-rhel7
 fi
 
-if ! sudo env "PATH=$PATH" make test TARGET=rhel7; then
+if ! sudo env "PATH=$PATH" SKIP_SQUASH=1 make test TARGET=rhel7; then
     echo "ERROR: #{image}-rhel7 failed testing."
     exit 1
 fi
 
-if ! sudo env "PATH=$PATH" make test TARGET=centos7; then
+if ! sudo env "PATH=$PATH" SKIP_SQUASH=1 make test TARGET=centos7; then
     echo "ERROR: #{image}-centos7 failed testing."
     exit 1
 fi
