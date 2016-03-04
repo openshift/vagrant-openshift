@@ -39,10 +39,6 @@ module Vagrant
             "/var/log/secure"                => artifacts_dir + "secure",
             "/var/log/audit/audit.log"       => artifacts_dir + "audit.log",
             "/tmp/openshift/"                => artifacts_dir,
-            "/tmp/origin/e2e/"               => artifacts_dir + "e2e/",
-            "/tmp/openshift-extended-tests/" => artifacts_dir + "extended-tests/",
-            "/tmp/openshift-cmd/"            => artifacts_dir + "cmd/",
-            "/tmp/openshift-integration/"    => artifacts_dir + "integration/",
 
             "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
           }
