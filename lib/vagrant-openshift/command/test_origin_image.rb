@@ -91,11 +91,10 @@ module Vagrant
             rc=1
             begin
               out, err, rc = do_execute(machine, %{
-set -o xtrace
-
 set -o errexit
 set -o nounset
 set -o pipefail
+set -o xtrace
 
 # NOTE: This is only for rhel7
 if [ -n "#{registry}" -a -f /etc/sysconfig/docker ]; then
@@ -118,14 +117,14 @@ chcon -t docker_share_t $temp_dir
 cd $temp_dir
 
 # clone the image repo
-git clone "#{source}"
-cd "#{source_dir}"
+git clone #{source}
+cd #{source_dir}
 
-# fetch the pull request's branch
-git fetch origin "pull/#{ref}/head:#{ref}"
+# Fetch refs from Github pull requests
+git fetch --quiet --tags --progress #{source} +refs/pull/*:refs/remotes/origin/pr/*
 
-# merge PR with master
-git merge --no-ff --no-edit "#{ref}"
+# switch to the desired ref
+git checkout #{ref}
 
 if [ "#{base_images}" == "true" -a -n "#{registry}" ]; then
   # Pull base images
