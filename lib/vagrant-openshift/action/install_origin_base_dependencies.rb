@@ -199,15 +199,22 @@ sed -i "s,^ADD_REGISTRY='\\(.*\\)',#ADD_REGISTRY='--add-registry=docker.io \\1',
 
 cat /etc/sysconfig/docker
 
+
 if sudo lvdisplay docker-vg 2>&1>/dev/null
 then
-  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/docker-vg/docker-data --storage-opt dm.metadatadev=/dev/docker-vg/docker-metadata'," /etc/sysconfig/docker-storage
+  VG="docker-vg"
 elif sudo lvdisplay vg_vagrant | grep docker-data 2>&1>/dev/null
 then
-  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/vg_vagrant/docker-data --storage-opt dm.metadatadev=/dev/vg_vagrant/docker-metadata'," /etc/sysconfig/docker-storage
+  VG="vg_vagrant"
 elif sudo lvdisplay centos | grep docker-data 2>&1>/dev/null
 then
-  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/centos/docker-data --storage-opt dm.metadatadev=/dev/centos/docker-metadata'," /etc/sysconfig/docker-storage
+  VG="centos"
+fi
+if [ -n "${VG}" ]
+then
+  sudo lvcreate -n docker-data -l 90%FREE /dev/${VG}
+  sudo lvcreate -n docker-metadata -l 50%FREE /dev/${VG}
+  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/${VG}/docker-data --storage-opt dm.metadatadev=/dev/${VG}/docker-metadata'," /etc/sysconfig/docker-storage
 fi
 
 # Force socket reuse
