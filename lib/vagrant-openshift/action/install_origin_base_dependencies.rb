@@ -203,10 +203,10 @@ cat /etc/sysconfig/docker
 if sudo lvdisplay docker-vg 2>&1>/dev/null
 then
   VG="docker-vg"
-elif sudo lvdisplay vg_vagrant | grep docker-data 2>&1>/dev/null
+elif sudo lvdisplay vg_vagrant 2>&1>/dev/null
 then
   VG="vg_vagrant"
-elif sudo lvdisplay centos | grep docker-data 2>&1>/dev/null
+elif sudo lvdisplay centos 2>&1>/dev/null
 then
   VG="centos"
 fi
