@@ -93,6 +93,7 @@ fi
                                 openvswitch \
                                 rubygems \
                                 screen \
+                                ShellCheck \
                                 socat \
                                 sqlite-devel \
                                 sysstat \
