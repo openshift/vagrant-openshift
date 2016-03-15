@@ -219,10 +219,10 @@ then
 
   sudo lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
   sudo mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
-  sudo mkdir -p /tmp/openshift/xfs-vol-dir
-  sudo sh -c "echo /dev/${VG}/openshift-xfs-vol-dir /tmp/openshift/xfs-vol-dir xfs gquota 1 1 >> /etc/fstab"
-  sudo mount /tmp/openshift/xfs-vol-dir
-  sudo chown -R #{ssh_user}:#{ssh_user} /tmp/openshift
+  sudo mkdir -p /mnt/openshift-xfs-vol-dir
+  sudo sh -c "echo /dev/${VG}/openshift-xfs-vol-dir /mnt/openshift-xfs-vol-dir xfs gquota 1 1 >> /etc/fstab"
+  sudo mount /mnt/openshift-xfs-vol-dir
+  sudo chown -R #{ssh_user}:#{ssh_user} /mnt/openshift-xfs-vol-dir
 fi
 
 # Force socket reuse
