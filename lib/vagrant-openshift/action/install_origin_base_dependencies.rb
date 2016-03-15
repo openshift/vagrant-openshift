@@ -194,9 +194,9 @@ systemctl enable ntpd
 groupadd -f docker
 usermod -a -G docker #{ssh_user}
 
-sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='--insecure-registry=172.30.0.0/16 \\1'," /etc/sysconfig/docker
-sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='--insecure-registry=172.30.0.0/16 -\\1'," /etc/sysconfig/docker
-sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='--insecure-registry=ci.dev.openshift.redhat.com:5000 -\\1'," /etc/sysconfig/docker
+ADDITIONAL_OPTIONS='--insecure-registry=172.30.0.0/16 --insecure-registry=ci.dev.openshift.redhat.com:5000'
+sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='${ADDITIONAL_OPTIONS} \\1'," /etc/sysconfig/docker
+sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='${ADDITIONAL_OPTIONS} -\\1'," /etc/sysconfig/docker
 sed -i "s,^ADD_REGISTRY='\\(.*\\)',#ADD_REGISTRY='--add-registry=docker.io \\1'," /etc/sysconfig/docker
 
 cat /etc/sysconfig/docker
