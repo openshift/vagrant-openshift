@@ -21,9 +21,10 @@ module Vagrant
       class DownloadArtifactsOrigin
         include CommandHelper
 
-        def initialize(app, env)
+        def initialize(app, env, options)
           @app = app
           @env = env
+          @options = options.clone
         end
 
         def call(env)
@@ -39,9 +40,12 @@ module Vagrant
             "/var/log/audit/audit.log"       => artifacts_dir + "audit.log",
             "/tmp/openshift/"                => artifacts_dir,
 
-            "/data/src/github.com/openshift/origin/_output/local/releases/" => artifacts_dir + "release/",
             "/data/src/github.com/openshift/origin/assets/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
           }
+
+          if @options[:download_release]
+            download_map["/data/src/github.com/openshift/origin/_output/local/releases/"] = artifacts_dir + "release/"
+          end
 
           download_map.each do |source,target|
             if ! machine.communicate.test("sudo ls #{source}")

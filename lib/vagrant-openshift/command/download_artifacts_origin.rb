@@ -31,6 +31,10 @@ module Vagrant
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant download-artifacts-origin [machine-name]"
             o.separator ""
+
+            o.on("", "--include-release-artifacts", String, "Include release binaries") do |f|
+              options[:download_release] = true
+            end
           end
 
           # Parse the options

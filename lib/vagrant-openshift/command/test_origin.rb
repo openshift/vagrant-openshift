@@ -59,6 +59,10 @@ module Vagrant
               options[:download] = true
             end
 
+            o.on("", "--download-release-artifacts", String, "Download release binaries") do |f|
+              options[:download_release] = true
+            end
+
             o.on("-s","--skip-image-cleanup", String, "Skip Docker image teardown for E2E test") do |f|
               options[:skip_image_cleanup] = true
             end

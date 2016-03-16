@@ -197,7 +197,7 @@ module Vagrant
 
       def self.download_origin_artifacts(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use DownloadArtifactsOrigin
+          b.use DownloadArtifactsOrigin, options
         end
       end
 
