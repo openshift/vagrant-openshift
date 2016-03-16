@@ -83,6 +83,9 @@ EOF
 
 docker build --rm -t rhel7.2 $contextdir
 
+# make sure the new rhel7.2 image has valid certs
+docker run rhel7.2 yum install -y tar
+
 # cleaning
 rm -rf $contextdir
             })
