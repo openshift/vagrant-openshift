@@ -31,7 +31,7 @@ module Vagrant
           if is_rhel
             ssh_user = env[:machine].ssh_info[:username]
             sudo(env[:machine], %{
-set -x
+set -ex
 
 # inside temporary directory create docker build context for the new base image
 contextdir=$(mktemp -d)
