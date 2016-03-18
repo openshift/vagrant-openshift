@@ -169,7 +169,7 @@ module Vagrant
         Vagrant::Action::Builder.new.tap do |b|
           b.use RunOriginTests, options
           if options[:download]
-            b.use DownloadArtifactsOrigin
+            b.use DownloadArtifactsOrigin, options
           end
           b.use TestExitCode
         end
