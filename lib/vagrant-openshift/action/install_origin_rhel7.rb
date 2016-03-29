@@ -42,6 +42,10 @@ cp /var/lib/yum/*.pem $contextdir/certs
 cp /etc/yum/vars/* $contextdir/vars
 cp /etc/yum.repos.d/* $contextdir/repos
 
+# yum magic that auto-replaces REGION in repos doesn't work
+# when running inside a docker container, so harcode the value.
+sed -i s/REGION.aws.ce.redhat.com/us-east-1.aws.ce.redhat.com/ $contextdir/repos/redhat-rhui*
+
 # remove google chrome repo
 rm -rf $contextdir/repos/*chrome*.repo
 
