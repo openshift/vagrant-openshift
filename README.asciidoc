@@ -145,8 +145,8 @@ $ vagrant test-origin --all
 
 === Developer environment
 
-To enable easy customization of the build environment, any files placed under '\~/.openshiftdev/home.d' will be copied to
-the vagrant user home directory. For example: '~/.openshiftdev/home.d/.bash_profile' will be copied to '.bash_profile'
+To enable easy customization of the build environment, any files placed under `\~/.openshiftdev/home.d` will be copied to
+the vagrant user home directory. For example: `~/.openshiftdev/home.d/.bash_profile` will be copied to `.bash_profile`
 on the vagrant VM.
 
 
@@ -178,7 +178,6 @@ You now need some AWS-specific configuration to specify which AMI to use.
 
 * Ensure your AWS credentials file is present at `~/.awscred`; it should have the following entries filled in:
 
-.'~/.awscred'
 ----
 AWSAccessKeyId=<AWS API Key>
 AWSSecretKey=<AWS API Secret>
@@ -230,7 +229,6 @@ NOTE: On some systems (e.g. mac) doing `export NOKOGIRI_USE_SYSTEM_LIBRARIES=1` 
 
 * Edit `~/.openstackcred` and update your OpenStack credentials, endpoint and tenant name.
 
-.'~/.openstackcred'
 ----
 OSEndpoint=<OpenStack Endpoint URL, e.g. http://openshift.example.com:5000/v2.0/tokens>
 OSUsername=<OpenStack Username>
@@ -246,7 +244,6 @@ OSFloatingIPPool=<specific pool or 'false' (to use first found) if floating ip i
   section. You'll need to indicate at least the base image
   you'd like to start, as well as the user to access with.
 
-.'.vagrant-openshift.json'
 ----
   "openstack": {
     "image": "Fedora-Cloud-Base-20141203-21.x86_64",
