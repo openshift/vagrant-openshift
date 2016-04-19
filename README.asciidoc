@@ -44,14 +44,17 @@ Compile using Rake:
 $ bundle exec rake
 ----
 
-NOTE: If at this point a warning like `git://github.com/mitchellh/vagrant.git (at master) is not yet checked out. Run bundle install first.` appears, run `bundle install` and then re-run `bundle exec rake`. The warning will most likely not go away, but it is safe to proceed regardless.
+[NOTE]
+====
+If at this point a warning like `git://github.com/mitchellh/vagrant.git (at master) is not yet checked out. Run bundle install first.` appears, run `bundle install` and then re-run `bundle exec rake`. The warning will most likely not go away, but it is safe to proceed regardless.
 
-Install the plugin using Vagrant:
+Finally, install the plugin using Vagrant:
 
 [source,sh]
 ----
 $ vagrant plugin install pkg/vagrant-openshift-<release>.gem
 ----
+====
 
 ===== From rubygems.org
 
