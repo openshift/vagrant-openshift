@@ -46,7 +46,7 @@ $ bundle exec rake
 
 NOTE: If at this point a warning like `git://github.com/mitchellh/vagrant.git (at master) is not yet checked out. Run bundle install first.` appears, run `bundle install` and then re-run `bundle exec rake`. The warning will most likely not go away, but it is safe to proceed regardless.
 
-Install the plugin using Vagrant:
+Install the plugin using Vagrant (only necessary if `bundle exec rake` still failed with the above noted warning):
 
 [source,sh]
 ----
