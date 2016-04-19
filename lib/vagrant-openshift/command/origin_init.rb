@@ -34,7 +34,8 @@ module Vagrant
             :volume_size => 25,
             :port_mappings => [],
             :no_synced_folders => false,
-            :no_insert_key => false
+            :no_insert_key => false,
+            :required_name_tag => nil
           }
 
           valid_stage = ['os','deps','inst']
@@ -70,6 +71,11 @@ module Vagrant
 
             o.on('--volume-size', "--volume-size [size]", String, "Specify the volume size for the instance") do |f|
               options[:volume_size] = f.to_i
+            end
+
+            o.on("--required-name-tag [name]", String, "Specify name tag to match against images, if supported") do |f|
+              name_tag = f.strip
+              options[:required_name_tag] = name_tag unless name_tag.empty?
             end
           end
 
