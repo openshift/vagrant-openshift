@@ -28,7 +28,7 @@ module Vagrant
         def call(env)
           sudo env[:machine], "rm -rf /etc/yum.repos.d/openshift-origin.repo"
           sudo env[:machine], "yum clean all"
-          sudo env[:machine], "yum -y update --skip-broken --exclude=kernel*", {fail_on_error: false, :timeout=>60*30}
+          sudo env[:machine], "yum -y update --exclude=kernel*", {fail_on_error: false, :timeout=>60*30}
           sudo env[:machine], "yum list installed"
 
           env[:machine].ui.warn "Increasing YUM cache timeout to 9999999. You will need manually clear cache to get additional updates."
