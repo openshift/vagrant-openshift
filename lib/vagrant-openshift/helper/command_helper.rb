@@ -140,21 +140,24 @@ popd
           if @options[:replace]
             command += %{
 echo 'Replacing: #{repo_path}'
-rm -rf #{repo_path}
+pushd #{repo_path}
+  git fetch origin
+  git reset --hard origin/master
+  git clean -f
+popd
 }
           else
             command += "echo 'Already cloned: #{repo}'\n"
           end
-        end
-
-        command += %{
+        else
+          command += %{
 cloned=false
 echo 'Cloning #{repo} ...'
 }
 
-        if @options[:user]
-          user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
-          command += %{
+          if @options[:user]
+            user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
+            command += %{
 echo 'Cloning #{user_repo_url}'
 git clone --quiet #{user_repo_url}
 if [ $? -eq 0 ]; then
@@ -165,11 +168,12 @@ echo 'Fork of repo #{repo} not found. Cloning read-only copy from upstream'
 fi
 }
 
-        end
-        command += %{
+          end
+          command += %{
 [ $cloned != true ] && git clone --quiet #{url}
 ( cd #{repo} && git checkout #{@options[:branch]} &>/dev/null)
 }
+        end
 
         command
       end
