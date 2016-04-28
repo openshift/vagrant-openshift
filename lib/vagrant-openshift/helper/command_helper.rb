@@ -144,6 +144,9 @@ pushd #{repo_path}
   git fetch origin
   git reset --hard origin/master
   git clean -f
+  set +e
+  git branch | grep -ve " master$" | xargs git branch -D
+  set -e
 popd
 }
           else
