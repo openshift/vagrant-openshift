@@ -143,7 +143,7 @@ echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
   git fetch origin
   git reset --hard origin/master
-  git clean -f
+  git clean -fdx
   set +e
   git branch | grep -ve " master$" | xargs git branch -D
   set -e
