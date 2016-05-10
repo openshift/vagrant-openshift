@@ -18,32 +18,24 @@ require 'pathname'
 module Vagrant
   module Openshift
     module Action
-      class DownloadArtifactsOrigin
+      class DownloadArtifactsOriginConsole
         include CommandHelper
 
-        def initialize(app, env, options)
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options.clone
         end
 
         def call(env)
           machine = @env[:machine]
-          machine.ui.info "Downloading logs"
+          machine.ui.info "Downloading any failure screenshots"
           ssh_info = machine.ssh_info
           private_key_path = ssh_info[:private_key_path].kind_of?(Array) ? ssh_info[:private_key_path][0] : ssh_info[:private_key_path]
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
           download_map = {
-            "/var/log/yum.log"               => artifacts_dir + "yum.log",
-            "/var/log/secure"                => artifacts_dir + "secure",
-            "/var/log/audit/audit.log"       => artifacts_dir + "audit.log",
-            "/tmp/openshift/"                => artifacts_dir
+            "/data/src/github.com/openshift/origin-web-console/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
           }
-
-          if @options[:download_release]
-            download_map["/data/src/github.com/openshift/origin/_output/local/releases/"] = artifacts_dir + "release/"
-          end
 
           download_map.each do |source,target|
             if ! machine.communicate.test("sudo ls #{source}")

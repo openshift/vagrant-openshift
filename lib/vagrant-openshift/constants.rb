@@ -30,7 +30,14 @@ module Vagrant
       def self.openshift_repos
         {
           'origin' => 'https://github.com/openshift/origin.git',
-          'source-to-image' => 'https://github.com/openshift/source-to-image.git'
+          'source-to-image' => 'https://github.com/openshift/source-to-image.git',
+          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'          
+        }
+      end
+
+      def self.console_repos
+        {
+          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'
         }
       end
 
@@ -44,6 +51,7 @@ module Vagrant
         {
           'origin' => openshift_repos,
           nil => openshift_repos,
+          'origin-console' => console_repos,
           'origin-aggregated-logging' => aggregated_logging_repos
         }[reponame]
       end
