@@ -33,7 +33,17 @@ module Vagrant
           private_key_path = ssh_info[:private_key_path].kind_of?(Array) ? ssh_info[:private_key_path][0] : ssh_info[:private_key_path]
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
+
+          _,_,exit_code = do_execute machine, "mkdir -p /tmp/openshift && journalctl -u openshift --no-pager > /tmp/openshift/openshift.log", :fail_on_error => false
+          if exit_code != 0 
+            machine.ui.warn "Unable to dump openshift log from journalctl"
+          end
+          
           download_map = {
+            "/var/log/yum.log"               => artifacts_dir + "yum.log",
+            "/var/log/secure"                => artifacts_dir + "secure",
+            "/var/log/audit/audit.log"       => artifacts_dir + "audit.log",
+            "/tmp/openshift/"                => artifacts_dir,
             "/data/src/github.com/openshift/origin-web-console/test/tmp/screenshots/" => artifacts_dir + "screenshots/"
           }
 
