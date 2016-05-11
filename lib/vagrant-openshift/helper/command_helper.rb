@@ -162,7 +162,7 @@ echo 'Cloning #{repo} ...'
             user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
             command += %{
 echo 'Cloning #{user_repo_url}'
-git clone --quiet #{user_repo_url}
+git clone #{user_repo_url}
 if [ $? -eq 0 ]; then
 cloned=true
 (cd #{repo} && git remote add upstream #{url} && git fetch upstream)
@@ -173,8 +173,8 @@ fi
 
           end
           command += %{
-[ $cloned != true ] && git clone --quiet #{url}
-( cd #{repo} && git checkout #{@options[:branch]} &>/dev/null)
+[ $cloned != true ] && git clone #{url}
+( cd #{repo} && git checkout #{@options[:branch]} )
 }
         end
 
