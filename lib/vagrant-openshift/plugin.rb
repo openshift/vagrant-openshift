@@ -37,6 +37,11 @@ module Vagrant
         Commands::RepoSyncOrigin
       end
 
+      command "sync-origin-console" do
+        require_relative "command/repo_sync_origin_console"
+        Commands::RepoSyncOriginConsole
+      end
+
       command "sync-sti" do
         require_relative "command/repo_sync_sti"
         Commands::RepoSyncSti
@@ -122,6 +127,11 @@ module Vagrant
         Commands::TestOrigin
       end
 
+      command "test-origin-console" do
+        require_relative "command/test_origin_console"
+        Commands::TestOriginConsole
+      end      
+
       command "test-sti" do
         require_relative "command/test_sti"
         Commands::TestSti
@@ -136,6 +146,11 @@ module Vagrant
         require_relative "command/download_artifacts_origin"
         Commands::DownloadArtifactsOrigin
       end
+
+      command "download-artifacts-origin-console" do
+        require_relative "command/download_artifacts_origin_console"
+        Commands::DownloadArtifactsOriginConsole
+      end      
 
       command "download-artifacts-origin-aggregated-logging" do
         require_relative "command/download_artifacts_origin_aggregated_logging"

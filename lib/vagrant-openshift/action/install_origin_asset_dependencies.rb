@@ -30,7 +30,7 @@ module Vagrant
           cmd = %{
 set -ex
 
-ORIGIN_PATH=/data/src/github.com/openshift/origin
+ORIGIN_CONSOLE_PATH=/data/src/github.com/openshift/origin-web-console
 ASSET_BACKUP_DIR=/data/asset_dependencies
 
 if ! which npm > /dev/null 2>&1 ; then
@@ -45,16 +45,16 @@ fi
   # make sure the dirs always exist
   mkdir -p /data/asset_dependencies/node_modules
   mkdir -p /data/asset_dependencies/bower_components
-  # copy them to the assets dir
-  cp -rf $ASSET_BACKUP_DIR/node_modules $ORIGIN_PATH/assets/node_modules
-  cp -rf $ASSET_BACKUP_DIR/bower_components $ORIGIN_PATH/assets/bower_components
+  # copy them to the console repo
+  cp -rf $ASSET_BACKUP_DIR/node_modules $ORIGIN_CONSOLE_PATH/node_modules
+  cp -rf $ASSET_BACKUP_DIR/bower_components $ORIGIN_CONSOLE_PATH/bower_components
 
 }
           end
 
           cmd += %{
-pushd $ORIGIN_PATH
-  hack/install-assets.sh
+pushd $ORIGIN_CONSOLE_PATH
+  hack/install-deps.sh
 popd
 
 }
@@ -62,12 +62,12 @@ popd
           if @options[:backup_assets]
             cmd += %{
   # Make sure tests pass before backing up this asset install
-  pushd $ORIGIN_PATH
-    hack/test-assets.sh
+  pushd $ORIGIN_CONSOLE_PATH
+    grunt test
   popd
   mkdir -p $ASSET_BACKUP_DIR
-  cp -rf $ORIGIN_PATH/assets/node_modules $ASSET_BACKUP_DIR/node_modules
-  cp -rf $ORIGIN_PATH/assets/bower_components $ASSET_BACKUP_DIR/bower_components
+  cp -rf $ORIGIN_CONSOLE_PATH/node_modules $ASSET_BACKUP_DIR/node_modules
+  cp -rf $ORIGIN_CONSOLE_PATH/bower_components $ASSET_BACKUP_DIR/bower_components
 }
           end
 

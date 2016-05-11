@@ -67,8 +67,6 @@ popd >/dev/null
           @options.delete :logs
 
           cmd_env = []
-          cmd_env << 'TEST_ASSETS=true'
-          cmd_env << 'TEST_ASSETS_HEADLESS=true'
           if @options[:skip_image_cleanup]
             cmd_env << 'SKIP_IMAGE_CLEANUP=1'
           end
@@ -121,12 +119,6 @@ popd >/dev/null
             extended_cmd_env_str = extended_cmd_env.join(' ')
 
             cmds = cmds.map{ |s| "#{extended_cmd_env_str} #{s}".strip }
-            env[:test_exit_code] = run_tests(env, cmds, @options[:root])
-          end
-
-          # any other tests that should not be run as sudo
-          if env[:test_exit_code] == 0 && @options[:all]
-            cmds = ['hack/test-assets.sh']
             env[:test_exit_code] = run_tests(env, cmds, @options[:root])
           end
 
