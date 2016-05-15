@@ -37,7 +37,7 @@ module Vagrant
 if [ -d #{bare_repo_path} ]; then
 rm -rf #{repo_path}
 echo 'Cloning #{repo_name} ...'
-git clone --quiet #{bare_repo_path} #{repo_path}
+git clone --quiet --recurse-submodules #{bare_repo_path} #{repo_path}
 }
 
             if @options[:branch] && @options[:branch][repo_name]
