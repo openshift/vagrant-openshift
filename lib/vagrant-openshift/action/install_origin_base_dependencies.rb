@@ -131,6 +131,8 @@ chown root /usr/bin/chromedriver
 chmod 755 /usr/bin/chromedriver
           }, :timeout=>60*60, :verbose => false)
 
+          sudo(env[:machine], "wget -O /etc/yum.repos.d/openshift-rhel7-dependencies.repo https://mirror.openshift.com/pub/openshift-origin/nightly/rhel-7/dependencies/openshift-rhel7-dependencies.repo", fail_on_error: true, :timeout=>60*20, :verbose => true)
+
           #
           # FIXME: Need to install golang packages 'after' the 'gcc' is
           #        installed. See BZ#1101508
