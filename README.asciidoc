@@ -420,13 +420,13 @@ $ vagrant build-origin --images
 $ vagrant build-sti --binary-only
 ----
 
-=== Testing openshift/origin-aggregated-logging
+=== Testing openshift/origin-aggregated-logging or openshift/origin-metrics
 
 NOTE: You will still need to clone the OpenShift Origin repo as above, in order
 to use the Vagrantfile and the contrib/vagrant directory.
-origin-aggregated-logging currently has no vagrant support.
+origin-aggregated-logging and origin-metrics currently have no vagrant support.
 
-==== Clone the OpenShift Origin aggregated logging repositories
+==== Clone the OpenShift Origin aggregated logging or metrics repositories
 
 Use `vagrant origin-local-checkout` as above link:#clone-the-openshift-origin-repositories[Clone the OpenShift Origin repositories], except use `--repo origin-aggregated-logging`:
 [source, sh]
