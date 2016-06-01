@@ -142,6 +142,11 @@ module Vagrant
         Commands::TestOriginAggregatedLogging
       end
 
+      command "test-origin-metrics" do
+        require_relative "command/test_origin_metrics"
+        Commands::TestOriginMetrics
+      end
+
       command "download-artifacts-origin" do
         require_relative "command/download_artifacts_origin"
         Commands::DownloadArtifactsOrigin
@@ -154,6 +159,11 @@ module Vagrant
 
       command "download-artifacts-origin-aggregated-logging" do
         require_relative "command/download_artifacts_origin_aggregated_logging"
+        Commands::DownloadArtifactsOriginAggregatedLogging
+      end
+
+      command "download-artifacts-origin-metrics" do
+        require_relative "command/download_artifacts_origin_metrics"
         Commands::DownloadArtifactsOriginAggregatedLogging
       end
 
@@ -195,6 +205,11 @@ module Vagrant
       command "sync-origin-aggregated-logging" do
         require_relative "command/repo_sync_origin_aggregated_logging"
         Commands::RepoSyncOriginAggregatedLogging
+      end
+
+      command "sync-origin-metrics" do
+        require_relative "command/repo_sync_origin_metrics"
+        Commands::RepoSyncOriginMetrics
       end
 
       provisioner(:openshift) do

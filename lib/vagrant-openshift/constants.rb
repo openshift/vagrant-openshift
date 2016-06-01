@@ -52,7 +52,10 @@ module Vagrant
           'origin' => openshift_repos,
           nil => openshift_repos,
           'origin-console' => console_repos,
-          'origin-aggregated-logging' => aggregated_logging_repos
+          'origin-aggregated-logging' => aggregated_logging_repos,
+          'origin-metrics' => {
+            'origin-metrics' => 'https://github.com/openshift/origin-metrics.git'
+          }
         }[reponame]
       end
 
