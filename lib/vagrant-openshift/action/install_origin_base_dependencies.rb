@@ -37,27 +37,7 @@ if ! [[ -L /etc/udev/rules.d/80-net-setup-link.rules ]]; then
 fi
             }, :verbose => false)
           end
-
-
-          sudo(env[:machine], %{
-if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
-
-cat <<EOF > /etc/yum.repos.d/dockerextra.repo
-[dockerextra]
-name=RHEL Docker Extra
-baseurl=https://mirror.openshift.com/enterprise/rhel/dockerextra/x86_64/os/
-enabled=1
-gpgcheck=0
-failovermethod=priority
-sslverify=False
-sslclientcert=/var/lib/yum/client-cert.pem
-sslclientkey=/var/lib/yum/client-key.pem
-
-EOF
-
-fi
-          }, :timeout=>60*10, :verbose => false)
-
+          
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum install -y \
                                 augeas \
@@ -69,7 +49,7 @@ fi
                                 bind-utils \
                                 ctags \
                                 device-mapper-devel \
-                                docker-io \
+                                docker-1.9.1-40.el7.x86_64 \
                                 ethtool \
                                 e2fsprogs \
                                 fontconfig \
