@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOriginBaseDependencies
+      class InstallOriginBaseDependenciesUpstream
         include CommandHelper
 
         def initialize(app, env)
@@ -67,6 +67,7 @@ fi
                                 ctags \
                                 device-mapper-devel \
                                 docker-engine-1.10.3-1.el7.centos.x86_64 \
+                                docker-forward-journald \
                                 ethtool \
                                 e2fsprogs \
                                 fontconfig \
