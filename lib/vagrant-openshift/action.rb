@@ -54,6 +54,15 @@ module Vagrant
         end
       end
 
+      def self.build_origin_base_upstream(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use CreateYumRepositories
+          b.use YumUpdate
+          b.use SetHostName
+          b.use InstallOriginBaseDependenciesUpstream
+        end
+      end
+
       def self.install_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use YumUpdate
@@ -340,6 +349,7 @@ module Vagrant
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :InstallOriginBaseDependencies, action_root.join("install_origin_base_dependencies")
+      autoload :InstallOriginBaseDependenciesUpstream, action_root.join("install_origin_base_dependencies_upstream")
       autoload :InstallOriginAssetDependencies, action_root.join("install_origin_asset_dependencies")
       autoload :BuildOriginBaseImages, action_root.join("build_origin_base_images")
       autoload :PushOpenshiftImages, action_root.join("push_openshift_images")
