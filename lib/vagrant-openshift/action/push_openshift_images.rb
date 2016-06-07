@@ -50,17 +50,11 @@ echo "Pushing image #{image_name}:#{git_ref}..."
 docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}
 docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:latest
 docker tag -f #{centos_namespace}/#{image_name}-centos7 docker.io/#{centos_namespace}/#{image_name}-centos7:latest
-docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
-docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
 
 # We can't fully parallelize this because docker fails when you push to the same repo at the
 # same time (using different tags), so we do two groups of push operations.
-# this one is failing in parallel for unknown reasons
-docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
-
 procs[0]="docker push #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}"
 procs[1]="docker push docker.io/#{centos_namespace}/#{image_name}-centos7:latest"
-#procs[2]="docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}"
 
 # Run pushes in parallel
 for i in {0..1}; do
@@ -76,19 +70,16 @@ for pid in ${pids[*]}; do
   wait $pid
 done
 
-procs[0]="docker push #{registry}#{centos_namespace}/#{image_name}-centos7:latest"
-procs[1]="docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest"
+docker push #{registry}#{centos_namespace}/#{image_name}-centos7:latest
 
-# Run pushes in parallel
-for i in {0..1}; do
-  ${procs[${i}]} &
-  pids[${i}]=$!
-done
+if [ #{rhel_namespace} != "SKIP" ]; then
+  docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
+  docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
 
-# Wait for all pushes.  "wait" will check the return code of each process also.
-for pid in ${pids[*]}; do
-  wait $pid
-done
+  # this one is failing when done in parallel for unknown reasons
+  docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
+  docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
+fi
 
 popd
 set +e
@@ -113,20 +104,24 @@ git_ref=$(git rev-parse --short HEAD)
 echo "Building and testing #{image_name}-centos7:$git_ref ..."
 sudo env "PATH=$PATH" SKIP_SQUASH=1 make test TARGET=centos7 VERSION=#{version} TAG_ON_SUCCESS=true
 echo "Building and testing #{image_name}-rhel7:$git_ref ..."
-sudo env "PATH=$PATH" SKIP_SQUASH=1 make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
+sudo env "PATH=$PATH" SKIP_SQUASH=1 SKIP_RHEL_SCL=1 make test TARGET=rhel7 VERSION=#{version} TAG_ON_SUCCESS=true
+
 popd
 set +e
           }
         end
 
         def check_latest_image_cmd(registry,namespace,name,git_url)
-          cmd = %{
-        git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
-        curl -s http://#{registry}v1/repositories/#{namespace}/#{name}-rhel7/tags/${git_ref} | grep -q "error"
-        if [[ "$?" != "0" ]]; then
-          echo "#{name};$git_ref" >> ~/latest_images
-        fi
+          cmd = ""
+          if $namespace!="SKIP"
+            cmd = %{
+git_ref=$(git ls-remote #{git_url} -h refs/heads/master | cut -c1-7)
+curl -s http://#{registry}v1/repositories/#{namespace}/#{name}-centos7/tags/${git_ref} | grep -q "error"
+if [[ "$?" != "0" ]]; then
+  echo "#{name};$git_ref" >> ~/latest_images
+fi
             }
+          end
           return cmd
         end
 
@@ -154,7 +149,7 @@ export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:
           # FIXME: We always need to make sure we have the latest base image
           # FIXME: This is because the internal registry is pruned once per month
           if !@options[:build_images].include?("base")
-            @options[:build_images] = "openshift;openshift;base;1;https://github.com/openshift/sti-base;master,#{@options[:build_images]}"
+            @options[:build_images] = "openshift;openshift;base;1;https://github.com/openshift/s2i-base;master,#{@options[:build_images]}"
           end
 
           build_images = @options[:build_images].split(",").map { |i| i.strip }
