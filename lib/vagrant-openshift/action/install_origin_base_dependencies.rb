@@ -49,7 +49,6 @@ fi
                                 bind-utils \
                                 ctags \
                                 device-mapper-devel \
-                                docker-1.9.1-40.el7.x86_64 \
                                 ethtool \
                                 e2fsprogs \
                                 fontconfig \
@@ -172,6 +171,19 @@ if ! test -e /etc/fedora-release; then
 fi
 
 systemctl enable ntpd
+
+mkdir /tmp/docker-latest
+cd /tmp/docker-latest
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-common-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-forward-journald-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-rhel-push-plugin-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-selinux-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-v1.10-migrator-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/oci-register-machine-1.10.3-33.el7.x86_64.rpm
+wget https://lsm5.fedorapeople.org/RPMS/x86_64/oci-systemd-hook-1.10.3-33.el7.x86_64.rpm
+
+yum install -y *.rpm
 
 groupadd -f docker
 usermod -a -G docker #{ssh_user}
