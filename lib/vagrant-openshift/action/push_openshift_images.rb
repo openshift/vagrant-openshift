@@ -172,7 +172,7 @@ export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:
           check_images = @options[:check_images].split(",").map { |i| i.strip }
           check_images.each do |image|
             centos_namespace,rhel_namespace,name, version, repo_url, git_ref = image.split(';')
-            cmd+= check_latest_image_cmd(@options[:registry],rhel_namespace,name,repo_url)
+            cmd+= check_latest_image_cmd(@options[:registry],centos_namespace,name,repo_url)
           end
 
           do_execute(env[:machine], cmd, :timeout=>60*60*5)
