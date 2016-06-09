@@ -143,6 +143,44 @@ To enable easy customization of the build environment, any files placed under `\
 the vagrant user home directory. For example: `~/.openshiftdev/home.d/.bash_profile` will be copied to `.bash_profile`
 on the vagrant VM.
 
+==== Configuring Docker and Golang versions for tests
+
+If the version of OpenShift that is being tested requires a version
+of Golang or Docker that is not default in the RPM streams for the
+operating system used for the image, `vagrant-openshift` allows for
+customization of the image.
+
+To build a new image with the versions of Golang and Docker necessary,
+begin with an 'os' stage:
+[source, sh]
+----
+$ vagrant origin-init --stage os --os rhel7 --instance-type c4.xlarge "${instance_name}"
+----
+
+Then, you may provide the following information to customize your image:
+
+* URLs to repositories containing the desired Docker and/or Golang RPMs to use during the install
+* names of repositores already installed on the OS that you want to use during the install
+* versions of Golang and/or Docker to install
+
+Any RPM repositories you add by providing URLs will only be enabled for
+the duration of the installation. Only the repositories you provide using
+URLs or those that you name explcitly will be enabled during the install.
+
+For instance, some installation of  OpenShift Origin could want custom
+Go and Docker versions, both of which must be installed from custom URLs.
+Furthermore, some of the Docker dependencies may have up-to-date versions
+in the RHEL streams, so the following commands would be used to configure
+the image base:
+[source, sh]
+----
+$ vagrant install-golang --golang.repourl=http://some.golang.rpm.repository.com/ \
+                         --golang.version=1.6.2
+
+$ vagrant install-docker --docker.repourl=http://some.docker.rpm.repository.com/ \
+                         --docker.repo=oso-rhui-rhel-server-releases \
+                         --docker.version=1.10.3
+----
 
 === Other Providers
 

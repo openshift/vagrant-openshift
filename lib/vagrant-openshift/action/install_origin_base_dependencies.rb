@@ -46,24 +46,14 @@ module Vagrant
           # Install Chrome and chromedriver for headless UI testing
           sudo(@env[:machine], "#{home}/install_chrome.sh", :timeout=>60*60)
 
-          sudo(env[:machine], "wget -O /etc/yum.repos.d/openshift-rhel7-dependencies.repo https://mirror.openshift.com/pub/openshift-origin/nightly/rhel-7/dependencies/openshift-rhel7-dependencies.repo", fail_on_error: true, :timeout=>60*20, :verbose => true)
-
-          # Install Golang
-          sudo(@env[:machine], "#{home}/install_golang.sh", :timeout=>60*60)
-
-          # If we're on RHEL, install the RPM repositories for OSE and Docker
+          # If we're on RHEL, install the OSE RPM repositories
           is_rhel = @env[:machine].communicate.test("test -e /etc/redhat-release && ! test -e /etc/fedora-release && ! test -e /etc/centos-release")
           if is_rhel
             sudo(@env[:machine], "#{home}/install_rhaos_repos.sh")
-            sudo(@env[:machine], "#{home}/install_dockerextra_repo.sh")
           end
 
-          # Install Docker
-          sudo(@env[:machine], "yum install -y docker", :timeout=>60*60)
-
-          # Configure the machine system and the Docker daemon
+          # Configure the machine system
           sudo(@env[:machine], "SSH_USER='#{ssh_user}' #{home}/configure_system.sh", :timeout=>60*30)
-          sudo(@env[:machine], "SSH_USER='#{ssh_user}' #{home}/configure_docker.sh", :timeout=>60*30)
 
           @app.call(@env)
         end
