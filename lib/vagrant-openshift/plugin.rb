@@ -72,6 +72,11 @@ module Vagrant
         Commands::BuildOriginBase
       end
 
+      command "build-origin-base-upstream" do
+        require_relative "command/build_origin_base_upstream"
+        Commands::BuildOriginBaseUpstream
+      end
+
       command "build-origin" do
         require_relative "command/build_origin"
         Commands::BuildOrigin

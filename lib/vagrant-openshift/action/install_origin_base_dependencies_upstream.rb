@@ -17,7 +17,7 @@
 module Vagrant
   module Openshift
     module Action
-      class InstallOriginBaseDependencies
+      class InstallOriginBaseDependenciesUpstream
         include CommandHelper
 
         def initialize(app, env)
@@ -37,7 +37,24 @@ if ! [[ -L /etc/udev/rules.d/80-net-setup-link.rules ]]; then
 fi
             }, :verbose => false)
           end
-          
+
+
+          sudo(env[:machine], %{
+if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
+
+cat <<EOF > /etc/yum.repos.d/docker.repo
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+
+EOF
+
+fi
+          }, :timeout=>60*10, :verbose => false)
+
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum install -y \
                                 augeas \
@@ -49,6 +66,8 @@ fi
                                 bind-utils \
                                 ctags \
                                 device-mapper-devel \
+                                docker-engine-1.10.3-1.el7.centos.x86_64 \
+                                docker-forward-journald \
                                 ethtool \
                                 e2fsprogs \
                                 fontconfig \
@@ -163,6 +182,54 @@ sslclientkey=/var/lib/yum/client-key.pem
 
 EOF
 
+rm -f /lib/systemd/system/docker.service /etc/sysconfig/docker /etc/sysconfig/docker-storage /etc/sysconfig/docker-network
+
+cat <<'EOF' > /lib/systemd/system/docker.service
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.com
+After=network.target
+Wants=docker-storage-setup.service
+
+[Service]
+Type=notify
+NotifyAccess=all
+EnvironmentFile=-/etc/sysconfig/docker
+EnvironmentFile=-/etc/sysconfig/docker-storage
+EnvironmentFile=-/etc/sysconfig/docker-network
+Environment=GOTRACEBACK=crash
+ExecStart=/bin/sh -c '/usr/bin/docker daemon $OPTIONS $DOCKER_STORAGE_OPTIONS $DOCKER_NETWORK_OPTIONS $ADD_REGISTRY $BLOCK_REGISTRY $INSECURE_REGISTRY 2>&1 | /usr/bin/forward-journald -tag docker'
+LimitNOFILE=1048576
+LimitNPROC=1048576
+LimitCORE=infinity
+MountFlags=slave
+TimeoutStartSec=10min
+Restart=on-abnormal
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+cat <<EOF > /etc/sysconfig/docker
+OPTIONS='--insecure-registry=172.30.0.0/16 --insecure-registry=ci.dev.openshift.redhat.com:5000 --selinux-enabled'
+
+DOCKER_CERT_PATH=/etc/docker
+
+EOF
+
+cat <<EOF > /etc/sysconfig/docker-storage
+DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/docker-vg/docker-data --storage-opt dm.metadatadev=/dev/docker-vg/docker-metadata'
+
+EOF
+
+cat <<EOF > /etc/sysconfig/docker-network
+DOCKER_NETWORK_OPTIONS=
+
+EOF
+
 fi
 
 if ! test -e /etc/fedora-release; then
@@ -171,19 +238,6 @@ if ! test -e /etc/fedora-release; then
 fi
 
 systemctl enable ntpd
-
-mkdir /tmp/docker-latest
-cd /tmp/docker-latest
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-common-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-forward-journald-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-rhel-push-plugin-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-selinux-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/docker-v1.10-migrator-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/oci-register-machine-1.10.3-33.el7.x86_64.rpm
-wget https://lsm5.fedorapeople.org/RPMS/x86_64/oci-systemd-hook-1.10.3-33.el7.x86_64.rpm
-
-yum install -y *.rpm
 
 groupadd -f docker
 usermod -a -G docker #{ssh_user}
@@ -210,7 +264,6 @@ if [ -n "${VG}" ]
 then
   sudo lvcreate -n docker-data -l 90%FREE /dev/${VG}
   sudo lvcreate -n docker-metadata -l 50%FREE /dev/${VG}
-  sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/${VG}/docker-data --storage-opt dm.metadatadev=/dev/${VG}/docker-metadata'," /etc/sysconfig/docker-storage
 
   sudo lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
   sudo mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
@@ -252,10 +305,6 @@ fi
 chown -R #{ssh_user}:#{ssh_user} /data
 
 sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd/system.conf
-
-# Docker 1.8.2 now sets a TimeoutStartSec of 1 minute.  Unfortunately, for some
-# reason the initial docker start up is now taking > 5 minutes.  Until that is fixed need this.
-sed -i 's,TimeoutStartSec=.*,TimeoutStartSec=10min,'  /usr/lib/systemd/system/docker.service
 
 systemctl daemon-reexec
 systemctl daemon-reload
