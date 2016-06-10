@@ -48,9 +48,9 @@ popd >/dev/null
         }
           exit_code = 0
           if as_root
-            _,_,exit_code = sudo(env[:machine], cmd, {:timeout => 60*60*4, :fail_on_error => false, :verbose => false})
+            _,_,exit_code = sudo(env[:machine], cmd, {:timeout => 60*60*8, :fail_on_error => false, :verbose => false})
           else
-            _,_,exit_code = do_execute(env[:machine], cmd, {:timeout => 60*60*4, :fail_on_error => false, :verbose => false})
+            _,_,exit_code = do_execute(env[:machine], cmd, {:timeout => 60*60*8, :fail_on_error => false, :verbose => false})
           end
           exit_code
         end
