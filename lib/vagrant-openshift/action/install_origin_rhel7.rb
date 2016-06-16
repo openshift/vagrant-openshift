@@ -37,14 +37,14 @@ set -ex
 contextdir=$(mktemp -d)
 
 # copy the necessary files
-mkdir $contextdir/{certs,repos,vars}
+mkdir $contextdir/{certs,repos,vars,keys}
 cp /var/lib/yum/*.pem $contextdir/certs
 cp /etc/yum/vars/* $contextdir/vars
 cp /etc/yum.repos.d/* $contextdir/repos
+cp /etc/pki/rpm-gpg/* $contextdir/keys
 
-# yum magic that auto-replaces REGION in repos doesn't work
-# when running inside a docker container, so harcode the value.
-sed -i s/REGION.aws.ce.redhat.com/us-east-1.aws.ce.redhat.com/ $contextdir/repos/redhat-rhui*
+# Remove repositories we won't be needing and which require RH certs
+rm -rf $contextdir/repos/redhat-rhui*
 
 # remove google chrome repo
 rm -rf $contextdir/repos/*chrome*.repo
@@ -58,6 +58,7 @@ RUN yum remove -y subscription-manager
 ADD vars/* /etc/yum/vars/
 ADD repos/* /etc/yum.repos.d/
 ADD certs/* /var/lib/yum/
+ADD keys/* /etc/pki/rpm-gpg/
 
 # we're picking up 7.2 packages in our 7.1 image and these two conflict, so
 # first replace the 7.1 package with the new 7.2 package so later updates/dep
@@ -80,6 +81,7 @@ RUN yum remove -y subscription-manager
 ADD vars/* /etc/yum/vars/
 ADD repos/* /etc/yum.repos.d/
 ADD certs/* /var/lib/yum/
+ADD keys/* /etc/pki/rpm-gpg/
 
 RUN yum update -y && yum clean all
 
