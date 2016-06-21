@@ -143,6 +143,7 @@ popd
 echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
   git fetch origin
+  git checkout #{branch}
   git reset --hard origin/#{branch}
   git clean -fdx
   set +e
