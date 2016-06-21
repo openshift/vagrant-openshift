@@ -136,16 +136,17 @@ popd
       def repo_checkout_bash_command(repo, url)
         repo_path = File.expand_path(repo)
         command = ""
+        branch = @options[:branch] || 'master'
         if Pathname.new(repo_path).exist?
           if @options[:replace]
             command += %{
 echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
   git fetch origin
-  git reset --hard origin/master
+  git reset --hard origin/#{branch}
   git clean -fdx
   set +e
-  git branch | grep -ve " master$" | xargs git branch -D
+  git branch | grep -ve " #{branch}$" | xargs git branch -D
   set -e
 popd
 }
@@ -174,7 +175,7 @@ fi
           end
           command += %{
 [ $cloned != true ] && git clone --quiet --recurse-submodules #{url}
-( cd #{repo} && git checkout #{@options[:branch]} &>/dev/null)
+(cd #{repo} && git checkout #{branch} &>/dev/null)
 }
         end
 
