@@ -104,6 +104,7 @@ fi
                                 wget \
                                 xfsprogs \
                                 Xvfb \
+                                firefox \
                                 yum-utils",:timeout=>60*30, :verbose => false)
 
           sudo(env[:machine], "yum install -y facter", fail_on_error: false, :timeout=>60*20, :verbose => false)
