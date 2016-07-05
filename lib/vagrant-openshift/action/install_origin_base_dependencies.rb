@@ -217,8 +217,8 @@ then
 fi
 if [ -n "${VG}" ]
 then
-  sudo lvcreate -n docker-data -l 90%FREE /dev/${VG}
-  sudo lvcreate -n docker-metadata -l 50%FREE /dev/${VG}
+  sudo lvcreate -n docker-data -l 70%FREE /dev/${VG}
+  sudo lvcreate -n docker-metadata -l 17%FREE /dev/${VG}
   sudo sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='-s devicemapper --storage-opt dm.datadev=/dev/${VG}/docker-data --storage-opt dm.metadatadev=/dev/${VG}/docker-metadata --storage-opt dm.use_deferred_removal=true --storage-opt dm.use_deferred_deletion=true'," /etc/sysconfig/docker-storage
 
   sudo lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
