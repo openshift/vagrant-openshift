@@ -50,6 +50,14 @@ module Vagrant
           end
         }
 
+        # if verbose output is requested, we don't mess with vagrant's built-in SSH error handling
+        # otherwise, we ask for muted SSH error handling to reduce the clutter
+        if options[:verbose]
+          opts = nil
+        else
+          opts = { :error_key => :ssh_bad_exit_status_muted }
+        end
+
         (0..options[:retries]).each do |retry_count|
           begin
             if options[:verbose]
@@ -59,9 +67,9 @@ module Vagrant
             end
             Timeout::timeout(options[:timeout]) do
               if options[:sudo]
-                rc = machine.communicate.sudo(command, nil, &execute)
+                rc = machine.communicate.sudo(command, opts, &execute)
               else
-                rc = machine.communicate.execute(command, nil, &execute)
+                rc = machine.communicate.execute(command, opts, &execute)
               end
             end
           rescue Timeout::Error
