@@ -145,23 +145,18 @@ popd
         repo_path = File.expand_path(repo)
         command = ""
         branch = @options[:branch] || 'master'
-        user = @options[:user] || 'openshift'
-        user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
-
         if Pathname.new(repo_path).exist?
           if @options[:replace]
             command += %{
 echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
-  git fetch origin --tags
-  git remote | grep -v origin | xargs -n 1 git remote rm || true
-  git remote add #{user} #{user_repo_url}
-  git fetch #{user}
-  git branch -D #{branch} || true
-  git checkout -b #{branch} #{user}/#{branch}
-  git reset --hard #{user}/#{branch}
+  git fetch origin
+  git checkout #{branch}
+  git reset --hard origin/#{branch}
   git clean -fdx
-  git branch | grep -ve " #{branch}$" | xargs git branch -D || true
+  set +e
+  git branch | grep -ve " #{branch}$" | xargs git branch -D
+  set -e
 popd
 }
           else
@@ -174,6 +169,7 @@ echo 'Cloning #{repo} ...'
 }
 
           if @options[:user]
+            user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
             command += %{
 echo 'Cloning #{user_repo_url}'
 git clone --quiet --recurse-submodules #{user_repo_url}
@@ -188,7 +184,6 @@ fi
           end
           command += %{
 [ $cloned != true ] && git clone --quiet --recurse-submodules #{url}
-git fetch origin --tags
 (cd #{repo} && git checkout #{branch} &>/dev/null)
 }
         end
