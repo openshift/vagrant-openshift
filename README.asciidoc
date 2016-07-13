@@ -252,16 +252,23 @@ vagrant up --provider=openstack
 NOTE: Requires latest link:https://github.com/cloudbau/vagrant-openstack-plugin[OpenStack] provider.
 
 
-==== LibVirt
+==== Libvirt
 
-* Install the vagrant-libvirt plugin dependencies
+* If using a recent version of Fedora, you can install vagrant-libvirt directly using yum/dnf.  Otherwise you will need to follow the `vagrant plugin install` instructions below.
 
 [source, sh]
 ----
-yum install libxslt-devel libxml2-devel libvirt-devel ruby-devel rubygems
+sudo yum install vagrant-libvirt
 ----
 
-* Install the vagrant-libvirt plugin
+* Install the vagrant-libvirt plugin dependencies (only if `sudo yum install vagrant-libvirt` didn't work)
+
+[source, sh]
+----
+sudo yum install libxslt-devel libxml2-devel libvirt-devel ruby-devel rubygems
+----
+
+* Install the vagrant-libvirt plugin (only if `sudo yum install vagrant-libvirt` didn't work)
 
 [source, sh]
 ----
@@ -272,86 +279,26 @@ NOTE: This may require modifying the system linker as described in
       link:https://github.com/mitchellh/vagrant/issues/5118[this issue]:
 
 ----
-# alternatives --set ld /usr/bin/ld.gold
+sudo alternatives --set ld /usr/bin/ld.gold
 ----
 
+* Add your user to the libvirt group - this gives authorization to connect to libvirtd
 
-* Configure LibVirt to allow remote TLS connections
-** Create TLS certificates and key pairs. Follow the guide at http://libvirt.org/remote.html#Remote_certificates
-Example commands for creating a self signed certificate are provided below.
-
-.Example self-signed certificates
 [source, sh]
 ----
-mkdir -p /etc/pki/libvirt/private
-
-#CA Cert
-certtool --generate-privkey > cakey.pem
-
-cat <<EOF> ca.info
-cn = MyOrg
-ca
-cert_signing_key
-EOF
-
-certtool --generate-self-signed --load-privkey cakey.pem --template ca.info --outfile cacert.pem
-/bin/cp -f cacert.pem /etc/pki/CA/cacert.pem
-
-#Server cert
-certtool --generate-privkey > serverkey.pem
-
-cat <<EOF> server.info
-organization = MyOrg
-cn = oirase
-tls_www_server
-encryption_key
-signing_key
-EOF
-
-certtool --generate-certificate --load-privkey serverkey.pem \
-  --load-ca-certificate cacert.pem --load-ca-privkey cakey.pem \
-  --template server.info --outfile servercert.pem
-/bin/cp -f serverkey.pem /etc/pki/libvirt/private/serverkey.pem
-/bin/cp -f servercert.pem /etc/pki/libvirt/servercert.pem
-
-#Client cert
-certtool --generate-privkey > clientkey.pem
-
-cat <<EOF> client.info
-country = US
-state = California
-locality = Mountain View
-organization = MyOrg
-cn = client1
-tls_www_client
-encryption_key
-signing_key
-EOF
-
-certtool --generate-certificate --load-privkey clientkey.pem \
-  --load-ca-certificate cacert.pem --load-ca-privkey cakey.pem \
-  --template client.info --outfile clientcert.pem
-
-/bin/cp -f clientkey.pem /etc/pki/libvirt/private/clientkey.pem
-/bin/cp -f clientcert.pem /etc/pki/libvirt/clientcert.pem
+sudo usermod -G -a libvirt $USER
 ----
 
-** Modify /etc/sysconfig/libvirtd and enable listening to connections
+* Log out and log in for the group change to take effect
 
-----
-LIBVIRTD_ARGS="--listen"
-----
-
-** Restart libvirtd
-
-* Start the LibVirt machine
+* Start the libvirt machine
 
 [source, sh]
 ----
 vagrant up --provider=libvirt
 ----
 
-NOTE: Requires latest link:https://github.com/pradels/vagrant-libvirt[LibVirt] provider
+NOTE: Requires latest link:https://github.com/pradels/vagrant-libvirt[libvirt] provider
 
 ===== Managed
 
