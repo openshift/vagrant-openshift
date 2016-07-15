@@ -35,10 +35,10 @@ module Vagrant
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
 
           _,_,exit_code = do_execute machine, "mkdir -p /tmp/openshift && journalctl -u openshift --no-pager > /tmp/openshift/openshift.log", :fail_on_error => false
-          if exit_code != 0 
+          if exit_code != 0
             machine.ui.warn "Unable to dump openshift log from journalctl"
           end
-          
+
           download_map = {
             "/var/log/yum.log"               => artifacts_dir + "yum.log",
             "/var/log/secure"                => artifacts_dir + "secure",
