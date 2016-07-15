@@ -41,7 +41,7 @@ sudo cp /etc/yum.repos.d/origin_local.repo .
 docker build -t openshift/origin-base -f Dockerfile.rpm .
 popd
 })
-       
+
         images = @options[:images].split(",")
         images.each do |image|
           sudo(env[:machine], %{
@@ -51,7 +51,7 @@ popd
           })
         end
 
-          
+
           @app.call(env)
         end
       end

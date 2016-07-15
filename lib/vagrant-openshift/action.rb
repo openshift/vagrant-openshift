@@ -135,7 +135,7 @@ module Vagrant
           end
         end
       end
-      
+
       def self.repo_sync_origin_console(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
@@ -146,12 +146,12 @@ module Vagrant
             end
             b.use SyncLocalRepository, :repo => 'origin-console'
             b.use CheckoutRepositories, :repo => 'origin-console'
-            if options[:build]            
+            if options[:build]
               b.use InstallOriginAssetDependencies, :restore_assets => true
-            end     
+            end
           end
         end
-      end      
+      end
 
       def self.repo_sync_origin_aggregated_logging(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -204,18 +204,18 @@ module Vagrant
           b.use TestExitCode
         end
       end
-      
+
       def self.run_origin_asset_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
           # UI integration tests require the api server to be running
-          b.use RunSystemctl, {:action => "start", :service => "openshift"}        
+          b.use RunSystemctl, {:action => "start", :service => "openshift"}
           b.use RunOriginAssetTests, options
           if options[:download]
             b.use DownloadArtifactsOriginConsole
           end
           b.use TestExitCode
         end
-      end      
+      end
 
       def self.run_origin_aggregated_logging_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -264,18 +264,18 @@ module Vagrant
           b.use DownloadArtifactsOriginAggregatedLogging
         end
       end
-      
+
       def self.download_origin_metrics_artifacts(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use DownloadArtifactsOriginMetrics
         end
       end
-      
+
       def self.download_origin_console_artifacts(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use DownloadArtifactsOriginConsole
         end
-      end      
+      end
 
       def self.gen_template(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -354,7 +354,7 @@ module Vagrant
       autoload :LocalOriginCheckout, action_root.join("local_origin_checkout")
       autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
       autoload :RunOriginTests, action_root.join("run_origin_tests")
-      autoload :RunOriginAssetTests, action_root.join("run_origin_asset_tests")      
+      autoload :RunOriginAssetTests, action_root.join("run_origin_asset_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")
       autoload :RunOriginAggregatedLoggingTests, action_root.join("run_origin_aggregated_logging_tests")
       autoload :RunOriginMetricsTests, action_root.join("run_origin_metrics_tests")
@@ -363,7 +363,7 @@ module Vagrant
       autoload :ModifyInstance, action_root.join("modify_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifactsOrigin, action_root.join("download_artifacts_origin")
-      autoload :DownloadArtifactsOriginConsole, action_root.join("download_artifacts_origin_console")      
+      autoload :DownloadArtifactsOriginConsole, action_root.join("download_artifacts_origin_console")
       autoload :DownloadArtifactsSti, action_root.join("download_artifacts_sti")
       autoload :DownloadArtifactsOriginAggregatedLogging, action_root.join("download_artifacts_origin_aggregated_logging")
       autoload :DownloadArtifactsOriginMetrics, action_root.join("download_artifacts_origin_metrics")

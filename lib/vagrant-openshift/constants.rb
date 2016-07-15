@@ -31,7 +31,7 @@ module Vagrant
         {
           'origin' => 'https://github.com/openshift/origin.git',
           'source-to-image' => 'https://github.com/openshift/source-to-image.git',
-          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'          
+          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'
         }
       end
 

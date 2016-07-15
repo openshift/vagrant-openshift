@@ -130,7 +130,7 @@ module Vagrant
       command "test-origin-console" do
         require_relative "command/test_origin_console"
         Commands::TestOriginConsole
-      end      
+      end
 
       command "test-sti" do
         require_relative "command/test_sti"
@@ -155,7 +155,7 @@ module Vagrant
       command "download-artifacts-origin-console" do
         require_relative "command/download_artifacts_origin_console"
         Commands::DownloadArtifactsOriginConsole
-      end      
+      end
 
       command "download-artifacts-origin-aggregated-logging" do
         require_relative "command/download_artifacts_origin_aggregated_logging"

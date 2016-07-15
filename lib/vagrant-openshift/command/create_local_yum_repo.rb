@@ -33,11 +33,11 @@ module Vagrant
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant create-local-yum-repo [vm-name]"
             o.separator ""
-            
+
             o.on("--rpmdir_loc [directory]", String, "Directory where the RPMs exist on the vm.") do |f|
               options[:rpmdir_loc] = f
             end
-           
+
           end
 
           # Parse the options

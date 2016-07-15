@@ -68,7 +68,7 @@ popd >/dev/null
           end
 
           cmds << 'hack/verify-dist.sh'
-          cmds << 'grunt test'    
+          cmds << 'grunt test'
           cmds << 'hack/test-integration-headless.sh'
           cmd = cmds.join(' ')
           env[:test_exit_code] = run_tests(env, cmds, @options[:root])
