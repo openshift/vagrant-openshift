@@ -10,7 +10,11 @@ group :development do
   if File.exist?(File.expand_path("../../vagrant", __FILE__))
     gem "vagrant", path: "../vagrant"
   else
-    gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git"
+    if Gem::Version.new(Bundler::VERSION) < Gem::Version.new("1.12.5")
+      gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git", :ref => "v1.7.4"
+    else
+      gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git"
+    end
   end
   gem "json"
 end
