@@ -173,7 +173,7 @@ echo 'Cloning #{repo} ...'
             user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
             command += %{
 echo 'Cloning #{user_repo_url}'
-git clone --quiet --recurse-submodules #{user_repo_url}
+git clone --depth 1 --quiet --recurse-submodules #{user_repo_url}
 if [ $? -eq 0 ]; then
 cloned=true
 (cd #{repo} && git remote add upstream #{url} && git fetch upstream)
