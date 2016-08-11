@@ -1,6 +1,7 @@
 == OpenShift Origin Build Tools
 
-image:https://travis-ci.org/openshift/vagrant-openshift.svg?branch=master[link=https://travis-ci.org/openshift/vagrant-openshift]
+image:https://ci.openshift.redhat.com/jenkins/buildStatus/icon?job=vagrant-openshift[title="Jenkins Build Status" link="https://ci.openshift.redhat.com/jenkins/job/vagrant-openshift/""]
+image:https://travis-ci.org/openshift/vagrant-openshift.svg?branch=master[title="Travis Build Status" ,link="https://travis-ci.org/openshift/vagrant-openshift"]
 
 This is a link:http://www.vagrantup.com[Vagrant] 1.7.2+ plugin that adds vagrant commands and provisioners to
 build and test link:http://openshift.github.io[OpenShift Origin].
