@@ -148,6 +148,7 @@ popd
         if Pathname.new(repo_path).exist?
           if @options[:replace]
             command += %{
+set -e
 echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
   git fetch origin
