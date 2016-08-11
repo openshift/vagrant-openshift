@@ -156,7 +156,7 @@ pushd #{repo_path}
   git clean -fdx
   set +e
   git branch | grep -ve " #{branch}$" | xargs git branch -D
-  git gc
+  #git gc
   set -e
 popd
 }
