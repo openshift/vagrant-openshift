@@ -168,6 +168,7 @@ sslclientkey=/var/lib/yum/client-key.pem
 
 EOF
 
+
 cat <<EOF > /etc/yum.repos.d/rhaos32.repo
 [rhel-7-server-ose-3.2-rpms]
 name=RHEL7 Red Hat Atomic OpenShift 3.2
@@ -175,6 +176,23 @@ baseurl=https://mirror.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAO
         https://use-mirror1.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
         https://use-mirror2.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
         https://euw-mirror1.ops.rhcloud.com/enterprise/enterprise-3.2/latest/RH7-RHAOS-3.2/x86_64/os/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release,file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta,https://mirror.ops.rhcloud.com/libra/keys/RPM-GPG-KEY-redhat-openshifthosted
+failovermethod=priority
+sslverify=0
+sslclientcert=/var/lib/yum/client-cert.pem
+sslclientkey=/var/lib/yum/client-key.pem
+
+EOF
+
+cat <<EOF > /etc/yum.repos.d/rhaos33.repo
+[rhel-7-server-ose-3.3-rpms]
+name=RHEL7 Red Hat Atomic OpenShift 3.3
+baseurl=https://mirror.ops.rhcloud.com/enterprise/enterprise-3.3/latest/RH7-RHAOS-3.3/x86_64/os/
+        https://use-mirror1.ops.rhcloud.com/enterprise/enterprise-3.3/latest/RH7-RHAOS-3.3/x86_64/os/
+        https://use-mirror2.ops.rhcloud.com/enterprise/enterprise-3.3/latest/RH7-RHAOS-3.3/x86_64/os/
+        https://euw-mirror1.ops.rhcloud.com/enterprise/enterprise-3.3/latest/RH7-RHAOS-3.3/x86_64/os/
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release,file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta,https://mirror.ops.rhcloud.com/libra/keys/RPM-GPG-KEY-redhat-openshifthosted
