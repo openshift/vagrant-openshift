@@ -229,6 +229,9 @@ then
 elif sudo lvdisplay vg_vagrant 2>&1>/dev/null
 then
   VG="vg_vagrant"
+elif sudo lvdisplay fedora 2>&1>/dev/null
+then
+  VG="fedora"
 elif sudo lvdisplay centos 2>&1>/dev/null
 then
   VG="centos"
