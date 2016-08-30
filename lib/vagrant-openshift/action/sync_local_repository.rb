@@ -116,7 +116,7 @@ module Vagrant
         end
 
         def get_branch
-          (%x[git status | head -n1].chomp =~ /.*branch (.*)/) ? $1 : 'origin/master'
+          (%x[git status | head -n1].chomp =~ /.*(branch|detached at) (.*)/) ? $1 : 'origin/master'
         end
 
       end
