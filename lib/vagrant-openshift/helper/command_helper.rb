@@ -152,6 +152,7 @@ set -e
 echo 'Replacing: #{repo_path}'
 pushd #{repo_path}
   git fetch origin
+  git fetch --prune origin +refs/tags/*:refs/tags/*
   git reset --merge
   git checkout #{branch}
   git reset --hard origin/#{branch}
