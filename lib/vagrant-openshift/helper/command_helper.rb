@@ -143,55 +143,65 @@ popd
 
       def repo_checkout_bash_command(repo, url)
         repo_path = File.expand_path(repo)
-        command = ""
         branch = @options[:branch] || 'master'
-        if Pathname.new(repo_path).exist?
-          if @options[:replace]
-            command += %{
+        command = %{
 set -e
-echo 'Replacing: #{repo_path}'
-pushd #{repo_path}
-  git fetch origin
-  git fetch --prune origin +refs/tags/*:refs/tags/*
-  git reset --merge
-  git checkout #{branch}
-  git reset --hard origin/#{branch}
-  git clean -fdx
-  set +e
-  git branch | grep -ve " #{branch}$" | xargs git branch -D
-  #git gc
-  set -e
-popd
-}
-          else
-            command += "echo 'Already cloned: #{repo}'\n"
-          end
-        else
-          command += %{
-cloned=false
-echo 'Cloning #{repo} ...'
-}
-
-          if @options[:user]
-            user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
-            command += %{
-echo 'Cloning #{user_repo_url}'
-git clone --quiet --recurse-submodules #{user_repo_url}
-if [ $? -eq 0 ]; then
-cloned=true
-(cd #{repo} && git remote add upstream #{url} && git fetch upstream)
+clone_repo=false
+if [ -d "#{repo_path}" ]
+then
+  replace_repo=#{@options[:replace] ? "true" : "false"}
+  echo 'Checking repo integrity for #{repo_path}'
+  if (pushd #{repo_path} && git fsck && popd)
+  then
+    if [ "${replace_repo}" = "true" ]
+    then
+      echo 'Replacing: #{repo_path}'
+      pushd #{repo_path}
+        git fetch origin
+        git fetch --prune origin +refs/tags/*:refs/tags/*
+        git reset --merge
+        git checkout #{branch}
+        git reset --hard origin/#{branch}
+        git clean -fdx
+        set +e
+        git branch | grep -ve " #{branch}$" | xargs git branch -D
+        set -e
+        git gc
+      popd
+    else
+      echo 'Already cloned: #{repo}'
+    fi
+  else
+    rm -rf #{repo_path}
+    clone_repo=true
+  fi
 else
-echo 'Fork of repo #{repo} not found. Cloning read-only copy from upstream'
+  clone_repo=true
 fi
-}
 
-          end
+if [ "${clone_repo}" = "true" ]
+then
+  cloned=false
+  echo 'Cloning #{repo} ...'
+}
+        if @options[:user]
+          user_repo_url="git@github.com:#{@options[:user]}/#{repo}"
           command += %{
-[ $cloned != true ] && git clone --quiet --recurse-submodules #{url}
-(cd #{repo} && git checkout #{branch} &>/dev/null)
+  echo 'Cloning #{user_repo_url}'
+  if git clone --quiet --recurse-submodules #{user_repo_url}
+  then
+    cloned=true
+    (cd #{repo} && git remote add upstream #{url} && git fetch upstream)
+  else
+    echo 'Fork of repo #{repo} not found. Cloning read-only copy from upstream'
+  fi
 }
         end
-
+        command += %{
+  [ "${cloned}" != true ] && git clone --quiet --recurse-submodules #{url}
+  (cd #{repo} && git checkout #{branch} &>/dev/null)
+fi
+}
         command
       end
 
