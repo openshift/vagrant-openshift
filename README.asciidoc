@@ -286,7 +286,7 @@ sudo alternatives --set ld /usr/bin/ld.gold
 
 [source, sh]
 ----
-sudo usermod -G -a libvirt $USER
+sudo usermod -a -G libvirt $USER
 ----
 
 * Log out and log in for the group change to take effect
