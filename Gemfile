@@ -11,9 +11,9 @@ group :development do
     gem "vagrant", path: "../vagrant"
   else
     if Gem::Version.new(Bundler::VERSION) < Gem::Version.new("1.12.5")
-      gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git", :ref => "v1.7.4"
+      gem "vagrant", :git => "https://github.com/mitchellh/vagrant", :ref => "v1.7.4"
     else
-      gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git"
+      gem "vagrant", :git => "https://github.com/mitchellh/vagrant"
     end
   end
   gem "json"
