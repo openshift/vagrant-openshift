@@ -32,16 +32,19 @@ Like other plugins, this gem will be installed in your `~/.vagrant.d/gems/` dire
 To work on the *vagrant-openshift* plugin, clone this repository and use
 link:http://gembundler.com[Bundler] to get the dependencies:
 
+You *MUST* use bundler < = 1.10.5 or bundler = 1.12.5 when building this gem, as it is required by the vagrant gem.
+
 [source, sh]
 ----
-$ bundle
+$ gem install bundler -v '1.12.5'
+$ bundle _1.12.5_
 ----
 
 Compile using Rake:
 
 [source, sh]
 ----
-$ bundle exec rake
+$ bundle _1.12.5_ exec rake
 ----
 
 ===== From rubygems.org
@@ -103,7 +106,7 @@ NOTE: If you are trying to refresh an existing image, you'll want to remove the 
 
 [source, sh]
 ----
-$ vagrant up
+$ vagrant up --provider=virtualbox
 ----
 
 NOTE: See link:#other-providers[Other Providers] below for launching VMs from other providers.
@@ -268,7 +271,7 @@ sudo yum install vagrant-libvirt
 sudo yum install libxslt-devel libxml2-devel libvirt-devel ruby-devel rubygems
 ----
 
-* Install the vagrant-libvirt plugin (only if `sudo yum install vagrant-libvirt` didn't work)
+* Install the vagrant-libvirt plugin *(only if `sudo yum install vagrant-libvirt` didn't work)*
 
 [source, sh]
 ----
@@ -379,8 +382,7 @@ Use `vagrant origin-local-checkout` as above link:#clone-the-openshift-origin-re
 [source, sh]
 ----
 $ cd $GOPATH
-$ vagrant origin-local-checkout --repo origin-aggregated-logging -u <github
-username>
+$ vagrant origin-local-checkout --repo origin-aggregated-logging -u <github username>
 # run the remaining vagrant commands from $GOPATH/src/github.com/openshift/origin
 $ pushd $GOPATH/src/github.com/openshift/origin
 ----
