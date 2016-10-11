@@ -32,7 +32,7 @@ module Vagrant
           %{
 sudo chmod a+rw /etc/sysconfig/docker
 cat <<EOF > /etc/sysconfig/docker
-OPTIONS='--insecure-registry #{registry_url} --selinux-enabled'
+OPTIONS='--insecure-registry #{registry_url} --selinux-enabled --skip-schema2-push'
 EOF
 sudo systemctl restart docker
           }
