@@ -148,6 +148,11 @@ chmod 755 /usr/bin/chromedriver
           sudo(env[:machine], %{
 set -ex
 
+if [[ ! -e /etc/fedora-release ]]; then
+curl -s  https://mirror.openshift.com/mirror/epel/epel7.repo > /etc/yum.repos.d/epel-openshift.repo
+echo 'OS_BUILD_IMAGE_ARGS="--mount /etc/yum.repos.d/epel-openshift.repo:/etc/yum.repos.d/epel.repo"' >> /etc/environment
+fi
+
 if [[ -e /etc/redhat-release && ! -e /etc/fedora-release && ! -e /etc/centos-release ]]; then
 
 # create rhaos3.1 and 3.2 repos
