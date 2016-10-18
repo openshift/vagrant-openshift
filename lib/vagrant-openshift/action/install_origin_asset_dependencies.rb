@@ -66,7 +66,7 @@ popd
             cmd += %{
   # Make sure tests pass before backing up this asset install
   pushd $ORIGIN_CONSOLE_PATH
-    grunt test
+    hack/test-headless.sh test
   popd
   mkdir -p $ASSET_BACKUP_DIR
   cp -rf $ORIGIN_CONSOLE_PATH/node_modules $ASSET_BACKUP_DIR/node_modules
