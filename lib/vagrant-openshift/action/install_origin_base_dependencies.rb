@@ -103,7 +103,7 @@ fi
                                 vim \
                                 wget \
                                 xfsprogs \
-                                xorg-x11-server-utils \
+                                xorg-x11-utils \
                                 Xvfb \
                                 firefox \
                                 yum-utils",:timeout=>60*30, :verbose => false)
