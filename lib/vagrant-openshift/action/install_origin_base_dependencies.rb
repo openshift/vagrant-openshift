@@ -86,6 +86,7 @@ fi
                                 kernel-devel \
                                 libselinux-devel \
                                 libnetfilter_queue-devel \
+                                lsof \
                                 make \
                                 mlocate \
                                 ntp \
@@ -96,7 +97,9 @@ fi
                                 ShellCheck \
                                 socat \
                                 sqlite-devel \
+                                strace \
                                 sysstat \
+                                tcpdump \
                                 tig \
                                 tmux \
                                 unzip \
