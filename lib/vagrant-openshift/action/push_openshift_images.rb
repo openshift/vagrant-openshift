@@ -146,12 +146,6 @@ docker pull #{@options[:registry]}openshift/base-rhel7
 export PATH=/data/src/github.com/openshift/source-to-image/_output/local/go/bin:/data/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64:$PATH
           }
 
-          # FIXME: We always need to make sure we have the latest base image
-          # FIXME: This is because the internal registry is pruned once per month
-          if !@options[:build_images].include?("base")
-            @options[:build_images] = "openshift;openshift;base;1;https://github.com/openshift/s2i-base;master,#{@options[:build_images]}"
-          end
-
           build_images = @options[:build_images].split(",").map { |i| i.strip }
 
           push_cmd = ""
