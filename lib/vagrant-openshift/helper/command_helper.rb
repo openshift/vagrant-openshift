@@ -166,7 +166,7 @@ then
         set +e
         git branch | grep -ve " #{branch}$" | xargs git branch -D
         set -e
-        git gc
+        git gc --prune=all
       popd
     else
       echo 'Already cloned: #{repo}'
