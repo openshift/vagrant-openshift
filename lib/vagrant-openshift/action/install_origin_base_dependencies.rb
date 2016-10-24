@@ -84,6 +84,7 @@ fi
                                 jq \
                                 java-1.?.0-openjdk \
                                 kernel-devel \
+                                krb5-devel \
                                 libselinux-devel \
                                 libnetfilter_queue-devel \
                                 lsof \
