@@ -61,6 +61,7 @@ fi
           ssh_user = env[:machine].ssh_info[:username]
           sudo(env[:machine], "yum install -y \
                                 augeas \
+                                bsdtar \
                                 bzr \
                                 bridge-utils \
                                 bzip2 \
