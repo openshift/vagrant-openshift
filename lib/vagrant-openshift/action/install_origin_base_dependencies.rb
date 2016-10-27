@@ -104,6 +104,7 @@ fi
                                 tig \
                                 tmux \
                                 unzip \
+                                zip \
                                 vim \
                                 wget \
                                 xfsprogs \
