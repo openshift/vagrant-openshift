@@ -47,9 +47,9 @@ git checkout #{git_ref}
 git_ref=$(git rev-parse --short HEAD)
 echo "Pushing image #{image_name}:#{git_ref}..."
 
-docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}
-docker tag -f #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:latest
-docker tag -f #{centos_namespace}/#{image_name}-centos7 docker.io/#{centos_namespace}/#{image_name}-centos7:latest
+docker tag #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:#{git_ref}
+docker tag #{centos_namespace}/#{image_name}-centos7 #{registry}#{centos_namespace}/#{image_name}-centos7:latest
+docker tag #{centos_namespace}/#{image_name}-centos7 docker.io/#{centos_namespace}/#{image_name}-centos7:latest
 
 # We can't fully parallelize this because docker fails when you push to the same repo at the
 # same time (using different tags), so we do two groups of push operations.
@@ -73,8 +73,8 @@ done
 docker push #{registry}#{centos_namespace}/#{image_name}-centos7:latest
 
 if [ #{rhel_namespace} != "SKIP" ]; then
-  docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
-  docker tag -f #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
+  docker tag #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
+  docker tag #{rhel_namespace}/#{image_name}-rhel7 #{registry}#{rhel_namespace}/#{image_name}-rhel7:latest
 
   # this one is failing when done in parallel for unknown reasons
   docker push #{registry}#{rhel_namespace}/#{image_name}-rhel7:#{git_ref}
@@ -136,9 +136,9 @@ set -x
 set +e
 echo "Pre-pulling base images ..."
 docker pull #{@options[:registry]}openshift/base-centos7
-[[ "$?" == "0" ]] && docker tag -f #{@options[:registry]}openshift/base-centos7 openshift/base-centos7
+[[ "$?" == "0" ]] && docker tag #{@options[:registry]}openshift/base-centos7 openshift/base-centos7
 docker pull #{@options[:registry]}openshift/base-rhel7
-[[ "$?" == "0" ]] && docker tag -f #{@options[:registry]}openshift/base-rhel7 openshift/base-rhel7
+[[ "$?" == "0" ]] && docker tag #{@options[:registry]}openshift/base-rhel7 openshift/base-rhel7
           }
 
           cmd += %{
