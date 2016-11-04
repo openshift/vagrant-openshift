@@ -15,6 +15,7 @@
 #++
 require 'yaml'
 require 'fog'
+require_relative '../aws'
 
 module Vagrant
   module Openshift
@@ -48,10 +49,14 @@ module Vagrant
           @openstack_creds_file = Pathname.new(File.expand_path(@openstack_creds_file))
           box_info[:openstack_creds_file] = @openstack_creds_file
 
-          @aws_creds_file = ENV['AWS_CREDS'].nil? || ENV['AWS_CREDS'] == '' ? "~/.awscred" : ENV['AWS_CREDS']
-          @aws_creds_file = Pathname.new(File.expand_path(@aws_creds_file))
-          box_info[:aws_creds_file] = @aws_creds_file
-          find_ami_from_tag(box_info)
+          if !box_info[:aws].nil? && !box_info[:aws][:ami_tag_prefix].nil?
+            begin
+              aws_creds = Vagrant::Openshift::AWS::aws_creds()
+              compute = Fog::Compute.new(Vagrant::Openshift::AWS::fog_config(aws_creds, box_info[:aws][:ami_region]))
+              box_info[:aws][:ami] = Vagrant::Openshift::AWS::find_ami_from_tag(compute, box_info[:aws][:ami_tag_prefix], @options[:required_name_tag])
+            rescue AWSCredentialsNotConfiguredError
+            end
+          end
 
           gopath = nil
           if ENV['GOPATH'] && !ENV['GOPATH'].empty?
@@ -102,33 +107,6 @@ module Vagrant
           end
 
           @app.call(env)
-        end
-
-        private
-
-        def find_ami_from_tag(box_info)
-          return if box_info[:aws].nil? || box_info[:aws][:ami_tag_prefix].nil?
-          @env[:ui].info("Reading AWS credentials from #{@aws_creds_file.to_s}")
-          if @aws_creds_file.exist?
-            aws_creds = @aws_creds_file.exist? ? Hash[*(File.open(@aws_creds_file.to_s).readlines.map{ |l| l.strip!
-                                                          l.split('=') }.flatten)] : {}
-
-            fog_config = {
-                :provider              => :aws,
-                :region                => box_info[:aws][:ami_region],
-                :aws_access_key_id     => aws_creds['AWSAccessKeyId'],
-                :aws_secret_access_key => aws_creds['AWSSecretKey'],
-            }
-
-            aws_compute = Fog::Compute.new(fog_config)
-            @env[:ui].info("Searching for latest base AMI")
-            image_filter = {'Owner' => 'self', 'name' => "#{box_info[:aws][:ami_tag_prefix]}*", 'state' => 'available' }
-            image_filter['tag:Name'] = @options[:required_name_tag] unless @options[:required_name_tag].nil?
-            images = aws_compute.images.all(image_filter)
-            latest_image = images.sort_by{ |i| i.name.split("_")[-1].to_i }.last
-            box_info[:aws][:ami] = latest_image.id
-            @env[:ui].info("Found: #{latest_image.id} (#{latest_image.name})")
-          end
         end
       end
     end

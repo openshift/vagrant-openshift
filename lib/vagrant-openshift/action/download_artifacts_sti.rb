@@ -34,11 +34,16 @@ module Vagrant
 
           artifacts_dir = Pathname.new(File.expand_path(machine.env.root_path + "artifacts"))
           download_map = {
-            "/var/log/yum.log"                     => artifacts_dir + "yum.log",
-            "/var/log/secure"                      => artifacts_dir + "secure",
-            "/var/log/audit/audit.log"             => artifacts_dir + "audit.log",
             "/tmp/sti/"                            => artifacts_dir + "sti/"
           }
+
+          if !is_windows?(machine)
+            download_map.merge!({
+              "/var/log/yum.log"                     => artifacts_dir + "yum.log",
+              "/var/log/secure"                      => artifacts_dir + "secure",
+              "/var/log/audit/audit.log"             => artifacts_dir + "audit.log"
+            })
+          end
 
           download_map.each do |source,target|
             machine.ui.info "Downloading artifacts from '#{source}' to '#{target}'"
