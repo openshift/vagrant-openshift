@@ -54,18 +54,6 @@ module Vagrant
         end
       end
 
-      def self.install_docker(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallDocker, options
-        end
-      end
-
-      def self.install_golang(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use InstallGolang, options
-        end
-      end
-
       def self.install_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use YumUpdate
@@ -352,8 +340,6 @@ module Vagrant
       autoload :SetHostName, action_root.join("set_host_name")
       autoload :YumUpdate, action_root.join("yum_update")
       autoload :InstallOriginBaseDependencies, action_root.join("install_origin_base_dependencies")
-      autoload :InstallDocker, action_root.join("install_docker")
-      autoload :InstallGolang, action_root.join("install_golang")
       autoload :InstallOriginAssetDependencies, action_root.join("install_origin_asset_dependencies")
       autoload :BuildOriginBaseImages, action_root.join("build_origin_base_images")
       autoload :PushOpenshiftImages, action_root.join("push_openshift_images")

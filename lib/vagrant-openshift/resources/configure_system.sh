@@ -18,6 +18,9 @@ mkdir -p /data/src
 mkdir -p /data/pkg
 mkdir -p /data/bin
 
+GO_VERSION=($(go version))
+echo "Detected go version: $(go version)"
+
 chown -R "${SSH_USER}:${SSH_USER}" /data
 
 sed -i "s,^#DefaultTimeoutStartSec=.*,DefaultTimeoutStartSec=240s," /etc/systemd/system.conf
