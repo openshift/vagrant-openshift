@@ -187,6 +187,20 @@ module Vagrant
         end
       end
 
+      def self.repo_sync_customer_diagnostics(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PrepareSshConfig
+          if options[:source]
+            if options[:clean]
+              b.use Clean, options
+              b.use CloneUpstreamRepositories, options
+            end
+            b.use SyncLocalRepository, options
+            b.use CheckoutRepositories, options
+          end
+        end
+      end
+
       def self.local_origin_checkout(options)
         Vagrant::Action::Builder.new.tap do |b|
           if not options[:no_build]
@@ -236,6 +250,17 @@ module Vagrant
           b.use TestExitCode
         end
       end
+
+      def self.run_customer_diagnostics_tests(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use RunCustomerDiagnosticsTests, options
+          if options[:download]
+            b.use DownloadArtifactsOriginMetrics
+          end
+          b.use TestExitCode
+        end
+      end
+
 
       def self.run_sti_tests(options)
         Vagrant::Action::Builder.new.tap do |b|
@@ -358,6 +383,7 @@ module Vagrant
       autoload :RunStiTests, action_root.join("run_sti_tests")
       autoload :RunOriginAggregatedLoggingTests, action_root.join("run_origin_aggregated_logging_tests")
       autoload :RunOriginMetricsTests, action_root.join("run_origin_metrics_tests")
+      autoload :RunCustomerDiagnosticsTests, action_root.join("run_customer_diagnostics_tests")
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")

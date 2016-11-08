@@ -147,6 +147,11 @@ module Vagrant
         Commands::TestOriginMetrics
       end
 
+      command "test-customer-diagnostics" do
+        require_relative "command/test_customer_diagnostics"
+        Commands::TestCustomerDiagnostics
+      end
+
       command "download-artifacts-origin" do
         require_relative "command/download_artifacts_origin"
         Commands::DownloadArtifactsOrigin
@@ -210,6 +215,11 @@ module Vagrant
       command "sync-origin-metrics" do
         require_relative "command/repo_sync_origin_metrics"
         Commands::RepoSyncOriginMetrics
+      end
+
+      command "sync-customer-diagnostics" do
+        require_relative "command/repo_sync_customer_diagnostics"
+        Commands::RepoSyncCustomerDiagnostics
       end
 
       provisioner(:openshift) do
