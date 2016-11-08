@@ -69,8 +69,7 @@ RUN yum update -y && yum clean all
 
 EOF
 
-docker build --rm -t rhel7:latest $contextdir
-docker tag rhel7:latest rhel7.1
+docker build --rm -t rhel7.1 $contextdir
 
 # create Dockerfile
 cat <<EOF > $contextdir/Dockerfile
@@ -91,6 +90,28 @@ docker build --rm -t rhel7.2 $contextdir
 
 # make sure the new rhel7.2 image has valid certs
 docker run rhel7.2 yum install -y tar
+
+# create Dockerfile
+cat <<EOF > $contextdir/Dockerfile
+FROM registry.access.redhat.com/rhel7.3:latest
+
+RUN yum remove -y subscription-manager
+
+ADD vars/* /etc/yum/vars/
+ADD repos/* /etc/yum.repos.d/
+ADD certs/* /var/lib/yum/
+ADD keys/* /etc/pki/rpm-gpg/
+
+RUN yum update -y && yum clean all
+
+EOF
+
+docker build --rm -t rhel7.3 $contextdir
+
+# make sure the new rhel7.3 image has valid certs
+docker run rhel7.3 yum install -y tar
+
+docker tag rhel7.3 rhel7
 
 # cleaning
 rm -rf $contextdir
