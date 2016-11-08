@@ -116,6 +116,11 @@ popd >/dev/null
             if @options[:image_registry]
               extended_cmd_env << "OPENSHIFT_TEST_IMAGE_REGISTRY=#{@options[:image_registry]}"
             end
+
+            if @options[:envs]
+              extended_cmd_env += @options[:envs]
+            end
+
             extended_cmd_env_str = extended_cmd_env.join(' ')
 
             cmds = cmds.map{ |s| "#{extended_cmd_env_str} #{s}".strip }
