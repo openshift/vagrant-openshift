@@ -41,20 +41,6 @@ function conditional_cleanup_instance() {
 	fi
 }
 
-# validate_version validates that the version of the package installed
-# on the remote VM is equal to the expected version provided
-function validate_version() {
-	local package=$1
-	local expected_version=$2
-	local actual_version
-	actual_version="$( vagrant ssh -c "rpm -q --queryformat='%{version}' '${package}'" )"
-	if [[ ! "${expected_version}" = "${actual_version}" ]]; then
-		echo "[FAILURE] Expected to find ${package}-${expected_version}, but got ${package}-${actual_version}."
-		return 1
-	fi
-	echo "[SUCCESS] Found ${package}-${actual_version} on the remote machine."
-}
-
 # test_vagrant runs a vagrant command and allows us to only show output from failed commands
 function test_vagrant() {
 	echo "[INFO] Testing \`vagrant $*\`"
@@ -106,20 +92,7 @@ done
 # We want to make sure we clean up after ourselves if this script exits unexpectedly
 trap conditional_cleanup_instance EXIT
 
-# The following steps ensure that we can build the `deps` image from the `os` base
 test_vagrant build-origin-base
-
-# Install Docker and Golang at specific versions
-test_vagrant install-golang --golang.version=1.6.3 \
-                            --repo=oso-rhui-rhel-server-releases-optional
-validate_version 'golang' '1.6.3'
-
-docker_repo='https://mirror.openshift.com/enterprise/rhel/dockerextra/x86_64/os/'
-test_vagrant install-docker --docker.version=1.12.2              \
-                            --repourl="${docker_repo}"           \
-                            --repo=oso-rhui-rhel-server-releases \
-                            --repo=oso-rhui-rhel-server-releases-optional
-validate_version 'docker' '1.12.2'
 
 test_vagrant clone-upstream-repos --clean
 test_vagrant checkout-repos

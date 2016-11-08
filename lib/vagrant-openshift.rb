@@ -27,7 +27,6 @@ module Vagrant
     plugin_path = Pathname.new(File.expand_path("#{__FILE__}/../vagrant-openshift/"))
 
     autoload :CommandHelper, plugin_path + "helper/command_helper"
-    autoload :InstallHelper, plugin_path + "helper/install_helper"
     autoload :Constants, plugin_path + "constants"
   end
 end

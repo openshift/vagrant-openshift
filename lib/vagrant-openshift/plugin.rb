@@ -87,16 +87,6 @@ module Vagrant
         Commands::InstallOrigin
       end
 
-      command "install-docker" do
-        require_relative "command/install_docker"
-        Commands::InstallDocker
-      end
-
-      command "install-golang" do
-        require_relative "command/install_golang"
-        Commands::InstallGolang
-      end
-
       command "install-origin-assets-base" do
         require_relative "command/install_origin_assets_base"
         Commands::InstallOriginAssetsBase
