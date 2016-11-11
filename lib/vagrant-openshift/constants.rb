@@ -55,6 +55,9 @@ module Vagrant
           'origin-aggregated-logging' => aggregated_logging_repos,
           'origin-metrics' => {
             'origin-metrics' => 'https://github.com/openshift/origin-metrics.git'
+          },
+          'openshift-ansible' => {
+            'openshift-ansible' => 'https://github.com/rhcarvalho/openshift-ansible.git'
           }
         }[reponame]
       end
