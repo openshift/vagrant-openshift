@@ -54,12 +54,9 @@ module Vagrant
           sudo(env[:machine], "yum clean all")
 
           unless is_fedora
-            unless env[:machine].communicate.test("rpm -q epel-release")
-              sudo(env[:machine], "yum install -y http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm")
-
-              #Workaround broken RHEL image which does not recover after restart.
-              if "VagrantPlugins::AWS::Provider" == env[:machine].provider.class.to_s
-                remote_write(env[:machine], "/etc/rc.local") {
+            #Workaround broken RHEL image which does not recover after restart.
+            if "VagrantPlugins::AWS::Provider" == env[:machine].provider.class.to_s
+              remote_write(env[:machine], "/etc/rc.local") {
 %{#!/bin/sh
 #
 # This script will be executed *after* all the other init scripts.
@@ -79,7 +76,6 @@ if [ ! -f /etc/blkid/blkid.tab ] ; then
 fi
 }}
                 sudo env[:machine], "chmod og+x /etc/rc.local"
-              end
             end
           end
 
