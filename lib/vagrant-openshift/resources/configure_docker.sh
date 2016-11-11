@@ -25,6 +25,13 @@ fi
 if [[ -n "${VG}" ]]; then
     lvcreate -n docker-data -l 70%FREE /dev/${VG}
     lvcreate -n docker-metadata -l 17%FREE /dev/${VG}
+    lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
+    mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
+    mkdir -p /mnt/openshift-xfs-vol-dir
+    echo /dev/${VG}/openshift-xfs-vol-dir /mnt/openshift-xfs-vol-dir xfs gquota 1 1 >> /etc/fstab
+    mount /mnt/openshift-xfs-vol-dir
+    chown -R "${SSH_USER}:${SSH_USER}" /mnt/openshift-xfs-vol-dir
+
     DOCKER_STORAGE_OPTIONS="  -s devicemapper"
     DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.datadev=/dev/${VG}/docker-data"
     DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.metadatadev=/dev/${VG}/docker-metadata"
@@ -34,13 +41,6 @@ if [[ -n "${VG}" ]]; then
         DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.use_deferred_deletion=true"
     fi
     sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='${DOCKER_STORAGE_OPTIONS}'," /etc/sysconfig/docker-storage
-
-    lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
-    mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
-    mkdir -p /mnt/openshift-xfs-vol-dir
-    echo /dev/${VG}/openshift-xfs-vol-dir /mnt/openshift-xfs-vol-dir xfs gquota 1 1 >> /etc/fstab
-    mount /mnt/openshift-xfs-vol-dir
-    chown -R "${SSH_USER}:${SSH_USER}" /mnt/openshift-xfs-vol-dir
 fi
 
 # Docker 1.8.2 now sets a TimeoutStartSec of 1 minute.  Unfortunately, for some

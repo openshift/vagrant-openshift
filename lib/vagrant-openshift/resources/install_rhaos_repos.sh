@@ -7,3 +7,5 @@ set -o errexit
 
 mv "$(dirname "${BASH_SOURCE}")/rhaos31.repo" /etc/yum.repos.d/
 mv "$(dirname "${BASH_SOURCE}")/rhaos32.repo" /etc/yum.repos.d/
+mv "$(dirname "${BASH_SOURCE}")/rhaos33.repo" /etc/yum.repos.d/
+mv "$(dirname "${BASH_SOURCE}")/rhaos34.repo" /etc/yum.repos.d/
