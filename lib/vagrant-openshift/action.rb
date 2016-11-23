@@ -68,7 +68,6 @@ module Vagrant
 
       def self.install_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use YumUpdate
           b.use SetHostName
           b.use InstallOrigin
           b.use InstallOriginRhel7
