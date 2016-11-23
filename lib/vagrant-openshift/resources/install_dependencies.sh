@@ -36,6 +36,7 @@ yum install -y                       \
             mlocate                  \
             ntp                      \
             openldap-clients         \
+            openssl                  \
             openvswitch              \
             rubygems                 \
             screen                   \
