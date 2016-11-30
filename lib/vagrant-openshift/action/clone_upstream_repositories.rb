@@ -27,9 +27,9 @@ module Vagrant
         end
 
         def call(env)
-          ssh_user, ssh_group = get_ssh_user_and_group(env[:machine])
+          ssh_user = env[:machine].ssh_info[:username]
 
-          remote_write(env[:machine], "/#{ssh_user}/.ssh/config", "#{ssh_user}:#{ssh_group}", "0600") {
+          remote_write(env[:machine], "/#{ssh_user}/.ssh/config", "#{ssh_user}:#{ssh_user}", "0600") {
 %{Host github.com
 StrictHostKeyChecking no
 UserKnownHostsFile=/dev/null
@@ -52,7 +52,7 @@ fi
           end
 
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
-          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_group} #{Constants.build_dir}")
+          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir}")
           do_execute env[:machine], git_clone_commands
 
           @app.call(env)

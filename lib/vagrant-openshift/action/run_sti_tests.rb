@@ -34,7 +34,7 @@ module Vagrant
           cmds = ['OUTPUT_COVERAGE=/tmp/sti/artifacts/coverage hack/test-go.sh']
 
           if @options[:all]
-            cmds << 'hack/test-integration.sh'
+            cmds << 'STI_TIMEOUT="--timeout 240s" hack/test-integration.sh'
             cmds << 'hack/test-stirunimage.sh'
           end
 
@@ -49,8 +49,6 @@ echo '***************************************************'
 "
           end
 
-          # TODO: the PATH export below should be removed once
-          # https://github.com/openshift/source-to-image/pull/625 merges.
           _,_,env[:test_exit_code] = sudo(env[:machine], %{
 set -e
 pushd #{Constants.build_dir}/source-to-image >/dev/null

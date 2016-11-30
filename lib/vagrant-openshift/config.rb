@@ -17,14 +17,13 @@
 module Vagrant
   module Openshift
     class Config < Vagrant.plugin(2, :config)
-      attr_accessor :autoconfigure_aws
 
       def initialize
-        @autoconfigure_aws = UNSET_VALUE
+        super
       end
 
       def finalize!
-        @autoconfigure_aws = false if @autoconfigure_aws == UNSET_VALUE
+        super
       end
     end
   end
