@@ -72,6 +72,11 @@ module Vagrant
         Commands::BuildOriginBase
       end
 
+      command "build-sti-base-windows" do
+        require_relative "command/build_sti_base_windows"
+        Commands::BuildStiBaseWindows
+      end
+
       command "build-origin" do
         require_relative "command/build_origin"
         Commands::BuildOrigin
@@ -232,9 +237,34 @@ module Vagrant
         Commands::RepoSyncCustomerDiagnostics
       end
 
+      provisioner("configure-docker-client-windows") do
+        require_relative "provisioner/configure_docker_client_windows"
+        Provisioner::ConfigureDockerClientWindows
+      end
+
+      provisioner("configure-docker-server-linux") do
+        require_relative "provisioner/configure_docker_server_linux"
+        Provisioner::ConfigureDockerServerLinux
+      end
+
       provisioner(:openshift) do
         require_relative "provisioner"
         Provisioner
+      end
+
+      action_hook(:configure_aws, :machine_action_read_state) do |hook|
+        require_relative "hooks/configure_aws"
+        hook.before(Vagrant::Action::Builtin::ConfigValidate, Vagrant::Openshift::Hooks::ConfigureAWS)
+      end
+
+      action_hook(:find_ami, :machine_action_up) do |hook|
+        require_relative "hooks/find_ami"
+        hook.before(VagrantPlugins::AWS::Action::RunInstance, Vagrant::Openshift::Hooks::FindAMI)
+      end
+
+      action_hook(:windows_wait, :machine_action_up) do |hook|
+        require_relative "hooks/windows_wait"
+        hook.after(VagrantPlugins::AWS::Action::RunInstance, Vagrant::Openshift::Hooks::WindowsWait)
       end
     end
   end
