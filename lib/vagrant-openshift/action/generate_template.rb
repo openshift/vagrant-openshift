@@ -51,9 +51,9 @@ module Vagrant
 
           if !box_info[:aws].nil? && !box_info[:aws][:ami_tag_prefix].nil?
             begin
-              aws_creds = Vagrant::Openshift::AWS::aws_creds()
+              aws_creds = Vagrant::Openshift::AWS::aws_creds(env[:ui])
               compute = Fog::Compute.new(Vagrant::Openshift::AWS::fog_config(aws_creds, box_info[:aws][:ami_region]))
-              box_info[:aws][:ami] = Vagrant::Openshift::AWS::find_ami_from_tag(compute, box_info[:aws][:ami_tag_prefix], @options[:required_name_tag])
+              box_info[:aws][:ami] = Vagrant::Openshift::AWS::find_ami_from_tag(env[:ui], compute, box_info[:aws][:ami_tag_prefix], @options[:required_name_tag])
             rescue AWSCredentialsNotConfiguredError
             end
           end

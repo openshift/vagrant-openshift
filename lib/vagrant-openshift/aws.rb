@@ -26,9 +26,10 @@ module Vagrant
     end
 
     class AWS
-      def self.aws_creds()
+      def self.aws_creds(ui)
         aws_creds_file = ENV["AWS_CREDS"].nil? || ENV["AWS_CREDS"] == "" ? "~/.awscred" : ENV["AWS_CREDS"]
         aws_creds_file = Pathname.new(File.expand_path(aws_creds_file))
+        ui.info("Reading AWS credentials from #{aws_creds_file.to_s}")
 
         raise AWSCredentialsNotConfiguredError if !aws_creds_file.exist?
 
@@ -44,12 +45,14 @@ module Vagrant
         }
       end
 
-      def self.find_ami_from_tag(compute, ami_tag_prefix, required_name_tag=nil)
+      def self.find_ami_from_tag(ui, compute, ami_tag_prefix, required_name_tag=nil)
+        ui.info("Searching #{ami_tag_prefix}* for latest base AMI (required_name_tag=#{required_name_tag})")
         image_filter = {"Owner" => "self", "name" => "#{ami_tag_prefix}*", "state" => "available"}
         image_filter["tag:Name"] = required_name_tag unless required_name_tag.nil?
         images = compute.images.all(image_filter)
         latest_image = images.sort_by{|i| i.name.split("_")[-1].to_i}.last
         if !latest_image.nil?
+          ui.info("Found: #{latest_image.id} (#{latest_image.name})")
           return latest_image.id
         end
 

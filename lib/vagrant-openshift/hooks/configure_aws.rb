@@ -26,7 +26,7 @@ module Vagrant
 
         def call(env)
           if env[:machine].config.openshift.autoconfigure_aws
-            aws_creds = Vagrant::Openshift::AWS::aws_creds()
+            aws_creds = Vagrant::Openshift::AWS::aws_creds(env[:ui])
 
             aws = env[:machine].config.vm.get_provider_config(:aws)
             aws.access_key_id = aws_creds["AWSAccessKeyId"]

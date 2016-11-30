@@ -30,7 +30,7 @@ module Vagrant
         end
 
         def call(env)
-          aws_creds = Vagrant::Openshift::AWS::aws_creds()
+          aws_creds = Vagrant::Openshift::AWS::aws_creds(env[:ui])
           compute = Fog::Compute.new(Vagrant::Openshift::AWS::fog_config(aws_creds))
 
           @env[:ui].info("Finding base AMI...")

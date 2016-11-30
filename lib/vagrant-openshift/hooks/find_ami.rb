@@ -30,7 +30,7 @@ module Vagrant
             if !aws.ami.nil? && !aws.ami.start_with?("ami-")
               box_info = YAML.load_file(Pathname.new(File.expand_path("#{__FILE__}/../../templates/command/init-openshift/box_info.yaml")))
               os, stage = aws.ami.split(":", 2)
-              aws.ami = Vagrant::Openshift::AWS::find_ami_from_tag(env[:aws_compute], box_info[os.to_sym][stage.to_sym][:aws][:ami_tag_prefix])
+              aws.ami = Vagrant::Openshift::AWS::find_ami_from_tag(env[:ui], env[:aws_compute], box_info[os.to_sym][stage.to_sym][:aws][:ami_tag_prefix])
             end
           end
 
