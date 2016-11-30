@@ -208,12 +208,3 @@
       :image: <ATOMIC>
       :flavor: m1.small
       :ssh_user: root
-:windows2012r2:
-  :deps:
-    :aws:
-      :ami: <AMI_ID>
-      :ami_region: us-east-1
-      :ssh_user: Administrator
-      :machine_name: openshift-windows2012r2
-      :ebs_volume_size: 30
-      :ami_tag_prefix: openshift-windows2012r2_

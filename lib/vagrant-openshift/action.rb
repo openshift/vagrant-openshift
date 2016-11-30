@@ -66,12 +66,6 @@ module Vagrant
         end
       end
 
-      def self.build_sti_base_windows(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use BuildStiBaseWindows, options
-        end
-      end
-
       def self.install_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use SetHostName
@@ -392,7 +386,6 @@ module Vagrant
       autoload :InstallOriginRhel7, action_root.join("install_origin_rhel7")
       autoload :BuildOrigin, action_root.join("build_origin")
       autoload :BuildSti, action_root.join("build_sti")
-      autoload :BuildStiBaseWindows, action_root.join("build_sti_base_windows")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
       autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
