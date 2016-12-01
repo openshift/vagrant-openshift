@@ -235,6 +235,15 @@ function wait_for_activate {
         return command
       end
 
+      def is_windows?(machine)
+        machine.config.ssh.username == "Administrator"
+      end
+
+      def get_ssh_user_and_group(machine)
+        ssh_user = machine.ssh_info[:username]
+        ssh_group = is_windows?(machine) ? "Administrators" : ssh_user
+        return ssh_user, ssh_group
+      end
     end
   end
 end
