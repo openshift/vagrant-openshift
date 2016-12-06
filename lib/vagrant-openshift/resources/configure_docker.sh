@@ -12,17 +12,20 @@ sed -i "s,^OPTIONS='\\(.*\\)',OPTIONS='${ADDITIONAL_OPTIONS} \\1'," /etc/sysconf
 sed -i "s,^OPTIONS=-\\(.*\\),OPTIONS='${ADDITIONAL_OPTIONS} -\\1'," /etc/sysconfig/docker
 sed -i "s,^ADD_REGISTRY='\\(.*\\)',#ADD_REGISTRY='--add-registry=docker.io \\1'," /etc/sysconfig/docker
 
-if lvdisplay docker-vg >/dev/null 2>&1; then
-    VG="docker-vg"
-elif lvdisplay vg_vagrant >/dev/null 2>&1; then
-    VG="vg_vagrant"
-elif lvdisplay fedora >/dev/null 2>&1; then
-    VG="fedora"
-elif lvdisplay centos >/dev/null 2>&1; then
-    VG="centos"
-fi
+if [[ -z "${SKIP_VG:-}" ]]; then
+    if lvdisplay docker-vg >/dev/null 2>&1; then
+        VG="docker-vg"
+    elif lvdisplay vg_vagrant >/dev/null 2>&1; then
+        VG="vg_vagrant"
+    elif lvdisplay fedora >/dev/null 2>&1; then
+        VG="fedora"
+    elif lvdisplay centos >/dev/null 2>&1; then
+        VG="centos"
+    else
+        echo "[ERROR] Could not determine volume group to use for Docker storage!"
+        exit 1
+    fi
 
-if [[ -n "${VG}" ]]; then
     lvcreate -n docker-data -l 70%FREE /dev/${VG}
     lvcreate -n docker-metadata -l 17%FREE /dev/${VG}
     lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}

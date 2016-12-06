@@ -44,7 +44,12 @@ module Vagrant
           )
 
           # Configure the Docker daemon
-          sudo(@env[:machine], "SSH_USER='#{ssh_user}' #{home}/configure_docker.sh", :timeout=>60*30)
+          if @options[:skip_volume_group]
+            skip_volume_group = "SKIP_VG=true"
+          else
+            skip_volume_group = ""
+          end
+          sudo(@env[:machine], "#{skip_volume_group} SSH_USER='#{ssh_user}' #{home}/configure_docker.sh", :timeout=>60*30)
 
           @app.call(@env)
         end
