@@ -32,7 +32,9 @@ echo "Building base images..."
 set -e
 pushd /data/src/github.com/openshift/origin
   hack/build-base-images.sh
-  hack/build-dind-images.sh
+  if [[ -f "hack/build-dind-images.sh" ]]; then
+    hack/build-dind-images.sh
+  fi
 popd
 },
             { :timeout => 60*60*2, :verbose => false })
