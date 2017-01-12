@@ -49,6 +49,9 @@ rm -rf $contextdir/repos/redhat-rhui*
 # remove google chrome repo
 rm -rf $contextdir/repos/*chrome*.repo
 
+# remove local openshift epel mirror - we will only temporarily mount this via imagebuilder during image builds
+rm -rf $contextdir/repos/local_epel.repo 
+
 # create Dockerfile
 cat <<EOF > $contextdir/Dockerfile
 FROM registry.access.redhat.com/rhel7.1:latest

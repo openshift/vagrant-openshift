@@ -1,0 +1,24 @@
+[local-epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=https://mirror.openshift.com/mirror/epel/7/x86_64
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+# according to note from sdodson in https://github.com/openshift/origin/issues/8571, default priority is 99,
+# but to ensure our local mirror is not overriden, setitng to 1
+priority=1
+
+[local-epel-debuginfo]
+name=Extra Packages for Enterprise Linux 7 - $basearch - Debug
+baseurl=https://mirror.openshift.com/mirror/epel/7/x86_64/debug
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-7&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+gpgcheck=1
+# according to note from sdodson in https://github.com/openshift/origin/issues/8571, default priority is 99,
+# but to ensure our local mirror is not overriden, setitng to 1
+priority=1
+
