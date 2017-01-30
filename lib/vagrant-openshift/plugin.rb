@@ -47,6 +47,11 @@ module Vagrant
         Commands::RepoSyncSti
       end
 
+      command "sync-jenkins" do
+        require_relative "command/repo_sync_jenkins"
+        Commands::RepoSyncJenkins
+      end
+
       command "build-atomic-host" do
         require_relative "command/build_atomic_host"
         Commands::BuildAtomicHost

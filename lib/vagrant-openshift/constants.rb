@@ -35,6 +35,16 @@ module Vagrant
         }
       end
 
+      def self.jenkins_repos
+        {
+          'jenkins' => 'https://github.com/openshift/jenkins.git',
+          'jenkins-plugin' => 'https://github.com/openshift/jenkins-plugin.git',
+          'jenkins-client-plugin' => 'https://github.com/openshift/jenkins-client-plugin.git',
+          'jenkins-openshift-login-plugin' => 'https://github.com/openshift/jenkins-openshift-login-plugin.git',
+          'jenkins-sync-plugin' => 'https://github.com/openshift/jenkins-sync-plugin.git'
+        }
+      end
+
       def self.console_repos
         {
           'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'
@@ -51,6 +61,7 @@ module Vagrant
         {
           'origin' => openshift_repos,
           nil => openshift_repos,
+          'jenkins' => jenkins_repos,
           'origin-console' => console_repos,
           'origin-aggregated-logging' => aggregated_logging_repos,
           'origin-metrics' => {
