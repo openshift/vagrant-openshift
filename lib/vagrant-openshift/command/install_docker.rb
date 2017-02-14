@@ -29,6 +29,7 @@ module Vagrant
           options = {}
           options[:"docker.repourls"] = []
           options[:"docker.reponames"] = []
+          options[:skip_volume_group] = false
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant install-docker [vm-name]"
@@ -48,6 +49,10 @@ module Vagrant
 
             o.on("--force", String, "Uninstall Docker to swap in the new version, even if the uninstall is unclean.") do |f|
               options[:force] = true
+            end
+
+            o.on("-s", "--skip-volume-group", "Skip creating volume groups for Docker storage.") do |f|
+              options[:skip_volume_group] = true
             end
 
           end
