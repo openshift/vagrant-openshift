@@ -55,7 +55,7 @@ module Vagrant
 
           unless is_fedora
             unless env[:machine].communicate.test("rpm -q epel-release")
-              sudo(env[:machine], "yum install -y http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm")
+              sudo(env[:machine], "yum install -y epel-release")
 
               #Workaround broken RHEL image which does not recover after restart.
               if "VagrantPlugins::AWS::Provider" == env[:machine].provider.class.to_s
