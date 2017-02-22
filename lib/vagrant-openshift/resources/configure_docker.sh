@@ -30,14 +30,6 @@ if [[ -n "${VG}" ]]; then
     mount /mnt/openshift-xfs-vol-dir
     chown -R "${SSH_USER}:${SSH_USER}" /mnt/openshift-xfs-vol-dir
 
-    DOCKER_STORAGE_OPTIONS="-s devicemapper"
-    if [[ "$(repoquery --pkgnarrow=installed --qf '%{version}' docker)" =~ ^1\.[0-9]{2}\..* ]]; then
-        # after Docker 1.10 we need to amend the devicemapper options
-        DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.use_deferred_removal=true"
-        DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.use_deferred_deletion=true"
-    fi
-    sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='${DOCKER_STORAGE_OPTIONS}'," /etc/sysconfig/docker-storage
-
     touch /etc/sysconfig/docker-storage-setup
     chown root:root /etc/sysconfig/docker-storage-setup
     chmod u+rw,g+r,o+r /etc/sysconfig/docker-storage-setup
