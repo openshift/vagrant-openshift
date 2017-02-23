@@ -23,24 +23,18 @@ elif lvdisplay centos >/dev/null 2>&1; then
 fi
 
 if [[ -n "${VG}" ]]; then
-    lvcreate -n docker-data -l 70%FREE /dev/${VG}
-    lvcreate -n docker-metadata -l 17%FREE /dev/${VG}
-    lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
+    lvcreate -n openshift-xfs-vol-dir -l 30%FREE /dev/${VG}
     mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
     mkdir -p /mnt/openshift-xfs-vol-dir
     echo /dev/${VG}/openshift-xfs-vol-dir /mnt/openshift-xfs-vol-dir xfs gquota 1 1 >> /etc/fstab
     mount /mnt/openshift-xfs-vol-dir
     chown -R "${SSH_USER}:${SSH_USER}" /mnt/openshift-xfs-vol-dir
 
-    DOCKER_STORAGE_OPTIONS="  -s devicemapper"
-    DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.datadev=/dev/${VG}/docker-data"
-    DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.metadatadev=/dev/${VG}/docker-metadata"
-    if [[ "$(repoquery --pkgnarrow=installed --qf '%{version}' docker)" =~ ^1\.[0-9]{2}\..* ]]; then
-        # after Docker 1.10 we need to amend the devicemapper options
-        DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.use_deferred_removal=true"
-        DOCKER_STORAGE_OPTIONS+=" --storage-opt dm.use_deferred_deletion=true"
-    fi
-    sed -i "s,^DOCKER_STORAGE_OPTIONS=.*,DOCKER_STORAGE_OPTIONS='${DOCKER_STORAGE_OPTIONS}'," /etc/sysconfig/docker-storage
+    touch /etc/sysconfig/docker-storage-setup
+    chown root:root /etc/sysconfig/docker-storage-setup
+    chmod u+rw,g+r,o+r /etc/sysconfig/docker-storage-setup
+    echo "VG=${VG}" >> /etc/sysconfig/docker-storage-setup
+    docker-storage-setup
 fi
 
 # Docker 1.8.2 now sets a TimeoutStartSec of 1 minute.  Unfortunately, for some
