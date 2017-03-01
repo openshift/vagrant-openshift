@@ -23,7 +23,7 @@ elif lvdisplay centos >/dev/null 2>&1; then
 fi
 
 if [[ -n "${VG}" ]]; then
-    lvcreate -n openshift-xfs-vol-dir -l 100%FREE /dev/${VG}
+    lvcreate -n openshift-xfs-vol-dir -l 25%FREE /dev/${VG}
     mkfs.xfs /dev/${VG}/openshift-xfs-vol-dir
     mkdir -p /mnt/openshift-xfs-vol-dir
     echo /dev/${VG}/openshift-xfs-vol-dir /mnt/openshift-xfs-vol-dir xfs gquota 1 1 >> /etc/fstab
