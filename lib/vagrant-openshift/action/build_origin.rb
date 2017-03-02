@@ -28,10 +28,18 @@ module Vagrant
 
         def call(env)
           if @options[:images]
+            # Migrate the local epel repo to the host machine
+            ssh_user = @env[:machine].ssh_info[:username]
+            destination="/home/#{ssh_user}/"
+            @env[:machine].communicate.upload(File.join(__dir__,"/../resources"), destination)
+            home="#{destination}/resources"
+          
+            sudo(@env[:machine], "#{home}/install_local_epel_repos.sh")
+            
             cmd = %{
 echo "Performing origin release build with images..."
 set -e
-make release
+OS_BUILD_IMAGE_ARGS='--mount /etc/yum.repos.d/local_epel.repo:/etc/yum.repos.d/local_epel.repo' make release
 }
           else
             cmd = %{

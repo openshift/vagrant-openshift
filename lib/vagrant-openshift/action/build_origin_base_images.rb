@@ -27,11 +27,20 @@ module Vagrant
         end
 
         def call(env)
+          # Migrate the local epel repo to the host machine
+          ssh_user = @env[:machine].ssh_info[:username]
+          destination="/home/#{ssh_user}/"
+          @env[:machine].communicate.upload(File.join(__dir__,"/../resources"), destination)
+          home="#{destination}/resources"
+          
+          sudo(@env[:machine], "#{home}/install_local_epel_repos.sh")
+          
           do_execute(env[:machine], %{
 echo "Building base images..."
 set -e
 pushd /data/src/github.com/openshift/origin
-  hack/build-base-images.sh
+  OS_BUILD_IMAGE_ARGS='--mount /etc/yum.repos.d/local_epel.repo:/etc/yum.repos.d/local_epel.repo' hack/build-base-images.sh
+  # note dind image does not have any epel related installs
   if [[ -f "hack/build-dind-images.sh" ]]; then
     hack/build-dind-images.sh
   fi
