@@ -342,6 +342,14 @@ module Vagrant
         end
       end
 
+      def self.destroy_instance(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use VagrantPlugins::AWS::Action::ConnectAWS
+          b.use DestroyInstance
+        end
+      end
+
       def self.modify_ami(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -407,6 +415,7 @@ module Vagrant
       autoload :GenerateTemplate, action_root.join("generate_template")
       autoload :CreateAMI, action_root.join("create_ami")
       autoload :ModifyInstance, action_root.join("modify_instance")
+      autoload :DestroyInstance, action_root.join("destroy_instance")
       autoload :ModifyAMI, action_root.join("modify_ami")
       autoload :DownloadArtifactsOrigin, action_root.join("download_artifacts_origin")
       autoload :DownloadArtifactsOriginConsole, action_root.join("download_artifacts_origin_console")
