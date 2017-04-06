@@ -4,33 +4,37 @@ set -o errexit
 
 yum install -y                       \
             augeas                   \
-            bzr                      \
-            bridge-utils             \
-            bzip2                    \
             bind                     \
+            bind-utils               \
+            bridge-utils             \
             bsdtar                   \
             btrfs-progs-devel        \
-            bind-utils               \
+            bzip2                    \
+            bzr                      \
             ctags                    \
             device-mapper-devel      \
-            ethtool                  \
             e2fsprogs                \
+            ethtool                  \
             firefox                  \
             fontconfig               \
-            git                      \
             gcc                      \
             gcc-c++                  \
+            git                      \
             glibc-static             \
             gnuplot                  \
-            httpie                   \
+            gpgme                    \
+            gpgme-devel              \
             hg                       \
+            httpie                   \
             iscsi-initiator-utils    \
-            jq                       \
             java-1.?.0-openjdk       \
+            jq                       \
             kernel-devel             \
             krb5-devel               \
-            libselinux-devel         \
+            libassuan                \
+            libassuan-devel          \
             libnetfilter_queue-devel \
+            libselinux-devel         \
             lsof                     \
             make                     \
             mlocate                  \
