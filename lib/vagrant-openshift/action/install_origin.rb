@@ -50,10 +50,6 @@ DELIM
 
 source /etc/profile.d/openshift.sh
 
-pushd $ORIGIN_PATH
-  hack/install-etcd.sh
-popd
-
 
 mkdir -p /openshift.local.config/master/
 touch /openshift.local.config/master/admin.kubeconfig
@@ -99,6 +95,12 @@ chmod +x /usr/bin/generate_openshift_service
 #systemctl enable openshift.service
 
 chown -R #{ssh_user}:#{ssh_user} /data
+          }, :verbose => false)
+
+          do_execute(env[:machine], %{
+pushd /data/src/github.com/openshift/origin
+  hack/install-etcd.sh
+popd
           }, :verbose => false)
 
           @app.call(env)
