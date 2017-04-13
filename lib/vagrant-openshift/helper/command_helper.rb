@@ -151,7 +151,7 @@ if [ -d "#{repo_path}" ]
 then
   replace_repo=#{@options[:replace] ? "true" : "false"}
   echo 'Checking repo integrity for #{repo_path}'
-  if (pushd #{repo_path} && git fsck && popd)
+  if (pushd #{repo_path} && git status && popd)
   then
     if [ "${replace_repo}" = "true" ]
     then
