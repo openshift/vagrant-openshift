@@ -15,8 +15,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+unset GOPATH
+
 function cleanup_instance() {
-	pushd "${OS_ROOT}" >/dev/null 2>&1
+	pushd "${OS_ROOT}"
 	if [[ -f ".vagrant-openshift.json" ]]; then
 		if [[ -n "${CLEANUP_RENAME:-}" ]]; then
 			vagrant modify-instance --stop --rename 'terminate'
@@ -32,7 +34,7 @@ function cleanup_instance() {
 		exit 1
 	fi
 	rm -rf .vagrant
-	popd >/dev/null 2>&1
+	popd
 }
 
 function conditional_cleanup_instance() {
@@ -70,13 +72,13 @@ function test_vagrant() {
 
 # First, build the new vagrant-openshift gem and install the plugin on the host
 VOS_ROOT="$( cd "$( dirname "${BASH_SOURCE}" )/.."; pwd )"
-pushd "${VOS_ROOT}" >/dev/null 2>&1
+pushd "${VOS_ROOT}"
 if [[ -z "${SKIP_INSTALL:-}" ]]; then
 	echo "[INFO] Building new vagrant-openshift gem and installing plugin"
 	hack/update.sh
 	vagrant plugin install vagrant-aws
 fi
-popd >/dev/null 2>&1
+popd
 
 OS_ROOT="./origin"
 if [[ -n "${GOPATH_OVERRIDE:-}" ]]; then
@@ -88,7 +90,7 @@ fi
 test_vagrant origin-local-checkout --replace
 
 # Next, create a VM and run our tests in it
-pushd "${OS_ROOT}" >/dev/null 2>&1
+pushd "${OS_ROOT}"
 test_vagrant origin-init --stage="os"                                \
                          --os="rhel7"                                \
                          --instance-type="${TEST_VM_SIZE:-m4.large}" \
@@ -130,6 +132,6 @@ test_vagrant install-origin
 test_vagrant build-origin --images
 test_vagrant build-sti --binary-only
 
-popd  >/dev/null 2>&1
+popd
 
 echo "[SUCCESS] vagrant-openshift tests successful"
