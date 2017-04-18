@@ -116,12 +116,11 @@ test_vagrant install-golang --golang.version=1.6.3 \
                             --repo=oso-rhui-rhel-server-releases-optional
 validate_version 'golang' '1.6.3'
 
-docker_repo='https://mirror.openshift.com/enterprise/rhel/dockerextra/x86_64/os/'
-test_vagrant install-docker --docker.version=1.12.2              \
+docker_repo='https://mirror.openshift.com/enterprise/rhel/dockertested/x86_64/os/'
+test_vagrant install-docker --docker.version=1.12.6              \
                             --repourl="${docker_repo}"           \
-                            --repo=oso-rhui-rhel-server-releases \
-                            --repo=oso-rhui-rhel-server-releases-optional
-validate_version 'docker' '1.12.2'
+                            --repo='oso-rhui-rhel-server-*'
+validate_version 'docker' '1.12.6'
 
 test_vagrant clone-upstream-repos --clean
 test_vagrant checkout-repos
