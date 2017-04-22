@@ -18,19 +18,27 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class DownloadArtifactsSti < Vagrant.plugin(2, :command)
+      class RepoSyncJenkins < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
-          "download the sti test artifacts"
+          "syncs your local repos to the current instance"
         end
 
         def execute
           options = {}
+          options[:no_build] = false
+          options[:clean] = false
+          options[:source] = false
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant download-artifacts-sti [machine-name]"
+            o.banner = "Usage: vagrant sync-jenkins [vm-name]"
             o.separator ""
+
+            o.on("-c", "--clean", "Delete existing repo before syncing") do |f|
+              options[:clean] = f
+            end
+
           end
 
           # Parse the options
@@ -38,7 +46,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.download_sti_artifacts(options)
+            actions = Vagrant::Openshift::Action.repo_sync_jenkins(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

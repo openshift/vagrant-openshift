@@ -153,6 +153,18 @@ module Vagrant
         end
       end
 
+      def self.repo_sync_jenkins(options)
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use PrepareSshConfig
+          if options[:clean]
+              b.use Clean, :repo => 'jenkins'
+              b.use CloneUpstreamRepositories, :repo => 'jenkins'
+          end
+          b.use SyncLocalRepository, :repo => 'jenkins'
+          b.use CheckoutRepositories, :repo => 'jenkins'
+        end
+      end
+
       def self.repo_sync_origin_console(options)
         Vagrant::Action::Builder.new.tap do |b|
           b.use PrepareSshConfig
