@@ -28,15 +28,14 @@ module Vagrant
 
         def call(env)
           git_clone_commands = ""
-          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
-            bare_repo_name = repo_name + "-bare"
-            wc_repo_name = repo_name + "-bare-working_copy"
-            bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
-            wc_repo_path = Constants.build_dir + wc_repo_name
+          repo_name = @options[:repo]
+          bare_repo_name = repo_name + "-bare"
+          wc_repo_name = repo_name + "-bare-working_copy"
+          bare_repo_path = Constants.build_dir + bare_repo_name
+          repo_path = Constants.build_dir + repo_name
+          wc_repo_path = Constants.build_dir + wc_repo_name
 
-            git_clone_commands += "rm -rf #{bare_repo_path}; \n"
-          end
+          git_clone_commands += "rm -rf #{bare_repo_path}; \n"
           do_execute env[:machine], git_clone_commands
 
           @app.call(env)
