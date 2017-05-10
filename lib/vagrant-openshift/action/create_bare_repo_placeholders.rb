@@ -17,47 +17,32 @@
 module Vagrant
   module Openshift
     module Action
-      class CheckoutRepositories
+      class CreateBareRepoPlaceholders
         include CommandHelper
 
-        def initialize(app, env, options={})
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options
         end
 
         def call(env)
-          git_clone_commands = "set -e\n"
-          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
+          remote_write(env[:machine], "/root/.ssh/config", "root:root", "0600") {
+%{Host github.com
+StrictHostKeyChecking no
+UserKnownHostsFile=/dev/null
+}}
+
+          git_clone_commands = ""
+          Constants.repos(env).each do |repo_name, url|
             bare_repo_name = repo_name + "-bare"
             bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
 
-            git_clone_commands += %{
-if [ -d #{bare_repo_path} ]; then
-rm -rf #{repo_path}
-echo 'Cloning #{repo_name} ...'
-git clone --quiet --recurse-submodules #{bare_repo_path} #{repo_path}
-}
-
-            if @options[:branch] && @options[:branch][repo_name]
-              git_clone_commands += "cd #{repo_path}; git checkout --quiet #{@options[:branch][repo_name]}; cd #{Constants.build_dir};\n"
-            end
-            git_clone_commands += %{
-else
-MISSING_REPO+='#{bare_repo_name}'
-fi
-}
+            git_clone_commands += "[ ! -d #{bare_repo_path} ] && git init --bare #{bare_repo_path};\n"
           end
 
-          git_clone_commands += %{
-if [ -n \"$MISSING_REPO\" ]; then
-echo 'Missing required upstream repositories:'
-echo $MISSING_REPO
-echo 'To fix, execute command: vagrant clone-upstream-repos'
-fi
-}
-
+          ssh_user = env[:machine].ssh_info[:username]
+          sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
+          sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_user} #{Constants.build_dir}")
           do_execute env[:machine], git_clone_commands
 
           @app.call(env)
