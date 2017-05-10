@@ -19,47 +19,8 @@ module Vagrant
   module Openshift
     class Constants
 
-      def self.repos(env)
-        openshift_repos
-      end
-
-      def self.logging_repos(env)
-        aggregated_logging_repos
-      end
-
-      def self.openshift_repos
-        {
-          'origin' => 'https://github.com/openshift/origin.git',
-          'source-to-image' => 'https://github.com/openshift/source-to-image.git',
-          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'
-        }
-      end
-
-      def self.console_repos
-        {
-          'origin-web-console' => 'https://github.com/openshift/origin-web-console.git'
-        }
-      end
-
-       def self.aggregated_logging_repos
-        {
-          'origin-aggregated-logging' => 'https://github.com/openshift/origin-aggregated-logging.git'
-        }
-      end
-
-      def self.repos_for_name(reponame)
-        {
-          'origin' => openshift_repos,
-          nil => openshift_repos,
-          'origin-console' => console_repos,
-          'origin-aggregated-logging' => aggregated_logging_repos,
-          'origin-metrics' => {
-            'origin-metrics' => 'https://github.com/openshift/origin-metrics.git'
-          },
-          'openshift-ansible' => {
-            'openshift-ansible' => 'https://github.com/openshift/openshift-ansible.git'
-          }
-        }[reponame]
+      def self.repo_url_for_name(name)
+        "https://github.com/openshift/#{name}.git"
       end
 
      def self.git_branch_current

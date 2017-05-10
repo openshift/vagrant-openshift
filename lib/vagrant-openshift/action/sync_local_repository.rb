@@ -29,18 +29,17 @@ module Vagrant
         def call(env)
           env[:machine].env.ui.info("Synchronizing local sources")
 
-          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
-            local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, "..", repo_name)))
+          repo_name = @options[:repo]
+          local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, "..", repo_name)))
+          unless local_repo.exist?
+            local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, repo_name)))
             unless local_repo.exist?
-              local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, repo_name)))
-              unless local_repo.exist?
-                env[:machine].ui.warn "Missing local clone of repository #{repo_name}"
-                next
-              end
+              env[:machine].ui.warn "Missing local clone of repository #{repo_name}"
+              next
             end
-
-            Dir.chdir(local_repo) { sync_repo(env[:machine], repo_name) }
           end
+
+          Dir.chdir(local_repo) { sync_repo(env[:machine], repo_name) }
 
           @app.call(env)
         end
