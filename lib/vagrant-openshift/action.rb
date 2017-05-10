@@ -158,11 +158,11 @@ module Vagrant
           b.use PrepareSshConfig
           if options[:source]
             if options[:clean]
-              b.use Clean, :repo => 'origin-web-console'
-              b.use CloneUpstreamRepositories, :repo => 'origin-web-console'
+              b.use Clean, :repo => 'origin-console'
+              b.use CloneUpstreamRepositories, :repo => 'origin-console'
             end
-            b.use SyncLocalRepository, :repo => 'origin-web-console'
-            b.use CheckoutRepositories, :repo => 'origin-web-console'
+            b.use SyncLocalRepository, :repo => 'origin-console'
+            b.use CheckoutRepositories, :repo => 'origin-console'
             if options[:build]
               b.use InstallOriginAssetDependencies, :restore_assets => true
             end
