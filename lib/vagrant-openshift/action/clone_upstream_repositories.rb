@@ -36,19 +36,20 @@ UserKnownHostsFile=/dev/null
 }}
 
           git_clone_commands = "set -e\n"
-          repo_name = @options[:repo]
-          bare_repo_name = repo_name + "-bare"
-          bare_repo_path = Constants.build_dir + bare_repo_name
+          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
+            bare_repo_name = repo_name + "-bare"
+            bare_repo_path = Constants.build_dir + bare_repo_name
 
-          if @options[:clean]
-            git_clone_commands += "rm -fr #{bare_repo_path};\n"
-          end
+            if @options[:clean]
+              git_clone_commands += "rm -fr #{bare_repo_path};\n"
+            end
 
-          git_clone_commands += %{
+            git_clone_commands += %{
 if [ ! -d #{bare_repo_path} ]; then
-git clone --quiet --bare #{Constants.repo_url_for_name(repo_name)} #{bare_repo_path} >/dev/null
+git clone --quiet --bare #{url} #{bare_repo_path} >/dev/null
 fi
 }
+          end
 
           sudo(env[:machine], "mkdir -p #{Constants.build_dir}")
           sudo(env[:machine], "mkdir -p #{Constants.build_dir + "builder"} && chown -R #{ssh_user}:#{ssh_group} #{Constants.build_dir}")

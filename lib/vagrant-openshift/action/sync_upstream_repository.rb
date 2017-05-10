@@ -17,30 +17,49 @@
 module Vagrant
   module Openshift
     module Action
-      class Clean
+      class SyncUpstreamRepository
         include CommandHelper
 
-        def initialize(app, env, options={})
+        def initialize(app, env)
           @app = app
           @env = env
-          @options = options
         end
 
         def call(env)
-          git_clone_commands = ""
-          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
+          env[:machine].env.ui.info("Synchronizing upstream sources\n")
+          command = "set -e\n"
+
+          Constants.repos(env).each do |repo_name, url|
+
+            branch="master"
+
             bare_repo_name = repo_name + "-bare"
-            wc_repo_name = repo_name + "-bare-working_copy"
+            bare_repo_wc_name = repo_name + "-bare-working_copy"
             bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
-            wc_repo_path = Constants.build_dir + wc_repo_name
+            bare_repo_wc_path = Constants.build_dir + bare_repo_wc_name
 
-            git_clone_commands += "rm -rf #{bare_repo_path}; \n"
+            command += "export GIT_SSH=#{Constants.git_ssh};\n" unless Constants.git_ssh.nil? or Constants.git_ssh.empty?
+            command += %{
+if [ ! -d #{bare_repo_wc_path} ]; then
+echo 'Cloning #{repo_name} ...'
+git clone -l --quiet #{bare_repo_path} #{bare_repo_wc_path}
+fi
+
+cd #{bare_repo_wc_path}
+git remote add upstream #{url}
+git fetch upstream
+git checkout master
+git reset --hard upstream/#{branch}
+git push origin master -f
+}
           end
-          do_execute env[:machine], git_clone_commands
 
+          do_execute(env[:machine], command)
+
+          env[:machine].env.ui.info("Done")
           @app.call(env)
         end
+
       end
     end
   end
