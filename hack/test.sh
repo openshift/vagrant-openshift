@@ -122,13 +122,21 @@ test_vagrant install-docker --docker.version=1.12.6              \
                             --repo='oso-rhui-rhel-server-*'
 validate_version 'docker' '1.12.6'
 
-test_vagrant clone-upstream-repos --clean
-test_vagrant checkout-repos
-test_vagrant build-origin-base-images
+test_vagrant origin-local-checkout --replace --repo origin-web-console
+test_vagrant clone-upstream-repos --clean --repo origin-web-console
+test_vagrant sync-origin-console -s
 test_vagrant install-origin-assets-base
 
+test_vagrant clone-upstream-repos --clean --repo origin
+test_vagrant checkout-repos --repo origin
+test_vagrant build-origin-base-images
 test_vagrant install-origin
 test_vagrant build-origin --images
+
+test_vagrant test-origin-console -d
+
+test_vagrant clone-upstream-repos --clean --repo source-to-image
+test_vagrant checkout-repos --repo source-to-image
 test_vagrant build-sti --binary-only
 
 popd

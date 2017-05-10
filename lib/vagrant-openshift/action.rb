@@ -158,11 +158,11 @@ module Vagrant
           b.use PrepareSshConfig
           if options[:source]
             if options[:clean]
-              b.use Clean, :repo => 'origin-console'
-              b.use CloneUpstreamRepositories, :repo => 'origin-console'
+              b.use Clean, :repo => 'origin-web-console'
+              b.use CloneUpstreamRepositories, :repo => 'origin-web-console'
             end
-            b.use SyncLocalRepository, :repo => 'origin-console'
-            b.use CheckoutRepositories, :repo => 'origin-console'
+            b.use SyncLocalRepository, :repo => 'origin-web-console'
+            b.use CheckoutRepositories, :repo => 'origin-web-console'
             if options[:build]
               b.use InstallOriginAssetDependencies, :restore_assets => true
             end
@@ -395,9 +395,7 @@ module Vagrant
       autoload :BuildStiBaseWindows, action_root.join("build_sti_base_windows")
       autoload :PrepareSshConfig, action_root.join("prepare_ssh_config")
       autoload :SyncLocalRepository, action_root.join("sync_local_repository")
-      autoload :SyncUpstreamRepository, action_root.join("sync_upstream_repository")
       autoload :LocalOriginCheckout, action_root.join("local_origin_checkout")
-      autoload :CreateBareRepoPlaceholders, action_root.join("create_bare_repo_placeholders")
       autoload :RunOriginTests, action_root.join("run_origin_tests")
       autoload :RunOriginAssetTests, action_root.join("run_origin_asset_tests")
       autoload :RunStiTests, action_root.join("run_sti_tests")

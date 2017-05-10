@@ -28,27 +28,26 @@ module Vagrant
 
         def call(env)
           git_clone_commands = "set -e\n"
-          Constants.repos_for_name(@options[:repo]).each do |repo_name, url|
-            bare_repo_name = repo_name + "-bare"
-            bare_repo_path = Constants.build_dir + bare_repo_name
-            repo_path = Constants.build_dir + repo_name
+          repo_name = @options[:repo]
+          bare_repo_name = repo_name + "-bare"
+          bare_repo_path = Constants.build_dir + bare_repo_name
+          repo_path = Constants.build_dir + repo_name
 
-            git_clone_commands += %{
+          git_clone_commands += %{
 if [ -d #{bare_repo_path} ]; then
 rm -rf #{repo_path}
 echo 'Cloning #{repo_name} ...'
 git clone --quiet --recurse-submodules #{bare_repo_path} #{repo_path}
 }
 
-            if @options[:branch] && @options[:branch][repo_name]
-              git_clone_commands += "cd #{repo_path}; git checkout --quiet #{@options[:branch][repo_name]}; cd #{Constants.build_dir};\n"
-            end
-            git_clone_commands += %{
+          if @options[:branch] && @options[:branch][repo_name]
+            git_clone_commands += "cd #{repo_path}; git checkout --quiet #{@options[:branch][repo_name]}; cd #{Constants.build_dir};\n"
+          end
+          git_clone_commands += %{
 else
 MISSING_REPO+='#{bare_repo_name}'
 fi
 }
-          end
 
           git_clone_commands += %{
 if [ -n \"$MISSING_REPO\" ]; then
