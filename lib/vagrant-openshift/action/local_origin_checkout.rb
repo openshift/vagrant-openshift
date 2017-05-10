@@ -38,9 +38,7 @@ module Vagrant
           end
           Dir.chdir(go_path) do
             commands = "echo 'Waiting for the cloning process to finish'\n"
-            Constants.repos_for_name(@options[:repo]).each do |repo, url|
-              commands += repo_checkout_bash_command(repo, url)
-            end
+            commands += repo_checkout_bash_command(@options[:repo], Constants.repo_url_for_name(@options[:repo]))
 
             system(commands)
             puts "Origin repositories cloned into #{Dir.pwd}"

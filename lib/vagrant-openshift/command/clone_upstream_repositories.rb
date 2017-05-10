@@ -28,6 +28,7 @@ module Vagrant
         def execute
           options = {}
           options[:clean] = false
+          options[:repo] = 'origin'
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant clone-upstream-repositories"
@@ -35,6 +36,10 @@ module Vagrant
 
             o.on("-c", "--clean", "Remove the current bare repositories on disk if present") do |c|
               options[:clean] = true
+            end
+
+            o.on("-r [repo-name]", "--repo [repo-name]", String, "Clone the specified repo. Default is 'origin'.") do |f|
+              options[:repo] = f
             end
           end
 
