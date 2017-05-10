@@ -35,7 +35,6 @@ module Vagrant
             local_repo = Pathname.new(File.expand_path(File.join(env[:machine].env.root_path, repo_name)))
             unless local_repo.exist?
               env[:machine].ui.warn "Missing local clone of repository #{repo_name}"
-              next
             end
           end
 
