@@ -141,11 +141,11 @@ module Vagrant
           b.use PrepareSshConfig
           if options[:source]
             if options[:clean]
-              b.use Clean
-              b.use CloneUpstreamRepositories
+              b.use Clean, :repo => 'source-to-image'
+              b.use CloneUpstreamRepositories, :repo => 'source-to-image'
             end
-            b.use SyncLocalRepository
-            b.use CheckoutRepositories
+            b.use SyncLocalRepository, :repo => 'source-to-image'
+            b.use CheckoutRepositories, :repo => 'source-to-image'
           end
           unless options[:no_build]
             b.use(BuildSti, options)
