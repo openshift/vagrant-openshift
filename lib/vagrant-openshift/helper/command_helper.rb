@@ -160,7 +160,9 @@ then
         git fetch origin
         git fetch --prune origin +refs/tags/*:refs/tags/*
         git reset --merge
-        git checkout #{branch}
+        if ! git checkout #{branch}; then
+          git checkout -b #{branch} origin/#{branch}
+        fi
         git reset --hard origin/#{branch}
         git clean -fdx
         set +e
@@ -191,7 +193,12 @@ then
   if git clone --quiet --recurse-submodules #{user_repo_url}
   then
     cloned=true
-    (cd #{repo} && git remote add upstream #{url} && git fetch upstream)
+    pushd #{repo}
+    if ! git checkout #{branch}; then
+      git checkout -b #{branch} origin/#{branch}
+    fi
+    git remote add upstream #{url} && git fetch upstream
+    popd
   else
     echo 'Fork of repo #{repo} not found. Cloning read-only copy from upstream'
   fi
