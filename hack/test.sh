@@ -135,8 +135,9 @@ test_vagrant build-origin --images
 
 test_vagrant test-origin-console -d
 
+test_vagrant origin-local-checkout --replace --repo source-to-image 
 test_vagrant clone-upstream-repos --clean --repo source-to-image
-test_vagrant checkout-repos --repo source-to-image
+test_vagrant sync-sti --clean --source
 test_vagrant build-sti --binary-only
 
 popd
