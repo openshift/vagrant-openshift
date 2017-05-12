@@ -123,10 +123,10 @@ module Vagrant
           if options[:source]
             if options[:clean]
               b.use Clean
-              b.use CloneUpstreamRepositories
+              b.use CloneUpstreamRepositories, :repo => 'origin'
             end
-            b.use SyncLocalRepository
-            b.use CheckoutRepositories
+            b.use SyncLocalRepository, :repo => 'origin'
+            b.use CheckoutRepositories, :repo => 'origin'
           end
           if options[:build]
             b.use(BuildOriginBaseImages, options) if options[:images]
