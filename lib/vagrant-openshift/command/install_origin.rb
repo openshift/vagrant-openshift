@@ -28,10 +28,15 @@ module Vagrant
         def execute
           options = {}
           options[:clean] = false
+          options[:install_assets] = true
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant install-origin [vm-name]"
             o.separator ""
+
+            o.on("-s", "--skip-assets", "Don't install the asset dependencies.") do |f|
+              options[:install_assets] = false
+            end
           end
 
           # Parse the options
