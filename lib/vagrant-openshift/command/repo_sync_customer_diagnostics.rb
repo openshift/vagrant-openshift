@@ -60,7 +60,7 @@ module Vagrant
           return if !argv
 
           with_target_vms(argv, :reverse => true) do |machine|
-            actions = Vagrant::Openshift::Action.repo_sync_customer_diagnostics(options)
+            actions = Vagrant::Openshift::Action.repo_sync(options)
             @env.action_runner.run actions, {:machine => machine}
             0
           end

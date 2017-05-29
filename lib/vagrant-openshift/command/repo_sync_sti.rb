@@ -27,9 +27,10 @@ module Vagrant
 
         def execute
           options = {}
-          options[:no_build] = false
+          options[:build] = true
           options[:clean] = false
           options[:source] = false
+          options[:repo] = 'source-to-image'
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-sti [vm-name]"
@@ -44,7 +45,7 @@ module Vagrant
             end
 
             o.on("--dont-install", "Don't build and install updated source") do |f|
-              options[:no_build] = true
+              options[:build] = false
             end
 
           end

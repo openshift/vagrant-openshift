@@ -31,6 +31,7 @@ module Vagrant
           options[:build] = true
           options[:clean] = false
           options[:source] = false
+          options[:repo] = 'origin'
 
           opts = OptionParser.new do |o|
             o.banner = "Usage: vagrant sync-origin [vm-name]"

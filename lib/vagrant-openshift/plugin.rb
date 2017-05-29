@@ -223,17 +223,17 @@ module Vagrant
       end
 
       command "sync-origin-aggregated-logging" do
-        require_relative "command/repo_sync_origin_aggregated_logging"
+        require_relative "command/repo_sync"
         Commands::RepoSyncOriginAggregatedLogging
       end
 
       command "sync-origin-metrics" do
-        require_relative "command/repo_sync_origin_metrics"
+        require_relative "command/repo_sync"
         Commands::RepoSyncOriginMetrics
       end
 
       command "sync-customer-diagnostics" do
-        require_relative "command/repo_sync_customer_diagnostics"
+        require_relative "command/repo_sync"
         Commands::RepoSyncCustomerDiagnostics
       end
 
