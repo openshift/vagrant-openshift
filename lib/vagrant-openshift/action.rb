@@ -121,18 +121,12 @@ module Vagrant
 
       def self.repo_sync_origin(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use Clean
-              b.use CloneUpstreamRepositories, :repo => 'origin'
-            end
-            b.use SyncLocalRepository, :repo => 'origin'
-            b.use CheckoutRepositories, :repo => 'origin'
-          end
+          self.repo_sync_generic(b, options)
           if options[:build]
-            b.use(BuildOriginBaseImages, options) if options[:images]
-            b.use(BuildOrigin, options)
+            if options[:images]
+              b.use BuildOriginBaseImages, options
+            end
+            b.use BuildOrigin, options
             b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
           end
         end
@@ -140,16 +134,8 @@ module Vagrant
 
       def self.repo_sync_sti(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use Clean, :repo => 'source-to-image'
-              b.use CloneUpstreamRepositories, :repo => 'source-to-image'
-            end
-            b.use SyncLocalRepository, :repo => 'source-to-image'
-            b.use CheckoutRepositories, :repo => 'source-to-image'
-          end
-          unless options[:no_build]
+          self.repo_sync_generic(b, options)
+          if options[:build]
             b.use(BuildSti, options)
           end
         end
@@ -157,66 +143,28 @@ module Vagrant
 
       def self.repo_sync_origin_console(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use Clean, :repo => 'origin-web-console'
-              b.use CloneUpstreamRepositories, :repo => 'origin-web-console'
-            end
-            b.use SyncLocalRepository, :repo => 'origin-web-console'
-            b.use CheckoutRepositories, :repo => 'origin-web-console'
-            if options[:build]
-              b.use InstallOriginAssetDependencies, :restore_assets => true
-            end
+          self.repo_sync_generic(b, options)
+          if options[:build]
+            b.use InstallOriginAssetDependencies, :restore_assets => true
           end
         end
       end
 
-      def self.repo_sync_origin_aggregated_logging(options)
+      def self.repo_sync(options)
         Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use(Clean, options)
-              b.use(CloneUpstreamRepositories, options)
-            end
-            b.use(SyncLocalRepository, options)
-            b.use(CheckoutRepositories, options)
-          end
-          # no build support currently
-          # if options[:build]
-          #   b.use(BuildOriginBaseImages, options) if options[:images]
-          #   b.use(BuildOrigin, options)
-          #   b.use RunSystemctl, {:action => "try-restart", :service => "openshift"}
-          # end
+          self.repo_sync_generic(b, options)
         end
       end
 
-      def self.repo_sync_origin_metrics(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use Clean, options
-              b.use CloneUpstreamRepositories, options
-            end
-            b.use SyncLocalRepository, options
-            b.use CheckoutRepositories, options
+      def self.repo_sync_generic(b, options)
+        b.use PrepareSshConfig
+        if options[:source]
+          if options[:clean]
+            b.use Clean, options
+            b.use CloneUpstreamRepositories, options
           end
-        end
-      end
-
-      def self.repo_sync_customer_diagnostics(options)
-        Vagrant::Action::Builder.new.tap do |b|
-          b.use PrepareSshConfig
-          if options[:source]
-            if options[:clean]
-              b.use Clean, options
-              b.use CloneUpstreamRepositories, options
-            end
-            b.use SyncLocalRepository, options
-            b.use CheckoutRepositories, options
-          end
+          b.use SyncLocalRepository, options
+          b.use CheckoutRepositories, options
         end
       end
 

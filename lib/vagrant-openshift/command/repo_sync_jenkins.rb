@@ -18,7 +18,7 @@ require_relative "../action"
 module Vagrant
   module Openshift
     module Commands
-      class RepoSyncOriginAggregatedLogging < Vagrant.plugin(2, :command)
+      class RepoSyncJenkins < Vagrant.plugin(2, :command)
         include CommandHelper
 
         def self.synopsis
@@ -31,10 +31,10 @@ module Vagrant
           options[:build] = true
           options[:clean] = false
           options[:source] = false
-          options[:repo] = 'origin-aggregated-logging'
+          options[:repo] = 'jenkins'
 
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant sync-origin-aggregated-logging [vm-name]"
+            o.banner = "Usage: vagrant sync-jenkins [vm-name]"
             o.separator ""
 
             o.on("-s", "--source", "Sync the source (not required if using synced folders)") do |f|
