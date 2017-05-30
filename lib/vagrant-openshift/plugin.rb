@@ -223,18 +223,23 @@ module Vagrant
       end
 
       command "sync-origin-aggregated-logging" do
-        require_relative "command/repo_sync"
+        require_relative "command/repo_sync_origin_aggregated_logging"
         Commands::RepoSyncOriginAggregatedLogging
       end
 
       command "sync-origin-metrics" do
-        require_relative "command/repo_sync"
+        require_relative "command/repo_sync_origin_metrics"
         Commands::RepoSyncOriginMetrics
       end
 
       command "sync-customer-diagnostics" do
-        require_relative "command/repo_sync"
+        require_relative "command/repo_sync_customer_diagnostics"
         Commands::RepoSyncCustomerDiagnostics
+      end
+
+      command "sync-jenkins" do
+        require_relative "command/repo_sync_jenkins"
+        Commands::RepoSyncJenkins
       end
 
       provisioner("configure-docker-client-windows") do
