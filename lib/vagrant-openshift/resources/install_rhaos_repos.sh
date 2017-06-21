@@ -10,3 +10,4 @@ mv "$(dirname "${BASH_SOURCE}")/rhaos32.repo" /etc/yum.repos.d/
 mv "$(dirname "${BASH_SOURCE}")/rhaos33.repo" /etc/yum.repos.d/
 mv "$(dirname "${BASH_SOURCE}")/rhaos34.repo" /etc/yum.repos.d/
 mv "$(dirname "${BASH_SOURCE}")/rhaos35.repo" /etc/yum.repos.d/
+mv "$(dirname "${BASH_SOURCE}")/rhaos36.repo" /etc/yum.repos.d/
